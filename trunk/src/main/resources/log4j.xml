@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} %5p %c{1}: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="All" />
+        <param name="File" value="${app.dir.log}/csns.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="4" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} %5p %c{1}: %m%n" />
+        </layout>
+    </appender>
+
+    <logger name="csns">
+        <level value="${app.log.level}" />
+    </logger>
+
+    <logger name="net.sf.ehcache">
+        <level value="error" />
+    </logger>
+
+    <root>
+        <level value="warn" />
+        <appender-ref ref="file" />
+    </root>
+
+</log4j:configuration>

@@ -1,0 +1,127 @@
+div#menu {
+    height: 35px;
+    background: transparent url(../img/layout/nav_bg.gif) no-repeat bottom center;
+    margin:0 auto;
+    width:1000px;
+}
+
+div#menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float:right;
+}
+div#menu ul.menu {
+    background:transparent url(../img/layout/nav_20.png) repeat;
+}
+
+div#menu li {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: block;
+    float: left;
+    z-index: 1;
+}
+div#menu ul ul li {
+    z-index: 1;
+}
+div#menu li div {
+    list-style: none;
+    float: left;
+    position: absolute;
+    z-index: 11;
+    top: 36px;
+    left: 0;
+    visibility: hidden;
+    padding:5px;
+    background: transparent url(../img/layout/nav_current.png) repeat-y left top;
+    width:172px;
+    margin:0;
+    border: 1px solid #0b2e65;
+    border-top:none;
+}
+div#menu li:hover>div {
+    visibility: visible;
+}
+
+div#menu a {
+    position: relative;
+    z-index: 10;
+    height: 35px;
+    display: block;
+    float: left;
+    line-height: 35px;
+    text-decoration: none;
+    white-space: nowrap;
+    text-align: center;
+    /*width:156px;*/
+    padding:0 40px;
+}
+
+/* menu::level1 */
+div#menu a {
+    font: bold 13px Trebuchet MS,Arial,san-serif;
+    color: #fff;
+    line-height: 35px;
+    height: 35px;
+    background: none;
+    border-left: 1px solid #0b2e65;
+    border-right: 1px solid #1b58a8;
+}
+div#menu a:hover,
+div#menu a.over,
+div#menu li.current a,
+div#menu ul.menu>li:hover>a {
+    color:#b4ff00;
+    background: #274d74 url(../img/layout/nav_hover.gif) repeat-y left top;
+    line-height:36px;
+    height:36px;
+}
+
+div#menu li.current a {
+    background:none;
+}
+div#menu a.over {
+    color: #b4ff00;
+}
+
+/* menu::level2 */
+div#menu ul ul li {
+    background: none;
+    padding: 0;
+}
+div#menu ul ul a {
+    padding: 0;
+    height: auto;
+    float: none;
+    display: block;
+    z-index: -1;
+    white-space: normal;
+    text-transform: none;
+    width:170px;
+    line-height: 35px;
+    font-size: 11px;
+    text-indent:35px;
+    text-align:left;
+    position:relative;
+}
+div#menu ul ul a img {
+	position:absolute;
+	top:10px;
+	left:9px;
+	width:16px;
+	height:16px;
+	border:none;
+}
+div#menu ul ul a, div#menu li.current ul a {
+    background-color:transparent;
+    border:none;
+    border-top: 1px solid #0b2e65;
+    border-bottom: 1px solid #3d78a0;
+}
+div#menu ul ul a:hover, div#menu li.current ul a:hover {
+    background: transparent url(../img/layout/subnav_hover.png) repeat-y center center;
+    line-height:35px;
+    height:35px;
+}

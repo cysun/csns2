@@ -1,0 +1,132 @@
+body {
+    padding:0;
+    margin:0;
+    background-color:#073773;
+    font: 14px Arial, Helvetica, sans-serif;
+    color:#000000;
+}
+
+/**********  HEADER  **********/
+
+#csns_header {
+    background: transparent url(../img/layout/header_bg.gif) repeat-x bottom center;
+    height:82px;
+}
+#csns_header .wrap {
+    background: transparent url(../img/layout/header.gif) repeat-x bottom center;
+    margin: 0 auto;
+    height:82px;
+    width:1000px;
+}
+#csns_header .wrap #csns_logo {
+	margin: 10px 0 0 25px;
+	float:left;
+}
+#csns_header #lpanel {
+    text-align:right;
+    margin-right:20px;
+    padding-top: 28px;
+    float:right;
+    width: 50%;
+    position:relative;
+    float:right;
+}
+.f_password {
+    border:0;
+    position:absolute;
+    top:20px; right:-20px;
+    width:41px; height:39px;
+}
+#csns_header #lpanel a {
+    color:#ffffff;
+    font: bold 14px arial;
+    text-decoration:none;
+    padding-bottom:3px;
+    border-bottom: 1px dotted #fff;
+}
+#csns_header #lpanel a:hover {
+    color:#b4ff00;
+    border-bottom: 1px dotted #b4ff00;
+}
+#csns_header #lpanel label {
+    margin-right:10px;
+}
+#csns_header #lpanel label input {
+    border:1px solid #2b6bb8;
+    font:15px 'Times New Roman', Times, serif;
+    color:#666666;
+    padding:4px;
+    width:150px;
+}
+#csns_header #lpanel .submit {
+    font:12px "Times New Roman", Times, serif;
+    background: transparent url(../img/layout/submit.gif) repeat-x center center;
+    padding:4px 10px;
+    border: 1px solid #7aad10;
+    margin-right:20px;
+}
+
+/**********  MENU  **********/
+
+#csns_menu {
+    background-color:#0b2e65;
+    border-bottom: 1px solid #062148;
+    height:35px;
+}
+
+/**********  CONTENT  **********/
+
+#csns_content { 
+    background: url(../img/layout/content_bg.jpg) repeat center center;
+}
+#csns_content #content {
+    margin: 0 auto;
+    width: 950px;
+    background: url(../img/layout/content_shadow.gif) repeat-y top center;
+    padding:25px 35px;
+    min-height:450px;
+}
+
+/**********  FOOTER  **********/
+
+#csns_footer {
+    background: url(../img/layout/footer.gif) no-repeat top center;
+    height:30px;
+    color:#ffffff;
+    font:12px arial;
+    padding-top: 10px;
+    line-height:22px;
+}
+#csns_footer .wrap {
+    width: 910px;
+    margin: 0 auto;
+    text-align:center;
+}
+#csns_footer a {
+    font-weight:bold;
+    color:#b4ff00;
+    text-decoration:none;
+    padding-bottom:3px;
+    border-bottom: 1px dotted #b4ff00;
+}
+#csns_footer a:hover {
+    color:#ffffff;
+    border-bottom: 1px dotted #ffffff;
+}
+
+/**********  COLOR SPACE  **********/
+
+#space {
+    height:2px; 
+    font-size:0px;
+    line-height:0; 
+    background-color:#fff;
+}
+#blue_border {
+    height:2px; 
+    font-size:0px;
+    line-height:0;
+    background-color:#3981cd;
+    border-top: 1px solid #0b2e65;
+    border-bottom: 1px solid #0b2e65;
+}

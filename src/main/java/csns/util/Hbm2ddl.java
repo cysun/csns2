@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright (c) 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -30,8 +30,6 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
  * Hopefully by then SchemaExport can be initialized from persistence.xml
  * instead of hibernate.cfg.xml or hibernate.properties, and if so, we can
  * remove this class and run SchemaExport directly.
- * 
- * @author cysun
  */
 @SuppressWarnings("deprecation")
 public class Hbm2ddl {
@@ -46,7 +44,7 @@ public class Hbm2ddl {
 
         System.out.print( "Export DDL to " + args[0] + " ... " );
 
-        Configuration cfg = (new Ejb3Configuration()).configure( "csns",
+        Configuration cfg = (new Ejb3Configuration()).configure( "csns2",
             new HashMap<String, Object>() ).getHibernateConfiguration();
 
         SchemaExport schemaExport = new SchemaExport( cfg );
@@ -55,11 +53,11 @@ public class Hbm2ddl {
             .setFormat( true )
             .setHaltOnError( true );
 
-        // . output to console: false
+        // . output script to console (and file if outputFile is set): true
         // . export to database: false
         // . only drop the tables: false
         // . only create the tables: true
-        schemaExport.execute( false, false, false, true );
+        schemaExport.execute( true, false, false, true );
 
         System.out.println( "Done." );
     }

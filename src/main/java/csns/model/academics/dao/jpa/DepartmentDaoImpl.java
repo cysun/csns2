@@ -45,7 +45,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
     public Department getDepartment( String abbreviation )
     {
         List<Department> departments = entityManager.createQuery(
-            "from Department where symbol = :symbol", Department.class )
+            "from Department where abbreviation = :abbreviation",
+            Department.class )
             .setParameter( "abbreviation", abbreviation )
             .getResultList();
         return departments.size() == 0 ? null : departments.get( 0 );
@@ -54,9 +55,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Override
     public List<Department> getDepartments()
     {
-        String query = "from Department where order by name asc";
-        return entityManager.createQuery( query, Department.class )
-            .getResultList();
+        return entityManager.createQuery( "from Department order by name asc",
+            Department.class ).getResultList();
     }
 
     @Override

@@ -13,16 +13,20 @@
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <context:annotation-config />
+
+    <tx:annotation-driven />
+
     <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="jdbc:postgresql://localhost:5432/csns" />
-        <property name="username" value="cysun" />
-        <property name="password" value="abcd" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
         <property name="initialSize" value="1" />
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="csns" />
+        <property name="persistenceUnitName" value="csns2" />
         <property name="dataSource" ref="dataSource" />
     </bean>
 
@@ -32,15 +36,11 @@
 
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-    <context:annotation-config />
-
-    <tx:annotation-driven />
-
-    <context:component-scan base-package="csns.model" />
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
 
     <security:authentication-manager>
-        <security:authentication-provider>
-            <security:jdbc-user-service data-source-ref="dataSource" />
+        <security:authentication-provider user-service-ref="userService">
+            <security:password-encoder ref="passwordEncoder" />
         </security:authentication-provider>
     </security:authentication-manager>
 
@@ -48,5 +48,8 @@
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />
+
+    <context:component-scan base-package="csns.model" />
+    <context:component-scan base-package="csns.security" />
 
 </beans>

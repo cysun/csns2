@@ -23,7 +23,7 @@
         <level value="${app.log.level}" />
     </logger>
 
-    <logger name="net.sf.ehcache">
+    <logger name="org.hibernate.cache">
         <level value="error" />
     </logger>
 

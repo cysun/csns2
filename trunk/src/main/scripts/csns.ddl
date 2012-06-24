@@ -58,8 +58,8 @@
 
     create table departments (
         id int8 not null,
+        abbreviation varchar(255) not null unique,
         name varchar(255) not null unique,
-        symbol varchar(255) not null unique,
         primary key (id)
     );
 

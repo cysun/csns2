@@ -21,7 +21,7 @@
 
     <bean id="entityManagerFactory"
         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="csns" />
+        <property name="persistenceUnitName" value="csns2" />
         <property name="dataSource" ref="dataSource" />
     </bean>
 

@@ -44,7 +44,9 @@
         </security:authentication-provider>
     </security:authentication-manager>
 
-    <security:http auto-config="true" use-expressions="true">
+    <security:http use-expressions="true">
+        <security:form-login login-page="/login" authentication-failure-url="/401" />
+        <security:logout />
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />

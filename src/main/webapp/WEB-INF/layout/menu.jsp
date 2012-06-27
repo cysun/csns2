@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+<div id="csns_menu">
 <div id="menu">
   <ul class="menu">
  
@@ -81,4 +82,5 @@
     <li><a href="<c:url value='/wiki/content/csns/help' />">Help</a></li>   
 
   </ul>
+</div>
 </div>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+    "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+    <definition name="layout.basic" template="/WEB-INF/layout/template.basic.jsp" />
+
+    <definition name="layout.bare" template="/WEB-INF/layout/template.basic.jsp">
+        <put-attribute name="header">
+            <definition template="/WEB-INF/layout/header.jsp">
+                <put-attribute name="lpanel" value="" />
+            </definition>
+        </put-attribute>
+        <put-attribute name="menu" value="" />
+    </definition>
+
+    <!-- ======= -->
+    <!-- General -->
+    <!-- ======= -->
+
+    <definition name="index" extends="layout.bare">
+        <put-attribute name="title" value="CSNetwork Services" />
+        <put-attribute name="content" value="/WEB-INF/content/index.jsp" />
+    </definition>
+
+    <definition name="404" extends="layout.bare">
+        <put-attribute name="title" value="Page Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
+    </definition>
+
+</tiles-definitions>

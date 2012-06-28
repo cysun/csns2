@@ -45,8 +45,10 @@
     </security:authentication-manager>
 
     <security:http use-expressions="true">
-        <security:form-login login-page="/login" authentication-failure-url="/401" />
-        <security:logout />
+        <security:form-login login-page="/login"
+            authentication-success-handler-ref="authenticationSuccessHandler"
+            authentication-failure-url="/401" />
+        <security:logout success-handler-ref="logoutRedirectHandler" />
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />

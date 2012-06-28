@@ -30,4 +30,23 @@
         <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
     </definition>
 
+    <definition name="403" extends="layout.bare">
+        <put-attribute name="title" value="Access Denied" />
+        <put-attribute name="content" value="/WEB-INF/content/403.jsp" />
+    </definition>
+
+    <definition name="401" extends="layout.bare">
+        <put-attribute name="title" value="Login Error" />
+        <put-attribute name="content" value="/WEB-INF/content/401.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Department -->
+    <!-- ========== -->
+
+    <definition name="department/index" extends="layout.basic">
+        <put-attribute name="title" value="Department Home" />
+        <put-attribute name="content" value="/WEB-INF/content/department/index.jsp" />
+    </definition>
+
 </tiles-definitions>

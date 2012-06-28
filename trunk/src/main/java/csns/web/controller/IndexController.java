@@ -18,6 +18,9 @@
  */
 package csns.web.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,15 +44,20 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping(value="/department/{dept}/")
-    public String index( @PathVariable String dept )
+    @RequestMapping(value = "/department/{dept}/")
+    public String index( @PathVariable String dept, ModelMap models,
+        HttpServletResponse response )
     {
         Department department = departmentDao.getDepartment( dept );
-        if( department == null )
-        {
-            
-        }
+        if( department == null ) return "redirect:/";
+
+        Cookie cookie = new Cookie( "default-dept", dept );
+        cookie.setPath( "/" );
+        cookie.setMaxAge( 100000000 );
+        response.addCookie( cookie );
+
+        models.addAttribute( "department", department );
         return "department/index";
     }
-    
+
 }

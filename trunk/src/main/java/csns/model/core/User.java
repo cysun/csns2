@@ -19,9 +19,11 @@
 package csns.model.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -136,6 +138,47 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     public boolean isSameUser( User user )
     {
         return user != null && user.getId().equals( id );
+    }
+
+    public boolean isAdmin()
+    {
+        return roles.contains( "ROLE_ADMIN" );
+    }
+
+    public boolean isDepartmentAdmin()
+    {
+        for( String role : roles )
+            if( role.startsWith( "DEPT_ROLE_ADMIN_" ) ) return true;
+
+        return false;
+    }
+
+    public boolean isFaculty()
+    {
+        for( String role : roles )
+            if( role.startsWith( "DEPT_ROLE_FACULTY_" ) ) return true;
+
+        return false;
+    }
+
+    public boolean isInstructor()
+    {
+        for( String role : roles )
+            if( role.startsWith( "DEPT_ROLE_INSTRUCTOR_" ) ) return true;
+
+        return false;
+    }
+
+    public List<String> getDepartments( String roleName )
+    {
+        String departmentRole = "DEPT_" + roleName + "_";
+
+        List<String> departments = new ArrayList<String>();
+        for( String role : roles )
+            if( role.startsWith( departmentRole ) )
+                departments.add( role.substring( departmentRole.length() ) );
+
+        return departments;
     }
 
     public String getName()

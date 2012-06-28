@@ -2,10 +2,10 @@
 <script type="text/javascript">
 $(function(){
     $('select').change(function(){
-    	window.location.href = $('select').val() + "/";
+    	window.location.href = $('select').val();
     });
     $('button').click(function(){
-    	window.location.href = $('select').val() + "/";
+    	window.location.href = $('select').val();
     });
 });
 </script>
@@ -24,7 +24,7 @@ facilitates teaching, learning, student administration, and program assessment.<
 <p>To proceed, please select a department:  
   <select name="department">
     <c:forEach items="${departments}" var="department">
-      <option value="${department.abbreviation}">${department.name}</option>
+      <option value="department/${department.abbreviation}/">${department.name}</option>
     </c:forEach>
   </select>
   <button>OK</button>

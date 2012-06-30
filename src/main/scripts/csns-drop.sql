@@ -18,5 +18,6 @@ drop table courses;
 
 drop table files;
 
+drop table persistent_logins;
 drop table authorities;
 drop table users;

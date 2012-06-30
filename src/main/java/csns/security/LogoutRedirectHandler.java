@@ -38,7 +38,7 @@ import csns.model.core.User;
 @Component
 public class LogoutRedirectHandler implements LogoutSuccessHandler {
 
-    private Logger logger = LoggerFactory.getLogger( this.getClass() );
+    private final static Logger logger = LoggerFactory.getLogger( LogoutRedirectHandler.class );
 
     @Override
     public void onLogoutSuccess( HttpServletRequest request,

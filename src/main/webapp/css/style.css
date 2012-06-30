@@ -14,8 +14,8 @@ a {
 }
 p {
     font: 15px arial;
-    margin:20px 0;
-    line-height:26px;
+    margin: 10px 0;
+    line-height: 26px;
 }
 
 h3 {
@@ -51,6 +51,10 @@ pre {
     width: 150px;
     text-align: center;
     font-weight:bold;
+}
+
+.tt {
+    font-family: monospace;
 }
 
 /**********  FORMS  **********/
@@ -634,10 +638,11 @@ table {
     border:1px solid #dddddd;
 }
 .general th {
-    width:20%;
-    text-align:right;
-    font:bold 13px arial;
-    background:#eeeeee url(../img/style/general_bg.gif) repeat-x bottom center;
+    width: 10%;
+    text-align: right;
+    white-space: nowrap;
+    font: bold 13px arial;
+    background: #eeeeee url(../img/style/general_bg.gif) repeat-x bottom center;
 }
 .general td {
     font-size:14px;

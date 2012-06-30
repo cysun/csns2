@@ -55,12 +55,14 @@ public class AuthenticationSuccessHandler extends
 
         String targetUrl;
         if( user.isFaculty() || user.isInstructor() )
-            targetUrl = "/instructor/sections/list";
+            targetUrl = "/instructor/section/list";
         else if( user.isDepartmentAdmin() )
             targetUrl = "/" + user.getDepartments( "ROLE_ADMIN" ).get( 0 )
                 + "/admin/";
+        else if( user.isAdmin() )
+            targetUrl = "/admin/department/list";
         else
-            targetUrl = "/student/sections/list";
+            targetUrl = "/student/section/list";
 
         getRedirectStrategy().sendRedirect( request, response, targetUrl );
     }

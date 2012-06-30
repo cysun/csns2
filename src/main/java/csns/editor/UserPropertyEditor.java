@@ -16,26 +16,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.core.dao;
+package csns.editor;
 
-import java.util.List;
+import java.beans.PropertyEditorSupport;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 
-public interface UserDao {
+@Component
+@Scope("prototype")
+public class UserPropertyEditor extends PropertyEditorSupport {
 
-    User getUser( Long id );
+    @Autowired
+    UserDao userDao;
 
-    User getUserByCin( String cin );
+    @Override
+    public void setAsText( String text ) throws IllegalArgumentException
+    {
+        setValue( userDao.getUser( Long.valueOf( text ) ) );
+    }
 
-    User getUserByUsername( String username );
-
-    User getUserByEmail( String email );
-
-    List<User> searchUsers( String term );
-
-    List<User> searchUsersByPrefix( String term );
-
-    User saveUser( User user );
+    @Override
+    public String getAsText()
+    {
+        User user = (User) getValue();
+        return user != null ? user.getId().toString() : "";
+    }
 
 }

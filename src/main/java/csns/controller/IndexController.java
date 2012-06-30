@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.controller;
+package csns.controller;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,7 @@ import csns.model.academics.dao.DepartmentDao;
 public class IndexController {
 
     @Autowired
-    private DepartmentDao departmentDao;
+    DepartmentDao departmentDao;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index( ModelMap models )

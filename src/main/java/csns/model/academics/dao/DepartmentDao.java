@@ -28,6 +28,8 @@ public interface DepartmentDao {
 
     Department getDepartment( String abbreviation );
 
+    Department getDepartmentByName( String name );
+
     List<Department> getDepartments();
 
     Department saveDepartment( Department department );

@@ -43,6 +43,14 @@ insert into users (id, cin, username, password, last_name, first_name, primary_e
 
 insert into authorities (user_id, role) values (1000, 'ROLE_ADMIN');
 
+-- for remember-me service
+create table persistent_logins (
+    series      varchar(64) primary key,
+    username    varchar(64) not null,
+    token       varchar(64) not null,
+    last_used   timestamp not null
+);
+
 -----------
 -- files --
 -----------
@@ -83,7 +91,8 @@ create table courses (
 create table departments (
     id              bigint primary key,
     name            varchar(255) not null unique,
-    abbreviation    varchar(255) not null unique
+    abbreviation    varchar(255) not null unique,
+    welcome_message varchar(8000)
 );
 
 create table department_administrators (

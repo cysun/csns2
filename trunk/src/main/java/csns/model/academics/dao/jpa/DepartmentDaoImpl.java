@@ -53,6 +53,16 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
+    public Department getDepartmentByName( String name )
+    {
+        List<Department> departments = entityManager.createQuery(
+            "from Department where name = :name", Department.class )
+            .setParameter( "name", name )
+            .getResultList();
+        return departments.size() == 0 ? null : departments.get( 0 );
+    }
+
+    @Override
     public List<Department> getDepartments()
     {
         return entityManager.createQuery( "from Department order by name asc",

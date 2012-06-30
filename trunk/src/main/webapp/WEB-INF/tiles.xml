@@ -25,6 +25,11 @@
         <put-attribute name="content" value="/WEB-INF/content/index.jsp" />
     </definition>
 
+    <definition name="login" extends="layout.bare">
+        <put-attribute name="title" value="Login" />
+        <put-attribute name="content" value="/WEB-INF/content/login.jsp" />
+    </definition>
+
     <definition name="404" extends="layout.bare">
         <put-attribute name="title" value="Page Not Found" />
         <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
@@ -39,6 +44,40 @@
         <put-attribute name="title" value="Login Error" />
         <put-attribute name="content" value="/WEB-INF/content/401.jsp" />
     </definition>
+
+    <!-- ===== -->
+    <!-- Admin -->
+    <!-- ===== -->
+    
+    <definition name="admin/department/list" extends="layout.basic">
+        <put-attribute name="title" value="Departments" />
+        <put-attribute name="content" value="/WEB-INF/content/admin/department/list.jsp" />
+    </definition>
+
+    <definition name="admin/department/add" extends="layout.basic">
+        <put-attribute name="title" value="Add Department" />
+        <put-attribute name="content" value="/WEB-INF/content/admin/department/add.jsp" />
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="admin/department/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Department" />
+        <put-attribute name="content" value="/WEB-INF/content/admin/department/edit.jsp" />
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+        </put-list-attribute>
+    </definition>
+
+    <!-- ==== -->
+    <!-- User -->
+    <!-- ==== -->
+    
+    <definition name="user/search" template="/WEB-INF/content/user/search.jsp" />
 
     <!-- ========== -->
     <!-- Department -->

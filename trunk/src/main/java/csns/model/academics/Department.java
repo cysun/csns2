@@ -19,6 +19,7 @@
 package csns.model.academics;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -56,6 +57,9 @@ public class Department implements Serializable {
      */
     @Column(nullable = false, unique = true)
     private String abbreviation;
+
+    @Column(name = "welcome_message")
+    private String welcomeMessage;
 
     @ManyToMany
     @JoinTable(name = "department_administrators",
@@ -131,6 +135,15 @@ public class Department implements Serializable {
 
     public Department()
     {
+        administrators = new ArrayList<User>();
+        faculty = new ArrayList<User>();
+        instructors = new ArrayList<User>();
+        reviewers = new ArrayList<User>();
+
+        undergraduateCourses = new ArrayList<Course>();
+        additionalUndergraduateCourses = new ArrayList<Course>();
+        graduateCourses = new ArrayList<Course>();
+        additionalGraduateCourses = new ArrayList<Course>();
     }
 
     public Long getId()
@@ -161,6 +174,16 @@ public class Department implements Serializable {
     public void setAbbreviation( String abbreviation )
     {
         this.abbreviation = abbreviation;
+    }
+
+    public String getWelcomeMessage()
+    {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage( String welcomeMessage )
+    {
+        this.welcomeMessage = welcomeMessage;
     }
 
     public List<User> getAdministrators()

@@ -60,6 +60,7 @@
         id int8 not null,
         abbreviation varchar(255) not null unique,
         name varchar(255) not null unique,
+        welcome_message varchar(255),
         primary key (id)
     );
 

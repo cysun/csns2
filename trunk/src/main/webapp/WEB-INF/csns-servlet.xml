@@ -21,9 +21,10 @@
     <mvc:resources mapping="/js/**" location="/js/" />
 
     <mvc:view-controller path="/login" view-name="login" />
-    <mvc:view-controller path="/404" view-name="404" />
-    <mvc:view-controller path="/403" view-name="403" />
+    <mvc:view-controller path="/400" view-name="400" />
     <mvc:view-controller path="/401" view-name="401" />
+    <mvc:view-controller path="/403" view-name="403" />
+    <mvc:view-controller path="/404" view-name="404" />
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 

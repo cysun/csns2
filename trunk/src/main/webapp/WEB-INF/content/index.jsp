@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script type="text/javascript">
 $(function(){
-    $('select').change(function(){
-    	window.location.href = $('select').val();
+    $("select").change(function(){
+    	window.location.href = $("select").val();
     });
-    $('button').click(function(){
-    	window.location.href = $('select').val();
+    $("button").click(function(){
+    	window.location.href = $("select").val();
     });
 });
 </script>

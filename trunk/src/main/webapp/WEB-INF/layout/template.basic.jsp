@@ -36,8 +36,8 @@
 <script>
 function set_content_height()
 {
-	var h = $(window).height()-$('#csns_header').height()-$('#csns_menu').height()-$('#csns_footer').height()-60;
-	$('#csns_content #content').css('min-height', h+'px'); 
+	var h = $(window).height()-$("#csns_header").height()-$("#csns_menu").height()-$("#csns_footer").height()-60;
+	$("#csns_content #content").css("min-height", h+"px"); 
 }
 $(function(){
 	set_content_height();

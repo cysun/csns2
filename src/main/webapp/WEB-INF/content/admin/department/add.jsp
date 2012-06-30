@@ -2,20 +2,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <script>
-$(function() {
-	$.ajaxSetup({ cache: false });
-    $('#admin').autocomplete({
-        source: "<c:url value='/user/prefixSearch' />",
+$(function(){
+    $("#admin").autocomplete({
+        source: "<c:url value='/user/autocomplete' />",
         select: function(event, ui) {
             if( ui.item )
-            {
-            	$("#display").html(ui.item.id);
-            	$('<input>').attr({
-            	    type: 'hidden',
-            	    name: 'administrators',
+            	$("<input>").attr({
+            	    type: "hidden",
+            	    name: "administrators",
             	    value: ui.item.id
-            	}).appendTo('form');
-            }
+            	}).appendTo("form");
         }
     });
 });

@@ -30,20 +30,33 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Controller
+@SessionAttributes("user")
 public class UserController {
 
     @Autowired
     UserDao userDao;
 
-    @RequestMapping(value = "/user/prefixSearch")
-    public String prefixSearch( @RequestParam String term,
+    @RequestMapping(value = "/user/search")
+    public String search( @RequestParam(required = false) String term,
+        ModelMap models )
+    {
+        List<User> users = null;
+        if( StringUtils.hasText( term ) ) users = userDao.searchUsers( term );
+        models.addAttribute( "users", users );
+        return "user/search";
+    }
+
+    @RequestMapping(value = "/user/autocomplete")
+    public String autocomplete( @RequestParam String term,
         HttpServletResponse response ) throws JSONException, IOException
     {
         JSONArray jsonArray = new JSONArray();
@@ -63,13 +76,6 @@ public class UserController {
         response.setContentType( "application/json" );
         jsonArray.write( response.getWriter() );
         return null;
-    }
-
-    @RequestMapping(value = "/user/search")
-    public String search( @RequestParam String term, ModelMap models )
-    {
-        models.addAttribute( "users", userDao.searchUsers( term ) );
-        return "user/search";
     }
 
 }

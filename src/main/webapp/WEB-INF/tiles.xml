@@ -30,9 +30,14 @@
         <put-attribute name="content" value="/WEB-INF/content/login.jsp" />
     </definition>
 
-    <definition name="404" extends="layout.bare">
-        <put-attribute name="title" value="Page Not Found" />
-        <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
+    <definition name="400" extends="layout.bare">
+        <put-attribute name="title" value="Bad Request" />
+        <put-attribute name="content" value="/WEB-INF/content/400.jsp" />
+    </definition>
+
+    <definition name="401" extends="layout.bare">
+        <put-attribute name="title" value="Login Error" />
+        <put-attribute name="content" value="/WEB-INF/content/401.jsp" />
     </definition>
 
     <definition name="403" extends="layout.bare">
@@ -40,9 +45,9 @@
         <put-attribute name="content" value="/WEB-INF/content/403.jsp" />
     </definition>
 
-    <definition name="401" extends="layout.bare">
-        <put-attribute name="title" value="Login Error" />
-        <put-attribute name="content" value="/WEB-INF/content/401.jsp" />
+    <definition name="404" extends="layout.bare">
+        <put-attribute name="title" value="Page Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
     </definition>
 
     <!-- ===== -->
@@ -68,16 +73,22 @@
     <definition name="admin/department/edit" extends="layout.basic">
         <put-attribute name="title" value="Edit Department" />
         <put-attribute name="content" value="/WEB-INF/content/admin/department/edit.jsp" />
-        <put-list-attribute name="jsUrls">
-            <add-attribute value="${ckeditor.url}" />
-        </put-list-attribute>
     </definition>
 
     <!-- ==== -->
     <!-- User -->
     <!-- ==== -->
-    
-    <definition name="user/search" template="/WEB-INF/content/user/search.jsp" />
+
+    <definition name="user/search" extends="layout.basic">
+        <put-attribute name="title" value="Users" />
+        <put-attribute name="content" value="/WEB-INF/content/user/search.jsp" />
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+        </put-list-attribute>
+    </definition>
 
     <!-- ========== -->
     <!-- Department -->

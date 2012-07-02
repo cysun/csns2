@@ -93,9 +93,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
-    private String address1;
-
-    private String address2;
+    private String street;
 
     private String city;
 
@@ -188,16 +186,28 @@ public class User implements Serializable, Comparable<User>, UserDetails {
 
     public String getAddress()
     {
-        StringBuffer address = address1 != null ? new StringBuffer( address1 )
-            : new StringBuffer();
+        StringBuffer address = new StringBuffer();
 
-        if( StringUtils.hasText( address2 ) )
-            address.append( ", " ).append( address2 );
+        if( StringUtils.hasText( street ) )
+        {
+            if( address.length() > 0 ) address.append( ", " );
+            address.append( street );
+        }
         if( StringUtils.hasText( city ) )
-            address.append( ", " ).append( city );
+        {
+            if( address.length() > 0 ) address.append( ", " );
+            address.append( city );
+        }
         if( StringUtils.hasText( state ) )
-            address.append( ", " ).append( state );
-        if( StringUtils.hasText( zip ) ) address.append( " " ).append( zip );
+        {
+            if( address.length() > 0 ) address.append( ", " );
+            address.append( state );
+        }
+        if( StringUtils.hasText( zip ) )
+        {
+            if( address.length() > 0 ) address.append( " " );
+            address.append( zip );
+        }
 
         return address.toString();
     }
@@ -346,7 +356,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
 
     public void setGender( String gender )
     {
-        this.gender = gender;
+        if( StringUtils.hasText( gender ) ) this.gender = gender;
     }
 
     public Date getBirthday()
@@ -359,24 +369,14 @@ public class User implements Serializable, Comparable<User>, UserDetails {
         this.birthday = birthday;
     }
 
-    public String getAddress1()
+    public String getStreet()
     {
-        return address1;
+        return street;
     }
 
-    public void setAddress1( String address1 )
+    public void setStreet( String street )
     {
-        this.address1 = address1;
-    }
-
-    public String getAddress2()
-    {
-        return address2;
-    }
-
-    public void setAddress2( String address2 )
-    {
-        this.address2 = address2;
+        this.street = street;
     }
 
     public String getCity()

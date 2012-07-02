@@ -19,6 +19,8 @@
 package csns.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,15 +30,24 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.validator.UserValidator;
 
 @Controller
 @SessionAttributes("user")
@@ -44,6 +55,24 @@ public class UserController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserValidator userValidator;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    /*
+     * The default Spring date property editor does not accept null or empty
+     * string so we have to explicitly register one that does.
+     */
+    @InitBinder
+    public void initBinder( WebDataBinder binder )
+    {
+        binder.registerCustomEditor( Date.class, new CustomDateEditor(
+            new SimpleDateFormat( "MM/dd/yyyy" ),
+            true ) );
+    }
 
     @RequestMapping(value = "/user/search")
     public String search( @RequestParam(required = false) String term,
@@ -76,6 +105,37 @@ public class UserController {
         response.setContentType( "application/json" );
         jsonArray.write( response.getWriter() );
         return null;
+    }
+
+    @RequestMapping(value = "/user/add", method = RequestMethod.GET)
+    public String add( ModelMap models )
+    {
+        models.put( "user", new User() );
+        return "user/add";
+    }
+
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+    public String add( @ModelAttribute User user, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        userValidator.validate( user, bindingResult );
+        if( bindingResult.hasErrors() ) return "user/add";
+
+        user.setUsername( user.getCin() );
+        user.setPassword( passwordEncoder.encodePassword( user.getCin(), null ) );
+        if( !StringUtils.hasText( user.getPrimaryEmail() ) )
+            user.setPrimaryEmail( user.getCin() + "@localhost" );
+        user = userDao.saveUser( user );
+
+        sessionStatus.setComplete();
+        return "redirect:/user/view?id=" + user.getId();
+    }
+
+    @RequestMapping(value = "/user/view")
+    public String view( @RequestParam Long id, ModelMap models )
+    {
+        models.put( "user", userDao.getUser( id ) );
+        return "user/view";
     }
 
 }

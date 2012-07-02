@@ -81,8 +81,6 @@
 
     create table users (
         id int8 not null,
-        address1 varchar(255),
-        address2 varchar(255),
         birthday date,
         cell_phone varchar(255),
         cin varchar(255) not null unique,
@@ -99,6 +97,7 @@
         primary_email varchar(255) not null unique,
         secondary_email varchar(255) unique,
         state varchar(255),
+        street varchar(255),
         username varchar(255) not null unique,
         zip varchar(255),
         primary key (id)

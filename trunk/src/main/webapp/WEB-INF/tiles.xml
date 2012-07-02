@@ -90,6 +90,28 @@
         </put-list-attribute>
     </definition>
 
+    <definition name="user/add" extends="layout.basic">
+        <put-attribute name="title" value="Add User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/add.jsp" />
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="user/view" extends="layout.basic">
+        <put-attribute name="title" value="View User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/view.jsp" />
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+        </put-list-attribute>
+    </definition>
+
     <!-- ========== -->
     <!-- Department -->
     <!-- ========== -->

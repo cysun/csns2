@@ -46,29 +46,33 @@ public class DepartmentValidator implements Validator {
     {
         Department department = (Department) target;
         Long id = department.getId();
+
         String name = department.getName();
-        String abbreviation = department.getAbbreviation();
-
         if( !StringUtils.hasText( name ) )
-            errors.rejectValue( "name", "error.department.name.empty" );
-        else if( id == null
-            && departmentDao.getDepartmentByName( name ) != null )
-            errors.rejectValue( "name", "error.department.name.taken" );
+            errors.rejectValue( "name", "error.field.required" );
+        else
+        {
+            Department d = departmentDao.getDepartmentByName( name );
+            if( d != null && !d.getId().equals( id ) )
+                errors.rejectValue( "name", "error.department.name.taken" );
+        }
 
+        String abbreviation = department.getAbbreviation();
         if( !StringUtils.hasText( abbreviation ) )
-            errors.rejectValue( "abbreviation",
-                "error.department.abbreviation.empty" );
+            errors.rejectValue( "abbreviation", "error.field.required" );
         else if( !Pattern.matches( "[a-z]+", abbreviation ) )
             errors.rejectValue( "abbreviation",
                 "error.department.abbreviation.invalid" );
-        else if( id == null
-            && departmentDao.getDepartment( abbreviation ) != null )
-            errors.rejectValue( "abbreviation",
-                "error.department.abbreviation.taken" );
+        else
+        {
+            Department d = departmentDao.getDepartment( abbreviation );
+            if( d != null && !d.getId().equals( id ) )
+                errors.rejectValue( "abbreviation",
+                    "error.department.abbreviation.taken" );
+        }
 
         if( department.getAdministrators().size() == 0 )
-            errors.rejectValue( "administrators",
-                "error.department.administrators.empty" );
+            errors.rejectValue( "administrators", "error.field.required" );
     }
 
 }

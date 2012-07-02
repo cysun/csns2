@@ -92,8 +92,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmail( String email )
     {
-        List<User> users = entityManager.createQuery(
-            "from User where email1 = :email", User.class )
+        String query = "from User where primaryEmail = :email "
+            + "or secondaryEmail = :email";
+
+        List<User> users = entityManager.createQuery( query, User.class )
             .setParameter( "email", email )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
@@ -125,7 +127,8 @@ public class UserDaoImpl implements UserDao {
             + "order by firstName asc";
         Object params[] = { term, term, term, term, term };
 
-        return setParameters( entityManager.createQuery( query, User.class ),
+        return setParameters(
+            entityManager.createQuery( query, User.class ).setMaxResults( 10 ),
             params ).getResultList();
     }
 

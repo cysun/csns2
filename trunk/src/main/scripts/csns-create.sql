@@ -30,7 +30,7 @@ create table users (
     home_phone      varchar(255),
     office_phone    varchar(255),
     enabled         boolean not null default 't',
-    expired         boolean not null default 'f'
+    temporary       boolean not null default 'f'
 );
 
 create table authorities (

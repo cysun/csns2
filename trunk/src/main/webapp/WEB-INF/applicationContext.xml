@@ -50,6 +50,7 @@
             authentication-failure-url="/401" />
         <security:logout success-handler-ref="logoutRedirectHandler" />
         <security:remember-me data-source-ref="dataSource"/>
+        <security:custom-filter ref="registrationFilter" position="LAST" />
         <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
     </security:http>
 

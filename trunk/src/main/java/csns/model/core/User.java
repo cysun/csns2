@@ -58,8 +58,8 @@ public class User implements Serializable, Comparable<User>, UserDetails {
 
     /**
      * CSNS used to encrypt CIN, but we no longer do that because it's better to
-     * have access to the CINs for student and class management. Some CINs in
-     * the system are still encrypted, and these CINs are indicated by
+     * have access to the CIN for student and class management. Some CIN in the
+     * system are still encrypted, and these CIN are indicated by
      * <code>cinEncrypted=true</code>.
      */
     @Column(name = "cin_encrypted", nullable = false)
@@ -117,8 +117,15 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Column(nullable = false)
     private boolean enabled;
 
+    /**
+     * A temporary account is an automatically created account (typically by
+     * roster import) where both the username and the password are the cin. When
+     * the user logs in for the first time, the user will be asked to complete
+     * the account information - including selecting a username and a password
+     * and so on, and after that the account is no longer temporary.
+     */
     @Column(nullable = false)
-    private boolean expired;
+    private boolean temporary;
 
     @Transient
     String password1;
@@ -130,7 +137,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     {
         cinEncrypted = false;
         enabled = true;
-        expired = false;
+        temporary = false;
         roles = new HashSet<String>();
     }
 
@@ -240,7 +247,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Override
     public boolean isAccountNonExpired()
     {
-        return !expired;
+        return true;
     }
 
     @Override
@@ -470,14 +477,14 @@ public class User implements Serializable, Comparable<User>, UserDetails {
         this.enabled = enabled;
     }
 
-    public boolean isExpired()
+    public boolean isTemporary()
     {
-        return expired;
+        return temporary;
     }
 
-    public void setExpired( boolean expired )
+    public void setTemporary( boolean temporary )
     {
-        this.expired = expired;
+        this.temporary = temporary;
     }
 
     public String getPassword1()

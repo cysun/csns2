@@ -87,7 +87,6 @@
         cin_encrypted boolean not null,
         city varchar(255),
         enabled boolean not null,
-        expired boolean not null,
         first_name varchar(255) not null,
         gender varchar(255),
         home_phone varchar(255),
@@ -99,6 +98,7 @@
         secondary_email varchar(255),
         state varchar(255),
         street varchar(255),
+        temporary boolean not null,
         username varchar(255) not null unique,
         zip varchar(255),
         primary key (id)

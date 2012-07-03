@@ -26,24 +26,31 @@ import csns.model.core.User;
 
 public class SecurityUtils {
 
-    public static AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
+    private static AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
 
-    public static User getCurrentUser()
-    {
-        return (User) SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getPrincipal();
-    }
-
-    public static Long getCurrentUserId()
-    {
-        return getCurrentUser().getId();
-    }
-
-    public static boolean isAnonymousUser()
+    /**
+     * <security:http> adds an AnonymousAuthenticationFilter which creates an
+     * Authentication token for anonymous users. The problem is that
+     * Authentication.isAuthenticated() will then return true even for anonymous
+     * users, so we have to use a AuthenticationTrustResolver to check for
+     * anonymous/authenticated.
+     */
+    public static boolean isAnonymous()
     {
         return authenticationTrustResolver.isAnonymous( SecurityContextHolder.getContext()
             .getAuthentication() );
+    }
+
+    public static boolean isAuthenticated()
+    {
+        return !isAnonymous();
+    }
+
+    public static User geUser()
+    {
+        return isAuthenticated() ? (User) SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getPrincipal() : null;
     }
 
 }

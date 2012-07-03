@@ -25,7 +25,7 @@ $(function(){
 <form:form modelAttribute="department">
 <table class="general">
   <tr>
-    <th>Name:</th>
+    <th>Name</th>
     <td>
       <form:input path="name" cssClass="leftinput" size="40" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
@@ -33,7 +33,7 @@ $(function(){
   </tr>
 
   <tr>
-    <th>Abbreviation:</th>
+    <th>Abbreviation</th>
     <td>
       <form:input path="abbreviation" cssClass="leftinput" size="40" maxlength="10" />
       <div class="error"><form:errors path="abbreviation" /></div>
@@ -41,7 +41,7 @@ $(function(){
   </tr>
 
   <tr>
-    <th>Administrator:</th>
+    <th>Administrator</th>
     <td>
       <input id="admin" type="text" class="forminput" name="term" size="40"
         value="${department.administrators[0].name}" />

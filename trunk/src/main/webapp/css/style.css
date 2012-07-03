@@ -153,6 +153,16 @@ pre {
     padding:0 5px;
 }
 
+.opbutton {
+    font: 14px Verdana,sans-serif;
+    background-color: #ffffff;
+    padding: 4px 10px;
+    margin-left: 10px;
+    border: 1px solid #969887;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #888;
+}
+
 /**********  TABLES  **********/
 
 table {

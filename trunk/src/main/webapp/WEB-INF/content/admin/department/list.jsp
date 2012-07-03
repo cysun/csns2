@@ -1,9 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<script>
+$(function(){
+    $("#add").click(function(){
+        window.location.href = "add";
+    });
+});
+</script>
+
 <ul id="title">
 <li>Departments</li>
+<li class="align_right"><button id="add" class="opbutton">Add</button></li>
 </ul>
-
-<p><a href="add">Add</a></p>
 
 <table class="viewtable">
 <tr>

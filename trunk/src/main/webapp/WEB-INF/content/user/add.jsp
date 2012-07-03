@@ -14,14 +14,16 @@ $(function() {
         var cin = "G" + (100000000 + Math.floor(Math.random()*100000000));
         $("#cin").val( cin );
     });
+    $("#cellPhone").mask("(999) 999-9999");
+    $("#homePhone").mask("(999) 999-9999");
+    $("#officePhone").mask("(999) 999-9999");
 });
 </script>
 
 <ul id="title">
-<li>Users</li>
+<li><a class="bc" href="search">Users</a></li>
+<li>Add User</li>
 </ul>
-
-<h3><a href="search">Search</a> | Add</h3>
 
 <p>When a new account is created, the username and the password for the account
 are the user's CIN. When the user logs onto the system for the first time,
@@ -30,21 +32,21 @@ they will be asked to choose their own username and password.</p>
 <form:form commandName="user">
 <table class="general">
   <tr>
-    <th>First Name *:</th>
+    <th>First Name *</th>
     <td>
       <form:input path="firstName" cssClass="forminput" />
       <div class="error"><form:errors path="firstName" /></div>
     </td>
   </tr>
   <tr>
-    <th>Last Name *:</th>
+    <th>Last Name *</th>
     <td>
       <form:input path="lastName" cssClass="forminput" />
       <div class="error"><form:errors path="lastName" /></div>
     </td>
   </tr>
   <tr>
-    <th>Gender:</th>
+    <th>Gender</th>
     <td>
       <form:select path="gender">
         <option />
@@ -54,11 +56,11 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
-    <th>Birthday (mm/dd/yyyy):</th>
-    <td><form:input path="birthday" cssClass="forminput" /></td>
+    <th>Birthday</th>
+    <td><form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" /></td>
   </tr>
   <tr>
-    <th>CIN *:</th>
+    <th>CIN *</th>
     <td>
       <form:input path="cin" cssClass="forminput" />
       <button id="generate_cin" class="subbutton">Generate</button>
@@ -66,53 +68,53 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
-    <th>Primary Email:</th>
+    <th>Primary Email</th>
     <td>
       <form:input path="primaryEmail" cssClass="forminput" />
       <div class="error"><form:errors path="primaryEmail" /></div>
     </td>
   </tr>
   <tr>
-    <th>Secondary Email:</th>
+    <th>Secondary Email</th>
     <td>
       <form:input path="secondaryEmail" cssClass="forminput" />
       <div class="error"><form:errors path="secondaryEmail" /></div>
     </td>
   </tr>
   <tr>
-    <th>Street:</th>
+    <th>Street</th>
     <td><form:input path="street" cssClass="forminput" /></td>
   </tr>
   <tr>
-    <th>City:</th>
+    <th>City</th>
     <td><form:input path="city" cssClass="forminput" /></td>
   </tr>
   <tr>
-    <th>State:</th>
+    <th>State</th>
     <td><form:input path="state" cssClass="forminput" /></td>
   </tr>
   <tr>
-    <th>Zip:</th>
+    <th>Zip</th>
     <td>
       <form:input path="zip" maxlength="5" cssClass="forminput" />
     </td>
   </tr>
   <tr>
-    <th>Cell Phone:</th>
+    <th>Cell Phone</th>
     <td>
-      <form:input path="cellPhone" cssClass="forminput" />
+      <form:input path="cellPhone" cssClass="forminput" placeholder="(###) ###-####" />
     </td>
   </tr>
   <tr>
-    <th>Home Phone:</th>
+    <th>Home Phone</th>
     <td>
-      <form:input path="homePhone" cssClass="forminput" />
+      <form:input path="homePhone" cssClass="forminput" placeholder="(###) ###-####" />
     </td>
   </tr>
   <tr>
-    <th>Office Phone:</th>
+    <th>Office Phone</th>
     <td>
-      <form:input path="officePhone" cssClass="forminput" />
+      <form:input path="officePhone" cssClass="forminput" placeholder="(###) ###-####" />
     </td>
   </tr>
   <tr>

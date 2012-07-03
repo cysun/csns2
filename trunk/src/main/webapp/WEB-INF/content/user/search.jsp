@@ -2,6 +2,9 @@
 
 <script>
 $(function(){
+    $("#add").click(function(){
+        window.location.href = "add";
+    });
     $("#search").autocomplete({
         source: "<c:url value='/user/autocomplete' />",
         select: function(event, ui) {
@@ -24,9 +27,8 @@ $(function(){
 
 <ul id="title">
 <li>Users</li>
+<li class="align_right"><button id="add" class="opbutton">Add</button></li>
 </ul>
-
-<h3>Search | <a href="add">Add</a></h3>
 
 <form action="search" method="get">
 <p><input id="search" name="term" type="text" class="forminput" size="40" />

@@ -3,11 +3,11 @@
 ## app.email.admin is the email that the users can use to contact the system
 ## administrator. Uploaded files are stored in app.dir.file, and the log files
 ## are kept under app.dir.log.
-app.url=http://localhost:8080/csns
-app.email=csns@localhost.localdomain
-app.email.admin=csnsadmin@localhost.localdomain
-app.dir.file=E:/TEMP/csns2/files
-app.dir.log=E:/TEMP/csns2/logs
+app.url=http://localhost:8080/csns2
+app.email=csns2@localhost.localdomain
+app.email.admin=csns2admin@localhost.localdomain
+app.dir.file=E:/Temp/csns2/files
+app.dir.log=E:/Temp/csns2/logs
 
 ## set app.log.level to debug during development and info for production.
 ## app.log.request controls whether HTTP requests should be logged.

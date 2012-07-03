@@ -3,6 +3,9 @@
 
 <script type="text/javascript">
 $(function() {
+    $("#tabs").tabs({
+        cache: false
+    });
     $("#birthday").datepicker({
         inline: true,
         changeMonth: true,
@@ -22,13 +25,18 @@ $(function() {
 
 <ul id="title">
 <li><a class="bc" href="search">Users</a></li>
-<li>Add User</li>
+<li><a class="bc" href="view?id=${user.id}">${user.name}</a></li>
+<li>Edit User</li>
 </ul>
 
-<p>When a new account is created, the username and the password for the account
-are the user's CIN. When the user logs onto the system for the first time,
-they will be asked to choose their own username and password.</p>
-
+<div id="tabs">
+<ul>
+  <li><a href="#account">Account</a></li>
+  <li><a href="standings">Standings</a></li>
+  <li><a href="coursework">Course Work</a></li>
+  <li><a href="advisement">Advisement</a></li>
+</ul>
+<div id="account">
 <form:form modelAttribute="user">
 <table class="general">
   <tr>
@@ -46,10 +54,16 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
-    <th>Gender</th>
+    <th>Middle Name</th>
+    <td>
+      <form:input path="middleName" cssClass="forminput" />
+    </td>
+  </tr>
+  <tr>
+    <th>Gender:</th>
     <td>
       <form:select path="gender">
-        <option />
+        <form:option value="" />
         <form:option value="M">Male</form:option>
         <form:option value="F">Female</form:option>
       </form:select>
@@ -65,8 +79,28 @@ they will be asked to choose their own username and password.</p>
     <th>CIN *</th>
     <td>
       <form:input path="cin" cssClass="forminput" />
-      <button id="generate_cin" class="subbutton">Generate</button>
       <div class="error"><form:errors path="cin" /></div>
+    </td>
+  </tr>
+  <tr>
+    <th>Username *</th>
+    <td>
+      <form:input path="username" cssClass="forminput" />
+      <div class="error"><form:errors path="username" /></div>
+    </td>
+  </tr>
+  <tr>
+    <th>Password</th>
+    <td>
+      <form:password path="password1" cssClass="forminput" />
+      <div class="error"><form:errors path="password1" /></div>
+    </td>
+  </tr>
+  <tr>
+    <th>Confirm password:</th>
+    <td>
+      <form:password path="password2" cssClass="forminput" />
+      <div class="error"><form:errors path="password2" /></div>
     </td>
   </tr>
   <tr>
@@ -120,10 +154,20 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
+    <th>Enabled:</th>
+    <td><form:checkbox path="enabled" cssStyle="width: auto;" /></td>
+  </tr>
+  <tr>
+    <th>Expired:</th>
+    <td><form:checkbox path="expired" cssStyle="width: auto;" /></td>
+  </tr>
+  <tr>
     <th></th>
     <td>
-      <input type="submit" class="subbutton" value="Add" />
+      <input type="submit" style="width: auto;" class="subbutton" value="Save" />
     </td>
   </tr>
 </table>
 </form:form>
+</div> <!-- account -->
+</div> <!-- tabs -->

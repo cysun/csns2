@@ -73,6 +73,9 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Column(nullable = false)
     private boolean enabled;
 
+    @Column(name = "account_expired", nullable = false)
+    private boolean accountExpired;
+
     @ElementCollection
     @CollectionTable(name = "authorities",
         joinColumns = @JoinColumn(name = "user_id"))
@@ -104,7 +107,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Column(name = "primary_email", nullable = false, unique = true)
     private String primaryEmail;
 
-    @Column(name = "secondary_email", unique = true)
+    @Column(name = "secondary_email")
     private String secondaryEmail;
 
     @Column(name = "cell_phone")
@@ -120,6 +123,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     {
         cinEncrypted = false;
         enabled = true;
+        accountExpired = false;
         roles = new HashSet<String>();
     }
 
@@ -229,7 +233,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Override
     public boolean isAccountNonExpired()
     {
-        return true;
+        return !accountExpired;
     }
 
     @Override
@@ -307,6 +311,16 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     public void setEnabled( boolean enabled )
     {
         this.enabled = enabled;
+    }
+
+    public boolean isAccountExpired()
+    {
+        return accountExpired;
+    }
+
+    public void setAccountExpired( boolean accountExpired )
+    {
+        this.accountExpired = accountExpired;
     }
 
     public Set<String> getRoles()

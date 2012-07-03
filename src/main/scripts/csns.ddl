@@ -81,6 +81,7 @@
 
     create table users (
         id int8 not null,
+        account_expired boolean not null,
         birthday date,
         cell_phone varchar(255),
         cin varchar(255) not null unique,
@@ -95,7 +96,7 @@
         office_phone varchar(255),
         password varchar(255) not null,
         primary_email varchar(255) not null unique,
-        secondary_email varchar(255) unique,
+        secondary_email varchar(255),
         state varchar(255),
         street varchar(255),
         username varchar(255) not null unique,

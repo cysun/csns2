@@ -74,19 +74,6 @@ public class UserValidator implements Validator {
             if( u != null && !u.getId().equals( id ) )
                 errors.rejectValue( "primaryEmail", "error.user.email.taken" );
         }
-
-        String secondaryEmail = user.getSecondaryEmail();
-        if( StringUtils.hasText( secondaryEmail ) )
-        {
-            User u = userDao.getUserByEmail( secondaryEmail );
-            if( u != null && !u.getId().equals( id ) )
-                errors.rejectValue( "secondaryEmail", "error.user.email.taken" );
-        }
-
-        if( StringUtils.hasText( primaryEmail )
-            && StringUtils.hasText( secondaryEmail )
-            && secondaryEmail.equalsIgnoreCase( primaryEmail ) )
-            errors.rejectValue( "secondaryEmail", "error.user.email.same" );
     }
 
 }

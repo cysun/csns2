@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -40,18 +39,6 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    /**
-     * A helper method for setting multiple parameters.
-     */
-    private TypedQuery<User> setParameters( TypedQuery<User> query,
-        Object[] params )
-    {
-        for( int i = 0; i < params.length; ++i )
-            query.setParameter( i + 1, params[i] );
-
-        return query;
-    }
 
     @Override
     public User getUser( Long id )
@@ -92,8 +79,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmail( String email )
     {
-        String query = "from User where primaryEmail = :email "
-            + "or secondaryEmail = :email";
+        String query = "from User where primaryEmail = :email";
 
         List<User> users = entityManager.createQuery( query, User.class )
             .setParameter( "email", email )
@@ -105,31 +91,31 @@ public class UserDaoImpl implements UserDao {
     public List<User> searchUsers( String term )
     {
         term = term.toLowerCase();
-        String query = "from User where cin = ?1 or lower(username) = ?2 "
-            + "or lower(firstName) = ?3 or lower(lastName) = ?4 "
-            + "or lower(firstName || ' ' || lastName) = ?5 "
+        String query = "from User where cin = :term or lower(username) = :term "
+            + "or lower(firstName) = :term or lower(lastName) = :term "
+            + "or lower(firstName || ' ' || lastName) = :term "
             + "order by firstName asc";
-        Object params[] = { term, term, term, term, term };
 
-        return setParameters( entityManager.createQuery( query, User.class ),
-            params ).getResultList();
+        return entityManager.createQuery( query, User.class )
+            .setParameter( "term", term )
+            .getResultList();
     }
 
     @Override
     public List<User> searchUsersByPrefix( String term )
     {
         term = term.toLowerCase();
-        String query = "from User where cin like ?1 || '%' "
-            + "or lower(username) like ?2 || '%' "
-            + "or lower(firstName) like ?3 || '%' "
-            + "or lower(lastName) like ?4 || '%' "
-            + "or lower(firstName || ' ' || lastName) like ?5 || '%' "
+        String query = "from User where cin like :term || '%' "
+            + "or lower(username) like :term || '%' "
+            + "or lower(firstName) like :term || '%' "
+            + "or lower(lastName) like :term || '%' "
+            + "or lower(firstName || ' ' || lastName) like :term || '%' "
             + "order by firstName asc";
-        Object params[] = { term, term, term, term, term };
 
-        return setParameters(
-            entityManager.createQuery( query, User.class ).setMaxResults( 10 ),
-            params ).getResultList();
+        return entityManager.createQuery( query, User.class )
+            .setParameter( "term", term )
+            .setMaxResults( 10 )
+            .getResultList();
     }
 
     @Override

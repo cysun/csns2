@@ -136,7 +136,7 @@ public class UserController {
         user.setPassword( passwordEncoder.encodePassword( user.getCin(), null ) );
         if( !StringUtils.hasText( user.getPrimaryEmail() ) )
             user.setPrimaryEmail( user.getCin() + "@localhost" );
-        user.setExpired( true );
+        user.setTemporary( true );
         user = userDao.saveUser( user );
 
         sessionStatus.setComplete();

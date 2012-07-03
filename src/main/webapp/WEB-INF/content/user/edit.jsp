@@ -158,8 +158,8 @@ $(function() {
     <td><form:checkbox path="enabled" cssStyle="width: auto;" /></td>
   </tr>
   <tr>
-    <th>Expired:</th>
-    <td><form:checkbox path="expired" cssStyle="width: auto;" /></td>
+    <th>Temporary:</th>
+    <td><form:checkbox path="temporary" cssStyle="width: auto;" /></td>
   </tr>
   <tr>
     <th></th>

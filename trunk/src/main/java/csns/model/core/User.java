@@ -36,6 +36,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -69,12 +70,6 @@ public class User implements Serializable, Comparable<User>, UserDetails {
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
-    private boolean enabled;
-
-    @Column(name = "account_expired", nullable = false)
-    private boolean accountExpired;
 
     @ElementCollection
     @CollectionTable(name = "authorities",
@@ -119,11 +114,23 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Column(name = "office_phone")
     private String officePhone;
 
+    @Column(nullable = false)
+    private boolean enabled;
+
+    @Column(nullable = false)
+    private boolean expired;
+
+    @Transient
+    String password1;
+
+    @Transient
+    String password2;
+
     public User()
     {
         cinEncrypted = false;
         enabled = true;
-        accountExpired = false;
+        expired = false;
         roles = new HashSet<String>();
     }
 
@@ -233,7 +240,7 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     @Override
     public boolean isAccountNonExpired()
     {
-        return !accountExpired;
+        return !expired;
     }
 
     @Override
@@ -301,26 +308,6 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     public void setPassword( String password )
     {
         this.password = password;
-    }
-
-    public boolean isEnabled()
-    {
-        return enabled;
-    }
-
-    public void setEnabled( boolean enabled )
-    {
-        this.enabled = enabled;
-    }
-
-    public boolean isAccountExpired()
-    {
-        return accountExpired;
-    }
-
-    public void setAccountExpired( boolean accountExpired )
-    {
-        this.accountExpired = accountExpired;
     }
 
     public Set<String> getRoles()
@@ -471,6 +458,46 @@ public class User implements Serializable, Comparable<User>, UserDetails {
     public void setOfficePhone( String officePhone )
     {
         this.officePhone = officePhone;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled( boolean enabled )
+    {
+        this.enabled = enabled;
+    }
+
+    public boolean isExpired()
+    {
+        return expired;
+    }
+
+    public void setExpired( boolean expired )
+    {
+        this.expired = expired;
+    }
+
+    public String getPassword1()
+    {
+        return password1;
+    }
+
+    public void setPassword1( String password1 )
+    {
+        this.password1 = password1;
+    }
+
+    public String getPassword2()
+    {
+        return password2;
+    }
+
+    public void setPassword2( String password2 )
+    {
+        this.password2 = password2;
     }
 
 }

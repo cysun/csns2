@@ -49,6 +49,6 @@ $(function(){
     </td>
   </tr>
 
-  <tr><th></th><td><input class="subbutton" type="submit" value="Done" /></td></tr>
+  <tr><th></th><td><input class="subbutton" type="submit" value="Add" /></td></tr>
 </table>
 </form:form>

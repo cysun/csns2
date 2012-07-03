@@ -47,6 +47,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.validator.AccountValidator;
 import csns.validator.UserValidator;
 
 @Controller
@@ -58,6 +59,9 @@ public class UserController {
 
     @Autowired
     UserValidator userValidator;
+
+    @Autowired
+    AccountValidator accountValidator;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -107,6 +111,13 @@ public class UserController {
         return null;
     }
 
+    @RequestMapping(value = "/user/view")
+    public String view( @RequestParam Long id, ModelMap models )
+    {
+        models.put( "user", userDao.getUser( id ) );
+        return "user/view";
+    }
+
     @RequestMapping(value = "/user/add", method = RequestMethod.GET)
     public String add( ModelMap models )
     {
@@ -125,18 +136,35 @@ public class UserController {
         user.setPassword( passwordEncoder.encodePassword( user.getCin(), null ) );
         if( !StringUtils.hasText( user.getPrimaryEmail() ) )
             user.setPrimaryEmail( user.getCin() + "@localhost" );
-        user.setAccountExpired( true );
+        user.setExpired( true );
         user = userDao.saveUser( user );
 
         sessionStatus.setComplete();
         return "redirect:/user/view?id=" + user.getId();
     }
 
-    @RequestMapping(value = "/user/view")
-    public String view( @RequestParam Long id, ModelMap models )
+    @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
+    public String edit( @RequestParam Long id, ModelMap models )
     {
         models.put( "user", userDao.getUser( id ) );
-        return "user/view";
+        return "user/edit";
+    }
+
+    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+    public String edit( @ModelAttribute User user, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        accountValidator.validate( user, bindingResult );
+        if( bindingResult.hasErrors() ) return "user/edit";
+
+        String password = user.getPassword1();
+        if( StringUtils.hasText( password ) )
+            user.setPassword( passwordEncoder.encodePassword( password, null ) );
+
+        user = userDao.saveUser( user );
+
+        sessionStatus.setComplete();
+        return "redirect:/user/view?id=" + user.getId();
     }
 
 }

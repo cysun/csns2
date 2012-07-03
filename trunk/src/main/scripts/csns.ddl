@@ -81,13 +81,13 @@
 
     create table users (
         id int8 not null,
-        account_expired boolean not null,
         birthday date,
         cell_phone varchar(255),
         cin varchar(255) not null unique,
         cin_encrypted boolean not null,
         city varchar(255),
         enabled boolean not null,
+        expired boolean not null,
         first_name varchar(255) not null,
         gender varchar(255),
         home_phone varchar(255),

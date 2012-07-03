@@ -15,8 +15,6 @@ create table users (
     cin_encrypted   boolean not null default 'f',
     username        varchar(255) not null unique,
     password        varchar(255) not null,
-    enabled         boolean not null default 't',
-    account_expired boolean not null default 'f',
     last_name       varchar(255) not null,
     first_name      varchar(255) not null,
     middle_name     varchar(255),
@@ -30,7 +28,9 @@ create table users (
     secondary_email varchar(255),
     cell_phone      varchar(255),
     home_phone      varchar(255),
-    office_phone    varchar(255)
+    office_phone    varchar(255),
+    enabled         boolean not null default 't',
+    expired         boolean not null default 'f'
 );
 
 create table authorities (

@@ -38,6 +38,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,9 +47,12 @@ import org.springframework.util.StringUtils;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable, Comparable<User>, UserDetails {
+public class User implements Serializable, Cloneable, Comparable<User>,
+    UserDetails {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = LoggerFactory.getLogger( User.class );
 
     @Id
     @GeneratedValue
@@ -139,6 +144,39 @@ public class User implements Serializable, Comparable<User>, UserDetails {
         enabled = true;
         temporary = false;
         roles = new HashSet<String>();
+    }
+
+    public User clone()
+    {
+        User user = null;
+        try
+        {
+            user = (User) super.clone();
+            user.roles = new HashSet<String>();
+            for( String role : roles )
+                user.roles.add( role );
+        }
+        catch( CloneNotSupportedException e )
+        {
+            logger.warn( "Clone user " + id + " failed." );
+        }
+
+        return user;
+    }
+
+    public void copySelfEditableFieldsFrom( User user )
+    {
+        gender = user.gender;
+        birthday = user.birthday;
+        street = user.street;
+        city = user.city;
+        state = user.state;
+        zip = user.zip;
+        primaryEmail = user.primaryEmail;
+        secondaryEmail = user.secondaryEmail;
+        cellPhone = user.cellPhone;
+        homePhone = user.homePhone;
+        officePhone = user.officePhone;
     }
 
     public int compareTo( User user )

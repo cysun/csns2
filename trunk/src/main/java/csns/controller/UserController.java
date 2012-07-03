@@ -47,8 +47,10 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
-import csns.validator.AccountValidator;
-import csns.validator.UserValidator;
+import csns.security.SecurityUtils;
+import csns.validator.AddUserValidator;
+import csns.validator.EditUserValidator;
+import csns.validator.RegistrationValidator;
 
 @Controller
 @SessionAttributes("user")
@@ -58,10 +60,13 @@ public class UserController {
     UserDao userDao;
 
     @Autowired
-    UserValidator userValidator;
+    AddUserValidator addUserValidator;
 
     @Autowired
-    AccountValidator accountValidator;
+    EditUserValidator editUserValidator;
+
+    @Autowired
+    RegistrationValidator registrationValidator;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -129,7 +134,7 @@ public class UserController {
     public String add( @ModelAttribute User user, BindingResult bindingResult,
         SessionStatus sessionStatus )
     {
-        userValidator.validate( user, bindingResult );
+        addUserValidator.validate( user, bindingResult );
         if( bindingResult.hasErrors() ) return "user/add";
 
         user.setUsername( user.getCin() );
@@ -154,17 +159,46 @@ public class UserController {
     public String edit( @ModelAttribute User user, BindingResult bindingResult,
         SessionStatus sessionStatus )
     {
-        accountValidator.validate( user, bindingResult );
+        editUserValidator.validate( user, bindingResult );
         if( bindingResult.hasErrors() ) return "user/edit";
 
         String password = user.getPassword1();
         if( StringUtils.hasText( password ) )
             user.setPassword( passwordEncoder.encodePassword( password, null ) );
-
         user = userDao.saveUser( user );
 
         sessionStatus.setComplete();
         return "redirect:/user/view?id=" + user.getId();
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register( ModelMap models )
+    {
+        User user = SecurityUtils.getUser().clone();
+        user.setUsername( null );
+        user.setPrimaryEmail( null );
+        models.put( "user", user );
+        return "register";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register( @ModelAttribute("user") User cmd,
+        BindingResult bindingResult, SessionStatus sessionStatus )
+    {
+        registrationValidator.validate( cmd, bindingResult );
+        if( bindingResult.hasErrors() ) return "register";
+
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        user.copySelfEditableFieldsFrom( cmd );
+        user.setUsername( cmd.getUsername() );
+        String password = cmd.getPassword1();
+        if( StringUtils.hasText( password ) )
+            user.setPassword( passwordEncoder.encodePassword( password, null ) );
+        user.setTemporary( false );
+        userDao.saveUser( user );
+
+        sessionStatus.setComplete();
+        return "redirect:/j_spring_security_logout";
     }
 
 }

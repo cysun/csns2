@@ -29,11 +29,10 @@ import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 /**
- * This validator is used for adding new users in user management. Registration
- * and account profile have their own validators.
+ * This validator is for adding new users in user management.
  */
 @Component
-public class UserValidator implements Validator {
+public class AddUserValidator implements Validator {
 
     @Autowired
     UserDao userDao;

@@ -47,7 +47,7 @@ public class RegistrationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI().substring( contextPath.length() );
 
         if( SecurityUtils.isAuthenticated()
-            && SecurityUtils.geUser().isTemporary() && !isPassThrough( path ) )
+            && SecurityUtils.getUser().isTemporary() && !isPassThrough( path ) )
         {
             response.sendRedirect( contextPath + "/register" );
             return;

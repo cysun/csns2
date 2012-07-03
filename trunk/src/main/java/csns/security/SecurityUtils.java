@@ -46,7 +46,7 @@ public class SecurityUtils {
         return !isAnonymous();
     }
 
-    public static User geUser()
+    public static User getUser()
     {
         return isAuthenticated() ? (User) SecurityContextHolder.getContext()
             .getAuthentication()

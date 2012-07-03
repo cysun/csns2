@@ -26,10 +26,10 @@ import org.springframework.validation.ValidationUtils;
 import csns.model.core.User;
 
 /**
- * This validator is used for editing user, registration, and account profile.
+ * This validator is for account profile and editing users in user management.
  */
 @Component
-public class AccountValidator extends UserValidator {
+public class EditUserValidator extends AddUserValidator {
 
     @Override
     public void validate( Object target, Errors errors )

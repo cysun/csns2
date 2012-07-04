@@ -57,6 +57,8 @@
     <security:global-method-security pre-post-annotations="enabled" />
 
     <context:component-scan base-package="csns.model" />
+    <context:component-scan base-package="csns.filter" />
     <context:component-scan base-package="csns.security" />
+    <context:component-scan base-package="csns.util" />
 
 </beans>

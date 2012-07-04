@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.security;
+package csns.filter;
 
 import java.io.IOException;
 
@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import csns.security.SecurityUtils;
 
 @Component
 public class RegistrationFilter extends OncePerRequestFilter {

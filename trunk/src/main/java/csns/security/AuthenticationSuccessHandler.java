@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -32,10 +33,14 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import csns.model.core.User;
+import csns.util.DefaultUrls;
 
 @Component
 public class AuthenticationSuccessHandler extends
     SavedRequestAwareAuthenticationSuccessHandler {
+
+    @Autowired
+    DefaultUrls defaultUrls;
 
     @Override
     public void onAuthenticationSuccess( HttpServletRequest request,
@@ -53,18 +58,8 @@ public class AuthenticationSuccessHandler extends
             return;
         }
 
-        String targetUrl;
-        if( user.isFaculty() || user.isInstructor() )
-            targetUrl = "/instructor/section/list";
-        else if( user.isDepartmentAdmin() )
-            targetUrl = "/" + user.getDepartments( "ROLE_ADMIN" ).get( 0 )
-                + "/admin/";
-        else if( user.isAdmin() )
-            targetUrl = "/admin/department/list";
-        else
-            targetUrl = "/student/section/list";
-
-        getRedirectStrategy().sendRedirect( request, response, targetUrl );
+        getRedirectStrategy().sendRedirect( request, response,
+            defaultUrls.homeUrl( user ) );
     }
 
 }

@@ -78,7 +78,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>csns.util.Hbm2ddl</mainClass>
+          <mainClass>csns.tool.Hbm2ddl</mainClass>
           <arguments>
             <argument>${project.build.scriptSourceDirectory}/csns.ddl</argument>
           </arguments>

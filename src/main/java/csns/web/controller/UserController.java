@@ -48,7 +48,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
-import csns.web.util.DefaultUrls;
+import csns.util.DefaultUrls;
 import csns.web.validator.AddUserValidator;
 import csns.web.validator.EditUserValidator;
 import csns.web.validator.RegistrationValidator;

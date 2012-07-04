@@ -33,7 +33,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import csns.model.core.User;
-import csns.web.util.DefaultUrls;
+import csns.util.DefaultUrls;
 
 @Component
 public class AuthenticationSuccessHandler extends

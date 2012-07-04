@@ -33,7 +33,7 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 import org.springframework.stereotype.Component;
 
 import csns.model.core.User;
-import csns.util.DefaultUrls;
+import csns.web.util.DefaultUrls;
 
 @Component
 public class LogoutRedirectHandler implements LogoutSuccessHandler {

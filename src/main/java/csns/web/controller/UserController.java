@@ -48,7 +48,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
-import csns.util.DefaultUrls;
+import csns.web.util.DefaultUrls;
 import csns.web.validator.AddUserValidator;
 import csns.web.validator.EditUserValidator;
 import csns.web.validator.RegistrationValidator;
@@ -207,7 +207,7 @@ public class UserController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile( ModelMap models )
     {
-        User user = SecurityUtils.getUser().clone();
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
         models.put( "user", user );
         return "profile";
     }

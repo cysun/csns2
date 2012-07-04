@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.controller.admin;
+package csns.web.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,12 +32,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
 
-import csns.editor.UserPropertyEditor;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
-import csns.validator.DepartmentValidator;
+import csns.web.editor.UserPropertyEditor;
+import csns.web.validator.DepartmentValidator;
 
 @Controller
 @SessionAttributes("department")

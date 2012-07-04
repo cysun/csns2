@@ -16,62 +16,50 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.validator;
+package csns.web.validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
 import csns.model.core.User;
-import csns.model.core.dao.UserDao;
 
 /**
- * This validator is for adding new users in user management.
+ * This validator is for account profile and editing users in user management.
  */
 @Component
-public class AddUserValidator implements Validator {
-
-    @Autowired
-    UserDao userDao;
-
-    @Override
-    public boolean supports( Class<?> clazz )
-    {
-        return User.class.isAssignableFrom( clazz );
-    }
+public class EditUserValidator extends AddUserValidator {
 
     @Override
     public void validate( Object target, Errors errors )
     {
+        super.validate( target, errors );
+
         User user = (User) target;
         Long id = user.getId();
 
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "firstName",
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "username",
             "error.field.required" );
 
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "lastName",
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "primaryEmail",
             "error.field.required" );
 
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "cin",
-            "error.field.required" );
-
-        String cin = user.getCin();
-        if( StringUtils.hasText( cin ) )
+        String username = user.getUsername();
+        if( StringUtils.hasText( username ) )
         {
-            User u = userDao.getUserByCin( cin );
+            User u = userDao.getUserByUsername( username );
             if( u != null && !u.getId().equals( id ) )
-                errors.rejectValue( "cin", "error.user.cin.taken" );
+                errors.rejectValue( "username", "error.user.username.taken" );
         }
 
-        String primaryEmail = user.getPrimaryEmail();
-        if( StringUtils.hasText( primaryEmail ) )
+        String password1 = user.getPassword1();
+        if( StringUtils.hasText( password1 ) )
         {
-            User u = userDao.getUserByEmail( primaryEmail );
-            if( u != null && !u.getId().equals( id ) )
-                errors.rejectValue( "primaryEmail", "error.user.email.taken" );
+            if( password1.length() < 6 )
+                errors.rejectValue( "password1", "error.user.password.short" );
+            if( !password1.equals( user.getPassword2() ) )
+                errors.rejectValue( "password2", "error.user.password.notmatch" );
         }
     }
 

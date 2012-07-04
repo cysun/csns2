@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.editor;
+package csns.web.editor;
 
 import java.beans.PropertyEditorSupport;
 

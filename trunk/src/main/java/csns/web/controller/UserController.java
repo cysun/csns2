@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.controller;
+package csns.web.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -49,9 +49,9 @@ import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.util.DefaultUrls;
-import csns.validator.AddUserValidator;
-import csns.validator.EditUserValidator;
-import csns.validator.RegistrationValidator;
+import csns.web.validator.AddUserValidator;
+import csns.web.validator.EditUserValidator;
+import csns.web.validator.RegistrationValidator;
 
 @Controller
 @SessionAttributes("user")

@@ -48,6 +48,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.DefaultUrls;
 import csns.validator.AddUserValidator;
 import csns.validator.EditUserValidator;
 import csns.validator.RegistrationValidator;
@@ -58,6 +59,9 @@ public class UserController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    DefaultUrls defaultUrls;
 
     @Autowired
     AddUserValidator addUserValidator;
@@ -191,14 +195,39 @@ public class UserController {
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         user.copySelfEditableFieldsFrom( cmd );
         user.setUsername( cmd.getUsername() );
-        String password = cmd.getPassword1();
-        if( StringUtils.hasText( password ) )
-            user.setPassword( passwordEncoder.encodePassword( password, null ) );
+        user.setPassword( passwordEncoder.encodePassword( cmd.getPassword1(),
+            null ) );
         user.setTemporary( false );
         userDao.saveUser( user );
 
         sessionStatus.setComplete();
         return "redirect:/j_spring_security_logout";
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String profile( ModelMap models )
+    {
+        User user = SecurityUtils.getUser().clone();
+        models.put( "user", user );
+        return "profile";
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    public String profile( @ModelAttribute("user") User cmd,
+        BindingResult bindingResult, SessionStatus sessionStatus )
+    {
+        editUserValidator.validate( cmd, bindingResult );
+        if( bindingResult.hasErrors() ) return "profile";
+
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        user.copySelfEditableFieldsFrom( cmd );
+        String password = cmd.getPassword1();
+        if( StringUtils.hasText( password ) )
+            user.setPassword( passwordEncoder.encodePassword( password, null ) );
+        user = userDao.saveUser( user );
+
+        sessionStatus.setComplete();
+        return "redirect:" + defaultUrls.homeUrl( user );
     }
 
 }

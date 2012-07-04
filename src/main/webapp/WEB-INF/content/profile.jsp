@@ -12,11 +12,6 @@ $(function() {
         changeYear: true,
         yearRange: "-60:+00"
     });
-    $("#generate_cin").click(function(event){
-        event.preventDefault();
-        var cin = "G" + (100000000 + Math.floor(Math.random()*100000000));
-        $("#cin").val( cin );
-    });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#officePhone").mask("(999) 999-9999");
@@ -24,54 +19,32 @@ $(function() {
 </script>
 
 <ul id="title">
-<li><a class="bc" href="search">Users</a></li>
-<li><a class="bc" href="view?id=${user.id}">${user.name}</a></li>
-<li>Edit User</li>
+<li>${user.name}</li>
 </ul>
 
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
-  <li><a href="standings">Standings</a></li>
-  <li><a href="coursework">Course Work</a></li>
-  <li><a href="advisement">Advisement</a></li>
+  <li><a href="forum/subscriptions">Forums</a></li>
+  <li><a href="mailinglist/subscriptions">Mailing Lists</a></li>
 </ul>
 <div id="account">
 <form:form modelAttribute="user">
 <table class="general">
   <tr>
-    <th>First Name *</th>
-    <td>
-      <form:input path="firstName" cssClass="forminput" />
-      <div class="error"><form:errors path="firstName" /></div>
-    </td>
+    <th>Name</th>
+    <td>${user.firstName} ${user.middleName} ${user.lastName}</td>
   </tr>
   <tr>
-    <th>Last Name *</th>
+    <th>CIN</th>
     <td>
-      <form:input path="lastName" cssClass="forminput" />
-      <div class="error"><form:errors path="lastName" /></div>
-    </td>
-  </tr>
-  <tr>
-    <th>Middle Name</th>
-    <td>
-      <form:input path="middleName" cssClass="forminput" />
-    </td>
-  </tr>
-  <tr>
-    <th>CIN *</th>
-    <td>
-      <form:input path="cin" cssClass="forminput" />
-      <div class="error"><form:errors path="cin" /></div>
+      <c:if test="${! user.cinEncrypted}">${user.cin}</c:if>
+      <c:if test="${user.cinEncrypted}">(encrypted)</c:if>
     </td>
   </tr>
   <tr>
     <th>Username *</th>
-    <td>
-      <form:input path="username" cssClass="forminput" />
-      <div class="error"><form:errors path="username" /></div>
-    </td>
+    <td>${user.username}</td>
   </tr>
   <tr>
     <th>Password</th>
@@ -88,7 +61,7 @@ $(function() {
     </td>
   </tr>
   <tr>
-    <th>Primary Email</th>
+    <th>Primary Email *</th>
     <td>
       <form:input path="primaryEmail" cssClass="forminput" />
       <div class="error"><form:errors path="primaryEmail" /></div>
@@ -152,14 +125,6 @@ $(function() {
     <td>
       <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
     </td>
-  </tr>
-  <tr>
-    <th>Enabled:</th>
-    <td><form:checkbox path="enabled" cssStyle="width: auto;" /></td>
-  </tr>
-  <tr>
-    <th>Temporary:</th>
-    <td><form:checkbox path="temporary" cssStyle="width: auto;" /></td>
   </tr>
   <tr>
     <th></th>

@@ -46,22 +46,6 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
-    <th>Gender</th>
-    <td>
-      <form:select path="gender">
-        <option />
-        <form:option value="M">Male</form:option>
-        <form:option value="F">Female</form:option>
-      </form:select>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td>
-      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
-    </td>
-  </tr>
-  <tr>
     <th>CIN *</th>
     <td>
       <form:input path="cin" cssClass="forminput" />
@@ -117,6 +101,22 @@ they will be asked to choose their own username and password.</p>
     <th>Office Phone</th>
     <td>
       <form:input path="officePhone" cssClass="forminput" placeholder="(###) ###-####" />
+    </td>
+  </tr>
+  <tr>
+    <th>Gender</th>
+    <td>
+      <form:select path="gender">
+        <option />
+        <form:option value="M">Male</form:option>
+        <form:option value="F">Female</form:option>
+      </form:select>
+    </td>
+  </tr>
+  <tr>
+    <th>Birthday</th>
+    <td>
+      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
     </td>
   </tr>
   <tr>

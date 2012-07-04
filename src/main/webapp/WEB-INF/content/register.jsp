@@ -9,11 +9,6 @@ $(function() {
         changeYear: true,
         yearRange: "-60:+00"
     });
-    $("#generate_cin").click(function(event){
-        event.preventDefault();
-        var cin = "G" + (100000000 + Math.floor(Math.random()*100000000));
-        $("#cin").val( cin );
-    });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#officePhone").mask("(999) 999-9999");
@@ -47,22 +42,6 @@ $(function() {
   <tr>
     <th>CIN</th>
     <td>${user.cin}</td>
-  </tr>
-  <tr>
-    <th>Gender:</th>
-    <td>
-      <form:select path="gender">
-        <form:option value="" />
-        <form:option value="M">Male</form:option>
-        <form:option value="F">Female</form:option>
-      </form:select>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td>
-      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
-    </td>
   </tr>
   <tr>
     <th>Username *</th>
@@ -133,6 +112,22 @@ $(function() {
     <th>Office Phone</th>
     <td>
       <form:input path="officePhone" cssClass="forminput" placeholder="(###) ###-####" />
+    </td>
+  </tr>
+  <tr>
+    <th>Gender</th>
+    <td>
+      <form:select path="gender">
+        <form:option value="" />
+        <form:option value="M">Male</form:option>
+        <form:option value="F">Female</form:option>
+      </form:select>
+    </td>
+  </tr>
+  <tr>
+    <th>Birthday</th>
+    <td>
+      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
     </td>
   </tr>
   <tr>

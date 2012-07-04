@@ -15,7 +15,7 @@
 </security:authorize>
 
 <security:authorize access="authenticated">
-  <a href="<c:url value='/account.html' />">Profile</a>&nbsp; | &nbsp;
+  <a href="<c:url value='/profile' />">Profile</a>&nbsp; | &nbsp;
   <a href="<c:url value='/j_spring_security_logout' />">Logout</a>
 </security:authorize>
 </div>

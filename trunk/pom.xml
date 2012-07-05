@@ -78,7 +78,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>csns.tool.Hbm2ddl</mainClass>
+          <mainClass>csns.util.Hbm2ddl</mainClass>
           <arguments>
             <argument>${project.build.scriptSourceDirectory}/csns.ddl</argument>
           </arguments>
@@ -152,6 +152,11 @@
           <version>2.2.2</version>
       </dependency>
       <dependency>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity</artifactId>
+          <version>1.7</version>
+      </dependency>
+      <dependency>
           <groupId>cglib</groupId>
           <artifactId>cglib</artifactId>
           <version>2.2.2</version>
@@ -167,9 +172,19 @@
           <version>1.6.6</version>
       </dependency>
       <dependency>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+          <version>1.4.5</version>
+      </dependency>
+      <dependency>
           <groupId>commons-fileupload</groupId>
           <artifactId>commons-fileupload</artifactId>
           <version>1.2.2</version>
+      </dependency>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20090211</version>
       </dependency>
       <dependency>
           <groupId>postgresql</groupId>
@@ -186,11 +201,6 @@
           <artifactId>testng</artifactId>
           <version>6.5.2</version>
           <scope>test</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-          <version>20090211</version>
       </dependency>
   </dependencies>
 </project>

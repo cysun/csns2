@@ -28,7 +28,9 @@
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
-    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver">
+        <property name="exposePathVariables" value="true" />
+    </bean>
 
     <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">

@@ -29,6 +29,17 @@ import csns.model.core.User;
 @Component
 public class DefaultUrls {
 
+    public String homeUrl( HttpServletRequest request )
+    {
+        String homeUrl = "/";
+
+        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
+        if( cookie != null )
+            homeUrl = "/department/" + cookie.getValue() + "/";
+
+        return homeUrl;
+    }
+
     public String homeUrl( User user )
     {
         String homeUrl = "/student/section/list";
@@ -39,17 +50,6 @@ public class DefaultUrls {
             homeUrl = "/user/search";
 
         return homeUrl;
-    }
-
-    public String logoutTargetUrl( HttpServletRequest request )
-    {
-        String logoutTargetUrl = "/";
-
-        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
-        if( cookie != null )
-            logoutTargetUrl = "/department/" + cookie.getValue() + "/";
-
-        return logoutTargetUrl;
     }
 
 }

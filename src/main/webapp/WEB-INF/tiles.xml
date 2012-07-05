@@ -20,16 +20,6 @@
     <!-- General -->
     <!-- ======= -->
 
-    <definition name="index" extends="layout.bare">
-        <put-attribute name="title" value="CSNetwork Services" />
-        <put-attribute name="content" value="/WEB-INF/content/index.jsp" />
-    </definition>
-
-    <definition name="login" extends="layout.bare">
-        <put-attribute name="title" value="Login" />
-        <put-attribute name="content" value="/WEB-INF/content/login.jsp" />
-    </definition>
-
     <definition name="400" extends="layout.bare">
         <put-attribute name="title" value="Bad Request" />
         <put-attribute name="content" value="/WEB-INF/content/400.jsp" />
@@ -48,6 +38,26 @@
     <definition name="404" extends="layout.bare">
         <put-attribute name="title" value="Page Not Found" />
         <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
+    </definition>
+
+    <definition name="index" extends="layout.bare">
+        <put-attribute name="title" value="CSNetwork Services" />
+        <put-attribute name="content" value="/WEB-INF/content/index.jsp" />
+    </definition>
+
+    <definition name="login" extends="layout.bare">
+        <put-attribute name="title" value="Login" />
+        <put-attribute name="content" value="/WEB-INF/content/login.jsp" />
+    </definition>
+
+    <definition name="error" extends="layout.basic">
+        <put-attribute name="title" value="Error" />
+        <put-attribute name="content" value="/WEB-INF/content/error.jsp" />
+    </definition>
+
+    <definition name="status" extends="layout.basic">
+        <put-attribute name="title" value="Status" />
+        <put-attribute name="content" value="/WEB-INF/content/status.jsp" />
     </definition>
 
     <!-- ===== -->
@@ -153,6 +163,11 @@
             <add-attribute value="${jqueryui.url}" />
             <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
         </put-list-attribute>
+    </definition>
+
+    <definition name="resetPassword" extends="layout.basic">
+        <put-attribute name="title" value="Reset Password" />
+        <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
     </definition>
 
     <!-- ========== -->

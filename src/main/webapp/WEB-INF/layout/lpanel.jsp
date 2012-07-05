@@ -7,7 +7,7 @@
   <label><input class="forminput" placeholder="Username" type="text" name="j_username" /></label>
   <label><input class="forminput" placeholder="Password" type="password" name="j_password" /></label>
   <input class="submit" type="submit" value="Login" name="submit"/> &nbsp;
-  <a href="<c:url value="/resetPassword.html" />">
+  <a href="<c:url value="/resetPassword" />">
     <img alt="reset password"  class="f_password" src="<c:url value='/img/icons/f_password.png' />"
          border="0" title="Forgot Password?" />
   </a>

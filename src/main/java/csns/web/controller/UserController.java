@@ -25,15 +25,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -48,6 +56,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.ApplicationProperties;
 import csns.util.DefaultUrls;
 import csns.web.validator.AddUserValidator;
 import csns.web.validator.EditUserValidator;
@@ -74,6 +83,17 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Autowired
+    VelocityEngine velocityEngine;
+
+    @Autowired
+    ApplicationProperties applicationProperties;
+
+    private final static Logger logger = LoggerFactory.getLogger( UserController.class );
 
     /*
      * The default Spring date property editor does not accept null or empty
@@ -228,6 +248,78 @@ public class UserController {
 
         sessionStatus.setComplete();
         return "redirect:" + defaultUrls.homeUrl( user );
+    }
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
+    public String resetPassword( ModelMap models )
+    {
+        return "resetPassword";
+    }
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public String resetPassword( HttpServletRequest request, ModelMap models )
+    {
+        String username = request.getParameter( "username" );
+        String cin = request.getParameter( "cin" );
+        String email = request.getParameter( "email" );
+
+        User user = null;
+        if( StringUtils.hasText( cin ) )
+            user = userDao.getUserByCin( cin );
+        else if( StringUtils.hasText( username ) )
+            user = userDao.getUserByUsername( username );
+        else if( StringUtils.hasText( email ) )
+            user = userDao.getUserByEmail( email );
+
+        models.put( "backUrl", defaultUrls.homeUrl( request ) );
+
+        if( user == null )
+        {
+            models.put( "message", "error.reset.password.user.not.found" );
+            return "error";
+        }
+
+        if( user.isTemporary() )
+        {
+            models.put( "message", "error.reset.password.temporary.user" );
+            return "error";
+        }
+
+        String newPassword = "" + (int) (Math.random() * 100000000);
+        user.setPassword( passwordEncoder.encodePassword( newPassword, null ) );
+        if( user.isCinEncrypted() && StringUtils.hasText( cin ) )
+        {
+            user.setCin( cin );
+            user.setCinEncrypted( false );
+        }
+        userDao.saveUser( user );
+        logger.info( "Reset password for " + user.getUsername() );
+
+        Map<String, String> vModels = new HashMap<String, String>();
+        vModels.put( "username", user.getUsername() );
+        vModels.put( "password", newPassword );
+        String text = VelocityEngineUtils.mergeTemplateIntoString(
+            velocityEngine, "email.resetPassword.vm", vModels );
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo( user.getPrimaryEmail() );
+        message.setFrom( applicationProperties.getProperty( "app.email" ) );
+        message.setText( text );
+        try
+        {
+            mailSender.send( message );
+            logger.info( "Password reset message sent to "
+                + user.getPrimaryEmail() );
+        }
+        catch( MailException e )
+        {
+            logger.error( e.getMessage() );
+            models.put( "message", "error.reset.password.email.failure" );
+            return "error";
+        }
+
+        models.put( "message", "status.reset.password" );
+        return "status";
     }
 
 }

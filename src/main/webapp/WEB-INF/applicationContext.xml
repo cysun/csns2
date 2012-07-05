@@ -13,6 +13,18 @@
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <bean id="applicationProperties" class="csns.util.ApplicationProperties">
+        <property name="properties">
+            <props>
+                <prop key="app.url">${app.url}</prop>
+                <prop key="app.email">${app.email}</prop>
+                <prop key="app.email.admin">${app.email.admin}</prop>
+                <prop key="app.dir.file">${app.dir.file}</prop>
+                <prop key="app.dir.log">${app.dir.log}</prop>
+            </props>
+        </property>
+    </bean>
+
     <context:annotation-config />
 
     <tx:annotation-driven />
@@ -55,6 +67,16 @@
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.smtp.server}" />
+        <property name="username" value="${mail.smtp.username}" />
+        <property name="password" value="${mail.smtp.password}" />
+    </bean>
+
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="resourceLoaderPath" value="/WEB-INF/velocity" />
+    </bean>
 
     <context:component-scan base-package="csns">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>

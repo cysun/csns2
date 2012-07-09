@@ -194,17 +194,23 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return user != null && user.getId().equals( id );
     }
 
-    public boolean isAdmin()
+    public boolean isSysAdmin()
     {
         return roles.contains( "ROLE_ADMIN" );
     }
 
-    public boolean isDepartmentAdmin()
+    public boolean isAdmin()
     {
         for( String role : roles )
             if( role.startsWith( "DEPT_ROLE_ADMIN_" ) ) return true;
 
         return false;
+    }
+
+    public boolean isAdmin( String dept )
+    {
+        return StringUtils.hasText( dept )
+            && roles.contains( "DEPT_ROLE_ADMIN_" + dept );
     }
 
     public boolean isFaculty()
@@ -215,12 +221,38 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return false;
     }
 
+    public boolean isFaculty( String dept )
+    {
+        return StringUtils.hasText( dept )
+            && roles.contains( "DEPT_ROLE_FACULTY_" + dept );
+    }
+
     public boolean isInstructor()
     {
         for( String role : roles )
             if( role.startsWith( "DEPT_ROLE_INSTRUCTOR_" ) ) return true;
 
         return false;
+    }
+
+    public boolean isInstructor( String dept )
+    {
+        return StringUtils.hasText( dept )
+            && roles.contains( "DEPT_ROLE_INSTRUCTOR_" + dept );
+    }
+
+    public boolean isReviewer()
+    {
+        for( String role : roles )
+            if( role.startsWith( "DEPT_ROLE_REVIEWER_" ) ) return true;
+
+        return false;
+    }
+
+    public boolean isReviewer( String dept )
+    {
+        return StringUtils.hasText( dept )
+            && roles.contains( "DEPT_ROLE_IREVIEWER_" + dept );
     }
 
     public List<String> getDepartments( String roleName )

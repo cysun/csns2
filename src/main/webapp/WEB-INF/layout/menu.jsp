@@ -1,86 +1,95 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+<c:if test="${empty dept}">
+  <c:set var="dept" value="${cookie['default-dept'].value}" scope="request" />
+</c:if> 
+
 <div id="csns_menu">
 <div id="menu">
-  <ul class="menu">
- 
-    <security:authorize access="isAuthenticated()">
-    <li><a href="<c:url value='/home.html' />">Home</a>
+<ul class="menu">
+
+<c:if test="${not empty dept}">
+
+<security:authorize access="hasRole('ROLE_ADMIN')" var="sysadmin" />
+<security:authorize access="authenticated and principal.isAdmin('${dept}')" var="admin" />
+<security:authorize access="authenticated and principal.isFaculty('${dept}')" var="faculty" />
+<security:authorize access="authenticated and principal.isInstructor('${dept}')" var="instructor" />
+<security:authorize access="authenticated and principal.isReviewer('${dept}')" var="reviewer" />
+<security:authorize access="authenticated" var="student" />
+
+<%-- Note that the order of <c:when> is important. --%>
+<c:choose>
+  <c:when test="${sysadmin}">
+    <li><a href="<c:url value='/user/search' />">Users</a></li>
+    <li><a href="<c:url value='/admin/department/list' />">Departments</a></li>
+  </c:when>
+  <c:when test="${reviewer}">
+    <li><a href="<c:url value='/wiki/content/${dept}/program_assessment/' />">Home</a></li>
+  </c:when>
+  <c:when test="${faculty or instructor}">
+    <li><a href="<c:url value='/instructor/section/list' />">Home</a>
       <div><ul>
-        <security:authorize access="hasRole('ROLE_STUDENT')">
-        <li><a href="<c:url value='/student/viewSections.html' />"><img alt=""
-            src="<c:url value='/img/icons/home-student.png' />" />Student</a></li>
-        </security:authorize>
-        <security:authorize access="hasRole('ROLE_INSTRUCTOR')">
-        <li><a href="<c:url value='/instructor/viewSections.html' />"><img alt=""
-            src="<c:url value='/img/icons/home-instructor.png' />" />Instructor</a></li>
-        </security:authorize>
-        <security:authorize access="hasRole('ROLE_ADMIN')">
-        <li><a href="<c:url value='/user/searchUsers.html' />"><img alt=""
-            src="<c:url value='/img/icons/home-administrator.png' />" />Administrator</a></li>
-        </security:authorize>
-        <security:authorize access="hasRole('ROLE_PROGRAM_REVIEWER')">
-        <li><a href="<c:url value='/wiki/content/assessment/' />"><img alt=""
-            src="<c:url value='/img/icons/home-administrator.png' />" />Program Reviewer</a></li>
-        </security:authorize>
+        <li><a href="<c:url value='/instructor/section/list' />"><img alt=""
+               src="<c:url value='/img/icons/instructor.png' />" />Instructor</a></li>
+        <li><a href="<c:url value='/student/section/list' />"><img alt=""
+               src="<c:url value='/img/icons/student.png' />" />Student</a></li>
       </ul></div>
     </li>
-    </security:authorize>
+  </c:when>
+  <c:when test="${admin}">
+    <li><a href="<c:url value='/user/search' />">Home</a></li>
+  </c:when>
+  <c:when test="${student}">
+    <li><a href="<c:url value='/student/section/list' />">Home</a></li>
+  </c:when>
+</c:choose>
 
-    <security:authorize access="hasAnyRole('ROLE_FACULTY','ROLE_ADMIN')">
-    <li><a href="#">Administration</a>
-      <div><ul>
-        <li><a href="<c:url value='/user/searchUsers.html'/>"><img alt=""
-            src="<c:url value='/img/icons/administration-users.png' />" />Users</a></li>
-        <li><a href="<c:url value='/section/viewSections.html'/>"><img alt=""
-            src="<c:url value='/img/icons/administration-sections.png' />" />Sections</a></li>
-        <li><a href="<c:url value='/program/viewPrograms.html'/>"><img alt=""
-            src="<c:url value='/img/icons/administration-programs.png' />" />Programs</a></li>
-        <li><a href="<c:url value='/assessment/mft/viewMFTScores.html' />"><img alt=""
-            src="<c:url value='/img/icons/administration-mft-data.png' />" />MFT Data</a></li>
-        <security:authorize access="hasRole('ROLE_ADMIN')">
-        <li><a href="<c:url value='/admin/importGrades.html'/>"><img alt=""
-            src="<c:url value='/img/icons/administration-data-import.png' />" />Data Import</a></li>
-        </security:authorize>
-      </ul></div>
-    </li>
-    </security:authorize>
+<li><a href="#">Department</a>
+  <div><ul>
+    <li><a href="<c:url value='/department/${dept}/news' />"><img alt=""
+           src="<c:url value='/img/icons/news.png' />" />News</a></li>
+    <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
+           src="<c:url value='/img/icons/users.png' />" />People</a></li>
+    <li><a href="<c:url value='/department/${dept}/sections'/>"><img alt=""
+           src="<c:url value='/img/icons/sections.png' />" />Sections</a></li>
+    <li><a href="<c:url value='/deparment/${dept}/courses' />"><img alt=""
+           src="<c:url value='/img/icons/courses.png' />" />Courses</a></li>
+    <li><a href="<c:url value='/department/${dept}/projects'/>"><img alt=""
+           src="<c:url value='/img/icons/projects.png' />" />Projects</a></li>
+    <li><a href="<c:url value='/department/${dept}/data'/>"><img alt=""
+           src="<c:url value='/img/icons/data.png' />" />Data Import</a></li>
+  </ul></div>
+</li>
 
-    <li><a href="#">Curriculum</a>
-      <div><ul>
-        <li><a href="<c:url value='/courses.html' />"><img alt=""
-            src="<c:url value='/img/icons/curriculum-undergraduate-courses.png' />" />Courses</a></li>
-        <li><a href="<c:url value='/projects.html'/>"><img alt=""
-            src="<c:url value='/img/icons/curriculum-senior-projects.png' />" />Senior Projects</a></li>
-      </ul></div>
-    </li>
+<li><a href="#">Assessment</a>
+  <div><ul>
+    <li><a href="<c:url value='/department/${dept}/mft' />"><img alt=""
+           src="<c:url value='/img/icons/mft.png' />" />MFT</a></li>
+    <li><a href="<c:url value='/department/${dept}/queries' />"><img alt=""
+           src="<c:url value='/img/icons/queries.png' />" />Queries</a></li>
+  </ul></div>
+</li>
 
-    <li><a href="#">Resources</a>
-      <div><ul>
-        <li><a href="<c:url value='/wiki/content/' />"><img alt=""
-            src="<c:url value='/img/icons/resources-wiki.png' />" />Wiki</a></li>
-        <li><a href="<c:url value='/news.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-news.png' />" />News</a></li>
-        <li><a href="<c:url value='/forum/viewForums.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-forums.png' />" />Forums</a></li>
-        <li><a href="<c:url value='/surveys.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-surveys.png' />" />Surveys</a></li>
-        <li><a href="<c:url value='/mailinglist/viewMailinglists.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-mailing-lists.png' />" />Mailing Lists</a></li>
-        <security:authorize ifAnyGranted="ROLE_USER">
-        <li><a href="<c:url value='/file/viewFolder.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-file-manager.png' />" />File Manager</a></li>
-        </security:authorize>
-        <security:authorize access="hasAnyRole('ROLE_FACULTY','ROLE_ADMIN')">
-        <li><a href="<c:url value='/assessment/viewStoredQueries.html' />"><img alt=""
-            src="<c:url value='/img/icons/resources-stored-queries.png' />" />Stored Queries</a></li>
-        </security:authorize>
-      </ul></div>
-    </li>
+<li><a href="#">Resources</a>
+  <div><ul>
+    <li><a href="<c:url value='/wiki/content/${dept}/' />"><img alt=""
+           src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
+    <li><a href="<c:url value='/forum/viewForums.html' />"><img alt=""
+            src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>
+    <li><a href="<c:url value='/department/${dept}/surveys' />"><img alt=""
+           src="<c:url value='/img/icons/surveys.png' />" />Surveys</a></li>
+    <li><a href="<c:url value='/mailinglist/viewMailinglists.html' />"><img alt=""
+           src="<c:url value='/img/icons/mailinglists.png' />" />Mailing Lists</a></li>
+    <li><a href="<c:url value='/file/viewFolder.html' />"><img alt=""
+           src="<c:url value='/img/icons/file-manager.png' />" />File Manager</a></li>
+ </ul></div>
+</li>
 
-    <li><a href="<c:url value='/wiki/content/csns/help' />">Help</a></li>   
+</c:if> <%-- end of <c:if test="${not empty dept}"> --%>
 
-  </ul>
-</div>
-</div>
+<li><a href="<c:url value='/wiki/content/csns/help' />">Help</a></li>   
+
+</ul>
+</div> <!-- end of menu -->
+</div> <!-- end of csns-menu -->

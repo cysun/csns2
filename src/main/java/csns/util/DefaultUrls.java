@@ -46,7 +46,7 @@ public class DefaultUrls {
 
         if( user.isFaculty() || user.isInstructor() )
             homeUrl = "/instructor/section/list";
-        else if( user.isAdmin() || user.isDepartmentAdmin() )
+        else if( user.isSysAdmin() || user.isAdmin() )
             homeUrl = "/user/search";
 
         return homeUrl;

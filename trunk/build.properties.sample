@@ -33,7 +33,7 @@ mail.smtp.password=abcd
 ## project. If you have internet connection during development, you may use
 ## the ones hosted on csns.calstatela.edu; otherwise you can download the
 ## libraries and place them under src/main/webapp/js.
-jquery.url=http://csns.calstatela.edu/static/jquery-1.6.4.min.js
+jquery.url=https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 jqueryui.url=http://csns.calstatela.edu/static/jqueryui-1.8.14/js/jquery-ui-1.8.14.custom.min.js
 jqueryui.css=http://csns.calstatela.edu/static/jqueryui-1.8.14/css/redmond/jquery-ui-1.8.14.custom.css
 jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins

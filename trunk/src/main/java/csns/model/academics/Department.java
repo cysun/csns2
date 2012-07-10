@@ -65,28 +65,28 @@ public class Department implements Serializable {
     @JoinTable(name = "department_administrators",
         joinColumns = @JoinColumn(name = "department_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @OrderBy("lastName asc")
+    @OrderBy("firstName asc")
     private List<User> administrators;
 
     @ManyToMany
     @JoinTable(name = "department_faculty",
         joinColumns = @JoinColumn(name = "department_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @OrderBy("lastName asc")
+    @OrderBy("firstName asc")
     private List<User> faculty;
 
     @ManyToMany
     @JoinTable(name = "department_instructors",
         joinColumns = @JoinColumn(name = "department_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @OrderBy("lastName asc")
+    @OrderBy("firstName asc")
     private List<User> instructors;
 
     @ManyToMany
     @JoinTable(name = "department_reviewers",
         joinColumns = @JoinColumn(name = "department_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @OrderBy("lastName asc")
+    @OrderBy("firstName asc")
     private List<User> reviewers;
 
     /**

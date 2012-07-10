@@ -31,8 +31,6 @@ h4 {
 
 pre {
     white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -o-pre-wrap;
     background: transparent url(../img/style/pre_code_bg.gif);
     line-height:20px;
     font-size:12px;
@@ -267,14 +265,14 @@ table {
     border-top: 1px solid #9eb5d5;
     border-bottom: 1px solid #6e91c1;
     color:#d1e3fb;
-    vertical-align:center;
+    vertical-align: middle;
 }
 .forums tr:hover {
     /*background-color:#d9dee5;*/
 }
 .forums tr td {
     border: 1px solid #dddddd;
-    vertical-align:center;
+    vertical-align: middle;
     padding:0;
     background-image: url(../img/style/general_bg.gif);
     background-position:bottom center;
@@ -407,7 +405,7 @@ table {
 .qa_list li .edit {
 	font-size:14px;
 	font-family:arial;
-	font-transform:uppercase;
+	text-transform:uppercase;
 	background-image:none;
 	background-color:transparent;
     background-color:#eeeeee;
@@ -470,7 +468,7 @@ table {
     border-top: 1px solid #9eb5d5;
     border-bottom: 1px solid #6e91c1;
     color:#d1e3fb;
-    vertical-align:center;
+    vertical-align: middle;
 }
 .topic tr td {
     border: 1px solid #dddddd;
@@ -730,12 +728,12 @@ table {
     margin:0 0 15px 0;
 }
 #blk .post_content ul, #blk .post_content ol {
-    font: 13px;
+    font-size: 13px;
     margin:0 0 15px 0;
 }
 #blk .post_content h1, #blk .post_content h2, #blk .post_content h3, #post .post_content h4, #news .post_content h5 {
     color: #164fa6;
-    background-color:none;
+    background-color:transparent;
     background-image:none;
     border-width:0;
     border-bottom: 1px solid #dddddd;

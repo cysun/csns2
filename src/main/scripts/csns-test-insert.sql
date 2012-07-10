@@ -20,8 +20,11 @@ insert into authorities values (1002, 'DEPT_ROLE_INSTRUCTOR_cs');
 insert into departments (id, name, abbreviation) values (1100, 'Computer Science', 'cs');
 insert into departments (id, name, abbreviation) values (1101, 'Mathematics', 'math');
 
-insert into department_administrators values (1100, 1001);
+insert into department_administrators values (1100, 1005);
+insert into department_administrators values (1100, 1004);
+insert into department_faculty values (1100, 1004);
 insert into department_faculty values (1100, 1001);
+insert into department_instructors values (1100, 1002);
 
 insert into courses (id, code, name, coordinator_id) values
     (1200, 'CS101', 'Introduction to Computer Science', null);

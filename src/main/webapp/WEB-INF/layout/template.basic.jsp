@@ -23,12 +23,12 @@
 <head>
   <meta charset="UTF-8">
   <title><tiles:insertAttribute name="title" defaultValue="CSNS" defaultValueType="string" /></title>
-  <link href="<c:url value='/favicon.ico' />" type="image/x-icon" rel="shortcut icon" />
+  <link href="<c:url value='/favicon.ico' />" type="image/x-icon" rel="shortcut icon" /><tiles:useAttribute
+    id="cssUrls" name="cssUrls" ignore="true" /><c:forEach items="${cssUrls}" var="cssUrl">
+  <link rel="stylesheet" href="<c:url value='${cssUrl}' />" /></c:forEach>
   <link rel="stylesheet" href="<c:url value='/css/layout.css' />">
   <link rel="stylesheet" href="<c:url value='/css/style.css' />">
-  <link rel="stylesheet" href="<c:url value='/css/menu.css' />"><tiles:useAttribute
-    id="cssUrls" name="cssUrls" ignore="true" /><c:forEach items="${cssUrls}" var="cssUrl">
-  <link href="<c:url value='${cssUrl}' />" type="text/css" rel="stylesheet" /></c:forEach>
+  <link rel="stylesheet" href="<c:url value='/css/menu.css' />">
   <script src="<c:url value='/js/functions.js' />"></script>
   <script src="<c:url value='${jquery.url}' />"></script><tiles:useAttribute
     id="jsUrls" name="jsUrls" ignore="true" /><c:forEach items="${jsUrls}" var="jsUrl">

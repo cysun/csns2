@@ -42,6 +42,10 @@ $(function(){
     </td>
   </tr>
   <tr>
+    <th>Obsolete</th>
+    <td><form:checkbox path="obsolete" cssStyle="width: auto;" /></td>
+  </tr>
+  <tr>
     <th></th>
     <td>
       <input type="submit" class="subbutton" value="Save" />

@@ -43,7 +43,8 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/user/search' />">Users</a></li>
 <li>${department.name}</li>
-<li class="align_right"><button id="add" class="opbutton">Add</button></li>
+<li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add"
+    alt="[Add]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 </ul>
 
 <div id="tabs">
@@ -65,17 +66,15 @@ $(function(){
 <div id="admin">
 <table class="viewtable">
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
-<tbody>
 <c:forEach items="${department.administrators}" var="user">
 <tr>
   <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
-  <td><a href="view?id=${user.id}">${user.name}</a></td>
+  <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/admin/remove?userId=${user.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/cross.png' />" /></a></td>
+    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
 </tr>
 </c:forEach>
-</tbody>
 </table>
 <form action="personnel/admin/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
@@ -87,17 +86,15 @@ $(function(){
 <div id="faculty">
 <table class="viewtable">
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
-<tbody>
 <c:forEach items="${department.faculty}" var="user">
 <tr>
   <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
-  <td><a href="view?id=${user.id}">${user.name}</a></td>
+  <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/faculty/remove?userId=${user.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/cross.png' />" /></a></td>
+    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
 </tr>
 </c:forEach>
-</tbody>
 </table>
 <form action="personnel/faculty/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
@@ -109,17 +106,15 @@ $(function(){
 <div id="instructor">
 <table class="viewtable">
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
-<tbody>
 <c:forEach items="${department.instructors}" var="user">
 <tr>
   <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
-  <td><a href="view?id=${user.id}">${user.name}</a></td>
+  <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/instructor/remove?userId=${user.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/cross.png' />" /></a></td>
+    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
 </tr>
 </c:forEach>
-</tbody>
 </table>
 <form action="personnel/instructor/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
@@ -131,17 +126,15 @@ $(function(){
 <div id="reviewer">
 <table class="viewtable">
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
-<tbody>
 <c:forEach items="${department.reviewers}" var="user">
 <tr>
   <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
-  <td><a href="view?id=${user.id}">${user.name}</a></td>
+  <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/reviewer/remove?userId=${user.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/cross.png' />" /></a></td>
+    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
 </tr>
 </c:forEach>
-</tbody>
 </table>
 <form action="personnel/reviewer/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />

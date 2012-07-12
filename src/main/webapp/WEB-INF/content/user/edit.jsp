@@ -154,11 +154,11 @@ $(function() {
     </td>
   </tr>
   <tr>
-    <th>Enabled:</th>
+    <th>Account Enabled</th>
     <td><form:checkbox path="enabled" cssStyle="width: auto;" /></td>
   </tr>
   <tr>
-    <th>Temporary:</th>
+    <th>Temporary Account</th>
     <td><form:checkbox path="temporary" cssStyle="width: auto;" /></td>
   </tr>
   <tr>

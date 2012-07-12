@@ -11,7 +11,9 @@ $(function() {
 
 <ul id="title">
 <li><a class="bc" href="search">Users</a></li>
-<li>${user.name} [<a href="edit?id=${user.id}">Edit</a>]</li>
+<li>${user.name}</li>
+<li class="align_right"><a href="edit?id=${user.id}"><img title="Edit" alt="[Edit]"
+    src="<c:url value='/img/icons/user_edit.png' />" /></a></li>
 </ul>
 
 <div id="tabs">
@@ -72,6 +74,20 @@ $(function() {
   <tr>
     <th>Birthday</th>
     <td><fmt:formatDate pattern="MM/dd/yyyy" value="${user.birthday}" /></td>
+  </tr>
+  <tr>
+    <th>Account Enabled</th>
+    <td>
+      <c:if test="${user.enabled}">Yes</c:if>
+      <c:if test="${not user.enabled}"><span style="color: red;">No</span></c:if>
+    </td>
+  </tr>
+  <tr>
+    <th>Temporary Account</th>
+    <td>
+      <c:if test="${user.temporary}">Yes</c:if>
+      <c:if test="${not user.temporary}">No</c:if>
+    </td>
   </tr>
 </table>
 </div> <!-- account -->

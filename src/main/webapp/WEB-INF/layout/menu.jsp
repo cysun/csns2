@@ -53,7 +53,7 @@
            src="<c:url value='/img/icons/users.png' />" />People</a></li>
     <li><a href="<c:url value='/department/${dept}/sections'/>"><img alt=""
            src="<c:url value='/img/icons/sections.png' />" />Sections</a></li>
-    <li><a href="<c:url value='/deparment/${dept}/courses' />"><img alt=""
+    <li><a href="<c:url value='/department/${dept}/courses' />"><img alt=""
            src="<c:url value='/img/icons/courses.png' />" />Courses</a></li>
     <li><a href="<c:url value='/department/${dept}/projects'/>"><img alt=""
            src="<c:url value='/img/icons/projects.png' />" />Projects</a></li>

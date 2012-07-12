@@ -23,6 +23,7 @@ import java.beans.PropertyEditorSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
@@ -37,7 +38,8 @@ public class UserPropertyEditor extends PropertyEditorSupport {
     @Override
     public void setAsText( String text ) throws IllegalArgumentException
     {
-        setValue( userDao.getUser( Long.valueOf( text ) ) );
+        if( StringUtils.hasText( text ) )
+            setValue( userDao.getUser( Long.valueOf( text ) ) );
     }
 
     @Override

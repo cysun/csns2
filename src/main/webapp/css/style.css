@@ -151,6 +151,11 @@ pre {
     padding:0 5px;
 }
 
+#title img {
+    border: 0px;
+    vertical-align: middle;
+}
+
 .opbutton {
     font: 14px Verdana,sans-serif;
     background-color: #ffffff;
@@ -245,6 +250,13 @@ table {
     width: 20%; 
     text-align: center; 
     white-space: nowrap;
+}
+
+.viewtable td img {
+    border: 0px;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .forums {

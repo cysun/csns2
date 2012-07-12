@@ -1,4 +1,8 @@
-/*
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- 
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
  * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
@@ -15,29 +19,16 @@
  * 
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
- */
-package csns.web.validator;
+ -->
+<hibernate-mapping>
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
+    <sql-query name="course.search">
+        <return class="csns.model.academics.Course" />
+<![CDATA[
+select * from courses where obsolete = 'f' and
+    (code like upper(:term) || '%' or plainto_tsquery(:term) @@ tsv)
+    order by code asc
+]]>
+    </sql-query>
 
-/**
- * This validator is for registration.
- */
-@Component
-public class RegistrationValidator extends EditUserValidator {
-
-    @Override
-    public void validate( Object target, Errors errors )
-    {
-        super.validate( target, errors );
-
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "password1",
-            "error.field.required" );
-
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "password2",
-            "error.field.required" );
-    }
-
-}
+</hibernate-mapping>

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.controller.department;
+package csns.web.controller;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Controller
-public class PeopleController {
+public class DepartmentUserController {
 
     @Autowired
     UserDao userDao;
@@ -43,7 +43,7 @@ public class PeopleController {
     @Autowired
     DepartmentDao departmentDao;
 
-    private final static Logger logger = LoggerFactory.getLogger( PeopleController.class );
+    private final static Logger logger = LoggerFactory.getLogger( DepartmentUserController.class );
 
     @RequestMapping(value = "/department/{dept}/people")
     public String people( @PathVariable String dept,

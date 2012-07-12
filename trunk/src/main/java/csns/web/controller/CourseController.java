@@ -139,20 +139,11 @@ public class CourseController {
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         courseValidator.validate( course, bindingResult );
-        if( bindingResult.hasErrors() ) return "course/edt";
+        if( bindingResult.hasErrors() ) return "course/edit";
 
         course = courseDao.saveCourse( course );
         sessionStatus.setComplete();
         return "redirect:view?id=" + course.getId();
-    }
-
-    @RequestMapping(value = "/course/delete")
-    public String delete( @RequestParam Long id )
-    {
-        Course course = courseDao.getCourse( id );
-        course.setObsolete( true );
-        courseDao.saveCourse( course );
-        return "redirect:search";
     }
 
 }

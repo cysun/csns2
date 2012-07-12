@@ -1,13 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script>
-function deleteCourse( courseId )
-{
-    var message = "Do you want to mark this course as obsolete?";
-    if( confirm(message) )
-        window.location.href = "delete?id=" + courseId;
-}
-
 $(function(){
     $("#add").click(function(){
         window.location.href = "add";
@@ -44,8 +37,6 @@ $(function(){
   <td class="center">
     <a href="edit?id=${course.id}"><img title="Edit" alt="[Edit]"
        src="<c:url value='/img/icons/table_edit.png' />" /></a>
-    <a href="javascript:deleteCourse(${course.id})"><img title="Delete" alt="[Delete]"
-       src="<c:url value='/img/icons/table_delete.png' />" /></a>
   </td>
 </tr>
 </c:forEach>

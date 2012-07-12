@@ -27,7 +27,8 @@ $(function(){
 
 <ul id="title">
 <li>Users</li>
-<li class="align_right"><button id="add" class="opbutton">Add</button></li>
+<li class="align_right"><a href="add"><img title="Add" alt="[Add]"
+    src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 </ul>
 
 <form action="search" method="get">
@@ -37,12 +38,16 @@ $(function(){
 
 <c:if test="${not empty users}">
 <table class="viewtable">
-<tr><th>CIN</th><th>Name</th><th>Primary Email</th></tr>
+<tr><th>CIN</th><th>Name</th><th>Primary Email</th><th></th></tr>
 <c:forEach items="${users}" var="user">
 <tr>
   <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
   <td><a href="view?id=${user.id}">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
+  <td class="center">
+    <a href="edit?id=${user.id}"><img title="Edit" alt="[Edit]"
+       src="<c:url value='/img/icons/user_edit.png' />" /></a>
+  </td>
 </tr>
 </c:forEach>
 </table>

@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,15 @@ public class CourseDaoImpl implements CourseDao {
             .setParameter( "code", code )
             .getResultList();
         return courses.size() == 0 ? null : courses.get( 0 );
+    }
+
+    @Override
+    public List<Course> searchCourses( String term, int maxResults )
+    {
+        TypedQuery<Course> query = entityManager.createNamedQuery(
+            "course.search", Course.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

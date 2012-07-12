@@ -56,8 +56,8 @@ public class DepartmentDaoTests extends
     {
         Department cs = departmentDao.getDepartment( "cs" );
 
-        assert cs.getAdministrators().size() == 1;
-        assert cs.getAdministrators().get( 0 ).getUsername().equals( "cysun" );
+        assert cs.getAdministrators().size() == 2;
+        assert cs.getAdministrators().get( 0 ).getUsername().equals( "rpamula" );
     }
 
 }

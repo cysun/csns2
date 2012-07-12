@@ -1,16 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script>
-$(function(){
-    $("#add").click(function(){
-        window.location.href = "add";
-    });
-});
-</script>
-
 <ul id="title">
 <li>Departments</li>
-<li class="align_right"><button id="add" class="opbutton">Add</button></li>
+<li class="align_right"><a href="add"><img title="Add" alt="[Add]"
+    src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </ul>
 
 <table class="viewtable">
@@ -26,7 +19,9 @@ $(function(){
     ${administrator.name}<c:if test="${not status.last}">, </c:if>
     </c:forEach>
   </td>
-  <td class="centered"><a href="edit?id=${department.id}">Edit</a></td>
+  <td class="center"><a href="edit?id=${department.id}"><img title="Edit" alt="[Remove]" border="0"
+    src="<c:url value='/img/icons/table_edit.png' />" /></a>
+  </td>
 </tr>
 </c:forEach>
 </table>

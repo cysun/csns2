@@ -14,6 +14,8 @@ drop table department_faculty;
 drop table department_administrators;
 drop table departments;
 
+drop trigger courses_ts_trigger on courses;
+drop function courses_ts_trigger_function();
 drop table courses;
 
 drop table files;

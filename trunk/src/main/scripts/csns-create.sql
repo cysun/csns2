@@ -84,6 +84,27 @@ create table courses (
     obsolete        boolean not null default 'f'
 );
 
+alter table courses add column tsv tsvector;
+
+create function courses_ts_trigger_function() returns trigger as $$
+begin
+    new.tsv :=
+        setweight( to_tsvector(coalesce(new.code,'')), 'A') ||
+        setweight( to_tsvector(coalesce(new.name,'')), 'B' );
+    return new;
+end
+$$ language plpgsql;
+
+create trigger courses_ts_trigger
+    before insert or update
+    on courses
+    for each row
+    execute procedure courses_ts_trigger_function();
+
+create index courses_ts_index
+    on courses
+    using gin(tsv);
+
 -----------------
 -- departments --
 -----------------

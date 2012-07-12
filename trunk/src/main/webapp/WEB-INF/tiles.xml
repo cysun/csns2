@@ -128,6 +128,30 @@
         <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
     </definition>
 
+    <!-- ====== -->
+    <!-- Course -->
+    <!-- ====== -->
+
+    <definition name="course/search" extends="layout.jqueryui">
+        <put-attribute name="title" value="Courses" />
+        <put-attribute name="content" value="/WEB-INF/content/course/search.jsp" />
+    </definition>
+
+    <definition name="course/view" extends="layout.basic">
+        <put-attribute name="title" value="View Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
+    </definition>
+
+    <definition name="course/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/add.jsp" />
+    </definition>
+
+    <definition name="course/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/edit.jsp" />
+    </definition>
+
     <!-- ========== -->
     <!-- Department -->
     <!-- ========== -->

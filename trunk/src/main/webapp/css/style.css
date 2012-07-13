@@ -152,7 +152,7 @@ pre {
     padding:0 5px;
 }
 
-#title img {
+#title img, .viewtable td.action img,  .outer_viewtable td.action img {
     border: 0px;
     vertical-align: middle;
 }

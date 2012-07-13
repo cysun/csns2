@@ -66,14 +66,14 @@ public class DepartmentController {
     public String list( ModelMap models )
     {
         models.put( "departments", departmentDao.getDepartments() );
-        return "admin/department/list";
+        return "department/list";
     }
 
     @RequestMapping(value = "/admin/department/add", method = RequestMethod.GET)
     public String add( ModelMap models )
     {
         models.put( "department", new Department() );
-        return "admin/department/add";
+        return "department/add";
     }
 
     @RequestMapping(value = "/admin/department/add",
@@ -102,7 +102,7 @@ public class DepartmentController {
     public String edit( @RequestParam Long id, ModelMap models )
     {
         models.put( "department", departmentDao.getDepartment( id ) );
-        return "admin/department/edit";
+        return "department/edit";
     }
 
     @RequestMapping(value = "/admin/department/edit",

@@ -73,21 +73,6 @@
     <!-- ===== -->
     <!-- Admin -->
     <!-- ===== -->
-    
-    <definition name="admin/department/list" extends="layout.basic">
-        <put-attribute name="title" value="Departments" />
-        <put-attribute name="content" value="/WEB-INF/content/admin/department/list.jsp" />
-    </definition>
-
-    <definition name="admin/department/add" extends="layout.jqueryui">
-        <put-attribute name="title" value="Add Department" />
-        <put-attribute name="content" value="/WEB-INF/content/admin/department/add.jsp" />
-    </definition>
-
-    <definition name="admin/department/edit" extends="layout.jqueryui">
-        <put-attribute name="title" value="Edit Department" />
-        <put-attribute name="content" value="/WEB-INF/content/admin/department/edit.jsp" />
-    </definition>
 
     <!-- ==== -->
     <!-- User -->
@@ -156,6 +141,21 @@
     <!-- Department -->
     <!-- ========== -->
 
+    <definition name="department/list" extends="layout.basic">
+        <put-attribute name="title" value="Departments" />
+        <put-attribute name="content" value="/WEB-INF/content/department/list.jsp" />
+    </definition>
+
+    <definition name="department/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Department" />
+        <put-attribute name="content" value="/WEB-INF/content/department/add.jsp" />
+    </definition>
+
+    <definition name="department/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Department" />
+        <put-attribute name="content" value="/WEB-INF/content/department/edit.jsp" />
+    </definition>
+
     <definition name="department/index" extends="layout.basic">
         <put-attribute name="title" value="Department Home" />
         <put-attribute name="content" value="/WEB-INF/content/department/index.jsp" />
@@ -169,6 +169,15 @@
     <definition name="department/courses" extends="layout.jqueryui">
         <put-attribute name="title" value="Courses" />
         <put-attribute name="content" value="/WEB-INF/content/department/courses.jsp" />
+    </definition>
+
+    <!-- ======= -->
+    <!-- Section -->
+    <!-- ======= -->
+
+    <definition name="section/taught" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/taught.jsp" />
     </definition>
 
 </tiles-definitions>

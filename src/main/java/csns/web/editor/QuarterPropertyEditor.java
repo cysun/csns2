@@ -16,40 +16,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.util;
+package csns.web.editor;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyEditorSupport;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.WebUtils;
+import org.springframework.util.StringUtils;
 
-import csns.model.core.User;
+import csns.model.academics.Quarter;
 
 @Component
-public class DefaultUrls {
+@Scope("prototype")
+public class QuarterPropertyEditor extends PropertyEditorSupport {
 
-    public String homeUrl( HttpServletRequest request )
+    @Override
+    public void setAsText( String text ) throws IllegalArgumentException
     {
-        String homeUrl = "/";
-
-        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
-        if( cookie != null )
-            homeUrl = "/department/" + cookie.getValue() + "/";
-
-        return homeUrl;
+        if( StringUtils.hasText( text ) )
+            setValue( new Quarter( Integer.valueOf( text ) ) );
     }
 
-    public String homeUrl( User user )
+    @Override
+    public String getAsText()
     {
-        String homeUrl = "/section/list/taken";
-
-        if( user.isFaculty() || user.isInstructor() )
-            homeUrl = "/section/list/taught";
-        else if( user.isSysAdmin() || user.isAdmin() )
-            homeUrl = "/user/search";
-
-        return homeUrl;
+        Quarter quarter = (Quarter) getValue();
+        return quarter != null ? "" + quarter.getCode() : "";
     }
 
 }

@@ -79,6 +79,19 @@ public class Quarter implements Serializable, Comparable<Quarter> {
     }
 
     @Override
+    public boolean equals( Object other )
+    {
+        return this == other || other instanceof Quarter
+            && ((Quarter) other).code == code;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Integer.valueOf( code ).hashCode();
+    }
+
+    @Override
     public int compareTo( Quarter quarter )
     {
         if( quarter == null )

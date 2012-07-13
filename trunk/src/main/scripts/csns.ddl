@@ -64,6 +64,17 @@
         primary key (id)
     );
 
+    create table enrollments (
+        id int8 not null,
+        comments varchar(255),
+        grade_mailed boolean not null,
+        grade_id int8,
+        section_id int8 not null,
+        student_id int8 not null,
+        primary key (id),
+        unique (section_id, student_id)
+    );
+
     create table files (
         id int8 not null,
         date timestamp not null,
@@ -77,6 +88,30 @@
         owner_id int8 not null,
         parent_id int8,
         primary key (id)
+    );
+
+    create table grades (
+        id int8 not null,
+        description varchar(255),
+        symbol varchar(255) not null unique,
+        value float8,
+        primary key (id)
+    );
+
+    create table section_instructors (
+        section_id int8 not null,
+        instructor_id int8 not null,
+        instructor_order int4 not null,
+        primary key (section_id, instructor_order)
+    );
+
+    create table sections (
+        id int8 not null,
+        number int4 not null,
+        quarter int4 not null,
+        course_id int8 not null,
+        primary key (id),
+        unique (quarter, course_id, number)
     );
 
     create table users (
@@ -199,6 +234,21 @@
         foreign key (course_id) 
         references courses;
 
+    alter table enrollments 
+        add constraint FKD680FDEFC0F82E5A 
+        foreign key (grade_id) 
+        references grades;
+
+    alter table enrollments 
+        add constraint FKD680FDEFAEFD183B 
+        foreign key (student_id) 
+        references users;
+
+    alter table enrollments 
+        add constraint FKD680FDEFDA3A2B9A 
+        foreign key (section_id) 
+        references sections;
+
     alter table files 
         add constraint FK5CEBA7767E6511D 
         foreign key (parent_id) 
@@ -208,5 +258,20 @@
         add constraint FK5CEBA774FA834C3 
         foreign key (owner_id) 
         references users;
+
+    alter table section_instructors 
+        add constraint FK8C3CB11C644C5699 
+        foreign key (instructor_id) 
+        references users;
+
+    alter table section_instructors 
+        add constraint FK8C3CB11CDA3A2B9A 
+        foreign key (section_id) 
+        references sections;
+
+    alter table sections 
+        add constraint FK38805E2E90C57DA 
+        foreign key (course_id) 
+        references courses;
 
     create sequence hibernate_sequence;

@@ -29,7 +29,6 @@
   <link rel="stylesheet" href="<c:url value='/css/layout.css' />">
   <link rel="stylesheet" href="<c:url value='/css/style.css' />">
   <link rel="stylesheet" href="<c:url value='/css/menu.css' />">
-  <script src="<c:url value='/js/functions.js' />"></script>
   <script src="<c:url value='${jquery.url}' />"></script><tiles:useAttribute
     id="jsUrls" name="jsUrls" ignore="true" /><c:forEach items="${jsUrls}" var="jsUrl">
   <script src="<c:url value='${jsUrl}' />"></script></c:forEach>

@@ -16,55 +16,61 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.core.dao;
+package csns.model.academics.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
+import csns.model.academics.Course;
+import csns.model.academics.Quarter;
 import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 
-@Test(groups = "UserDaoTests")
+@Test(groups = "SectionDaoTests", dependsOnGroups = { "UserDaoTests",
+    "CourseDaoTests" })
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class UserDaoTests extends AbstractTestNGSpringContextTests {
+public class SectionDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    CourseDao courseDao;
+
+    @Autowired
+    SectionDao sectionDao;
+
     @Test
-    public void getUserById()
+    public void getSectionsByQuarter()
     {
-        assert userDao.getUser( 1000L ) != null;
+        Quarter f10 = new Quarter( 1109 );
+        assert sectionDao.getSections( f10 ).size() == 1;
     }
 
     @Test
-    public void getUserByCin()
+    public void getSectionsByCourse()
     {
-        assert userDao.getUserByCin( "1000" ) != null;
+        Course cs520 = courseDao.getCourse( "CS520" );
+        assert sectionDao.getSections( cs520 ).size() == 1;
     }
 
     @Test
-    public void getUserByUsername()
+    public void getSectionsByInstructor()
     {
-        assert userDao.getUserByUsername( "cysun" ) != null;
-        assert userDao.getUserByUsername( "jdoe1" ) != null;
-        assert userDao.getUserByUsername( "jdoe2" ) != null;
+        Quarter f10 = new Quarter( 1109 );
+        User cysun = userDao.getUserByUsername( "cysun" );
+        assert sectionDao.getSectionsByInstructor( cysun, f10 ).size() == 1;
     }
 
     @Test
-    public void saveUser()
+    public void getSectionsByStudent()
     {
-        User user = new User();
-        user.setCin( "123456789" );
-        user.setUsername( "testuser1" );
-        user.setPassword( "testuser1" );
-        user.setLastName( "User" );
-        user.setFirstName( "Test" );
-        user.setPrimaryEmail( "testuser1@localhost.localdomain" );
+        Quarter f10 = new Quarter( 1109 );
+        User jdoe1 = userDao.getUserByUsername( "jdoe1" );
 
-        user = userDao.saveUser( user );
-        assert user.getId() != null;
+        assert sectionDao.getSectionsByStudent( jdoe1, f10 ).size() == 1;
     }
 
 }

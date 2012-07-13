@@ -16,55 +16,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.core.dao;
+package csns.model.academics.dao;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
+import csns.model.academics.Enrollment;
 import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 
-@Test(groups = "UserDaoTests")
+@Test(groups = "EnrollmentDaoTests", dependsOnGroups = "UserDaoTests")
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class UserDaoTests extends AbstractTestNGSpringContextTests {
+public class EnrollmentDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
     UserDao userDao;
 
-    @Test
-    public void getUserById()
-    {
-        assert userDao.getUser( 1000L ) != null;
-    }
+    @Autowired
+    EnrollmentDao enrollmentDao;
 
     @Test
-    public void getUserByCin()
+    public void getEnrollments()
     {
-        assert userDao.getUserByCin( "1000" ) != null;
-    }
-
-    @Test
-    public void getUserByUsername()
-    {
-        assert userDao.getUserByUsername( "cysun" ) != null;
-        assert userDao.getUserByUsername( "jdoe1" ) != null;
-        assert userDao.getUserByUsername( "jdoe2" ) != null;
-    }
-
-    @Test
-    public void saveUser()
-    {
-        User user = new User();
-        user.setCin( "123456789" );
-        user.setUsername( "testuser1" );
-        user.setPassword( "testuser1" );
-        user.setLastName( "User" );
-        user.setFirstName( "Test" );
-        user.setPrimaryEmail( "testuser1@localhost.localdomain" );
-
-        user = userDao.saveUser( user );
-        assert user.getId() != null;
+        User jdoe1 = userDao.getUserByUsername( "jdoe1" );
+        List<Enrollment> enrollments = enrollmentDao.getEnrollments( jdoe1 );
+        assert enrollments.size() == 2;
+        assert enrollments.get( 1 ).getSection().getQuarter().getCode() == 1109;
     }
 
 }

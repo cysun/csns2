@@ -1,4 +1,34 @@
 
+    create table answer_sections (
+        id int8 not null,
+        section_index int4 not null,
+        answer_sheet_id int8 not null,
+        primary key (id)
+    );
+
+    create table answer_selections (
+        answer_id int8 not null,
+        selection int4
+    );
+
+    create table answer_sheets (
+        id int8 not null,
+        question_sheet_id int8 not null,
+        primary key (id)
+    );
+
+    create table answers (
+        answer_type varchar(31) not null,
+        id int8 not null,
+        answer_index int4,
+        text varchar(255),
+        rating int4,
+        question_id int8,
+        answer_section_id int8 not null,
+        attachment_id int8,
+        primary key (id)
+    );
+
     create table authorities (
         user_id int8 not null,
         role varchar(255)
@@ -98,6 +128,48 @@
         primary key (id)
     );
 
+    create table question_choices (
+        question_id int8 not null,
+        choice varchar(255),
+        choice_index int4 not null,
+        primary key (question_id, choice_index)
+    );
+
+    create table question_correct_selections (
+        question_id int8 not null,
+        selection int4
+    );
+
+    create table question_sections (
+        id int8 not null,
+        description varchar(255),
+        question_sheet_id int8,
+        section_index int4 not null,
+        primary key (id)
+    );
+
+    create table question_sheets (
+        id int8 not null,
+        primary key (id)
+    );
+
+    create table questions (
+        question_type varchar(31) not null,
+        id int8 not null,
+        description varchar(255),
+        point_value int4,
+        max_selections int4,
+        min_selections int4,
+        attachment_allowed boolean not null,
+        correct_answer varchar(255),
+        text_length int4,
+        max_rating int4,
+        min_rating int4,
+        question_section_id int8,
+        question_index int4 not null,
+        primary key (id)
+    );
+
     create table section_instructors (
         section_id int8 not null,
         instructor_id int8 not null,
@@ -138,6 +210,36 @@
         zip varchar(255),
         primary key (id)
     );
+
+    alter table answer_sections 
+        add constraint FK96B4258F9AA31C1D 
+        foreign key (answer_sheet_id) 
+        references answer_sheets;
+
+    alter table answer_selections 
+        add constraint FK3DB533885DC9F17B 
+        foreign key (answer_id) 
+        references answers;
+
+    alter table answer_sheets 
+        add constraint FK4BB67A95810289CD 
+        foreign key (question_sheet_id) 
+        references question_sheets;
+
+    alter table answers 
+        add constraint FKCD7DB87592AF0204 
+        foreign key (attachment_id) 
+        references files;
+
+    alter table answers 
+        add constraint FKCD7DB875F424C19D 
+        foreign key (answer_section_id) 
+        references answer_sections;
+
+    alter table answers 
+        add constraint FKCD7DB8752E9C937A 
+        foreign key (question_id) 
+        references questions;
 
     alter table authorities 
         add constraint FK2B0F1321E3C184AB 
@@ -258,6 +360,26 @@
         add constraint FK5CEBA774FA834C3 
         foreign key (owner_id) 
         references users;
+
+    alter table question_choices 
+        add constraint FKCCF0F399376C843B 
+        foreign key (question_id) 
+        references questions;
+
+    alter table question_correct_selections 
+        add constraint FKC4E1AC55376C843B 
+        foreign key (question_id) 
+        references questions;
+
+    alter table question_sections 
+        add constraint FK9CB15667810289CD 
+        foreign key (question_sheet_id) 
+        references question_sheets;
+
+    alter table questions 
+        add constraint FK95C5414DC05F834D 
+        foreign key (question_section_id) 
+        references question_sections;
 
     alter table section_instructors 
         add constraint FK8C3CB11C644C5699 

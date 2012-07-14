@@ -26,6 +26,16 @@ drop table courses;
 
 drop table grades;
 
+drop table answer_selections;
+drop table answers;
+drop table answer_sections;
+drop table answer_sheets;
+drop table question_correct_selections;
+drop table question_choices;
+drop table questions;
+drop table question_sections;
+drop table question_sheets;
+
 drop table files;
 
 drop table persistent_logins;

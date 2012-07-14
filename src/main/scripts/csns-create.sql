@@ -69,6 +69,82 @@ create table files (
     deleted     boolean not null default 'f'
 );
 
+--------------------------
+-- question and answers --
+--------------------------
+
+create table question_sheets (
+    id  bigint primary key
+);
+
+create table question_sections (
+    id                  bigint primary key,
+    description         varchar(8000),
+    question_sheet_id   bigint references question_sheets(id),
+    section_index       integer not null,
+  unique (question_sheet_id, section_index)
+);
+
+create table questions (
+    id                  bigint primary key,
+    question_type       varchar(255) not null,
+    description         varchar(8000),
+    point_value         integer,
+    min_selections      integer,
+    max_selections      integer,
+    min_rating          integer,
+    max_rating          integer,
+    text_length         integer,
+    attachment_allowed  boolean not null default 'f',
+    correct_answer      varchar(8000),
+    question_section_id bigint references question_sections(id),
+    question_index      integer not null,
+  unique (question_section_id, question_index)
+);
+
+create table question_choices (
+    question_id     bigint not null references questions(id),
+    choice          varchar(4000),
+    choice_index    integer not null,
+  primary key (question_id, choice_index)
+);
+
+create table question_correct_selections (
+    question_id bigint not null references questions(id),
+    selection   integer,
+  primary key (question_id, selection)
+);
+
+create table answer_sheets (
+    id                  bigint primary key,
+    question_sheet_id   bigint not null references question_sheets(id),
+    timestamp           timestamp
+);
+
+create table answer_sections (
+    id              bigint primary key,
+    answer_sheet_id bigint not null references answer_sheets(id),
+    section_index   integer not null,
+  unique (answer_sheet_id, section_index)
+);
+
+create table answers (
+    id                  bigint primary key,
+    answer_type         varchar(255) not null,
+    answer_section_id   bigint not null references answer_sections(id),
+    answer_index        integer not null,
+    question_id         bigint references questions(id),
+    rating              integer,
+    text                varchar(8000),
+    attachment_id       bigint unique references files(id),
+  unique (answer_section_id, answer_index)
+);
+
+create table answer_selections (
+    answer_id   bigint not null references answers(id),
+    selection   integer
+);
+
 ------------
 -- grades --
 ------------

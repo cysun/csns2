@@ -29,6 +29,22 @@
         primary key (id)
     );
 
+    create table assignments (
+        assignment_type varchar(31) not null,
+        id int8 not null,
+        alias varchar(255) not null,
+        available_after_due_date boolean not null,
+        due_date timestamp,
+        file_extensions varchar(255),
+        max_file_size int8,
+        name varchar(255) not null,
+        publish_date timestamp,
+        total_points varchar(255),
+        section_id int8,
+        question_sheet_id int8 unique,
+        primary key (id)
+    );
+
     create table authorities (
         user_id int8 not null,
         role varchar(255)
@@ -117,6 +133,7 @@
         type varchar(255),
         owner_id int8 not null,
         parent_id int8,
+        submission_id int8,
         primary key (id)
     );
 
@@ -160,11 +177,11 @@
         point_value int4,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4 not null,
         primary key (id)
@@ -184,6 +201,20 @@
         course_id int8 not null,
         primary key (id),
         unique (quarter, course_id, number)
+    );
+
+    create table submissions (
+        submission_type varchar(31) not null,
+        id int8 not null,
+        comments varchar(255),
+        due_date timestamp,
+        grade varchar(255),
+        grade_mailed boolean not null,
+        assignment_id int8 not null,
+        student_id int8 not null,
+        answer_sheet_id int8 unique,
+        primary key (id),
+        unique (student_id, assignment_id)
     );
 
     create table users (
@@ -240,6 +271,16 @@
         add constraint FKCD7DB8752E9C937A 
         foreign key (question_id) 
         references questions;
+
+    alter table assignments 
+        add constraint FK68455346DA3A2B9A 
+        foreign key (section_id) 
+        references sections;
+
+    alter table assignments 
+        add constraint FK68455346810289CD 
+        foreign key (question_sheet_id) 
+        references question_sheets;
 
     alter table authorities 
         add constraint FK2B0F1321E3C184AB 
@@ -361,6 +402,11 @@
         foreign key (owner_id) 
         references users;
 
+    alter table files 
+        add constraint FK5CEBA77B350BE3A 
+        foreign key (submission_id) 
+        references submissions;
+
     alter table question_choices 
         add constraint FKCCF0F399376C843B 
         foreign key (question_id) 
@@ -395,5 +441,20 @@
         add constraint FK38805E2E90C57DA 
         foreign key (course_id) 
         references courses;
+
+    alter table submissions 
+        add constraint FK2912EA73583829A 
+        foreign key (assignment_id) 
+        references assignments;
+
+    alter table submissions 
+        add constraint FK2912EA7AEFD183B 
+        foreign key (student_id) 
+        references users;
+
+    alter table submissions 
+        add constraint FK2912EA79AA31C1D 
+        foreign key (answer_sheet_id) 
+        references answer_sheets;
 
     create sequence hibernate_sequence;

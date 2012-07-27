@@ -56,17 +56,18 @@ create table persistent_logins (
 -----------
 
 create table files (
-    id          bigint primary key,
-    name        varchar(255) not null,
-    type        varchar(255),
-    size        bigint,
-    date        timestamp not null default current_timestamp,
-    owner_id    bigint not null references users(id),
-    parent_id   bigint references files(id),
-    folder      boolean not null default 'f',
-    public      boolean not null default 'f',
-    regular     boolean not null default 'f',
-    deleted     boolean not null default 'f'
+    id              bigint primary key,
+    name            varchar(255) not null,
+    type            varchar(255),
+    size            bigint,
+    date            timestamp not null default current_timestamp,
+    owner_id        bigint not null references users(id),
+    parent_id       bigint references files(id),
+    folder          boolean not null default 'f',
+    public          boolean not null default 'f',
+    submission_id   bigint,
+    regular         boolean not null default 'f',
+    deleted         boolean not null default 'f'
 );
 
 --------------------------
@@ -261,6 +262,41 @@ create table enrollments (
     grade_mailed    boolean not null default 'f',
   unique (section_id, student_id)
 );
+
+--------------------------------
+-- assignments and submission --
+--------------------------------
+
+create table assignments (
+    id                          bigint primary key,
+    assignment_type             varchar(255) not null default 'REGULAR',
+    name                        varchar(255) not null,
+    alias                       varchar(255) not null,
+    total_points                varchar(255),
+    section_id                  bigint references sections(id),
+    publish_date                timestamp,
+    due_date                    timestamp,
+    max_file_size               bigint,
+    file_extensions             varchar(255),
+    available_after_due_date    boolean not null default 't',
+    question_sheet_id           bigint unique references question_sheets(id)
+);
+
+create table submissions (
+    id              bigint primary key,
+    submission_type varchar(255) not null default 'REGULAR',
+    student_id      bigint not null references users(id),
+    assignment_id   bigint not null references assignments(id),
+    due_date        timestamp,
+    grade           varchar(255),
+    comments        text,
+    grade_mailed    boolean not null default 'f',
+    answer_sheet_id bigint unique references answer_sheets(id),
+  unique (student_id, assignment_id)
+);
+
+alter table files add constraint files_submission_id_fkey
+    foreign key (submission_id) references submissions(id);
 
 -----------------
 -- departments --

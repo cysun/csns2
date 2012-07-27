@@ -31,6 +31,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import csns.model.academics.Submission;
+
 @Entity
 @Table(name = "files")
 public class File implements Serializable {
@@ -70,6 +72,14 @@ public class File implements Serializable {
 
     @Column(name = "public", nullable = false)
     private boolean isPublic;
+
+    /**
+     * If this field is not null, it means that this file is part of an
+     * assignment submission.
+     */
+    @ManyToOne
+    @JoinColumn(name = "submission_id")
+    private Submission submission;
 
     /**
      * A file is <em>regular</em> if it is uploaded through the file manager
@@ -226,6 +236,16 @@ public class File implements Serializable {
     public void setPublic( boolean isPublic )
     {
         this.isPublic = isPublic;
+    }
+
+    public Submission getSubmission()
+    {
+        return submission;
+    }
+
+    public void setSubmission( Submission submission )
+    {
+        this.submission = submission;
     }
 
     public boolean isRegular()

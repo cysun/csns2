@@ -18,22 +18,21 @@
  */
 package csns.model.academics.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
+import java.util.List;
 
-@Test(groups = "GradeDaoTests")
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class GradeDaoTests extends AbstractTestNGSpringContextTests {
+import csns.model.academics.Assignment;
+import csns.model.academics.OnlineAssignment;
+import csns.model.academics.Section;
+import csns.model.core.User;
 
-    @Autowired
-    GradeDao gradeDao;
+public interface AssignmentDao {
 
-    @Test
-    public void getGrade()
-    {
-        assert gradeDao.getGrade( "A" ).getValue().equals( 4.0 );
-    }
+    Assignment getAssignment( Long id );
+
+    List<OnlineAssignment> getOnlineAssignments( Section section );
+
+    List<OnlineAssignment> getOnlineAssignments( User instructor );
+
+    Assignment saveAssignment( Assignment assignment );
 
 }

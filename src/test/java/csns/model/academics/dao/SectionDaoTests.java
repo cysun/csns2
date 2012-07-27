@@ -18,20 +18,25 @@
  */
 package csns.model.academics.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
+import csns.model.academics.Assignment;
 import csns.model.academics.Course;
 import csns.model.academics.Quarter;
+import csns.model.academics.Section;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Test(groups = "SectionDaoTests", dependsOnGroups = { "UserDaoTests",
     "CourseDaoTests" })
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class SectionDaoTests extends AbstractTestNGSpringContextTests {
+public class SectionDaoTests extends
+    AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     UserDao userDao;
@@ -41,6 +46,12 @@ public class SectionDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
     SectionDao sectionDao;
+
+    @Test
+    public void getSection()
+    {
+        assert sectionDao.getSection( 1000300L ) != null;
+    }
 
     @Test
     public void getSectionsByQuarter()
@@ -71,6 +82,37 @@ public class SectionDaoTests extends AbstractTestNGSpringContextTests {
         User jdoe1 = userDao.getUserByUsername( "jdoe1" );
 
         assert sectionDao.getSectionsByStudent( jdoe1, f10 ).size() == 1;
+    }
+
+    /**
+     * To test lazy loading of collections like assignments, the test class must
+     * extend AbstractTransactionalTestNGSpringContextTests instead of
+     * AbstractTestNGSpringContextTests so Spring will run each test method in a
+     * transaction and keep the entity manager open until the method finishes.
+     */
+    @Test(dependsOnMethods = "getSection")
+    public void loadAssignments()
+    {
+        Section section = sectionDao.getSection( 1000300L );
+        List<Assignment> assignments = section.getAssignments();
+
+        assert assignments.size() == 2;
+        assert assignments.get( 0 ).getName().equals( "Homework 1" );
+        assert assignments.get( 1 ).getName().equals( "Homework 2" );
+    }
+
+    @Test(dependsOnMethods = "loadAssignments")
+    public void addAssignment()
+    {
+        Section section = sectionDao.getSection( 1000300L );
+        Assignment assignment = new Assignment();
+        assignment.setName( "Homework 3" );
+        assignment.setAlias( "HW3" );
+        section.getAssignments().add( assignment );
+        sectionDao.saveSection( section );
+
+        assert section.getAssignments().size() == 3;
+        assert section.getAssignments().get( 2 ).getAlias().equals( "HW3" );
     }
 
 }

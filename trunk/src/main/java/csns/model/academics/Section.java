@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -34,6 +35,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -76,6 +78,10 @@ public class Section implements Serializable, Comparable<Section> {
     @Filter(name = "sortEnrollments",
         condition = "order by student.lastName asc, student.firstName asc")
     private List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    @OrderBy("name asc")
+    private List<Assignment> assignments;
 
     public Section()
     {
@@ -167,6 +173,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setEnrollments( List<Enrollment> enrollments )
     {
         this.enrollments = enrollments;
+    }
+
+    public List<Assignment> getAssignments()
+    {
+        return assignments;
+    }
+
+    public void setAssignments( List<Assignment> assignments )
+    {
+        this.assignments = assignments;
     }
 
 }

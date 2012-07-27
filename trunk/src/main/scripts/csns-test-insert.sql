@@ -62,3 +62,19 @@ insert into enrollments (id, section_id, student_id) values (1000400, 1000300, 1
 insert into enrollments (id, section_id, student_id) values (1000401, 1000300, 1000003);
 insert into enrollments (id, section_id, student_id) values (1000402, 1000301, 1000002);
 insert into enrollments (id, section_id, student_id) values (1000403, 1000302, 1000003);
+
+insert into assignments (id, name, alias, section_id, due_date) values
+    (1000500, 'Homework 1', 'HW1', 1000300, '2010-10-01');
+insert into assignments (id, name, alias, section_id, due_date) values
+    (1000501, 'Homework 2', 'HW2', 1000300, '2010-10-07');
+insert into assignments (id, name, alias, section_id, due_date) values
+    (1000502, 'Homework 1', 'HW1', 1000301, current_timestamp + interval '2 weeks');
+
+insert into submissions (id, student_id, assignment_id) values
+    (1000600, 1000002, 1000500);
+insert into submissions (id, student_id, assignment_id) values
+    (1000601, 1000003, 1000500);
+insert into submissions (id, student_id, assignment_id) values
+    (1000602, 1000003, 1000501);
+insert into submissions (id, student_id, assignment_id) values
+    (1000603, 1000002, 1000502);

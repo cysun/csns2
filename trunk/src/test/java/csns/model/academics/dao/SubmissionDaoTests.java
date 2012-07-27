@@ -23,17 +23,44 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-@Test(groups = "GradeDaoTests")
+import csns.model.academics.Assignment;
+import csns.model.academics.Section;
+import csns.model.core.User;
+import csns.model.core.dao.UserDao;
+
+@Test(groups = "SubmissionDaoTest", dependsOnGroups = { "SectionDaoTests",
+    "AssignmentDaoTests" })
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class GradeDaoTests extends AbstractTestNGSpringContextTests {
+public class SubmissionDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    GradeDao gradeDao;
+    UserDao userDao;
+
+    @Autowired
+    SectionDao sectionDao;
+
+    @Autowired
+    AssignmentDao assignmentDao;
+
+    @Autowired
+    SubmissionDao submissionDao;
 
     @Test
-    public void getGrade()
+    public void getSubmission()
     {
-        assert gradeDao.getGrade( "A" ).getValue().equals( 4.0 );
+        User student = userDao.getUserByUsername( "jdoe1" );
+        Assignment assignment = assignmentDao.getAssignment( 1000500L );
+
+        assert submissionDao.getSubmission( student, assignment ) != null;
+    }
+
+    @Test
+    public void getSubmissions()
+    {
+        User student = userDao.getUserByUsername( "jdoe1" );
+        Section section = sectionDao.getSection( 1000300L );
+
+        assert submissionDao.getSubmissions( student, section ).size() == 1;
     }
 
 }

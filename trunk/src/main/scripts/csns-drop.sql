@@ -17,6 +17,10 @@ drop table department_faculty;
 drop table department_administrators;
 drop table departments;
 
+alter table files drop constraint files_submission_id_fkey;
+drop table submissions;
+drop table assignments;
+
 drop table enrollments;
 drop table section_instructors;
 drop table sections;

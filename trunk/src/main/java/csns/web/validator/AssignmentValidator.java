@@ -16,40 +16,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.util;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+package csns.web.validator;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.WebUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import csns.model.core.User;
+import csns.model.academics.Assignment;
 
 @Component
-public class DefaultUrls {
+public class AssignmentValidator implements Validator {
 
-    public String homeUrl( HttpServletRequest request )
+    @Override
+    public boolean supports( Class<?> clazz )
     {
-        String homeUrl = "/";
-
-        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
-        if( cookie != null )
-            homeUrl = "/department/" + cookie.getValue() + "/";
-
-        return homeUrl;
+        return Assignment.class.isAssignableFrom( clazz );
     }
 
-    public String homeUrl( User user )
+    @Override
+    public void validate( Object target, Errors errors )
     {
-        String homeUrl = "/section/taken";
-
-        if( user.isFaculty() || user.isInstructor() )
-            homeUrl = "/section/taught";
-        else if( user.isSysAdmin() || user.isAdmin() )
-            homeUrl = "/user/search";
-
-        return homeUrl;
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
+            "error.field.required" );
     }
 
 }

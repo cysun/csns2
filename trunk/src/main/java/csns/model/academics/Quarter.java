@@ -170,16 +170,16 @@ public class Quarter implements Serializable, Comparable<Quarter> {
         switch( code % 10 )
         {
             case 1:
-                s = "WINTER";
+                s = "Winter";
                 break;
             case 3:
-                s = "SPRING";
+                s = "Spring";
                 break;
             case 6:
-                s = "SUMMER";
+                s = "Summer";
                 break;
             case 9:
-                s = "FALL";
+                s = "Fall";
                 break;
             default:
                 s = "UNKNOWN";

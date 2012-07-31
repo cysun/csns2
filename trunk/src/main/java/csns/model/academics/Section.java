@@ -79,7 +79,8 @@ public class Section implements Serializable, Comparable<Section> {
         condition = "order by student.lastName asc, student.firstName asc")
     private List<Enrollment> enrollments;
 
-    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
+        CascadeType.PERSIST })
     @OrderBy("name asc")
     private List<Assignment> assignments;
 

@@ -28,9 +28,9 @@
     <li><a href="<c:url value='/wiki/content/${dept}/program_assessment/' />">Home</a></li>
   </c:when>
   <c:when test="${faculty or instructor}">
-    <li><a href="<c:url value='/instructor/section/list' />">Home</a>
+    <li><a href="<c:url value='/section/taught' />">Home</a>
       <div><ul>
-        <li><a href="<c:url value='/instructor/section/list' />"><img alt=""
+        <li><a href="<c:url value='/section/taught' />"><img alt=""
                src="<c:url value='/img/icons/instructor.png' />" />Instructor</a></li>
         <li><a href="<c:url value='/student/section/list' />"><img alt=""
                src="<c:url value='/img/icons/student.png' />" />Student</a></li>

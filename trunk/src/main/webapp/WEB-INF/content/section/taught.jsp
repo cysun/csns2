@@ -26,6 +26,7 @@ $(function(){
 </ul>
 
 <c:forEach var="section" items="${sections}">
+<a id="section-${section.id}"></a>
 <table class="outer_viewtable">
   <tr class="rowtypea">
     <td>${section.course.code} ${section.course.name} - ${section.number}</td>
@@ -35,16 +36,34 @@ $(function(){
     </td>
   </tr>
   <tr> 
-    <td colspan="2">Assignments go here.</td>
+    <td colspan="2">
+      <table class="viewtable">
+        <tr><th>Assignment</th><th>Due Date</th><th></th></tr>
+        <c:forEach items="${section.assignments}" var="assignment">
+        <tr>
+          <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
+          <td class="duedate"><fmt:formatDate value="${assignment.dueDate.time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+          <td class="action">
+            <c:if test="${assignment.online}">
+              <a href="<c:url value='/assignment/view?id=${assignment.id}' />"><img alt="[View Assignment]" 
+                 title="View Assignment" src="<c:url value='/img/icons/script.png'/>" />View</a>
+            </c:if>
+            <a href="<c:url value='/assignment/edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
+               title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" />Edit</a>
+          </td>
+        </tr>
+        </c:forEach>
+      </table>
+    </td>
   </tr>
   <tr class="rowtypeb">
-      <td colspan="2">
-        <a href="assignment?sectionId=${section.id}">Add Assignment</a> |
-        <a href="viewStudents.html?sectionId=${section.id}">View Students</a> |
-        <a href="importRoster.html?sectionId=${section.id}">Enroll Students</a> |
-        <a href="viewEnrollments.html?sectionId=${section.id}">Enter Grades</a> |
-        <a href="<c:url value='/assessment/editCourseJournal.html?sectionId=${section.id}'/>">Assessment</a>
-      </td>
+    <td colspan="2">
+      <a href="<c:url value='/assignment/add?sectionId=${section.id}' />">Add Assignment</a> |
+      <a href="viewStudents.html?sectionId=${section.id}">View Students</a> |
+      <a href="importRoster.html?sectionId=${section.id}">Enroll Students</a> |
+      <a href="viewEnrollments.html?sectionId=${section.id}">Enter Grades</a> |
+      <a href="<c:url value='/assessment/editCourseJournal.html?sectionId=${section.id}'/>">Assessment</a>
+    </td>
   </tr>
 </table>
 </c:forEach>

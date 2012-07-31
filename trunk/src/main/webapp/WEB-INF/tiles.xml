@@ -14,6 +14,7 @@
         <put-list-attribute name="jsUrls">
             <add-attribute value="${jqueryui.url}" />
             <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
         </put-list-attribute>
     </definition>
 
@@ -178,6 +179,25 @@
     <definition name="section/taught" extends="layout.basic">
         <put-attribute name="title" value="Sections" />
         <put-attribute name="content" value="/WEB-INF/content/section/taught.jsp" />
+    </definition>
+
+    <definition name="section/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Section" />
+        <put-attribute name="content" value="/WEB-INF/content/section/edit.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Assignment -->
+    <!-- ========== -->
+
+    <definition name="assignment/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/add.jsp" />
+    </definition>
+
+    <definition name="assignment/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
     </definition>
 
 </tiles-definitions>

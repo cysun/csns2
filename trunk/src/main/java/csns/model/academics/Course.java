@@ -80,6 +80,15 @@ public class Course implements Serializable, Comparable<Course> {
         return getCode().compareTo( course.getCode() );
     }
 
+    public String getDepartmentCode()
+    {
+        int index;
+        for( index = 0; index < code.length(); ++index )
+            if( Character.isDigit( code.charAt( index ) ) ) break;
+
+        return code.substring( 0, index );
+    }
+
     public Long getId()
     {
         return id;

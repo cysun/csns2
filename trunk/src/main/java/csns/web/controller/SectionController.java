@@ -18,10 +18,14 @@
  */
 package csns.web.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +33,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
+import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.QuarterPropertyEditor;
 
@@ -46,10 +53,16 @@ import csns.web.editor.QuarterPropertyEditor;
 public class SectionController {
 
     @Autowired
+    UserDao userDao;
+
+    @Autowired
     QuarterDao quarterDao;
 
     @Autowired
     SectionDao sectionDao;
+
+    @Autowired
+    DepartmentDao departmentDao;
 
     @Autowired
     WebApplicationContext context;
@@ -63,9 +76,7 @@ public class SectionController {
             (QuarterPropertyEditor) context.getBean( "quarterPropertyEditor" ) );
     }
 
-    @RequestMapping("/section/list/{type}")
-    public String list( @PathVariable String type,
-        @RequestParam(required = false) Quarter quarter, ModelMap models,
+    private String list( String type, Quarter quarter, ModelMap models,
         HttpSession session )
     {
         if( quarter != null )
@@ -104,6 +115,81 @@ public class SectionController {
         models.put( "sections", sections );
 
         return view;
+    }
+
+    @RequestMapping("/section/taught")
+    public String taught( @RequestParam(required = false) Quarter quarter,
+        ModelMap models, HttpSession session )
+    {
+        return list( "taught", quarter, models, session );
+    }
+
+    @RequestMapping("/section/taken")
+    public String taken( @RequestParam(required = false) Quarter quarter,
+        ModelMap models, HttpSession session )
+    {
+        return list( "taken", quarter, models, session );
+    }
+
+    @RequestMapping(value = "/section/edit", method = RequestMethod.GET)
+    public String edit( @RequestParam Long id, ModelMap models )
+    {
+        Section section = sectionDao.getSection( id );
+        Department department = departmentDao.getDepartment( section.getCourse()
+            .getDepartmentCode() );
+
+        List<User> instructors = new ArrayList<User>();
+        instructors.addAll( department.getFaculty() );
+        instructors.addAll( department.getInstructors() );
+        instructors.removeAll( section.getInstructors() );
+
+        JSONArray jsonArray = new JSONArray();
+        for( User instructor : instructors )
+        {
+            String label = instructor.isCinEncrypted() ? instructor.getName()
+                : instructor.getCin() + " " + instructor.getName();
+
+            Map<String, String> json = new HashMap<String, String>();
+            json.put( "id", instructor.getId().toString() );
+            json.put( "value", instructor.getName() );
+            json.put( "label", label );
+            jsonArray.put( json );
+        }
+
+        models.put( "section", section );
+        models.put( "instructors", jsonArray );
+
+        return "section/edit";
+    }
+
+    @RequestMapping(value = "/section/edit", params = "instructor=add")
+    public String addInstructor( @RequestParam Long id,
+        @RequestParam Long instructorId )
+    {
+        Section section = sectionDao.getSection( id );
+        User instructor = userDao.getUser( instructorId );
+        if( !section.getInstructors().contains( instructor ) )
+        {
+            section.getInstructors().add( instructor );
+            sectionDao.saveSection( section );
+        }
+
+        return "redirect:/section/edit?id=" + id;
+    }
+
+    @RequestMapping(value = "/section/edit", params = "instructor=remove")
+    public String removeInstructor( @RequestParam Long id,
+        @RequestParam Long instructorId )
+    {
+        Section section = sectionDao.getSection( id );
+        User instructor = userDao.getUser( instructorId );
+        if( section.getInstructors().contains( instructor ) )
+        {
+            section.getInstructors().remove( instructor );
+            sectionDao.saveSection( section );
+        }
+
+        return "redirect:/section/edit?id=" + id;
     }
 
 }

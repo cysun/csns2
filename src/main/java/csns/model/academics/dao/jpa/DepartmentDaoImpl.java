@@ -47,7 +47,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
         List<Department> departments = entityManager.createQuery(
             "from Department where abbreviation = :abbreviation",
             Department.class )
-            .setParameter( "abbreviation", abbreviation )
+            .setParameter( "abbreviation", abbreviation.toLowerCase() )
             .getResultList();
         return departments.size() == 0 ? null : departments.get( 0 );
     }

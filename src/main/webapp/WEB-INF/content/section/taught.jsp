@@ -1,8 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<script type="text/javascript">
-/* <![CDATA[ */
+<script>
 $(function(){
     $("select[name='quarter'] option").each(function(){
        if( $(this).val() == ${quarter.code}) 
@@ -12,8 +11,34 @@ $(function(){
         var quarter = $("select[name='quarter'] option:selected").val();
         window.location.href = "taught?quarter=" + quarter;
     });
+    
+    $("#addSectionForm").hide();
+    $("#addSectionLink").click(function(){
+       $("#addSectionForm").toggle(); 
+    });
+    $(".add").each(function(){
+        $(this).autocomplete({
+            source: "<c:url value='/course/autocomplete' />",
+            select: function(event, ui) {
+                if( ui.item )
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "courseId",
+                        value: ui.item.id
+                    }).appendTo($(this).parent());
+            }
+        });
+    });
+    $(".clear").each(function(){
+       $(this).click(function(event){
+           event.preventDefault();
+           $("input[name='courseId']").remove();
+           $(".add").each(function(){
+              $(this).val("");
+           });
+       });
+    });
 });
-/* ]]> */
 </script>
 
 <ul id="title">
@@ -67,3 +92,12 @@ $(function(){
   </tr>
 </table>
 </c:forEach>
+
+<p><a id="addSectionLink">Add Section</a></p>
+
+<form id="addSectionForm" action="add" method="post">
+<input type="text" class="forminput add" name="name" size="40" />
+<input type="hidden" name="quarterCode" value="${quarter.code}" />
+<input type="submit" class="subbutton" name="add" value="Add" />
+<button class="subbutton clear">Clear</button>
+</form>

@@ -38,9 +38,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
+import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
@@ -54,6 +56,9 @@ public class SectionController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    CourseDao courseDao;
 
     @Autowired
     QuarterDao quarterDao;
@@ -129,6 +134,42 @@ public class SectionController {
         ModelMap models, HttpSession session )
     {
         return list( "taken", quarter, models, session );
+    }
+
+    @RequestMapping("/section/add")
+    public String add( @RequestParam Long courseId,
+        @RequestParam Integer quarterCode )
+    {
+        Quarter quarter = new Quarter( quarterCode );
+        Course course = courseDao.getCourse( courseId );
+        User instructor = SecurityUtils.getUser();
+        sectionDao.addSection( quarter, course, instructor );
+
+        return "redirect:/section/taught";
+    }
+
+    @RequestMapping("/section/delete")
+    public String delete( @RequestParam Long id, ModelMap models )
+    {
+        Section section = sectionDao.getSection( id );
+        if( section.getEnrollments().size() > 0
+            && section.getInstructors().size() == 1 )
+        {
+            models.put( "message", "error.section.nonempty" );
+            models.put( "backUrl", "/section/taught#section-" + section.getId() );
+            return "error";
+        }
+
+        User user = SecurityUtils.getUser();
+        for( User instructor : section.getInstructors() )
+            if( instructor.getId().equals( user.getId() ) )
+            {
+                section.getInstructors().remove( instructor );
+                sectionDao.saveSection( section );
+                break;
+            }
+
+        return "redirect:/section/taught";
     }
 
     @RequestMapping(value = "/section/edit", method = RequestMethod.GET)

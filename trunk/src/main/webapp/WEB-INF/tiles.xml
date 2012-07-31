@@ -176,7 +176,7 @@
     <!-- Section -->
     <!-- ======= -->
 
-    <definition name="section/taught" extends="layout.basic">
+    <definition name="section/taught" extends="layout.jqueryui">
         <put-attribute name="title" value="Sections" />
         <put-attribute name="content" value="/WEB-INF/content/section/taught.jsp" />
     </definition>

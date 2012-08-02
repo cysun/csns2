@@ -40,8 +40,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.Filter;
-
 import csns.model.core.User;
 
 @Entity
@@ -74,9 +72,7 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderColumn(name = "instructor_order")
     private List<User> instructors;
 
-    @OneToMany(mappedBy = "section")
-    @Filter(name = "sortEnrollments",
-        condition = "order by student.lastName asc, student.firstName asc")
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
@@ -108,7 +104,7 @@ public class Section implements Serializable, Comparable<Section> {
         return getNumber() - section.getNumber();
     }
 
-    public boolean isStudentEnrolled( User student )
+    public boolean isEnrolled( User student )
     {
         for( Enrollment enrollment : enrollments )
             if( enrollment.getStudent().equals( student ) ) return true;

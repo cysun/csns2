@@ -61,15 +61,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @Column(nullable = false, unique = true)
     private String cin;
 
-    /**
-     * CSNS used to encrypt CIN, but we no longer do that because it's better to
-     * have access to the CIN for student and class management. Some CIN in the
-     * system are still encrypted, and these CIN are indicated by
-     * <code>cinEncrypted=true</code>.
-     */
-    @Column(name = "cin_encrypted", nullable = false)
-    private boolean cinEncrypted;
-
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -140,7 +131,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
 
     public User()
     {
-        cinEncrypted = false;
         enabled = true;
         temporary = false;
         roles = new HashSet<String>();
@@ -355,16 +345,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setCin( String cin )
     {
         this.cin = cin;
-    }
-
-    public boolean isCinEncrypted()
-    {
-        return cinEncrypted;
-    }
-
-    public void setCinEncrypted( boolean cinEncrypted )
-    {
-        this.cinEncrypted = cinEncrypted;
     }
 
     public String getUsername()

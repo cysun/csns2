@@ -1,8 +1,11 @@
+## app.school is the acronym of the school. It is used to include/exclude
+## some school-specific code.
 ## app.url is the URL by which the application will be accessed.
 ## app.email is used as the sender of the automated emails sent by the system.
 ## app.email.admin is the email that the users can use to contact the system
 ## administrator. Uploaded files are stored in app.dir.file, and the log files
 ## are kept under app.dir.log.
+app.school=csula
 app.url=http://localhost:8080/csns2
 app.email=csns2@localhost.localdomain
 app.email.admin=csns2admin@localhost.localdomain

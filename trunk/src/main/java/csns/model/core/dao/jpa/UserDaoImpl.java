@@ -23,8 +23,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +35,6 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public User getUser( Long id )
     {
@@ -49,13 +44,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByCin( String cin )
     {
-        String query = "from User where cin = :cin and cinEncrypted = false "
-            + "or cin = :encryptedCin and cinEncrypted = true";
-
-        String encryptedCin = passwordEncoder.encodePassword( cin, null );
-        List<User> users = entityManager.createQuery( query, User.class )
+        List<User> users = entityManager.createQuery(
+            "from User where cin = :cin", User.class )
             .setParameter( "cin", cin )
-            .setParameter( "encryptedCin", encryptedCin )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
     }

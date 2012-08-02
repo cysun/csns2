@@ -222,7 +222,6 @@
         birthday date,
         cell_phone varchar(255),
         cin varchar(255) not null unique,
-        cin_encrypted boolean not null,
         city varchar(255),
         enabled boolean not null,
         first_name varchar(255) not null,

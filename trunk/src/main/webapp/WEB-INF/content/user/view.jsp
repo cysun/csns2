@@ -31,10 +31,7 @@ $(function() {
   </tr>
   <tr>
     <th>CIN</th>
-    <td>
-      <c:if test="${! user.cinEncrypted}">${user.cin}</c:if>
-      <c:if test="${user.cinEncrypted}">(encrypted)</c:if>
-    </td>
+    <td>${user.cin}</td>
   </tr>
   <tr>
     <th>Username</th>

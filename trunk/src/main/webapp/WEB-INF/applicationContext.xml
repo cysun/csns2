@@ -82,7 +82,8 @@
     </bean>
 
     <context:component-scan base-package="csns">
-        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="regex" expression="^csns\.importer\.parser\.(?!${app.school})\..*$" />
     </context:component-scan>
 
 </beans>

@@ -187,13 +187,10 @@ public class SectionController {
         JSONArray jsonArray = new JSONArray();
         for( User instructor : instructors )
         {
-            String label = instructor.isCinEncrypted() ? instructor.getName()
-                : instructor.getCin() + " " + instructor.getName();
-
             Map<String, String> json = new HashMap<String, String>();
             json.put( "id", instructor.getId().toString() );
             json.put( "value", instructor.getName() );
-            json.put( "label", label );
+            json.put( "label", instructor.getCin() + " " + instructor.getName() );
             jsonArray.put( json );
         }
 

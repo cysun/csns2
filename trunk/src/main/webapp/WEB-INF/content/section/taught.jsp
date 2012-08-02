@@ -84,8 +84,8 @@ $(function(){
   <tr class="rowtypeb">
     <td colspan="2">
       <a href="<c:url value='/assignment/add?sectionId=${section.id}' />">Add Assignment</a> |
-      <a href="viewStudents.html?sectionId=${section.id}">View Students</a> |
-      <a href="importRoster.html?sectionId=${section.id}">Enroll Students</a> |
+      <a href="roster?id=${section.id}">View Students</a> |
+      <a href="roster/import?id=${section.id}">Enroll Students</a> |
       <a href="viewEnrollments.html?sectionId=${section.id}">Enter Grades</a> |
       <a href="<c:url value='/assessment/editCourseJournal.html?sectionId=${section.id}'/>">Assessment</a>
     </td>

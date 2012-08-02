@@ -125,13 +125,10 @@ public class UserController {
         List<User> users = userDao.searchUsersByPrefix( term );
         for( User user : users )
         {
-            String label = user.isCinEncrypted() ? user.getName()
-                : user.getCin() + " " + user.getName();
-
             Map<String, String> json = new HashMap<String, String>();
             json.put( "id", user.getId().toString() );
             json.put( "value", user.getName() );
-            json.put( "label", label );
+            json.put( "label", user.getCin() + " " + user.getName() );
             jsonArray.put( json );
         }
 
@@ -287,11 +284,6 @@ public class UserController {
 
         String newPassword = "" + (int) (Math.random() * 100000000);
         user.setPassword( passwordEncoder.encodePassword( newPassword, null ) );
-        if( user.isCinEncrypted() && StringUtils.hasText( cin ) )
-        {
-            user.setCin( cin );
-            user.setCinEncrypted( false );
-        }
         userDao.saveUser( user );
         logger.info( "Reset password for " + user.getUsername() );
 

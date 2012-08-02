@@ -68,7 +68,7 @@ $(function(){
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
 <c:forEach items="${department.administrators}" var="user">
 <tr>
-  <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
+  <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/admin/remove?userId=${user.id}"><img
@@ -88,7 +88,7 @@ $(function(){
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
 <c:forEach items="${department.faculty}" var="user">
 <tr>
-  <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
+  <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/faculty/remove?userId=${user.id}"><img
@@ -108,7 +108,7 @@ $(function(){
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
 <c:forEach items="${department.instructors}" var="user">
 <tr>
-  <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
+  <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/instructor/remove?userId=${user.id}"><img
@@ -128,7 +128,7 @@ $(function(){
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
 <c:forEach items="${department.reviewers}" var="user">
 <tr>
-  <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
+  <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center"><a href="personnel/reviewer/remove?userId=${user.id}"><img

@@ -47,7 +47,7 @@
     <security:global-method-security pre-post-annotations="enabled" />
 
     <context:component-scan base-package="csns" use-default-filters="false">
-        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
 </beans>

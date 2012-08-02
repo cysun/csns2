@@ -41,7 +41,7 @@ $(function(){
 <tr><th>CIN</th><th>Name</th><th>Primary Email</th><th></th></tr>
 <c:forEach items="${users}" var="user">
 <tr>
-  <td><c:if test="${not user.cinEncrypted}">${user.cin}</c:if><br /></td>
+  <td>${user.cin}</td>
   <td><a href="view?id=${user.id}">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
   <td class="center">

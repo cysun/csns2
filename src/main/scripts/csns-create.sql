@@ -12,7 +12,6 @@ create sequence hibernate_sequence minvalue 2000000;
 create table users (
     id              bigint primary key,
     cin             varchar(255) not null unique,
-    cin_encrypted   boolean not null default 'f',
     username        varchar(255) not null unique,
     password        varchar(255) not null,
     last_name       varchar(255) not null,

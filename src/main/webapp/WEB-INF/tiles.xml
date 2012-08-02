@@ -186,6 +186,26 @@
         <put-attribute name="content" value="/WEB-INF/content/section/edit.jsp" />
     </definition>
 
+    <definition name="section/roster" extends="layout.jqueryui">
+        <put-attribute name="title" value="Students" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster.jsp" />
+    </definition>
+
+    <definition name="section/roster/import0" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import0.jsp" />
+    </definition>
+
+    <definition name="section/roster/import1" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import1.jsp" />
+    </definition>
+
+    <definition name="section/roster/import2" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import2.jsp" />
+    </definition>
+
     <!-- ========== -->
     <!-- Assignment -->
     <!-- ========== -->

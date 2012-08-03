@@ -20,16 +20,17 @@ $(function(){
 <div id="tabs">
 <ul>
   <li><a href="#import">Import</a></li>
-  <li><a href="#add">Add</a></li>
+  <li><a href="add?sectionId=${section.id}">Add</a></li>
 </ul>
-</div>
 
 <div id="import">
 <p>Please copy and paste the class roster from GET to the text area below:</p>
 
 <form:form modelAttribute="rosterImporter">
-  <form:textarea path="text" rows="20" cols="80" cssStyle="width: 99%; border: 1px solid;" />
+  <form:textarea path="text" rows="20" cols="80" cssStyle="width: 100%; border: 1px solid;" />
   <p><input type="hidden" name="_page" value="0" />
   <input type="submit" name="_target1" value="Next" class="subbutton" /></p>
 </form:form>
+</div>
+
 </div>

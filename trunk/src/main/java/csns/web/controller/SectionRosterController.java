@@ -40,6 +40,7 @@ import csns.importer.ImportedUser;
 import csns.importer.RosterImporter;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Section;
+import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
@@ -54,6 +55,9 @@ public class SectionRosterController {
 
     @Autowired
     SectionDao sectionDao;
+
+    @Autowired
+    EnrollmentDao enrollmentDao;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -71,10 +75,10 @@ public class SectionRosterController {
 
     @RequestMapping(value = "/section/roster/import",
         method = RequestMethod.GET)
-    public String importRoster( @RequestParam Long id, ModelMap models )
+    public String importRoster( @RequestParam Long sectionId, ModelMap models )
     {
         RosterImporter rosterImporter = (RosterImporter) context.getBean( "rosterImporter" );
-        rosterImporter.setSection( sectionDao.getSection( id ) );
+        rosterImporter.setSection( sectionDao.getSection( sectionId ) );
         models.put( "rosterImporter", rosterImporter );
         return "section/roster/import0";
     }
@@ -116,15 +120,13 @@ public class SectionRosterController {
                 student.setPrimaryEmail( cin + "@localhost" );
                 student.setTemporary( true );
                 student = userDao.saveUser( student );
-                section.getEnrollments()
-                    .add( new Enrollment( section, student ) );
+                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
                 importedStudent.setAccountCreated( true );
                 importedStudent.setAddedToSection( true );
             }
             else if( !section.isEnrolled( student ) )
             {
-                section.getEnrollments()
-                    .add( new Enrollment( section, student ) );
+                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
                 importedStudent.setAccountCreated( false );
                 importedStudent.setAddedToSection( true );
             }
@@ -135,11 +137,39 @@ public class SectionRosterController {
             }
         }
 
-        section = sectionDao.saveSection( section );
-        rosterImporter.setSection( section );
         models.put( "rosterImporter", rosterImporter );
         sessionStatus.setComplete();
         return views.get( 2 );
+    }
+
+    @RequestMapping(value = "/section/roster/add", method = RequestMethod.GET)
+    public String add( @RequestParam Long sectionId, ModelMap models )
+    {
+        models.put( "user", new User() );
+        return "section/roster/add";
+    }
+
+    @RequestMapping(value = "/section/roster/add", method = RequestMethod.POST)
+    public String add( @ModelAttribute User user, @RequestParam Long sectionId,
+        SessionStatus sessionStatus )
+    {
+        String cin = user.getCin();
+        User student = userDao.getUserByCin( cin );
+        if( student == null )
+        {
+            student = user;
+            student.setUsername( cin );
+            String password = passwordEncoder.encodePassword( cin, null );
+            student.setPassword( password );
+            student.setPrimaryEmail( cin + "@localhost" );
+            student.setTemporary( true );
+            student = userDao.saveUser( student );
+        }
+
+        Section section = sectionDao.getSection( sectionId );
+        enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+        sessionStatus.setComplete();
+        return "redirect:/section/roster?id=" + sectionId;
     }
 
 }

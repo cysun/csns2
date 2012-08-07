@@ -244,7 +244,7 @@ table {
 }*/
 .viewtable tr td.action, .outer_viewtable tr td.action {
     width: 12%; 
-    text-align: right; 
+    text-align: center; 
     white-space: nowrap;
 }
 .viewtable tr td.duedate {

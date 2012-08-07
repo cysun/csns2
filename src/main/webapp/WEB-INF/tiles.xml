@@ -183,6 +183,11 @@
         <put-attribute name="content" value="/WEB-INF/content/section/taught.jsp" />
     </definition>
 
+    <definition name="section/taken" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/taken.jsp" />
+    </definition>
+
     <definition name="section/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Section" />
         <put-attribute name="content" value="/WEB-INF/content/section/edit.jsp" />
@@ -222,6 +227,15 @@
     <definition name="assignment/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Submission -->
+    <!-- ========== -->
+
+    <definition name="submission/view" extends="layout.basic">
+        <put-attribute name="title" value="View Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/view.jsp" />
     </definition>
 
 </tiles-definitions>

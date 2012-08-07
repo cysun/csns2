@@ -19,9 +19,9 @@
 package csns.model.academics;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -33,6 +33,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -63,7 +64,8 @@ public class Submission implements Serializable {
     protected Assignment assignment;
 
     @OneToMany(mappedBy = "submission")
-    protected Set<File> files;
+    @OrderBy("name asc")
+    protected List<File> files;
 
     @Column(name = "due_date")
     protected Calendar dueDate;
@@ -77,8 +79,15 @@ public class Submission implements Serializable {
 
     public Submission()
     {
-        files = new HashSet<File>();
+        files = new ArrayList<File>();
         gradeMailed = false;
+    }
+
+    public Submission( User student, Assignment assignment )
+    {
+        this();
+        this.student = student;
+        this.assignment = assignment;
     }
 
     public boolean isOnline()
@@ -134,12 +143,12 @@ public class Submission implements Serializable {
         this.assignment = assignment;
     }
 
-    public Set<File> getFiles()
+    public List<File> getFiles()
     {
         return files;
     }
 
-    public void setFiles( Set<File> files )
+    public void setFiles( List<File> files )
     {
         this.files = files;
     }

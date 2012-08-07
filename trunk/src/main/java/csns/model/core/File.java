@@ -148,6 +148,17 @@ public class File implements Serializable {
         return fullPath;
     }
 
+    public static String getFileExtension( String fileName )
+    {
+        int lastDotIndex = fileName.lastIndexOf( '.' );
+        return lastDotIndex != -1 ? fileName.substring( lastDotIndex + 1 ) : "";
+    }
+
+    public String getFileExtension()
+    {
+        return File.getFileExtension( name );
+    }
+
     public Long getId()
     {
         return id;

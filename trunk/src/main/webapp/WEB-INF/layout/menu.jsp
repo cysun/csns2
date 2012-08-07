@@ -32,7 +32,7 @@
       <div><ul>
         <li><a href="<c:url value='/section/taught' />"><img alt=""
                src="<c:url value='/img/icons/instructor.png' />" />Instructor</a></li>
-        <li><a href="<c:url value='/student/section/list' />"><img alt=""
+        <li><a href="<c:url value='/section/taken' />"><img alt=""
                src="<c:url value='/img/icons/student.png' />" />Student</a></li>
       </ul></div>
     </li>
@@ -41,7 +41,7 @@
     <li><a href="<c:url value='/user/search' />">Home</a></li>
   </c:when>
   <c:when test="${student}">
-    <li><a href="<c:url value='/student/section/list' />">Home</a></li>
+    <li><a href="<c:url value='/section/taken' />">Home</a></li>
   </c:when>
 </c:choose>
 

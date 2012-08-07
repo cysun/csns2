@@ -11,7 +11,6 @@ $(function(){
         var quarter = $("select[name='quarter'] option:selected").val();
         window.location.href = "taught?quarter=" + quarter;
     });
-    
     $("#addSectionForm").hide();
     $("#addSectionLink").click(function(){
        $("#addSectionForm").toggle(); 

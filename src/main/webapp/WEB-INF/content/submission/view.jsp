@@ -19,8 +19,8 @@ function removeFile( fileId )
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>${submission.assignment.name}</li>
 <c:if test="${assignment.availableAfterDueDate || not assignment.pastDue}">
-<li class="align_right"><a href="download?id=${submission.id}"><img title="Download All Files"
-  alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a>
+<li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img
+  title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a>
 </c:if>
 </ul>
 
@@ -45,7 +45,7 @@ File: <input type="file" name="uploadedFile" size="50" />
   </tr>
   <c:forEach items="${submission.files}" var="file">
   <tr>
-    <td>${file.name}</td>
+    <td><a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a></td>
     <td>${file.size}</td>
     <td class="duedate"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
     <c:if test="${not submission.pastDue}">

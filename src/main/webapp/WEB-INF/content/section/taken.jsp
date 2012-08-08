@@ -45,7 +45,7 @@ $(function(){
     </td>
   </tr>
   <tr class="rowtypeb">
-    <td><a href="downloadZip.html?sectionId=${section.id}">Download All Files</a></td>
+    <td><a href="<c:url value='/download?sectionId=${section.id}' />">Download All Files</a></td>
   </tr>
 </table>
 </c:forEach>

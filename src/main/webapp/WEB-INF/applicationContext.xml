@@ -81,6 +81,10 @@
         <property name="password" value="${mail.smtp.password}" />
     </bean>
 
+    <bean id="contentTypes" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:types.properties" />
+    </bean>
+
     <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="resourceLoaderPath" value="/WEB-INF/velocity" />
     </bean>

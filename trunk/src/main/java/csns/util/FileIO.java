@@ -18,6 +18,11 @@
  */
 package csns.util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +55,37 @@ public class FileIO {
         catch( Exception e )
         {
             logger.error( "Failed to save uploaded file", e );
+        }
+    }
+
+    public void copy( InputStream in, OutputStream out )
+    {
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        try
+        {
+            while( (bytesRead = in.read( buffer )) != -1 )
+                out.write( buffer, 0, bytesRead );
+        }
+        catch( IOException e )
+        {
+            logger.error( "Failed to copy input to output", e );
+        }
+    }
+
+    public void copy( File file, OutputStream out )
+    {
+        try
+        {
+            String fileId = file.getId().toString();
+            java.io.File diskFile = new java.io.File( fileDir, fileId );
+            FileInputStream in = new FileInputStream( diskFile );
+            copy( in, out );
+            in.close();
+        }
+        catch( Exception e )
+        {
+            logger.error( "Failed to copy file to output", e );
         }
     }
 

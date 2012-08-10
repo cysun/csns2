@@ -66,7 +66,7 @@ $(function(){
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
-          <td class="duedate"><fmt:formatDate value="${assignment.dueDate.time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+          <td class="fixedwidth"><fmt:formatDate value="${assignment.dueDate.time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
           <td class="action">
             <c:if test="${assignment.online}">
               <a href="<c:url value='/assignment/view?id=${assignment.id}' />"><img alt="[View Assignment]" 

@@ -10,6 +10,18 @@
     <short-name>csns</short-name>
     <uri>http://cs.calstatela.edu/csns</uri>
 
+    <tag>
+        <description>Output file size in B, KB, MB, or GB</description>
+        <name>fileSize</name>
+        <tag-class>csns.web.tag.FileSizeTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
     <tag-file>
         <name>dueDate</name>
         <path>/WEB-INF/tags/dueDate.tag</path>

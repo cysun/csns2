@@ -167,7 +167,9 @@ public class SectionRosterController {
         }
 
         Section section = sectionDao.getSection( sectionId );
-        enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+        Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
+        if( enrollment == null )
+            enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
         sessionStatus.setComplete();
         return "redirect:/section/roster?id=" + sectionId;
     }

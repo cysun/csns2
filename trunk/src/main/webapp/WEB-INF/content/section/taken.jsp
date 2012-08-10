@@ -38,7 +38,7 @@ $(function(){
           <td>
             <a href="<c:url value='/submission/view?assignmentId=${assignment.id}' />">${assignment.name}</a>
           </td>
-          <td class="duedate"><csns:dueDate assignment="${assignment}" /></td>
+          <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
         </tr>
         </c:forEach>
       </table>

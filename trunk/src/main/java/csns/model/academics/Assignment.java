@@ -84,7 +84,8 @@ public class Assignment implements Serializable {
     @Column(name = "available_after_due_date", nullable = false)
     protected boolean availableAfterDueDate;
 
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
+        CascadeType.PERSIST })
     protected List<Submission> submissions;
 
     @Transient

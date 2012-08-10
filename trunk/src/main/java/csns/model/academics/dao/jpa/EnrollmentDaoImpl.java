@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Enrollment;
+import csns.model.academics.Section;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.core.User;
 
@@ -40,6 +41,20 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     public Enrollment getEnrollment( Long id )
     {
         return entityManager.find( Enrollment.class, id );
+    }
+
+    @Override
+    public Enrollment getEnrollment( Section section, User student )
+    {
+        String query = "from Enrollment where section = :section "
+            + "and student = :student";
+
+        List<Enrollment> enrollments = entityManager.createQuery( query,
+            Enrollment.class )
+            .setParameter( "section", section )
+            .setParameter( "student", student )
+            .getResultList();
+        return enrollments.size() == 0 ? null : enrollments.get( 0 );
     }
 
     @Override

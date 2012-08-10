@@ -104,10 +104,19 @@ public class Section implements Serializable, Comparable<Section> {
         return getNumber() - section.getNumber();
     }
 
-    public boolean isEnrolled( User student )
+    public boolean isEnrolled( User user )
     {
         for( Enrollment enrollment : enrollments )
-            if( enrollment.getStudent().equals( student ) ) return true;
+            if( enrollment.getStudent().getId().equals( user.getId() ) )
+                return true;
+
+        return false;
+    }
+
+    public boolean isInstructor( User user )
+    {
+        for( User instructor : instructors )
+            if( instructor.getId().equals( user.getId() ) ) return true;
 
         return false;
     }

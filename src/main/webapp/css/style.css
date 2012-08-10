@@ -247,7 +247,7 @@ table {
     text-align: center; 
     white-space: nowrap;
 }
-.viewtable tr td.duedate {
+.viewtable tr td.fixedwidth {
     width: 20%; 
     text-align: center; 
     white-space: nowrap;
@@ -258,6 +258,14 @@ table {
     vertical-align: middle;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.autowidth {
+    width: auto;
+}
+
+.halfwidth {
+    width: 45%;
 }
 
 .forums {

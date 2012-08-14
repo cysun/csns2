@@ -216,6 +216,11 @@
 
     <definition name="section/roster/add" template="/WEB-INF/content/section/roster/add.jsp" />
 
+    <definition name="section/grade" extends="layout.jqueryui">
+        <put-attribute name="title" value="Grade Student" />
+        <put-attribute name="content" value="/WEB-INF/content/section/grade.jsp" />
+    </definition>
+
     <!-- ========== -->
     <!-- Assignment -->
     <!-- ========== -->

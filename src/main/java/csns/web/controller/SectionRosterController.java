@@ -41,6 +41,7 @@ import csns.importer.RosterImporter;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.EnrollmentDao;
+import csns.model.academics.dao.GradeDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
@@ -52,6 +53,9 @@ public class SectionRosterController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    GradeDao gradeDao;
 
     @Autowired
     SectionDao sectionDao;
@@ -70,6 +74,7 @@ public class SectionRosterController {
     {
         Section section = sectionDao.getSection( id );
         models.put( "gradeSheet", new GradeSheet( section ) );
+        models.put( "grades", gradeDao.getGrades() );
         return "section/roster";
     }
 

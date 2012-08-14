@@ -43,10 +43,11 @@ public class GradeDaoImpl implements GradeDao {
     @Override
     public Grade getGrade( String symbol )
     {
-        return entityManager.createQuery( "from Grade where symbol = :symbol",
-            Grade.class )
+        List<Grade> grades = entityManager.createQuery(
+            "from Grade where symbol = :symbol", Grade.class )
             .setParameter( "symbol", symbol.toUpperCase() )
-            .getSingleResult();
+            .getResultList();
+        return grades.size() == 0 ? null : grades.get( 0 );
     }
 
     @Override

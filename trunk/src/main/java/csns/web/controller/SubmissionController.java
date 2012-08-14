@@ -247,7 +247,7 @@ public class SubmissionController {
     }
 
     @RequestMapping(value = "/submission/edit", params = "comments")
-    public String editSubmissionComments( @RequestParam Long id,
+    public String editComments( @RequestParam Long id,
         @RequestParam String comments, HttpServletResponse response )
         throws IOException
     {
@@ -281,9 +281,10 @@ public class SubmissionController {
 
         Map<String, String> vModels = new HashMap<String, String>();
         vModels.put( "grade", submission.getGrade() );
-        vModels.put( "comments", submission.getComments() );
+        String comments = submission.getComments();
+        vModels.put( "comments", comments != null ? comments : "" );
         String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.grade.vm", vModels );
+            velocityEngine, "email.submission.grade.vm", vModels );
         message.setText( text );
 
         try

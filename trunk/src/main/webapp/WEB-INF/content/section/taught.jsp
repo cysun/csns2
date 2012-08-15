@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -62,11 +62,11 @@ $(function(){
   <tr> 
     <td colspan="2">
       <table class="viewtable">
-        <tr><th>Assignment</th><th>Due Date</th><th></th></tr>
+        <tr><th>Assignment</th><th class="fixedwidth">Due Date</th><th class="action"></th></tr>
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
-          <td class="fixedwidth"><fmt:formatDate value="${assignment.dueDate.time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+          <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
           <td class="action">
             <c:if test="${assignment.online}">
               <a href="<c:url value='/assignment/view?id=${assignment.id}' />"><img alt="[View Assignment]" 

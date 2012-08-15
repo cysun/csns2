@@ -5,10 +5,14 @@
 
 <script>
 $(function(){
-    $('#dueDate').datetimepicker({
+    $("#dueDate").datetimepicker({
         inline: true,
         showSecond: true,
         timeFormat: 'hh:mm:ss'
+    });
+    $("select").click(function(){
+       if( $(this).val() == "ONLINE")
+           window.location.href = "online/list?sectionId=${section.id}";
     });
 });
 </script>

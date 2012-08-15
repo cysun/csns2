@@ -244,9 +244,19 @@ table {
 .viewtable tr.even .cat a:hover {
     background-color:#d6dbf0;
 }*/
+.viewtable tr th.action {
+    width: 15%;
+    white-space: nowrap;
+}
 .viewtable tr td.action, .outer_viewtable tr td.action {
-    width: 12%; 
-    text-align: center; 
+    width: 15%;
+    padding-left: 1em;
+    padding-right: 1em; 
+    text-align: right; 
+    white-space: nowrap;
+}
+.viewtable tr th.fixedwidth {
+    width: 20%; 
     white-space: nowrap;
 }
 .viewtable tr td.fixedwidth {

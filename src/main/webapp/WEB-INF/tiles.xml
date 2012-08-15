@@ -235,6 +235,15 @@
         <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
     </definition>
 
+    <!-- ================== -->
+    <!-- Online Assignments -->
+    <!-- ================== -->
+
+    <definition name="assignment/online/list" extends="layout.basic">
+        <put-attribute name="title" value="Online Assignments" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/list.jsp" />
+    </definition>
+
     <!-- ========== -->
     <!-- Submission -->
     <!-- ========== -->

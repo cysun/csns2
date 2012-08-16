@@ -6,8 +6,8 @@
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>Online Assignments</li>
-<li class="align_right"><a href="add?sectionId=${section.id}"><img alt="[Add Online Assignment]"
-  title="Add Online Assignment" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
+<li class="align_right"><a href="create?sectionId=${section.id}"><img alt="[Create Online Assignment]"
+  title="Create Online Assignment" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
 </ul>
 
 <c:if test="${fn:length(assignments) > 0}">

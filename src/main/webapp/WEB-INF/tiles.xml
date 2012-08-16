@@ -7,6 +7,15 @@
 
     <definition name="layout.basic" template="/WEB-INF/layout/template.basic.jsp" />
 
+    <definition name="layout.bare" template="/WEB-INF/layout/template.basic.jsp">
+        <put-attribute name="header">
+            <definition template="/WEB-INF/layout/header.jsp">
+                <put-attribute name="lpanel" value="" />
+            </definition>
+        </put-attribute>
+        <put-attribute name="menu" value="" />
+    </definition>
+
     <definition name="layout.jqueryui" template="/WEB-INF/layout/template.basic.jsp">
         <put-list-attribute name="cssUrls">
             <add-attribute value="${jqueryui.css}" />
@@ -21,13 +30,16 @@
         </put-list-attribute>
     </definition>
 
-    <definition name="layout.bare" template="/WEB-INF/layout/template.basic.jsp">
-        <put-attribute name="header">
-            <definition template="/WEB-INF/layout/header.jsp">
-                <put-attribute name="lpanel" value="" />
-            </definition>
-        </put-attribute>
-        <put-attribute name="menu" value="" />
+    <definition name="layout.qa" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
+            <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+        </put-list-attribute>
     </definition>
 
     <!-- ======= -->
@@ -242,6 +254,11 @@
     <definition name="assignment/online/list" extends="layout.basic">
         <put-attribute name="title" value="Online Assignments" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/list.jsp" />
+    </definition>
+
+    <definition name="assignment/online/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Online Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/create.jsp" />
     </definition>
 
     <!-- ========== -->

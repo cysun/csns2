@@ -20,6 +20,7 @@ package csns.model.academics;
 
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -33,7 +34,7 @@ public class OnlineAssignment extends Assignment {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "question_sheet_id", unique = true)
     private QuestionSheet questionSheet;
 

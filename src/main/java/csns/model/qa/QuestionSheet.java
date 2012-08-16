@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -40,15 +41,17 @@ public class QuestionSheet implements Serializable {
 
     @Id
     @GeneratedValue
-    protected Long id;
+    private Long id;
 
-    @OneToMany
+    private String description;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "question_sheet_id")
-    @OrderColumn(name = "section_index", nullable = false)
-    protected List<QuestionSection> sections;
+    @OrderColumn(name = "section_index")
+    private List<QuestionSection> sections;
 
     @OneToMany(mappedBy = "questionSheet")
-    protected Set<AnswerSheet> answerSheets;
+    private Set<AnswerSheet> answerSheets;
 
     public QuestionSheet()
     {
@@ -92,6 +95,16 @@ public class QuestionSheet implements Serializable {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
     }
 
     public List<QuestionSection> getSections()

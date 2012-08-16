@@ -65,9 +65,7 @@ public class AssignmentController {
     public String add( @RequestParam Long sectionId, ModelMap models )
     {
         Assignment assignment = new Assignment();
-        Section section = sectionDao.getSection( sectionId );
-        assignment.setSection( section );
-
+        assignment.setSection( sectionDao.getSection( sectionId ) );
         models.addAttribute( "assignment", assignment );
         return "assignment/add";
     }

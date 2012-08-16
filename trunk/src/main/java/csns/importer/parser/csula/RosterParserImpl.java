@@ -47,6 +47,7 @@ public class RosterParserImpl implements RosterParser {
             if( scanner.hasNext() ) scanner.next();
             if( scanner.hasNext() ) scanner.next();
         }
+        scanner.close();
 
         return students;
     }

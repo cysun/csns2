@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -42,9 +43,9 @@ public class QuestionSection implements Serializable {
 
     protected String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "question_section_id")
-    @OrderColumn(name = "question_index", nullable = false)
+    @OrderColumn(name = "question_index")
     protected List<Question> questions;
 
     public QuestionSection()

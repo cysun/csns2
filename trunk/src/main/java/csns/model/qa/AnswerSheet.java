@@ -39,15 +39,15 @@ public class AnswerSheet implements Serializable {
 
     @Id
     @GeneratedValue
-    protected Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "question_sheet_id", nullable = false)
-    protected QuestionSheet questionSheet;
+    private QuestionSheet questionSheet;
 
     @OneToMany(mappedBy = "answerSheet")
     @OrderColumn(name = "section_index")
-    protected List<AnswerSection> sections;
+    private List<AnswerSection> sections;
 
     public AnswerSheet()
     {

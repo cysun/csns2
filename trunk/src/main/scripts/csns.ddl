@@ -21,8 +21,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        text varchar(255),
         rating int4,
+        text varchar(255),
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -161,12 +161,13 @@
         id int8 not null,
         description varchar(255),
         question_sheet_id int8,
-        section_index int4 not null,
+        section_index int4,
         primary key (id)
     );
 
     create table question_sheets (
         id int8 not null,
+        description varchar(255),
         primary key (id)
     );
 
@@ -175,15 +176,15 @@
         id int8 not null,
         description varchar(255),
         point_value int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
-        question_index int4 not null,
+        question_index int4,
         primary key (id)
     );
 

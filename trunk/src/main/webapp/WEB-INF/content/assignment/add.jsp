@@ -32,7 +32,7 @@ $(function(){
 <form:form modelAttribute="assignment">
 <table class="general">
   <tr>
-    <th>Name:</th>
+    <th>Name</th>
     <td>
       <form:input path="name" cssClass="leftinput" size="30" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
@@ -40,33 +40,33 @@ $(function(){
   </tr>
 
   <tr>
-    <th>Alias:</th>
+    <th>Alias</th>
     <td>
       <form:input path="alias" cssClass="leftinput" size="30" maxlength="255" />
     </td>
   </tr>
 
   <tr>
-    <th>Total points:</th>
+    <th>Total Points</th>
     <td><form:input path="totalPoints" cssClass="leftinput" size="30" maxlength="255" /></td>
   </tr>
 
   <tr>
-    <th>Allowed File Extensions:</th>
+    <th>Allowed File Extensions</th>
     <td>
       <form:input path="fileExtensions" cssClass="leftinput" size="30" maxlength="255" />
     </td>
   </tr>
 
   <tr>
-    <th>Due Date:</th>
+    <th>Due Date</th>
     <td>
       <form:input path="dueDate" cssClass="leftinput" size="30" maxlength="30" />
     </td>
   </tr>
 
   <tr>
-    <th>Available After Due Date:</th>
+    <th>Available After Due Date</th>
     <td>
       <form:checkbox path="availableAfterDueDate" />
     </td>

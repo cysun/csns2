@@ -4,15 +4,13 @@
 <c:set var="section" value="${assignment.section}"/>
 
 <script>
-function deleteAssignment( id )
-{
-    var msg = "Are you sure you want to delete this assignment?";
-    if( confirm(msg) )
-        window.location.href = "delete?id=" + id;
-}
-
 $(function(){
-    $('#dueDate').datetimepicker({
+    $("#publishDate").datetimepicker({
+        inline: true,
+        showSecond: true,
+        timeFormat: 'hh:mm:ss'
+    });
+    $("#dueDate").datetimepicker({
         inline: true,
         showSecond: true,
         timeFormat: 'hh:mm:ss'
@@ -22,11 +20,9 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
-<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${assignment.name}</li>
-<li class="align_right"><a href="javascript:deleteAssignment(${assignment.id})"><img title="Delete Assignment"
-  alt="[Delete Assignment]" src="<c:url value='/img/icons/script_delete.png' />" /></a>
-</li>
+<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code}-${section.number}</a></li>
+<li><a class="bc" href="list?sectionId=${section.id}">Online Assignments</a></li>
+<li>Create Assignment</li>
 </ul>
 
 <form:form modelAttribute="assignment">
@@ -47,14 +43,23 @@ $(function(){
   </tr>
 
   <tr>
-    <th>Total Points</th>
-    <td><form:input path="totalPoints" cssClass="leftinput" size="30" maxlength="255" /></td>
+    <th>Description</th>
+    <td>
+      <form:textarea path="questionSheet.description" cssStyle="width: 99%;" rows="15" cols="80" />
+    </td>
   </tr>
 
   <tr>
-    <th>Allowed File Extensions</th>
+    <th>Number of Sections</th>
     <td>
-      <form:input path="fileExtensions" cssClass="leftinput" size="30" maxlength="255" />
+      <form:input path="questionSheet.numOfSections" cssClass="leftinput" size="30" maxlength="2" />
+    </td>
+  </tr>
+
+  <tr>
+    <th>Publish Date</th>
+    <td>
+      <form:input path="publishDate" cssClass="leftinput" size="30" maxlength="30" />
     </td>
   </tr>
 
@@ -72,6 +77,10 @@ $(function(){
     </td>
   </tr>
 
-  <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
+  <tr><th></th><td><input class="subbutton" type="submit" value="Create" /></td></tr>
 </table>
 </form:form>
+
+<script>
+CKEDITOR.replaceAll();
+</script>

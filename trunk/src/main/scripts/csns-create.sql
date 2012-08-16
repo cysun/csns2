@@ -74,14 +74,15 @@ create table files (
 --------------------------
 
 create table question_sheets (
-    id  bigint primary key
+    id          bigint primary key,
+    description varchar(8000)
 );
 
 create table question_sections (
     id                  bigint primary key,
     description         varchar(8000),
     question_sheet_id   bigint references question_sheets(id),
-    section_index       integer not null,
+    section_index       integer,
   unique (question_sheet_id, section_index)
 );
 
@@ -98,7 +99,7 @@ create table questions (
     attachment_allowed  boolean not null default 'f',
     correct_answer      varchar(8000),
     question_section_id bigint references question_sections(id),
-    question_index      integer not null,
+    question_index      integer,
   unique (question_section_id, question_index)
 );
 

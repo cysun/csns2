@@ -11,7 +11,7 @@
     <uri>http://cs.calstatela.edu/csns</uri>
 
     <tag>
-        <description>Output file size in B, KB, MB, or GB</description>
+        <description>Output file size in B, KB, MB, or GB.</description>
         <name>fileSize</name>
         <tag-class>csns.web.tag.FileSizeTag</tag-class>
         <body-content>empty</body-content>
@@ -22,6 +22,18 @@
         </attribute>
     </tag>
 
+    <tag>
+        <description>Format a number in Roman.</description>
+        <name>romanNumber</name>
+        <tag-class>csns.web.tag.RomanNumberTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+ 
     <tag-file>
         <name>dueDate</name>
         <path>/WEB-INF/tags/dueDate.tag</path>
@@ -31,5 +43,31 @@
         <name>publishDate</name>
         <path>/WEB-INF/tags/publishDate.tag</path>
     </tag-file>
+
+    <tag-file>
+        <name>displayQuestion</name>
+        <path>/WEB-INF/tags/displayQuestion.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>displayAnswer</name>
+        <path>/WEB-INF/tags/displayAnswer.tag</path>
+    </tag-file>
+
+    <function>
+        <name>isSelectionCorrect</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            boolean isSelectionCorrect( csns.model.qa.ChoiceQuestion, java.lang.Integer )
+        </function-signature>
+    </function>
+
+    <function>
+        <name>isChoiceSelected</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            boolean isChoiceSelected( csns.model.qa.ChoiceAnswer, java.lang.Integer )
+        </function-signature>
+    </function>
 
 </taglib>

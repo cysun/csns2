@@ -46,8 +46,8 @@ public abstract class Question implements Serializable {
 
     protected String description;
 
-    @Column(name = "point_value")
-    protected Integer pointValue;
+    @Column(name = "point_value", nullable = false)
+    protected int pointValue;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id asc")
@@ -55,6 +55,7 @@ public abstract class Question implements Serializable {
 
     public Question()
     {
+        pointValue = 1;
         answers = new ArrayList<Answer>();
     }
 
@@ -84,12 +85,12 @@ public abstract class Question implements Serializable {
         this.description = description;
     }
 
-    public Integer getPointValue()
+    public int getPointValue()
     {
         return pointValue;
     }
 
-    public void setPointValue( Integer pointValue )
+    public void setPointValue( int pointValue )
     {
         this.pointValue = pointValue;
     }

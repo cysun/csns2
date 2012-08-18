@@ -55,8 +55,7 @@ public class ChoiceAnswer extends Answer {
     @Override
     public int check()
     {
-        int points = question.getPointValue() == null ? 1
-            : question.getPointValue().intValue();
+        int points = question.getPointValue();
 
         Set<Integer> correctSelections = ((ChoiceQuestion) question).getCorrectSelections();
 

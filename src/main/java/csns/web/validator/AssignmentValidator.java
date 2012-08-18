@@ -19,6 +19,7 @@
 package csns.web.validator;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -39,6 +40,10 @@ public class AssignmentValidator implements Validator {
     {
         ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
             "error.field.required" );
+
+        Assignment assignment = (Assignment) target;
+        if( !StringUtils.hasText( assignment.getAlias() ) )
+            assignment.setAlias( assignment.getName() );
     }
 
 }

@@ -90,7 +90,7 @@ create table questions (
     id                  bigint primary key,
     question_type       varchar(255) not null,
     description         varchar(8000),
-    point_value         integer,
+    point_value         integer not null default 1,
     min_selections      integer,
     max_selections      integer,
     min_rating          integer,

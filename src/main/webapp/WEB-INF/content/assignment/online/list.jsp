@@ -26,7 +26,7 @@
     <td class="action">
       <a href="clone?id=${assignment.id}' />"><img alt="[Clone Assignment]" 
          title="Clone Assignment" src="<c:url value='/img/icons/script_code.png'/>" />Clone</a>
-      <a href="edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
+      <a href="edit?id=${assignment.id}"><img alt="[Edit Assignment]"
          title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" />Edit</a>
     </td>
   </tr>

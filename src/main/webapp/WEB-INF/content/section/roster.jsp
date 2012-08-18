@@ -64,8 +64,8 @@ $(function(){
 </td></tr>
 <tr class="rowtypeb">
   <td>
-    <a href="email?sectionId=${section.id}&format=excel">Email Grades</a> |
-    <a href="export?sectionId=${section.id}">Export to Excel</a>
+    <a href="email?sectionId=${section.id}">Email Grades</a> |
+    <a href="export?sectionId=${section.id}&amp;format=excel">Export to Excel</a>
   </td>
 </tr>
 </table>

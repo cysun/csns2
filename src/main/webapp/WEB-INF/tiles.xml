@@ -242,7 +242,7 @@
         <put-attribute name="content" value="/WEB-INF/content/assignment/add.jsp" />
     </definition>
 
-    <definition name="assignment/edit" extends="layout.jqueryui">
+    <definition name="assignment/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
     </definition>
@@ -259,6 +259,21 @@
     <definition name="assignment/online/create" extends="layout.qa">
         <put-attribute name="title" value="Create Online Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/create.jsp" />
+    </definition>
+
+    <definition name="assignment/online/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Online Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/edit.jsp" />
+    </definition>
+
+    <definition name="assignment/online/editSection" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editSection.jsp" />
+    </definition>
+
+    <definition name="assignment/online/addQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/addQuestion.jsp" />
     </definition>
 
     <!-- ========== -->

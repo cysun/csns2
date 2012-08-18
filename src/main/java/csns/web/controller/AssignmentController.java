@@ -20,10 +20,11 @@ package csns.web.controller;
 
 import java.util.Calendar;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -77,10 +78,7 @@ public class AssignmentController {
         assignmentValidator.validate( assignment, result );
         if( result.hasErrors() ) return "assignment/add";
 
-        if( !StringUtils.hasText( assignment.getAlias() ) )
-            assignment.setAlias( assignment.getName() );
         assignment = assignmentDao.saveAssignment( assignment );
-
         sessionStatus.setComplete();
         return "redirect:/section/taught#section-"
             + assignment.getSection().getId();
@@ -95,18 +93,18 @@ public class AssignmentController {
 
     @RequestMapping(value = "/assignment/edit", method = RequestMethod.POST)
     public String edit( @ModelAttribute Assignment assignment,
-        BindingResult result, SessionStatus sessionStatus )
+        HttpServletRequest request, BindingResult result,
+        SessionStatus sessionStatus )
     {
         assignmentValidator.validate( assignment, result );
         if( result.hasErrors() ) return "assignment/edit";
 
-        if( !StringUtils.hasText( assignment.getAlias() ) )
-            assignment.setAlias( assignment.getName() );
         assignment = assignmentDao.saveAssignment( assignment );
-
         sessionStatus.setComplete();
-        return "redirect:/section/taught#section-"
-            + assignment.getSection().getId();
+        return assignment.isOnline() && request.getParameter( "next" ) != null
+            ? "redirect:/assignment/online/edit?id=" + assignment.getId()
+            : "redirect:/section/taught#section-"
+                + assignment.getSection().getId();
     }
 
     @RequestMapping(value = "/assignment/delete")

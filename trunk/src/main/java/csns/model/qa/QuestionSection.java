@@ -43,7 +43,7 @@ public class QuestionSection implements Serializable {
 
     protected String description;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "question_section_id")
     @OrderColumn(name = "question_index")
     protected List<Question> questions;

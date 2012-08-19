@@ -64,6 +64,34 @@ public class QuestionSection implements Serializable {
         return newSection;
     }
 
+    public Question getQuestion( Long questionId )
+    {
+        for( Question question : questions )
+            if( question.getId().equals( questionId ) ) return question;
+
+        return null;
+    }
+
+    public void deleteQuestion( Long questionId )
+    {
+        for( int i = 0; i < questions.size(); ++i )
+            if( questions.get( i ).getId().equals( questionId ) )
+            {
+                questions.remove( i );
+                break;
+            }
+    }
+
+    public void replaceQuestion( Question question )
+    {
+        for( int i = 0; i < questions.size(); ++i )
+            if( questions.get( i ).getId().equals( question.getId() ) )
+            {
+                questions.set( i, question );
+                break;
+            }
+    }
+
     public Long getId()
     {
         return id;

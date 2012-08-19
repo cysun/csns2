@@ -272,8 +272,13 @@
     </definition>
 
     <definition name="assignment/online/addQuestion" extends="layout.qa">
-        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="title" value="Add Question" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/addQuestion.jsp" />
+    </definition>
+
+    <definition name="assignment/online/editQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestion.jsp" />
     </definition>
 
     <!-- ========== -->

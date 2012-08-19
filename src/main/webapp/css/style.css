@@ -446,7 +446,6 @@ table {
 .qa_list li .edit {
 	font-size:14px;
 	font-family:arial;
-	text-transform:uppercase;
 	background-image:none;
 	background-color:transparent;
     background-color:#eeeeee;
@@ -454,6 +453,8 @@ table {
     border-bottom:1px solid #dddddd;
     line-height:25px;
     height:25px;
+    font-weight: normal;
+    color: black;
 }
 .qa_list .question {
     color:#222222;

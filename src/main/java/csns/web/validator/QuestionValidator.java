@@ -49,8 +49,9 @@ public class QuestionValidator implements Validator {
 
             int minSelections = question.getMinSelections();
             int maxSelections = question.getMaxSelections();
-            int numOfChoices = question.getChoices().size();
+            int numOfChoices = question.getNumOfChoices();
 
+            if( maxSelections <= 0 ) maxSelections = 1;
             if( maxSelections > numOfChoices ) maxSelections = numOfChoices;
             if( minSelections < 0 ) minSelections = 0;
             if( minSelections > maxSelections ) minSelections = maxSelections;

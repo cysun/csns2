@@ -202,8 +202,57 @@ public class OnlineAssignmentController {
             .add( question );
         assignmentDao.saveAssignment( assignment );
 
-        return "redirect:/assignment/online/edit?id=" + assignmentId + "&sectionIndex="
-            + sectionIndex;
+        return "redirect:/assignment/online/edit?id=" + assignmentId
+            + "&sectionIndex=" + sectionIndex;
+    }
+
+    @RequestMapping(value = "/assignment/online/editQuestion",
+        method = RequestMethod.GET)
+    public String editQuestion( @RequestParam Long assignmentId,
+        @RequestParam int sectionIndex, @RequestParam Long questionId,
+        ModelMap models )
+    {
+        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
+        Question question = assignment.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex )
+            .getQuestion( questionId );
+        models.put( "assignment", assignment );
+        models.put( "question", question );
+        return "assignment/online/editQuestion";
+    }
+
+    @RequestMapping(value = "/assignment/online/editQuestion",
+        method = RequestMethod.POST)
+    public String editQuestion( @ModelAttribute("question") Question question,
+        @RequestParam Long assignmentId, @RequestParam int sectionIndex,
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        questionValidator.validate( question, result );
+        if( result.hasErrors() ) return "assignment/online/editQuestion";
+
+        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
+        assignment.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex )
+            .replaceQuestion( question );
+        assignmentDao.saveAssignment( assignment );
+
+        return "redirect:/assignment/online/edit?id=" + assignmentId
+            + "&sectionIndex=" + sectionIndex;
+    }
+
+    @RequestMapping("/assignment/online/deleteQuestion")
+    public String deleteQuestion( @RequestParam Long assignmentId,
+        @RequestParam int sectionIndex, @RequestParam Long questionId )
+    {
+        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
+        assignment.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex )
+            .deleteQuestion( questionId );
+        return "redirect:/assignment/online/edit?id=" + assignmentId
+            + "&sectionIndex=" + sectionIndex;
     }
 
 }

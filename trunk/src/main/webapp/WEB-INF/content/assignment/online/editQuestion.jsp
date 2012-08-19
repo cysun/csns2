@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <c:set var="section" value="${assignment.section}" />
@@ -30,13 +31,21 @@ $(function(){
         }
     });
 });
+function deleteQuestion()
+{
+    var msg = "Are you sure you want to delete this question?";
+    if( confirm(msg) )
+        window.location.href = "deleteQuestion?assignmentId=${assignment.id}&sectionIndex=${param.sectionIndex}&questionId=${question.id}";
+}
 </script>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="edit?id=${assignment.id}&sectionIndex=${param.sectionIndex}">${assignment.name}</a></li>
-<li>Add Question</li>
+<li>Edit Question</li>
+<li class="align_right"><a href="javascript:deleteQuestion()"><img title="Delete Question"
+  alt="[Delete Question]" src="<c:url value='/img/icons/page_delete.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="question">
@@ -48,7 +57,7 @@ $(function(){
 
 <c:when test="${question.type == 'CHOICE'}">
 <h4>Number of choices:
-<form:input path="numOfChoices" cssClass="forminput" cssStyle="width: 2em;" />
+<form:input path="numOfChoices" cssStyle="width: 2em;" />
 </h4>
 <div id="choicesInput">
 <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
@@ -82,7 +91,7 @@ $(function(){
 
 <input type="hidden" name="assignmentId" value="${assignment.id}" />
 <input type="hidden" name="sectionIndex" value="${param.sectionIndex}" />
-<input class="subbutton" type="submit" value="Add" />
+<input class="subbutton" type="submit" value="Save" />
 </form:form>
 
 <script type="text/javascript">

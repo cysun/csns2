@@ -60,6 +60,8 @@ public class ChoiceQuestion extends Question {
     public ChoiceQuestion()
     {
         choices = new ArrayList<String>();
+        for( int i = 0; i < 4; ++i )
+            choices.add( "" );
         correctSelections = new HashSet<Integer>();
         minSelections = 0;
         maxSelections = 4;
@@ -97,6 +99,27 @@ public class ChoiceQuestion extends Question {
     public boolean isSingleSelection()
     {
         return maxSelections == 1;
+    }
+
+    public int getNumOfChoices()
+    {
+        return choices.size();
+    }
+
+    public void setNumOfChoices( int numOfChoices )
+    {
+        if( numOfChoices <= 0 ) numOfChoices = 1;
+
+        if( numOfChoices > choices.size() )
+            for( int i = choices.size(); i < numOfChoices; ++i )
+                choices.add( "" );
+
+        if( numOfChoices < choices.size() )
+            for( int i = choices.size(); i > numOfChoices; --i )
+            {
+                choices.remove( i - 1 );
+                correctSelections.remove( i - 1 );
+            }
     }
 
     public List<Integer> getAnswerStats()

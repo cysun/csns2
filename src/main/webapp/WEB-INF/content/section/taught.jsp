@@ -38,6 +38,12 @@ $(function(){
        });
     });
 });
+function publish( id )
+{
+    var msg = "Are you sure you want to publish this assignment?";
+    if( confirm(msg) )
+        $("#pdate-"+id).load( "<c:url value='/assignment/publish?id=' />" + id );
+}
 </script>
 
 <ul id="title">
@@ -62,18 +68,21 @@ $(function(){
   <tr> 
     <td colspan="2">
       <table class="viewtable">
-        <tr><th>Assignment</th><th class="fixedwidth">Due Date</th><th class="action"></th></tr>
+        <tr>
+          <th>Assignment</th><th class="fixedwidth">Publish Date</th><th class="fixedwidth">Due Date</th><th class="action"></th>
+        </tr>
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
+          <td class="fixedwidth"><csns:publishDate assignment="${assignment}" /></td>
           <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
           <td class="action">
             <c:if test="${assignment.online}">
-              <a href="<c:url value='/assignment/view?id=${assignment.id}' />"><img alt="[View Assignment]" 
-                 title="View Assignment" src="<c:url value='/img/icons/script.png'/>" />View</a>
+              <a href="<c:url value='/assignment/online/view?id=${assignment.id}' />"><img alt="[View Assignment]" 
+                 title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
             </c:if>
             <a href="<c:url value='/assignment/edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
-               title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" />Edit</a>
+               title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
           </td>
         </tr>
         </c:forEach>

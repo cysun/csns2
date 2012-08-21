@@ -18,9 +18,12 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,6 +116,15 @@ public class OnlineAssignmentController {
         return "redirect:/assignment/online/edit?id=" + assignment.getId();
     }
 
+    @RequestMapping("/assignment/online/view")
+    public String view( @RequestParam Long id,
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+    {
+        models.put( "assignment", assignmentDao.getAssignment( id ) );
+        models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
+        return "assignment/online/view";
+    }
+
     @RequestMapping("/assignment/online/edit")
     public String edit( @RequestParam Long id,
         @RequestParam(required = false) Integer sectionIndex, ModelMap models )
@@ -148,7 +160,8 @@ public class OnlineAssignmentController {
         assignmentDao.saveAssignment( assignment );
 
         sessionStatus.setComplete();
-        return "redirect:/assignment/online/edit?id=" + assignmentId;
+        return "redirect:/assignment/online/edit?id=" + assignmentId
+            + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping("/assignment/online/deleteSection")
@@ -250,9 +263,32 @@ public class OnlineAssignmentController {
         assignment.getQuestionSheet()
             .getSections()
             .get( sectionIndex )
-            .deleteQuestion( questionId );
+            .removeQuestion( questionId );
         return "redirect:/assignment/online/edit?id=" + assignmentId
             + "&sectionIndex=" + sectionIndex;
+    }
+
+    @RequestMapping("/assignment/online/reorderQuestion")
+    public String reorderQuestion( @RequestParam Long assignmentId,
+        @RequestParam int sectionIndex, @RequestParam Long questionId,
+        @RequestParam int newIndex, HttpServletResponse response )
+        throws IOException
+    {
+        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
+        QuestionSection questionSection = assignment.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex );
+        Question question = questionSection.removeQuestion( questionId );
+        if( question != null )
+        {
+            questionSection.getQuestions().add( newIndex, question );
+            assignmentDao.saveAssignment( assignment );
+        }
+
+        response.setContentType( "text/plain" );
+        response.getWriter().print( "" );
+
+        return null;
     }
 
 }

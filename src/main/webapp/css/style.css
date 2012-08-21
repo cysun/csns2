@@ -245,11 +245,11 @@ table {
     background-color:#d6dbf0;
 }*/
 .viewtable tr th.action {
-    width: 15%;
+    width: 10%;
     white-space: nowrap;
 }
 .viewtable tr td.action, .outer_viewtable tr td.action {
-    width: 15%;
+    width: 10%;
     padding-left: 1em;
     padding-right: 1em; 
     text-align: right; 

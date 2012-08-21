@@ -18,9 +18,13 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -107,7 +111,7 @@ public class AssignmentController {
                 + assignment.getSection().getId();
     }
 
-    @RequestMapping(value = "/assignment/delete")
+    @RequestMapping("/assignment/delete")
     public String delete( @RequestParam Long id )
     {
         Assignment assignment = assignmentDao.getAssignment( id );
@@ -116,6 +120,25 @@ public class AssignmentController {
         assignmentDao.saveAssignment( assignment );
 
         return "redirect:/section/taught#section-" + section.getId();
+    }
+
+    @RequestMapping("/assignment/publish")
+    public String publish( @RequestParam Long id, HttpServletResponse response )
+        throws IOException
+    {
+        Assignment assignment = assignmentDao.getAssignment( id );
+        if( !assignment.isPublished() )
+        {
+            assignment.setPublishDate( Calendar.getInstance() );
+            assignment = assignmentDao.saveAssignment( assignment );
+        }
+
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm a" );
+        response.setContentType( "text/plain" );
+        response.getWriter().print(
+            dateFormat.format( assignment.getPublishDate().getTime() ) );
+
+        return null;
     }
 
 }

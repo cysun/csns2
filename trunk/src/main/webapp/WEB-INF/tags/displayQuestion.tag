@@ -3,7 +3,7 @@
 <%@ attribute name="question" required="true" rtexprvalue="true" type="csns.model.qa.Question" %>
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" %>
 
-<li title="${question.id}"> <jsp:doBody /> 
+<li id="${question.id}"> <jsp:doBody /> 
 <div class="question">${question.description}</div>
 <div class="selection">
 <c:choose>

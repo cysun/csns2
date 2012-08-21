@@ -18,13 +18,32 @@ $(function(){
     $("select[name='questionType']").change(function(){
         $(this).closest("form").submit();
     });
+    $("#sortable li:first").addClass("first");
+    $("#sortable li:last").addClass("last");
+    $("span").removeAttr("style");
+    $("table").removeAttr("border");
+    $("#sortable").sortable({
+        update: function(event, ui) {
+            $.ajax({
+                type: "POST",
+                url:  "reorderQuestion",
+                data: {
+                    "assignmentId" : "${assignment.id}",
+                    "sectionIndex" : "${sectionIndex}",
+                    "questionId" : ui.item.attr("id"),
+                    "newIndex" : ui.item.index()
+                }
+            });
+        }
+    });
+    $("#sortable").disableSelection();
 });
 </script>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="view?id=${assignment.id}">${assignment.name}</a></li>
+<li><a class="bc" href="view?id=${assignment.id}&amp;sectionIndex=${sectionIndex}">${assignment.name}</a></li>
 <li>Questions</li>
 </ul>
 

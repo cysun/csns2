@@ -72,14 +72,13 @@ public class QuestionSection implements Serializable {
         return null;
     }
 
-    public void deleteQuestion( Long questionId )
+    public Question removeQuestion( Long questionId )
     {
         for( int i = 0; i < questions.size(); ++i )
             if( questions.get( i ).getId().equals( questionId ) )
-            {
-                questions.remove( i );
-                break;
-            }
+                return questions.remove( i );
+
+        return null;
     }
 
     public void replaceQuestion( Question question )

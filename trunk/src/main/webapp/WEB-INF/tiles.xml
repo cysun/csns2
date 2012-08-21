@@ -261,7 +261,12 @@
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/create.jsp" />
     </definition>
 
-    <definition name="assignment/online/edit" extends="layout.basic">
+    <definition name="assignment/online/view" extends="layout.basic">
+        <put-attribute name="title" value="View Online Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/view.jsp" />
+    </definition>
+
+    <definition name="assignment/online/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Online Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/edit.jsp" />
     </definition>

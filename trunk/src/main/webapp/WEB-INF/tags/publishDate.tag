@@ -6,12 +6,13 @@
 <c:if test="${not empty assignment}">
   <c:set var="publishDate" value="${assignment.publishDate}" />
   <c:set var="published" value="${assignment.published}" />
+  <c:set var="id" value="${assignment.id}" />
 </c:if>
 
 <c:if test="${published}">
-  <fmt:formatDate value="${publishDate.time}" pattern="yyyy-MM-dd hh:mm a" />
+  <span id="pdate-${id}"><fmt:formatDate value="${publishDate.time}" pattern="yyyy-MM-dd hh:mm a" /></span>
 </c:if>
 
 <c:if test="${not published}">
-  <a href="javascript:publish(${assignment.id})">Publish</a>
+  <span id="pdate-${id}"><a href="javascript:publish(${assignment.id})">Publish</a></span>
 </c:if>

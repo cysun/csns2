@@ -264,6 +264,8 @@ public class OnlineAssignmentController {
             .getSections()
             .get( sectionIndex )
             .removeQuestion( questionId );
+        assignmentDao.saveAssignment( assignment );
+
         return "redirect:/assignment/online/edit?id=" + assignmentId
             + "&sectionIndex=" + sectionIndex;
     }

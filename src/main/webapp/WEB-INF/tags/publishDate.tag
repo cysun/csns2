@@ -14,5 +14,7 @@
 </c:if>
 
 <c:if test="${not published}">
-  <span id="pdate-${id}"><a href="javascript:publish(${assignment.id})">Publish</a></span>
+  <span id="pdate-${id}"><a href="javascript:publish(${assignment.id})"><c:if
+    test="${empty publishDate}">Publish</c:if><c:if test="${not empty publishDate}"><fmt:formatDate
+    value="${publishDate.time}" pattern="yyyy-MM-dd hh:mm a" /></c:if></a></span>
 </c:if>

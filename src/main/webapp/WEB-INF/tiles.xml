@@ -310,4 +310,23 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/upload.jsp" />
     </definition>
 
+    <!-- ================= -->
+    <!-- Online Submission -->
+    <!-- ================= -->
+
+    <definition name="submission/online/view" extends="layout.basic">
+        <put-attribute name="title" value="View Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/view.jsp" />
+    </definition>
+
+    <definition name="submission/online/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/edit.jsp" />
+    </definition>
+
+    <definition name="submission/online/grade" extends="layout.jqueryui">
+        <put-attribute name="title" value="Grade Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/grade.jsp" />
+    </definition>
+
 </tiles-definitions>

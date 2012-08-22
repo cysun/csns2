@@ -63,7 +63,7 @@ ${questionSheet.sections[sectionIndex].description}
 <c:forEach items="${questionSheet.sections[sectionIndex].questions}" var="question">
 <csns:displayQuestion question="${question}">
 <div class="edit">(${question.pointValue}pt)
-<a class="qa_action" href="editQuestion.html?assignmentId=${assignment.id}&amp;sectionIndex=${sectionIndex}&amp;questionId=${question.id}">Edit</a>
+<a class="qa_action" href="editQuestion?assignmentId=${assignment.id}&amp;sectionIndex=${sectionIndex}&amp;questionId=${question.id}">Edit</a>
 </div>
 </csns:displayQuestion>
 </c:forEach>

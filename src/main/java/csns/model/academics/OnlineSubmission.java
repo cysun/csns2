@@ -20,11 +20,13 @@ package csns.model.academics;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import csns.model.core.User;
 import csns.model.qa.Answer;
 import csns.model.qa.AnswerSheet;
 
@@ -34,7 +36,7 @@ public class OnlineSubmission extends Submission {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "answer_sheet_id", unique = true)
     private AnswerSheet answerSheet;
 
@@ -43,11 +45,10 @@ public class OnlineSubmission extends Submission {
         super();
     }
 
-    public OnlineSubmission( OnlineAssignment assignment )
+    public OnlineSubmission( User student, OnlineAssignment assignment )
     {
-        super();
+        super( student, assignment );
 
-        this.assignment = assignment;
         if( assignment.isPublished() )
             answerSheet = new AnswerSheet( assignment.getQuestionSheet() );
     }
@@ -60,9 +61,8 @@ public class OnlineSubmission extends Submission {
 
     public void creatAnswerSheet()
     {
-        if( answerSheet == null )
-            answerSheet = new AnswerSheet(
-                ((OnlineAssignment) assignment).getQuestionSheet() );
+        answerSheet = new AnswerSheet(
+            ((OnlineAssignment) assignment).getQuestionSheet() );
     }
 
     public void grade()

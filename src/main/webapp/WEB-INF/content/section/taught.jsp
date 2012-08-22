@@ -40,7 +40,7 @@ $(function(){
 });
 function publish( id )
 {
-    var msg = "Are you sure you want to publish this assignment?";
+    var msg = "Do you want to publish this assignment now?";
     if( confirm(msg) )
         $("#pdate-"+id).load( "<c:url value='/assignment/publish?id=' />" + id );
 }

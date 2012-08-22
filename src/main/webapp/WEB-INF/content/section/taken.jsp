@@ -33,14 +33,25 @@ $(function(){
     <td>
       <table class="viewtable">
         <tr><th>Assignment</th><th>Due Date</th></tr>
-        <c:forEach items="${section.assignments}" var="assignment">
+<c:forEach items="${section.assignments}" var="assignment">
+<c:if test="${assignment.published}">
+  <c:choose>
+    <c:when test="${not assignment.online}">
+      <c:url var="link" value="/submission/view?assignmentId=${assignment.id}" />
+    </c:when>
+    <c:when test="${assignment.online and assignment.pastDue}">
+      <c:url  var="link" value="/submission/online/view?assignmentId=${assignment.id}"/>
+    </c:when>
+    <c:otherwise>
+      <c:url  var="link" value="/submission/online/edit?assignmentId=${assignment.id}"/>
+    </c:otherwise>
+  </c:choose>
         <tr>
-          <td>
-            <a href="<c:url value='/submission/view?assignmentId=${assignment.id}' />">${assignment.name}</a>
-          </td>
+          <td><a href="${link}">${assignment.name}</a></td>
           <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
         </tr>
-        </c:forEach>
+</c:if>
+</c:forEach>
       </table>
     </td>
   </tr>

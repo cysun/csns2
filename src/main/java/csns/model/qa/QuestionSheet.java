@@ -80,11 +80,17 @@ public class QuestionSheet implements Serializable {
     {
         if( n < 1 ) n = 1;
 
-        if( n > sections.size() ) for( int i = sections.size(); i < n; ++i )
-            sections.add( new QuestionSection() );
+        if( n > sections.size() )
+        {
+            for( int i = sections.size(); i < n; ++i )
+                sections.add( new QuestionSection() );
+        }
 
-        if( n < sections.size() ) for( int i = sections.size(); i > n; --i )
-            sections.remove( i - 1 );
+        if( n < sections.size() )
+        {
+            for( int i = sections.size(); i > n; --i )
+                sections.remove( i - 1 );
+        }
     }
 
     public Long getId()

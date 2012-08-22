@@ -4,6 +4,7 @@
 
 <c:set var="section" value="${assignment.section}" />
 
+<c:if test="${not assignment.published}">
 <script>
 $(function(){
     $("input[name='numOfChoices']").change(function(){
@@ -38,14 +39,17 @@ function deleteQuestion()
         window.location.href = "deleteQuestion?assignmentId=${assignment.id}&sectionIndex=${param.sectionIndex}&questionId=${question.id}";
 }
 </script>
+</c:if>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="edit?id=${assignment.id}&sectionIndex=${param.sectionIndex}">${assignment.name}</a></li>
 <li>Edit Question</li>
+<c:if test="${not assignment.published}">
 <li class="align_right"><a href="javascript:deleteQuestion()"><img title="Delete Question"
   alt="[Delete Question]" src="<c:url value='/img/icons/page_delete.png' />" /></a></li>
+</c:if>
 </ul>
 
 <form:form modelAttribute="question">
@@ -56,8 +60,10 @@ function deleteQuestion()
 <c:choose>
 
 <c:when test="${question.type == 'CHOICE'}">
-<h4>Number of choices:
-<form:input path="numOfChoices" cssStyle="width: 2em;" />
+<h4>
+<c:if test="${not assignment.published}">
+Number of choices: <form:input path="numOfChoices" cssStyle="width: 2em;" />
+</c:if>
 </h4>
 <div id="choicesInput">
 <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">

@@ -74,6 +74,7 @@ $(function(){
     </td>
   </tr>
 
+  <c:if test="${not assignment.published}">
   <tr>
     <th>Number of Sections</th>
     <td>
@@ -87,6 +88,7 @@ $(function(){
       <form:input path="publishDate" cssClass="leftinput" size="30" maxlength="30" />
     </td>
   </tr>
+  </c:if>
 </c:if>
 
   <tr>

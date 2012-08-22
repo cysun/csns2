@@ -15,6 +15,7 @@ $(function(){
     $("#done").click(function(){
         window.location.href = "<c:url value='/section/taught#section-${section.id}' />"; 
     });
+<c:if test="${not assignment.published}">
     $("select[name='questionType']").change(function(){
         $(this).closest("form").submit();
     });
@@ -37,6 +38,7 @@ $(function(){
         }
     });
     $("#sortable").disableSelection();
+</c:if>
 });
 </script>
 
@@ -69,6 +71,7 @@ ${questionSheet.sections[sectionIndex].description}
 </c:forEach>
 </ol>
 
+<c:if test="${not assignment.published}">
 <form method="get" action="addQuestion">
 <input type="hidden" name="assignmentId" value="${assignment.id}" />
 <input type="hidden" name="sectionIndex" value="${sectionIndex}" />
@@ -79,6 +82,7 @@ ${questionSheet.sections[sectionIndex].description}
 </select>
 <input type="submit" class="subbutton" name="add" value="Add" />
 </form>
+</c:if>
 
 <p>
 <c:if test="${sectionIndex > 0}">

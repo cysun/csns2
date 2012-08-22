@@ -19,8 +19,10 @@ function deleteSection()
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="edit?id=${assignment.id}">${assignment.name}</a></li>
 <li>Section <csns:romanNumber value="${sectionIndex+1}" /></li>
+<c:if test="${not assignment.published}">
 <li class="align_right"><a href="javascript:deleteSection()"><img title="Delete Section"
   alt="[Delete Section]" src="<c:url value='/img/icons/page_delete.png' />" /></a></li>
+</c:if>
 </ul>
 
 <form:form modelAttribute="questionSection">

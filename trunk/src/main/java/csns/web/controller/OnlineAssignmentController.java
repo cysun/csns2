@@ -169,8 +169,12 @@ public class OnlineAssignmentController {
         @RequestParam int sectionIndex )
     {
         OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        assignment.getQuestionSheet().getSections().remove( sectionIndex );
-        assignmentDao.saveAssignment( assignment );
+        if( !assignment.isPublished() )
+        {
+            assignment.getQuestionSheet().getSections().remove( sectionIndex );
+            assignmentDao.saveAssignment( assignment );
+        }
+
         return "redirect:/assignment/online/edit?id=" + assignmentId;
     }
 
@@ -208,12 +212,15 @@ public class OnlineAssignmentController {
         if( result.hasErrors() ) return "assignment/online/addQuestion";
 
         OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex )
-            .getQuestions()
-            .add( question );
-        assignmentDao.saveAssignment( assignment );
+        if( !assignment.isPublished() )
+        {
+            assignment.getQuestionSheet()
+                .getSections()
+                .get( sectionIndex )
+                .getQuestions()
+                .add( question );
+            assignmentDao.saveAssignment( assignment );
+        }
 
         return "redirect:/assignment/online/edit?id=" + assignmentId
             + "&sectionIndex=" + sectionIndex;
@@ -260,11 +267,14 @@ public class OnlineAssignmentController {
         @RequestParam int sectionIndex, @RequestParam Long questionId )
     {
         OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex )
-            .removeQuestion( questionId );
-        assignmentDao.saveAssignment( assignment );
+        if( !assignment.isPublished() )
+        {
+            assignment.getQuestionSheet()
+                .getSections()
+                .get( sectionIndex )
+                .removeQuestion( questionId );
+            assignmentDao.saveAssignment( assignment );
+        }
 
         return "redirect:/assignment/online/edit?id=" + assignmentId
             + "&sectionIndex=" + sectionIndex;
@@ -277,14 +287,17 @@ public class OnlineAssignmentController {
         throws IOException
     {
         OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        QuestionSection questionSection = assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex );
-        Question question = questionSection.removeQuestion( questionId );
-        if( question != null )
+        if( !assignment.isPublished() )
         {
-            questionSection.getQuestions().add( newIndex, question );
-            assignmentDao.saveAssignment( assignment );
+            QuestionSection questionSection = assignment.getQuestionSheet()
+                .getSections()
+                .get( sectionIndex );
+            Question question = questionSection.removeQuestion( questionId );
+            if( question != null )
+            {
+                questionSection.getQuestions().add( newIndex, question );
+                assignmentDao.saveAssignment( assignment );
+            }
         }
 
         response.setContentType( "text/plain" );

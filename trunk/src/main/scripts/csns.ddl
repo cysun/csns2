@@ -176,13 +176,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -216,6 +216,35 @@
         answer_sheet_id int8 unique,
         primary key (id),
         unique (student_id, assignment_id)
+    );
+
+    create table survey_responses (
+        id int8 not null,
+        date timestamp not null,
+        answer_sheet_id int8 not null unique,
+        respondent_id int8,
+        survey_id int8 not null,
+        primary key (id)
+    );
+
+    create table surveys (
+        id int8 not null,
+        close_date timestamp,
+        date timestamp not null,
+        deleted boolean not null,
+        name varchar(255) not null,
+        publish_date timestamp,
+        type varchar(255),
+        author_id int8 not null,
+        department_id int8,
+        question_sheet_id int8 not null unique,
+        primary key (id)
+    );
+
+    create table surveys_taken (
+        user_id int8 not null,
+        survey_id int8 not null,
+        primary key (user_id, survey_id)
     );
 
     create table users (
@@ -456,5 +485,45 @@
         add constraint FK2912EA79AA31C1D 
         foreign key (answer_sheet_id) 
         references answer_sheets;
+
+    alter table survey_responses 
+        add constraint FK86922DAD37CDD060 
+        foreign key (respondent_id) 
+        references users;
+
+    alter table survey_responses 
+        add constraint FK86922DAD5B66DD70 
+        foreign key (survey_id) 
+        references surveys;
+
+    alter table survey_responses 
+        add constraint FK86922DAD9AA31C1D 
+        foreign key (answer_sheet_id) 
+        references answer_sheets;
+
+    alter table surveys 
+        add constraint FK91914459F7F6787A 
+        foreign key (department_id) 
+        references departments;
+
+    alter table surveys 
+        add constraint FK91914459447A76EB 
+        foreign key (author_id) 
+        references users;
+
+    alter table surveys 
+        add constraint FK91914459810289CD 
+        foreign key (question_sheet_id) 
+        references question_sheets;
+
+    alter table surveys_taken 
+        add constraint FK95459D61E3C184AB 
+        foreign key (user_id) 
+        references users;
+
+    alter table surveys_taken 
+        add constraint FK95459D615B66DD70 
+        foreign key (survey_id) 
+        references surveys;
 
     create sequence hibernate_sequence;

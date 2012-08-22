@@ -33,6 +33,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,6 +46,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
+
+import csns.model.survey.Survey;
 
 @Entity
 @Table(name = "users")
@@ -129,11 +133,18 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @Transient
     String password2;
 
+    @ManyToMany
+    @JoinTable(name = "surveys_taken",
+        joinColumns = { @JoinColumn(name = "user_id", nullable = false) },
+        inverseJoinColumns = { @JoinColumn(name = "survey_id", nullable = false) })
+    private Set<Survey> surveysTaken;
+
     public User()
     {
         enabled = true;
         temporary = false;
         roles = new HashSet<String>();
+        surveysTaken = new HashSet<Survey>();
     }
 
     public User clone()
@@ -555,6 +566,16 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setPassword2( String password2 )
     {
         this.password2 = password2;
+    }
+
+    public Set<Survey> getSurveysTaken()
+    {
+        return surveysTaken;
+    }
+
+    public void setSurveysTaken( Set<Survey> surveysTaken )
+    {
+        this.surveysTaken = surveysTaken;
     }
 
 }

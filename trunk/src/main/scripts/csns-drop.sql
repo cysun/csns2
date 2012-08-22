@@ -7,6 +7,10 @@ drop sequence hibernate_sequence;
 drop function quarter();
 drop function quarter(date);
 
+drop table surveys_taken;
+drop table survey_responses;
+drop table surveys;
+
 drop table department_additional_graduate_courses;
 drop table department_graduate_courses;
 drop table department_additional_undergraduate_courses;

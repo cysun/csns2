@@ -133,7 +133,7 @@ public class Assignment implements Serializable {
     public boolean isPublished()
     {
         return isPastDue() || publishDate != null
-            && publishDate.before( Calendar.getInstance() );
+            && Calendar.getInstance().after( publishDate );
     }
 
     public boolean isFileExtensionAllowed( String fileExtension )

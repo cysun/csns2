@@ -57,7 +57,7 @@ public class RomanNumberFormat extends Format {
         if( fp.getField() != NumberFormat.INTEGER_FIELD )
             throw new IllegalArgumentException( fp
                 + " must be FieldPosition(NumberFormat.INTEGER_FIELD" );
-        int n = ((Number) on).intValue(); // TODO: check in range.
+        int n = ((Number) on).intValue();
 
         // First, put the digits on a tiny stack. Must be 4 digits.
         for( int i = 0; i < 4; i++ )
@@ -110,8 +110,6 @@ public class RomanNumberFormat extends Format {
     public Object parseObject( String what, ParsePosition where )
     {
         throw new IllegalArgumentException( "Parsing not implemented" );
-        // TODO PARSING HERE
-        // return new Long(0);
     }
 
     /* Implement a toy stack */

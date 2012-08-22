@@ -349,6 +349,37 @@ create table department_additional_graduate_courses (
     course_id       bigint not null references courses(id)
 );
 
+-------------
+-- surveys --
+-------------
+
+create table surveys (
+    id                  bigint primary key,
+    name                varchar(255) not null,
+    type                varchar(255) default 'ANONYMOUS',
+    question_sheet_id   bigint not null unique references question_sheets(id),
+    publish_date        timestamp,
+    close_date          timestamp,
+    department_id       bigint references departments(id),
+    author_id           bigint not null references users(id),
+    date                timestamp not null default current_timestamp,
+    deleted             boolean not null default 'f'
+);
+
+create table survey_responses (
+    id              bigint primary key,
+    survey_id       bigint not null references surveys(id),
+    answer_sheet_id bigint not null unique references answer_sheets(id),
+    respondent_id   bigint references users(id),
+    date            timestamp not null default current_timestamp
+);
+
+create table surveys_taken (
+    user_id     bigint not null references users(id),
+    survey_id   bigint not null references surveys(id),
+  primary key (user_id, survey_id)
+);
+
 ------------------------------
 -- functions and procedures --
 ------------------------------

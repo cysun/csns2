@@ -27,17 +27,15 @@ public class RatingAnswer extends Answer {
 
     private static final long serialVersionUID = 1L;
 
-    private int rating;
+    private Integer rating;
 
     public RatingAnswer()
     {
-        rating = -1;
     }
 
     public RatingAnswer( RatingQuestion ratingQuestion )
     {
         super( ratingQuestion );
-        rating = ratingQuestion.getMaxRating() + 1;
     }
 
     @Override
@@ -46,12 +44,12 @@ public class RatingAnswer extends Answer {
         return 0;
     }
 
-    public int getRating()
+    public Integer getRating()
     {
         return rating;
     }
 
-    public void setRating( int rating )
+    public void setRating( Integer rating )
     {
         this.rating = rating;
     }

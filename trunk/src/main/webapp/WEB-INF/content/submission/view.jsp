@@ -69,7 +69,8 @@ File: <input type="file" name="uploadedFile" size="50" />
 </c:if>
 
 <c:if test="${submission.gradeMailed}">
-<p><b>Grade: ${submission.grade}</b></p>
-<p><b>Comments:</b></p>
-<p>${submission.comments}</p>
+<h4>Grade</h4>
+<div class="editable_input">${submission.grade}</div>
+<h4>Comments</h4>
+<pre><c:out value="${submission.comments}" escapeXml="true" /></pre>
 </c:if>

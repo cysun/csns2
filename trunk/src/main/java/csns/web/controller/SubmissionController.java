@@ -50,6 +50,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.Enrollment;
+import csns.model.academics.OnlineAssignment;
+import csns.model.academics.OnlineSubmission;
 import csns.model.academics.Submission;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SubmissionDao;
@@ -133,7 +135,7 @@ public class SubmissionController {
 
         if( !isInstructor && submission.isPastDue() )
         {
-            models.put( "message", "error.submission.pastdue" );
+            models.put( "message", "error.assignment.pastdue" );
             models.put( "backUrl", view );
             return "error";
         }
@@ -143,7 +145,7 @@ public class SubmissionController {
             && !submission.getAssignment().isFileExtensionAllowed(
                 File.getFileExtension( fileName ) ) )
         {
-            models.put( "message", "error.submission.file.type" );
+            models.put( "message", "error.assignment.file.type" );
             models.put( "backUrl", view );
             return "error";
         }
@@ -201,7 +203,9 @@ public class SubmissionController {
         // didn't have a submission for this assignment.
         for( User student : students )
         {
-            Submission submission = new Submission( student, assignment );
+            Submission submission = assignment.isOnline()
+                ? new OnlineSubmission( student, (OnlineAssignment) assignment )
+                : new Submission( student, assignment );
             assignment.getSubmissions().add( submission );
         }
         assignment = assignmentDao.saveAssignment( assignment );
@@ -224,7 +228,9 @@ public class SubmissionController {
         Submission submission = submissionDao.getSubmission( id );
         submission.setDueDate( dueDate );
         submissionDao.saveSubmission( submission );
-        return "redirect:/submission/grade?id=" + id;
+
+        return submission.isOnline() ? "redirect:/submission/online/grade?id="
+            + id : "redirect:/submission/grade?id=" + id;
     }
 
     @RequestMapping(value = "/submission/edit", params = "grade")

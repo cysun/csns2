@@ -4,12 +4,12 @@
 <%@ attribute name="submission" required="false" rtexprvalue="true" type="csns.model.academics.Submission" %>
 <%@ tag body-content="empty" trimDirectiveWhitespaces="true" %>
 
-<c:if test="${not empty assignment}">
+<c:if test="${not empty pageScope.assignment}">
   <c:set var="dueDate" value="${assignment.dueDate}" />
   <c:set var="pastDue" value="${assignment.pastDue}" />
 </c:if>
 
-<c:if test="${not empty submission}">
+<c:if test="${not empty pageScope.submission}">
   <c:set var="dueDate" value="${submission.effectiveDueDate}" />
   <c:set var="pastDue" value="${submission.pastDue}" />
 </c:if>

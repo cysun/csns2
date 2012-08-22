@@ -27,12 +27,17 @@ $(function(){
 <table class="outer_viewtable halfwidth">
 <tr><td>
 <table class="viewtable">
-<thead><tr><th>Name</th><th># of Files</th><th>Grade</th></tr></thead>
+<thead><tr><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr>
+<c:if test="${not assignment.online}">
     <td><a href="grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a></td>
     <td class="center">${fn:length(submission.files)}</td>
+</c:if>
+<c:if test="${assignment.online}">
+    <td><a href="online/grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a></td>
+</c:if>
     <td class="center">
       <c:if test="${not submission.gradeMailed}"><b>${submission.grade}</b></c:if>
       <c:if test="${submission.gradeMailed}">${submission.grade}</c:if>

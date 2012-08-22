@@ -127,7 +127,7 @@ public class Assignment implements Serializable {
 
     public boolean isPastDue()
     {
-        return Calendar.getInstance().after( dueDate );
+        return dueDate != null && Calendar.getInstance().after( dueDate );
     }
 
     public boolean isPublished()

@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -45,7 +46,7 @@ public class AnswerSheet implements Serializable {
     @JoinColumn(name = "question_sheet_id", nullable = false)
     private QuestionSheet questionSheet;
 
-    @OneToMany(mappedBy = "answerSheet")
+    @OneToMany(mappedBy = "answerSheet", cascade = CascadeType.ALL)
     @OrderColumn(name = "section_index")
     private List<AnswerSection> sections;
 
@@ -74,6 +75,11 @@ public class AnswerSheet implements Serializable {
             }
             sections.add( answerSection );
         }
+    }
+
+    public int getNumOfSections()
+    {
+        return sections.size();
     }
 
     public Long getId()

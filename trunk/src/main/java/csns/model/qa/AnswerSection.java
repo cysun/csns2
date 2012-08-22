@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,20 +50,21 @@ public class AnswerSection implements Serializable {
     @Column(name = "section_index", nullable = false)
     protected int index;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
+        CascadeType.PERSIST })
     @OrderColumn(name = "answer_index")
     protected List<Answer> answers;
 
     public AnswerSection()
     {
-        index = 0;
-        answers = new ArrayList<Answer>();
+        this( null, 0 );
     }
 
     public AnswerSection( AnswerSheet answerSheet, int index )
     {
         this.answerSheet = answerSheet;
         this.index = index;
+        this.answers = new ArrayList<Answer>();
     }
 
     public Long getId()

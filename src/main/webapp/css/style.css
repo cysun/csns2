@@ -244,24 +244,27 @@ table {
 .viewtable tr.even .cat a:hover {
     background-color:#d6dbf0;
 }*/
-.viewtable tr th.action {
-    width: 10%;
+.viewtable tr th.shrink, .viewtable tr td.shrink {
+    width: 1%;
+    padding-left: 1em;
+    padding-right: 1em;
     white-space: nowrap;
 }
-.viewtable tr td.action, .outer_viewtable tr td.action {
+.viewtable tr th.action, .viewtable tr td.action {
     width: 10%;
     padding-left: 1em;
     padding-right: 1em; 
     text-align: right; 
     white-space: nowrap;
 }
-.viewtable tr th.fixedwidth {
-    width: 20%; 
+.viewtable tr th.date, .viewtable tr td.date {
+    width: 10%;
+    text-align: center;
     white-space: nowrap;
 }
-.viewtable tr td.fixedwidth {
-    width: 20%; 
-    text-align: center; 
+.viewtable tr th.datetime, .viewtable tr td.datetime {
+    width: 20%;
+    text-align: center;
     white-space: nowrap;
 }
 

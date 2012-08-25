@@ -1,29 +1,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:set var="section" value="${assignment.section}" />
-<c:set var="questionSheet" value="${assignment.questionSheet}"/>
+<c:set var="questionSheet" value="${survey.questionSheet}"/>
 
 <script>
 $(function(){
     $("#prev").click(function(){
-        window.location.href = "view?id=${assignment.id}&sectionIndex=${sectionIndex-1}"; 
+        window.location.href = "view?id=${survey.id}&sectionIndex=${sectionIndex-1}"; 
     });
     $("#next").click(function(){
-        window.location.href = "view?id=${assignment.id}&sectionIndex=${sectionIndex+1}"; 
+        window.location.href = "view?id=${survey.id}&sectionIndex=${sectionIndex+1}"; 
     });
     $("#ok").click(function(){
-        window.location.href = "<c:url value='/section/taught#section-${section.id}' />"; 
+        window.location.href = "list"; 
     });
 });
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
-<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${assignment.name}</li>
-<li class="align_right"><a href="edit?id=${assignment.id}&amp;sectionIndex=${sectionIndex}"><img title="Edit"
-  alt="[Edit Question]" src="<c:url value='/img/icons/page_edit.png' />" /></a></li>
+<li><a class="bc" href="list">Surveys</a></li>
+<li><csns:truncate value="${survey.name}" /></li>
+<li class="align_right"><a href="edit?id=${survey.id}"><img title="Edit Survey"
+  alt="[Edit Survey]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
 
 <div class="qa_content">
@@ -36,9 +34,7 @@ ${questionSheet.sections[sectionIndex].description}
 
 <ol class="qa_list">
 <c:forEach items="${questionSheet.sections[sectionIndex].questions}" var="question">
-<csns:displayQuestion question="${question}">
-<div class="edit">(${question.pointValue}pt)</div>
-</csns:displayQuestion>
+<csns:displayQuestion question="${question}" />
 </c:forEach>
 </ol>
 

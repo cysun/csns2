@@ -62,7 +62,7 @@ public class SurveyDaoImpl implements SurveyDao {
     public List<Survey> getSurveys( Department department )
     {
         String query = "from Survey where department = :department "
-            + "and deleted = false order by name asc";
+            + "and deleted = false order by date desc";
 
         return entityManager.createQuery( query, Survey.class )
             .setParameter( "department", department )

@@ -46,7 +46,7 @@ File: <input type="file" name="uploadedFile" size="50" />
 <c:if test="${assignment.availableAfterDueDate || not submission.pastDue}">
 <table class="viewtable">
 <thead>
-  <tr><th>Name</th><th>Size (B)</th><th>Date</th>
+  <tr><th>Name</th><th class="shrink">Size</th><th class="datetime">Date</th>
     <c:if test="${not submission.pastDue}"><th></th></c:if>
   </tr>
 </thead>
@@ -54,8 +54,8 @@ File: <input type="file" name="uploadedFile" size="50" />
   <c:forEach items="${submission.files}" var="file">
   <tr>
     <td><a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a></td>
-    <td class="fixedwidth"><csns:fileSize value="${file.size}" /></td>
-    <td class="fixedwidth"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+    <td class="shrink"><csns:fileSize value="${file.size}" /></td>
+    <td class="datetime"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
     <c:if test="${not submission.pastDue}">
     <td class="action">
       <a href="javascript:removeFile(${file.id})"><img alt="[Remove File]"

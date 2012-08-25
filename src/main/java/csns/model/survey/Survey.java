@@ -85,7 +85,7 @@ public class Survey implements Serializable {
 
     public Survey()
     {
-        type = "ANONYMOUS";
+        type = "Anonymous";
         date = new Date();
         questionSheet = new QuestionSheet();
         responses = new ArrayList<SurveyResponse>();

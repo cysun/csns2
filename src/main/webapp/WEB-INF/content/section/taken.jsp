@@ -32,7 +32,7 @@ $(function(){
   <tr> 
     <td>
       <table class="viewtable">
-        <tr><th>Assignment</th><th>Due Date</th></tr>
+        <tr><th>Assignment</th><th class="datetime">Due Date</th></tr>
 <c:forEach items="${section.assignments}" var="assignment">
 <c:if test="${assignment.published}">
   <c:choose>
@@ -48,7 +48,7 @@ $(function(){
   </c:choose>
         <tr>
           <td><a href="${link}">${assignment.name}</a></td>
-          <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
+          <td class="datetime"><csns:dueDate assignment="${assignment}" /></td>
         </tr>
 </c:if>
 </c:forEach>

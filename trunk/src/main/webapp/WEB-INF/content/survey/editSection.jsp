@@ -2,23 +2,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:set var="section" value="${assignment.section}" />
-
 <script>
 function deleteSection()
 {
     var msg = "Are you sure you want to delete this section?";
     if( confirm(msg) )
-        window.location.href = "deleteSection?assignmentId=${assignment.id}&sectionIndex=${param.sectionIndex}";
+        window.location.href = "deleteSection?surveyId=${survey.id}&sectionIndex=${param.sectionIndex}";
 }
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
-<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="edit?id=${assignment.id}">${assignment.name}</a></li>
+<li><a class="bc" href="list">Surveys</a></li>
+<li><a class="bc" href="editQuestionSheet?surveyId=${survey.id}&amp;sectionIndex=${param.sectionIndex}"><csns:truncate
+  value="${survey.name}" /></a></li>
 <li>Section <csns:romanNumber value="${param.sectionIndex+1}" /></li>
-<c:if test="${not assignment.published}">
+<c:if test="${not survey.published}">
 <li class="align_right"><a href="javascript:deleteSection()"><img title="Delete Section"
   alt="[Delete Section]" src="<c:url value='/img/icons/page_delete.png' />" /></a></li>
 </c:if>

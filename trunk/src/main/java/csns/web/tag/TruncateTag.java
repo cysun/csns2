@@ -19,44 +19,37 @@
 package csns.web.tag;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-public class FileSizeTag extends SimpleTagSupport {
+public class TruncateTag extends SimpleTagSupport {
 
-    private double value;
+    private int length;
+
+    private String value;
+
+    public TruncateTag()
+    {
+        length = 80;
+    }
+
+    public void setLength( int length )
+    {
+        if( length > 0 ) this.length = length;
+    }
+
+    public void setValue( String value )
+    {
+        this.value = value;
+    }
 
     @Override
     public void doTag() throws IOException
     {
-        String unit = "B";
+        if( value.length() > length )
+            value = value.substring( 0, length - 3 ) + "...";
 
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "KB";
-        }
-
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "MB";
-        }
-
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "GB";
-        }
-
-        getJspContext().getOut().print(
-            (new DecimalFormat( "#.#" ).format( value )) + " " + unit );
-    }
-
-    public void setValue( double value )
-    {
-        this.value = value;
+        getJspContext().getOut().println( value );
     }
 
 }

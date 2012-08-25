@@ -77,7 +77,7 @@
            src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
     <li><a href="<c:url value='/forum/viewForums.html' />"><img alt=""
             src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>
-    <li><a href="<c:url value='/department/${dept}/surveys' />"><img alt=""
+    <li><a href="<c:url value='/department/${dept}/survey/current' />"><img alt=""
            src="<c:url value='/img/icons/surveys.png' />" />Surveys</a></li>
     <li><a href="<c:url value='/mailinglist/viewMailinglists.html' />"><img alt=""
            src="<c:url value='/img/icons/mailinglists.png' />" />Mailing Lists</a></li>

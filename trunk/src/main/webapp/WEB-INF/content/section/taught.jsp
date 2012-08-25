@@ -69,13 +69,13 @@ function publish( id )
     <td colspan="2">
       <table class="viewtable">
         <tr>
-          <th>Assignment</th><th class="fixedwidth">Publish Date</th><th class="fixedwidth">Due Date</th><th class="action"></th>
+          <th>Assignment</th><th class="datetime">Publish Date</th><th class="datetime">Due Date</th><th class="action"></th>
         </tr>
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
-          <td class="fixedwidth"><csns:publishDate assignment="${assignment}" /></td>
-          <td class="fixedwidth"><csns:dueDate assignment="${assignment}" /></td>
+          <td class="datetime"><csns:publishDate assignment="${assignment}" /></td>
+          <td class="datetime"><csns:dueDate assignment="${assignment}" /></td>
           <td class="action">
             <c:if test="${assignment.online}">
               <a href="<c:url value='/assignment/online/view?id=${assignment.id}' />"><img alt="[View Assignment]" 

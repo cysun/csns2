@@ -16,47 +16,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.tag;
+package csns.web.validator;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import javax.servlet.jsp.tagext.SimpleTagSupport;
+import csns.model.survey.Survey;
 
-public class FileSizeTag extends SimpleTagSupport {
-
-    private double value;
+@Component
+public class SurveyValidator implements Validator {
 
     @Override
-    public void doTag() throws IOException
+    public boolean supports( Class<?> clazz )
     {
-        String unit = "B";
-
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "KB";
-        }
-
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "MB";
-        }
-
-        if( value >= 1024 )
-        {
-            value /= 1024;
-            unit = "GB";
-        }
-
-        getJspContext().getOut().print(
-            (new DecimalFormat( "#.#" ).format( value )) + " " + unit );
+        return Survey.class.isAssignableFrom( clazz );
     }
 
-    public void setValue( double value )
+    @Override
+    public void validate( Object target, Errors errors )
     {
-        this.value = value;
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
+            "error.field.required" );
     }
 
 }

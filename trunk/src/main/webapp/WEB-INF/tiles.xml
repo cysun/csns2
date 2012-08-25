@@ -329,4 +329,53 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/online/grade.jsp" />
     </definition>
 
+    <!-- ====== -->
+    <!-- Survey -->
+    <!-- ====== -->
+
+    <definition name="survey/current" extends="layout.basic">
+        <put-attribute name="title" value="Open Surveys" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/current.jsp" />
+    </definition>
+
+    <definition name="survey/list" extends="layout.basic">
+        <put-attribute name="title" value="List Surveys" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/list.jsp" />
+    </definition>
+
+    <definition name="survey/view" extends="layout.basic">
+        <put-attribute name="title" value="View Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/view.jsp" />
+    </definition>
+
+    <definition name="survey/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/create.jsp" />
+    </definition>
+
+    <definition name="survey/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/edit.jsp" />
+    </definition>
+
+    <definition name="survey/editQuestionSheet" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Questions" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editQuestionSheet.jsp" />
+    </definition>
+
+    <definition name="survey/editSection" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editSection.jsp" />
+    </definition>
+
+    <definition name="survey/addQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Add Question" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/addQuestion.jsp" />
+    </definition>
+
+    <definition name="survey/editQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editQuestion.jsp" />
+    </definition>
+
 </tiles-definitions>

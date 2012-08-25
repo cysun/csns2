@@ -34,6 +34,23 @@
         </attribute>
     </tag>
  
+     <tag>
+        <description>Truncate a string to a specified length (default 80).</description>
+        <name>truncate</name>
+        <tag-class>csns.web.tag.TruncateTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>length</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
     <tag-file>
         <name>dueDate</name>
         <path>/WEB-INF/tags/dueDate.tag</path>
@@ -42,6 +59,11 @@
     <tag-file>
         <name>publishDate</name>
         <path>/WEB-INF/tags/publishDate.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>closeDate</name>
+        <path>/WEB-INF/tags/closeDate.tag</path>
     </tag-file>
 
     <tag-file>

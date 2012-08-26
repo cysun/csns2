@@ -19,6 +19,8 @@
 package csns.web.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -101,6 +103,19 @@ public class SurveyController {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
         return "survey/view";
+    }
+
+    @RequestMapping("/department/{dept}/survey/clone")
+    public String clone( @PathVariable String dept, @RequestParam Long id )
+    {
+        Survey oldSurvey = surveyDao.getSurvey( id );
+        Survey newSurvey = oldSurvey.clone();
+        newSurvey.setDepartment( departmentDao.getDepartment( dept ) );
+        newSurvey.setAuthor( SecurityUtils.getUser() );
+        newSurvey.setDate( new Date() );
+        newSurvey = surveyDao.saveSurvey( newSurvey );
+
+        return "redirect:edit?id=" + newSurvey.getId();
     }
 
     @RequestMapping(value = "/department/{dept}/survey/create",
@@ -343,6 +358,44 @@ public class SurveyController {
         survey.setDeleted( true );
         surveyDao.saveSurvey( survey );
         return "redirect:list";
+    }
+
+    @RequestMapping("/survey/publish")
+    public String publish( @RequestParam Long id, HttpServletResponse response )
+        throws IOException
+    {
+        Survey survey = surveyDao.getSurvey( id );
+        if( !survey.isPublished() )
+        {
+            survey.setPublishDate( Calendar.getInstance() );
+            survey = surveyDao.saveSurvey( survey );
+        }
+
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+        response.setContentType( "text/plain" );
+        response.getWriter().print(
+            dateFormat.format( survey.getPublishDate().getTime() ) );
+
+        return null;
+    }
+
+    @RequestMapping("/survey/close")
+    public String close( @RequestParam Long id, HttpServletResponse response )
+        throws IOException
+    {
+        Survey survey = surveyDao.getSurvey( id );
+        if( !survey.isClosed() )
+        {
+            survey.setCloseDate( Calendar.getInstance() );
+            survey = surveyDao.saveSurvey( survey );
+        }
+
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+        response.setContentType( "text/plain" );
+        response.getWriter().print(
+            dateFormat.format( survey.getCloseDate().getTime() ) );
+
+        return null;
     }
 
 }

@@ -2,6 +2,27 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
+<script>
+function publish( id )
+{
+    var msg = "Do you want to publish this survey now?";
+    if( confirm(msg) )
+        $("#pdate-"+id).load( "publish?id=" + id );
+}
+function close( id )
+{
+    var msg = "Do you want to close this survey now?";
+    if( confirm(msg) )
+        $("#cdate-"+id).load( "close?id=" + id );
+}
+function clone( id )
+{
+    var msg = "Do you want to clone this survey?";
+    if( confirm(msg) )
+        window.location.href = "clone?id=" + id;
+}
+</script>
+
 <ul id="title">
 <li><a class="bc" href="<c:url value='/department/${department.abbreviation}/' />">${department.name}</a></li>
 <li>Surveys</li>
@@ -30,7 +51,7 @@
       <c:if test="${not survey.published}">Summary</c:if>
     </td>
     <td class="shrink">
-      <a href="clone?id=${survey.id}' />"><img alt="[Clone Survey]" 
+      <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
          title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
       <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"
          title="Edit Survey" src="<c:url value='/img/icons/script_edit.png'/>" /></a>

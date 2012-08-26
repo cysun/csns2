@@ -90,6 +90,7 @@ public class ChoiceQuestion extends Question {
         newQuestion.pointValue = pointValue;
         newQuestion.minSelections = minSelections;
         newQuestion.maxSelections = maxSelections;
+        newQuestion.choices.clear();
         newQuestion.choices.addAll( choices );
         newQuestion.correctSelections.addAll( correctSelections );
 

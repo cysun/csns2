@@ -63,6 +63,7 @@ public class QuestionSheet implements Serializable {
     public QuestionSheet clone()
     {
         QuestionSheet newQuestionSheet = new QuestionSheet();
+        newQuestionSheet.description = description;
 
         newQuestionSheet.sections.clear();
         for( QuestionSection section : sections )

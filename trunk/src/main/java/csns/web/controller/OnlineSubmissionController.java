@@ -118,8 +118,8 @@ public class OnlineSubmissionController {
         method = RequestMethod.POST)
     public String edit(
         @ModelAttribute("submission") OnlineSubmission submission,
-        @RequestParam int sectionIndex, ModelMap models,
-        HttpServletRequest request, SessionStatus sessionStatus )
+        @RequestParam int sectionIndex, HttpServletRequest request,
+        ModelMap models, SessionStatus sessionStatus )
     {
         submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
 

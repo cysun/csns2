@@ -360,7 +360,7 @@ public class SurveyController {
         return "redirect:list";
     }
 
-    @RequestMapping("/survey/publish")
+    @RequestMapping("/department/{dept}/survey/publish")
     public String publish( @RequestParam Long id, HttpServletResponse response )
         throws IOException
     {
@@ -379,7 +379,7 @@ public class SurveyController {
         return null;
     }
 
-    @RequestMapping("/survey/close")
+    @RequestMapping("/department/{dept}/survey/close")
     public String close( @RequestParam Long id, HttpServletResponse response )
         throws IOException
     {

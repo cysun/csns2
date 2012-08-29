@@ -21,6 +21,7 @@ package csns.model.survey;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class SurveyResponse implements Serializable {
     @JoinColumn(name = "survey_id", nullable = false)
     private Survey survey;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "answer_sheet_id", nullable = false, unique = true)
     private AnswerSheet answerSheet;
 

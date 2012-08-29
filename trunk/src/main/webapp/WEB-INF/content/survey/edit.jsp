@@ -39,11 +39,14 @@ function removeSurvey( id )
   <tr>
     <th>Type</th>
     <td>
+<c:if test="${survey.published}">${survey.type}</c:if>
+<c:if test="${not survey.published}">
       <form:select path="type">
         <form:option value="Anonymous"/>
         <form:option value="Recorded"/>
         <form:option value="Named"/>
       </form:select>
+</c:if>
     </td>
   </tr>
 

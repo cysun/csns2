@@ -333,7 +333,7 @@
     <!-- Survey -->
     <!-- ====== -->
 
-    <definition name="survey/current" extends="layout.basic">
+    <definition name="survey/current" extends="layout.jqueryui">
         <put-attribute name="title" value="Open Surveys" />
         <put-attribute name="content" value="/WEB-INF/content/survey/current.jsp" />
     </definition>
@@ -376,6 +376,15 @@
     <definition name="survey/editQuestion" extends="layout.qa">
         <put-attribute name="title" value="Edit Question" />
         <put-attribute name="content" value="/WEB-INF/content/survey/editQuestion.jsp" />
+    </definition>
+
+    <!-- =============== -->
+    <!-- Survey Response -->
+    <!-- =============== -->
+
+    <definition name="survey/response/edit" extends="layout.qa">
+        <put-attribute name="title" value="Take Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/edit.jsp" />
     </definition>
 
 </tiles-definitions>

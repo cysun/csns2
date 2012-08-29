@@ -248,12 +248,13 @@ table {
     width: 1%;
     padding-left: 1em;
     padding-right: 1em;
+    text-align: center;
     white-space: nowrap;
 }
 .viewtable tr th.action, .viewtable tr td.action {
     width: 10%;
     padding-left: 1em;
-    padding-right: 1em; 
+    padding-right: 1em;
     text-align: right; 
     white-space: nowrap;
 }
@@ -263,7 +264,7 @@ table {
     white-space: nowrap;
 }
 .viewtable tr th.datetime, .viewtable tr td.datetime {
-    width: 20%;
+    width: 18%;
     text-align: center;
     white-space: nowrap;
 }

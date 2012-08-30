@@ -102,6 +102,20 @@ public class ChoiceQuestion extends Question {
         return maxSelections == 1;
     }
 
+    public List<Integer> getChoiceSelections()
+    {
+        List<Integer> choiceSelections = new ArrayList<Integer>();
+        for( int i = 0; i < choices.size(); ++i )
+            choiceSelections.add( 0 );
+
+        for( Answer answer : answers )
+            for( Integer selection : ((ChoiceAnswer) answer).getSelections() )
+                choiceSelections.set( selection,
+                    choiceSelections.get( selection ) + 1 );
+
+        return choiceSelections;
+    }
+
     public int getNumOfChoices()
     {
         return choices.size();

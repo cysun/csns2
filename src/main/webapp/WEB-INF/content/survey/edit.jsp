@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
@@ -60,14 +61,20 @@ function removeSurvey( id )
   <tr>
     <th>Number of Sections</th>
     <td>
+<c:if test="${survey.published}">${survey.questionSheet.numOfSections}</c:if>
+<c:if test="${not survey.published}">
       <form:input path="questionSheet.numOfSections" cssClass="leftinput" size="30" maxlength="2" />
+</c:if>
     </td>
   </tr>
 
   <tr>
     <th>Publish Date</th>
     <td>
+<c:if test="${survey.published}"><fmt:formatDate value="${survey.publishDate.time}" pattern="MM/dd/yyyy" /></c:if>
+<c:if test="${not survey.published}">
       <form:input path="publishDate" cssClass="leftinput" size="30" maxlength="30" />
+</c:if>
     </td>
   </tr>
 

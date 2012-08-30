@@ -59,6 +59,11 @@ public abstract class Question implements Serializable {
         answers = new ArrayList<Answer>();
     }
 
+    public int getNumOfAnswers()
+    {
+        return answers.size();
+    }
+
     public abstract String getType();
 
     public abstract Answer createAnswer();

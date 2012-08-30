@@ -378,6 +378,11 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/editQuestion.jsp" />
     </definition>
 
+    <definition name="survey/results" extends="layout.basic">
+        <put-attribute name="title" value="Survey Results" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/results.jsp" />
+    </definition>
+
     <!-- =============== -->
     <!-- Survey Response -->
     <!-- =============== -->
@@ -385,6 +390,16 @@
     <definition name="survey/response/edit" extends="layout.qa">
         <put-attribute name="title" value="Take Survey" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/edit.jsp" />
+    </definition>
+
+    <definition name="survey/response/view" extends="layout.basic">
+        <put-attribute name="title" value="View Survey Response" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/view.jsp" />
+    </definition>
+
+    <definition name="survey/response/list" extends="layout.basic">
+        <put-attribute name="title" value="List Survey Responses" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
     </definition>
 
 </tiles-definitions>

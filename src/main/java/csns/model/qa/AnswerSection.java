@@ -25,6 +25,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -51,7 +52,7 @@ public class AnswerSection implements Serializable {
     protected int index;
 
     @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
-        CascadeType.PERSIST })
+        CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @OrderColumn(name = "answer_index")
     protected List<Answer> answers;
 

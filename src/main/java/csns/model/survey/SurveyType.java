@@ -16,30 +16,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.survey.dao;
+package csns.model.survey;
 
-import java.util.List;
+public class SurveyType {
 
-import csns.model.core.User;
-import csns.model.qa.ChoiceQuestion;
-import csns.model.qa.RatingQuestion;
-import csns.model.survey.Survey;
-import csns.model.survey.SurveyResponse;
+    public static final String ANONYMOUS = "Anonymous";
 
-public interface SurveyResponseDao {
+    public static final String RECORDED = "Recorded";
 
-    SurveyResponse getSurveyResponse( Long id );
-
-    SurveyResponse getSurveyResponse( Survey survey, User user );
-
-    SurveyResponse findSurveyResponse( Long answerSheetId );
-
-    List<SurveyResponse> findSurveyResponses( ChoiceQuestion choiceQuestion,
-        Integer selection );
-
-    List<SurveyResponse> findSurveyResponses( RatingQuestion ratingQuestion,
-        Integer rating );
-
-    SurveyResponse saveSurveyResponse( SurveyResponse surveyResponse );
+    public static final String NAMED = "Named";
 
 }

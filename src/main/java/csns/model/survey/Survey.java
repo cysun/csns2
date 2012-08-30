@@ -85,7 +85,7 @@ public class Survey implements Serializable {
 
     public Survey()
     {
-        type = "Anonymous";
+        type = SurveyType.ANONYMOUS;
         questionSheet = new QuestionSheet();
         responses = new ArrayList<SurveyResponse>();
         deleted = false;
@@ -110,6 +110,11 @@ public class Survey implements Serializable {
     public boolean isClosed()
     {
         return closeDate != null && Calendar.getInstance().after( closeDate );
+    }
+
+    public int getNumOfResponses()
+    {
+        return responses.size();
     }
 
     public Long getId()

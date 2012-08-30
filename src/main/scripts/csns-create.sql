@@ -119,7 +119,8 @@ create table question_correct_selections (
 create table answer_sheets (
     id                  bigint primary key,
     question_sheet_id   bigint not null references question_sheets(id),
-    timestamp           timestamp
+    author_id           bigint references users(id),
+    date                timestamp
 );
 
 create table answer_sections (
@@ -369,9 +370,7 @@ create table surveys (
 create table survey_responses (
     id              bigint primary key,
     survey_id       bigint not null references surveys(id),
-    answer_sheet_id bigint not null unique references answer_sheets(id),
-    respondent_id   bigint references users(id),
-    date            timestamp not null default current_timestamp
+    answer_sheet_id bigint not null unique references answer_sheets(id)
 );
 
 create table surveys_taken (

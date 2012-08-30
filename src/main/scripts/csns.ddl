@@ -13,6 +13,8 @@
 
     create table answer_sheets (
         id int8 not null,
+        date timestamp,
+        author_id int8,
         question_sheet_id int8 not null,
         primary key (id)
     );
@@ -176,13 +178,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_selections int4,
         min_selections int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -220,9 +222,7 @@
 
     create table survey_responses (
         id int8 not null,
-        date timestamp not null,
         answer_sheet_id int8 not null unique,
-        respondent_id int8,
         survey_id int8 not null,
         primary key (id)
     );
@@ -280,6 +280,11 @@
         add constraint FK3DB533885DC9F17B 
         foreign key (answer_id) 
         references answers;
+
+    alter table answer_sheets 
+        add constraint FK4BB67A95447A76EB 
+        foreign key (author_id) 
+        references users;
 
     alter table answer_sheets 
         add constraint FK4BB67A95810289CD 
@@ -485,11 +490,6 @@
         add constraint FK2912EA79AA31C1D 
         foreign key (answer_sheet_id) 
         references answer_sheets;
-
-    alter table survey_responses 
-        add constraint FK86922DAD37CDD060 
-        foreign key (respondent_id) 
-        references users;
 
     alter table survey_responses 
         add constraint FK86922DAD5B66DD70 

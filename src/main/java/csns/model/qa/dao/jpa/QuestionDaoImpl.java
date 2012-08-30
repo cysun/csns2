@@ -16,30 +16,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.survey.dao;
+package csns.model.qa.dao.jpa;
 
-import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import csns.model.core.User;
-import csns.model.qa.ChoiceQuestion;
-import csns.model.qa.RatingQuestion;
-import csns.model.survey.Survey;
-import csns.model.survey.SurveyResponse;
+import org.springframework.stereotype.Repository;
 
-public interface SurveyResponseDao {
+import csns.model.qa.Question;
+import csns.model.qa.dao.QuestionDao;
 
-    SurveyResponse getSurveyResponse( Long id );
+@Repository
+public class QuestionDaoImpl implements QuestionDao {
 
-    SurveyResponse getSurveyResponse( Survey survey, User user );
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    SurveyResponse findSurveyResponse( Long answerSheetId );
-
-    List<SurveyResponse> findSurveyResponses( ChoiceQuestion choiceQuestion,
-        Integer selection );
-
-    List<SurveyResponse> findSurveyResponses( RatingQuestion ratingQuestion,
-        Integer rating );
-
-    SurveyResponse saveSurveyResponse( SurveyResponse surveyResponse );
+    @Override
+    public Question getQuestion( Long id )
+    {
+        return entityManager.find( Question.class, id );
+    }
 
 }

@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:if test="${not assignment.published}">
+<c:if test="${not survey.published}">
 <script>
 $(function(){
     $("input[name='numOfChoices']").change(function(){
@@ -57,7 +57,7 @@ function deleteQuestion()
 
 <c:when test="${question.type == 'CHOICE'}">
 <h4>
-<c:if test="${not assignment.published}">
+<c:if test="${not survey.published}">
 Number of choices: <form:input path="numOfChoices" cssStyle="width: 2em;" />
 </c:if>
 </h4>
@@ -87,7 +87,7 @@ Number of choices: <form:input path="numOfChoices" cssStyle="width: 2em;" />
 
 </c:choose>
 
-<input type="hidden" name="assignmentId" value="${assignment.id}" />
+<input type="hidden" name="surveyId" value="${survey.id}" />
 <input type="hidden" name="sectionIndex" value="${param.sectionIndex}" />
 <input class="subbutton" type="submit" value="Save" />
 </form:form>

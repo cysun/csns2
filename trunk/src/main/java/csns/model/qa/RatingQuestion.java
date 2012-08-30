@@ -73,19 +73,20 @@ public class RatingQuestion extends Question {
         return newQuestion;
     }
 
-    public List<Integer> getAnswerStats()
+    public List<Integer> getRatingSelections()
     {
-        List<Integer> answerStats = new ArrayList<Integer>();
+        List<Integer> ratingSelections = new ArrayList<Integer>();
         for( int i = minRating; i <= maxRating; ++i )
-            answerStats.add( 0 );
+            ratingSelections.add( 0 );
 
         for( Answer answer : answers )
         {
             int selection = ((RatingAnswer) answer).getRating() - minRating;
-            answerStats.set( selection, answerStats.get( selection ) + 1 );
+            ratingSelections.set( selection,
+                ratingSelections.get( selection ) + 1 );
         }
 
-        return answerStats;
+        return ratingSelections;
     }
 
     public Map<String, Number> getRatingStats()

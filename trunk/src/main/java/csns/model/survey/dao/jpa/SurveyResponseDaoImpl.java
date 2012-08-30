@@ -49,7 +49,7 @@ public class SurveyResponseDaoImpl implements SurveyResponseDao {
     public SurveyResponse getSurveyResponse( Survey survey, User user )
     {
         String query = "from SurveyResponse where survey = :survey "
-            + "and respondent = :user";
+            + "and answerSheet.author = :user";
 
         List<SurveyResponse> results = entityManager.createQuery( query,
             SurveyResponse.class )
@@ -60,7 +60,18 @@ public class SurveyResponseDaoImpl implements SurveyResponseDao {
     }
 
     @Override
-    public List<SurveyResponse> getSurveyResponses(
+    public SurveyResponse findSurveyResponse( Long answerSheetId )
+    {
+        List<SurveyResponse> results = entityManager.createQuery(
+            "from SurveyResponse where answerSheet.id = :answerSheetId",
+            SurveyResponse.class )
+            .setParameter( "answerSheetId", answerSheetId )
+            .getResultList();
+        return results.size() == 0 ? null : results.get( 0 );
+    }
+
+    @Override
+    public List<SurveyResponse> findSurveyResponses(
         ChoiceQuestion choiceQuestion, Integer selection )
     {
         String query = "select response from SurveyResponse response "
@@ -68,7 +79,7 @@ public class SurveyResponseDaoImpl implements SurveyResponseDao {
             + "join section.answers answer "
             + "join answer.selections selection "
             + "where answer.question = :question and selection = :selection "
-            + "order by response.date asc";
+            + "order by response.answerSheet.date asc";
 
         return entityManager.createQuery( query, SurveyResponse.class )
             .setParameter( "question", choiceQuestion )
@@ -77,18 +88,18 @@ public class SurveyResponseDaoImpl implements SurveyResponseDao {
     }
 
     @Override
-    public List<SurveyResponse> getSurveyResponses(
+    public List<SurveyResponse> findSurveyResponses(
         RatingQuestion ratingQuestion, Integer rating )
     {
         String query = "select response from SurveyResponse response "
             + "join response.answerSheet.sections section "
             + "join section.answers answer "
             + "where answer.question = :question and answer.rating = :rating "
-            + "order by response.date asc";
+            + "order by response.answerSheet.date asc";
 
         return entityManager.createQuery( query, SurveyResponse.class )
             .setParameter( "question", ratingQuestion )
-            .setParameter( "selection", rating )
+            .setParameter( "rating", rating )
             .getResultList();
     }
 

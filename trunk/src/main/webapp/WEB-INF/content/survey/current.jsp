@@ -43,13 +43,18 @@ function help( type )
 
 <div id="help-Anonymous" class="help">An <em>Anonymous</em> survey is open to
 the public, i.e. no CSNS account is required, and the system does not keep
-any information about the people who take the survey.</div>
+any information about the people who took the survey.</div>
 
 <div id="help-Recorded" class="help">A <em>Recorded</em> survey requires the
-users to log in CSNS to take the survey, but the system only records whether a
-user has taken a survey or not, i.e. a survey response is not connected to a
-particular user so certain level of anonymity is preserved.</div>
+users to log in CSNS to take the survey. The system only records whether a
+user has taken a survey or not, but does not link a survey response to a
+particular user. A <em>Recored</em> survey prevents a user from taking
+the survey multiple times to influence the results, and at the same time it
+still preserve anonymity so users can share their honest opinions.
+</div>
 
-<div id="help-Named" class="help">A <em>named</em> survey requires the users
+<div id="help-Named" class="help">A <em>Named</em> survey requires the users
 to log in CSNS to take the survey. The system records the identity of the user
-for each survey response.</div>
+for each survey response. Named surveys may not be suitable for collecting
+opinions, but they can be useful for things like voting, class pre-registration,
+and so on.</div>

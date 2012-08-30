@@ -16,30 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.survey.dao;
+package csns.model.qa.dao;
 
-import java.util.List;
+import csns.model.qa.Question;
 
-import csns.model.core.User;
-import csns.model.qa.ChoiceQuestion;
-import csns.model.qa.RatingQuestion;
-import csns.model.survey.Survey;
-import csns.model.survey.SurveyResponse;
+public interface QuestionDao {
 
-public interface SurveyResponseDao {
-
-    SurveyResponse getSurveyResponse( Long id );
-
-    SurveyResponse getSurveyResponse( Survey survey, User user );
-
-    SurveyResponse findSurveyResponse( Long answerSheetId );
-
-    List<SurveyResponse> findSurveyResponses( ChoiceQuestion choiceQuestion,
-        Integer selection );
-
-    List<SurveyResponse> findSurveyResponses( RatingQuestion ratingQuestion,
-        Integer rating );
-
-    SurveyResponse saveSurveyResponse( SurveyResponse surveyResponse );
+    Question getQuestion( Long id );
 
 }

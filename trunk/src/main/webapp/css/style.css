@@ -101,10 +101,10 @@ pre {
 /* ALIGNMENTS*/
 
 .center {
-    text-align:center;
+    text-align: center;
 }
 .right {
-    text-align:right;
+    text-align: right;
 }
 .nowrap {
     white-space: nowrap;
@@ -251,7 +251,7 @@ table {
     text-align: center;
     white-space: nowrap;
 }
-.viewtable tr th.action, .viewtable tr td.action {
+.viewtable tr th.action, .viewtable tr td.action, .outer_viewtable tr td.action {
     width: 10%;
     padding-left: 1em;
     padding-right: 1em;
@@ -265,6 +265,7 @@ table {
 }
 .viewtable tr th.datetime, .viewtable tr td.datetime {
     width: 18%;
+    min-width: 160px;
     text-align: center;
     white-space: nowrap;
 }

@@ -265,6 +265,7 @@ public class SurveyController {
             surveyDao.saveSurvey( survey );
         }
 
+        sessionStatus.setComplete();
         return "redirect:editQuestionSheet?surveyId=" + surveyId
             + "&sectionIndex=" + sectionIndex;
     }
@@ -303,6 +304,7 @@ public class SurveyController {
             .replaceQuestion( question );
         surveyDao.saveSurvey( survey );
 
+        sessionStatus.setComplete();
         return "redirect:editQuestionSheet?surveyId=" + surveyId
             + "&sectionIndex=" + sectionIndex;
     }
@@ -396,6 +398,15 @@ public class SurveyController {
             dateFormat.format( survey.getCloseDate().getTime() ) );
 
         return null;
+    }
+
+    @RequestMapping("/department/{dept}/survey/results")
+    public String results( @RequestParam Long id,
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+    {
+        models.put( "survey", surveyDao.getSurvey( id ) );
+        models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
+        return "survey/results";
     }
 
 }

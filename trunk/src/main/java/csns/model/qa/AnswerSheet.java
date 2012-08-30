@@ -20,10 +20,12 @@ package csns.model.qa;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,6 +33,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+
+import csns.model.core.User;
 
 @Entity
 @Table(name = "answer_sheets")
@@ -46,9 +50,17 @@ public class AnswerSheet implements Serializable {
     @JoinColumn(name = "question_sheet_id", nullable = false)
     private QuestionSheet questionSheet;
 
-    @OneToMany(mappedBy = "answerSheet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "answerSheet",
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER)
     @OrderColumn(name = "section_index")
     private List<AnswerSection> sections;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
+    private Date date;
 
     public AnswerSheet()
     {
@@ -110,6 +122,26 @@ public class AnswerSheet implements Serializable {
     public void setSections( List<AnswerSection> sections )
     {
         this.sections = sections;
+    }
+
+    public User getAuthor()
+    {
+        return author;
+    }
+
+    public void setAuthor( User author )
+    {
+        this.author = author;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate( Date date )
+    {
+        this.date = date;
     }
 
 }

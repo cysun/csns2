@@ -28,8 +28,10 @@ function deleteAssignment( id )
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>${assignment.name}</li>
+<c:if test="${assignment.online}">
 <li class="align_right"><a href="online/edit?id=${assignment.id}"><img title="Edit Questions"
   alt="[Edit Question]" src="<c:url value='/img/icons/page_edit.png' />" /></a></li>
+</c:if>
 <li class="align_right"><a href="javascript:deleteAssignment(${assignment.id})"><img title="Delete Assignment"
   alt="[Delete Assignment]" src="<c:url value='/img/icons/script_delete.png' />" /></a></li>
 </ul>

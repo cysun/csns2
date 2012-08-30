@@ -19,10 +19,8 @@
 package csns.model.survey;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,7 +29,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import csns.model.core.User;
 import csns.model.qa.AnswerSheet;
 
 @Entity
@@ -51,13 +48,6 @@ public class SurveyResponse implements Serializable {
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "answer_sheet_id", nullable = false, unique = true)
     private AnswerSheet answerSheet;
-
-    @ManyToOne
-    @JoinColumn(name = "respondent_id")
-    private User respondent;
-
-    @Column(nullable = false)
-    private Date date;
 
     public SurveyResponse()
     {
@@ -99,26 +89,6 @@ public class SurveyResponse implements Serializable {
     public void setAnswerSheet( AnswerSheet answerSheet )
     {
         this.answerSheet = answerSheet;
-    }
-
-    public User getRespondent()
-    {
-        return respondent;
-    }
-
-    public void setRespondent( User respondent )
-    {
-        this.respondent = respondent;
-    }
-
-    public Date getDate()
-    {
-        return date;
-    }
-
-    public void setDate( Date date )
-    {
-        this.date = date;
     }
 
 }

@@ -266,14 +266,14 @@
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/view.jsp" />
     </definition>
 
-    <definition name="assignment/online/edit" extends="layout.jqueryui">
-        <put-attribute name="title" value="Edit Online Assignment" />
-        <put-attribute name="content" value="/WEB-INF/content/assignment/online/edit.jsp" />
+    <definition name="assignment/online/editQuestionSheet" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Questions" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestionSheet.jsp" />
     </definition>
 
-    <definition name="assignment/online/editSection" extends="layout.qa">
+    <definition name="assignment/online/editQuestionSection" extends="layout.qa">
         <put-attribute name="title" value="Edit Question Section" />
-        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editSection.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestionSection.jsp" />
     </definition>
 
     <definition name="assignment/online/addQuestion" extends="layout.qa">

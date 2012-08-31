@@ -18,8 +18,6 @@
  */
 package csns.model.academics;
 
-import java.util.Calendar;
-
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -42,7 +40,7 @@ public class OnlineAssignment extends Assignment {
     {
         super();
 
-        publishDate = (Calendar) dueDate.clone();
+        publishDate = null;
         availableAfterDueDate = false;
         questionSheet = new QuestionSheet();
     }

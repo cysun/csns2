@@ -7,10 +7,10 @@
 <script>
 $(function(){
     $("#prev").click(function(){
-        window.location.href = "edit?id=${assignment.id}&sectionIndex=${sectionIndex-1}"; 
+        window.location.href = "editQuestionSheet?assignmentId=${assignment.id}&sectionIndex=${sectionIndex-1}"; 
     });
     $("#next").click(function(){
-        window.location.href = "edit?id=${assignment.id}&sectionIndex=${sectionIndex+1}"; 
+        window.location.href = "editQuestionSheet?assignmentId=${assignment.id}&sectionIndex=${sectionIndex+1}"; 
     });
     $("#done").click(function(){
         window.location.href = "<c:url value='/section/taught#section-${section.id}' />"; 
@@ -45,7 +45,8 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="view?id=${assignment.id}&amp;sectionIndex=${sectionIndex}">${assignment.name}</a></li>
+<li><a class="bc" href="view?id=${assignment.id}&amp;sectionIndex=${sectionIndex}"><csns:truncate
+  value="${assignment.name}" length="60" /></a></li>
 <li>Questions</li>
 </ul>
 
@@ -54,7 +55,7 @@ ${questionSheet.description}
 
 <c:if test="${questionSheet.numOfSections > 1}">
 <div id="qa_section">Section <csns:romanNumber value="${sectionIndex+1}" />
-<span class="qa_action"><a href="editSection?assignmentId=${assignment.id}&amp;sectionIndex=${sectionIndex}"><img
+<span class="qa_action"><a href="editQuestionSection?assignmentId=${assignment.id}&amp;sectionIndex=${sectionIndex}"><img
   title="Edit Section Description" alt="[Edit Section Description]"
   src="<c:url value='/img/icons/page_edit.png' />" /></a></span>
 </div>

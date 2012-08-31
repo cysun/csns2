@@ -113,7 +113,8 @@ public class OnlineAssignmentController {
 
         assignment = (OnlineAssignment) assignmentDao.saveAssignment( assignment );
         sessionStatus.setComplete();
-        return "redirect:/assignment/online/edit?id=" + assignment.getId();
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignment.getId();
     }
 
     @RequestMapping("/assignment/online/view")
@@ -125,18 +126,18 @@ public class OnlineAssignmentController {
         return "assignment/online/view";
     }
 
-    @RequestMapping("/assignment/online/edit")
-    public String edit( @RequestParam Long id,
+    @RequestMapping("/assignment/online/editQuestionSheet")
+    public String editQuestionSheet( @RequestParam Long assignmentId,
         @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
-        models.put( "assignment", assignmentDao.getAssignment( id ) );
+        models.put( "assignment", assignmentDao.getAssignment( assignmentId ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
-        return "assignment/online/edit";
+        return "assignment/online/editQuestionSheet";
     }
 
-    @RequestMapping(value = "/assignment/online/editSection",
+    @RequestMapping(value = "/assignment/online/editQuestionSection",
         method = RequestMethod.GET)
-    public String editSection( @RequestParam Long assignmentId,
+    public String editQuestionSection( @RequestParam Long assignmentId,
         @RequestParam int sectionIndex, ModelMap models )
     {
         OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
@@ -144,12 +145,13 @@ public class OnlineAssignmentController {
         models.put( "questionSection", assignment.getQuestionSheet()
             .getSections()
             .get( sectionIndex ) );
-        return "assignment/online/editSection";
+        return "assignment/online/editQuestionSection";
     }
 
-    @RequestMapping(value = "/assignment/online/editSection",
+    @RequestMapping(value = "/assignment/online/editQuestionSection",
         method = RequestMethod.POST)
-    public String editSection( @ModelAttribute QuestionSection questionSection,
+    public String editQuestionSection(
+        @ModelAttribute QuestionSection questionSection,
         @RequestParam Long assignmentId, @RequestParam int sectionIndex,
         SessionStatus sessionStatus )
     {
@@ -160,8 +162,8 @@ public class OnlineAssignmentController {
         assignmentDao.saveAssignment( assignment );
 
         sessionStatus.setComplete();
-        return "redirect:/assignment/online/edit?id=" + assignmentId
-            + "&sectionIndex=" + sectionIndex;
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignmentId + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping("/assignment/online/deleteSection")
@@ -175,7 +177,8 @@ public class OnlineAssignmentController {
             assignmentDao.saveAssignment( assignment );
         }
 
-        return "redirect:/assignment/online/edit?id=" + assignmentId;
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignmentId;
     }
 
     @RequestMapping(value = "/assignment/online/addQuestion",
@@ -222,8 +225,9 @@ public class OnlineAssignmentController {
             assignmentDao.saveAssignment( assignment );
         }
 
-        return "redirect:/assignment/online/edit?id=" + assignmentId
-            + "&sectionIndex=" + sectionIndex;
+        sessionStatus.setComplete();
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignmentId + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping(value = "/assignment/online/editQuestion",
@@ -258,8 +262,9 @@ public class OnlineAssignmentController {
             .replaceQuestion( question );
         assignmentDao.saveAssignment( assignment );
 
-        return "redirect:/assignment/online/edit?id=" + assignmentId
-            + "&sectionIndex=" + sectionIndex;
+        sessionStatus.setComplete();
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignmentId + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping("/assignment/online/deleteQuestion")
@@ -276,8 +281,8 @@ public class OnlineAssignmentController {
             assignmentDao.saveAssignment( assignment );
         }
 
-        return "redirect:/assignment/online/edit?id=" + assignmentId
-            + "&sectionIndex=" + sectionIndex;
+        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
+            + assignmentId + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping("/assignment/online/reorderQuestion")

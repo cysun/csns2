@@ -55,8 +55,8 @@ function toggleFilePublic( fileId )
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="list?assignmentId=${assignment.id}">${assignment.name}</a></li>
-<li>${submission.student.name}</li>
+<li><a class="bc" href="list?assignmentId=${assignment.id}"><csns:truncate value="${assignment.name}" length="40" /></a></li>
+<li><csns:truncate value="${submission.student.name}" length="25" /></li>
 <li class="align_right"><a href="email?submissionId=${submission.id}"><img title="Email Grade" alt="[Email Grade]"
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img

@@ -22,7 +22,7 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taken' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${submission.assignment.name}</li>
+<li><csns:truncate value="${submission.assignment.name}" length="60" /></li>
 <c:if test="${assignment.availableAfterDueDate || not assignment.pastDue}">
 <li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img
   title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a>

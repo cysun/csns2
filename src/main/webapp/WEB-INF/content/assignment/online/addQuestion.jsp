@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${assignment.section}" />
 
@@ -35,7 +36,8 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="edit?id=${assignment.id}&sectionIndex=${param.sectionIndex}">${assignment.name}</a></li>
+<li><a class="bc" href="editQuestionSheet?assignmentId=${assignment.id}&amp;sectionIndex=${param.sectionIndex}"><csns:truncate
+  value="${assignment.name}" length="60" /></a></li>
 <li>Add Question</li>
 </ul>
 

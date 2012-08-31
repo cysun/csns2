@@ -21,9 +21,9 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${assignment.name}</li>
-<li class="align_right"><a href="edit?id=${assignment.id}&amp;sectionIndex=${sectionIndex}"><img title="Edit"
-  alt="[Edit Question]" src="<c:url value='/img/icons/page_edit.png' />" /></a></li>
+<li><csns:truncate value="${assignment.name}" length="60" /></li>
+<li class="align_right"><a href="../edit?id=${assignment.id}"><img title="Edit Assignment"
+  alt="[Edit Assignment]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
 
 <div class="qa_content">

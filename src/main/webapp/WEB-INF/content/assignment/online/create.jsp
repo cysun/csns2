@@ -30,7 +30,7 @@ $(function(){
   <tr>
     <th>Name</th>
     <td>
-      <form:input path="name" cssClass="leftinput" size="30" maxlength="255" />
+      <form:input path="name" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
     </td>
   </tr>
@@ -38,7 +38,7 @@ $(function(){
   <tr>
     <th>Alias</th>
     <td>
-      <form:input path="alias" cssClass="leftinput" size="30" maxlength="255" />
+      <form:input path="alias" cssClass="leftinput" size="30" maxlength="10" />
     </td>
   </tr>
 

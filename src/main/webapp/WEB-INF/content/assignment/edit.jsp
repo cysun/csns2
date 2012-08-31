@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${assignment.section}"/>
 
@@ -27,9 +28,9 @@ function deleteAssignment( id )
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${assignment.name}</li>
+<li><csns:truncate value="${assignment.name}" length="60" /></li>
 <c:if test="${assignment.online}">
-<li class="align_right"><a href="online/edit?id=${assignment.id}"><img title="Edit Questions"
+<li class="align_right"><a href="online/editQuestionSheet?assignmentId=${assignment.id}"><img title="Edit Questions"
   alt="[Edit Question]" src="<c:url value='/img/icons/page_edit.png' />" /></a></li>
 </c:if>
 <li class="align_right"><a href="javascript:deleteAssignment(${assignment.id})"><img title="Delete Assignment"
@@ -41,7 +42,7 @@ function deleteAssignment( id )
   <tr>
     <th>Name</th>
     <td>
-      <form:input path="name" cssClass="leftinput" size="30" maxlength="255" />
+      <form:input path="name" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
     </td>
   </tr>
@@ -49,7 +50,7 @@ function deleteAssignment( id )
   <tr>
     <th>Alias</th>
     <td>
-      <form:input path="alias" cssClass="leftinput" size="30" maxlength="255" />
+      <form:input path="alias" cssClass="leftinput" size="30" maxlength="10" />
     </td>
   </tr>
 

@@ -106,8 +106,8 @@ public class AssignmentController {
         assignment = assignmentDao.saveAssignment( assignment );
         sessionStatus.setComplete();
         return assignment.isOnline() && request.getParameter( "next" ) != null
-            ? "redirect:/assignment/online/edit?id=" + assignment.getId()
-            : "redirect:/section/taught#section-"
+            ? "redirect:/assignment/online/editQuestionSheet?assignmentId="
+                + assignment.getId() : "redirect:/section/taught#section-"
                 + assignment.getSection().getId();
     }
 

@@ -15,7 +15,7 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>${assignment.name}</li>
+<li><csns:truncate value="${assignment.name}" length="70" /></li>
 </ul>
 
 <p>Due Date: <csns:dueDate assignment="${assignment}" /></p>

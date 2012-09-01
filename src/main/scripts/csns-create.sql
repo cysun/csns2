@@ -293,6 +293,8 @@ create table submissions (
     comments        text,
     grade_mailed    boolean not null default 'f',
     answer_sheet_id bigint unique references answer_sheets(id),
+    saved           boolean not null default 'f',
+    finished        boolean not null default 'f',
   unique (student_id, assignment_id)
 );
 

@@ -3,22 +3,25 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:if test="${survey.type != 'Named'}">
+<c:set var="section" value="${assignment.section}" />
+
 <script>
 $(function(){
-    $(".viewtable").addClass("halfwidth");
+   $("table").tablesorter({
+      sortList: [[0,0]]
+   });
 });
 </script>
-</c:if>
 
 <ul id="title">
-<li><a class="bc" href="../list">Surveys</a></li>
-<li><a class="bc" href="../results?id=${survey.id}"><csns:truncate
-  value="${survey.name}" length="65" /></a></li>
-<li>List of Responses</li>
+<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
+<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
+<li><a class="bc" href="<c:url value='/submission/online/summary?assignmentId=${assignment.id}' />"><csns:truncate
+  value="${assignment.name}" length="35" /></a></li>
+<li>List of Submissions</li>
 </ul>
 
-<h3>Number of responses: ${fn:length(answerSheets)}</h3>
+<h3>Number of submissions: ${fn:length(answerSheets)}</h3>
 
 <c:if test="${not empty question}">
 <div>${question.description}</div>
@@ -49,26 +52,21 @@ $(function(){
 </p>
 </c:if>
 
-
 <c:if test="${fn:length(answerSheets) > 0}">
-<table class="viewtable">
-  <tr>
-<c:if test="${survey.type == 'Named'}">
-    <th>CIN</th><th>Name</th>
-</c:if>
-    <th>Response ID</th><th>Timestamp</th>
-  </tr>
+<table class="viewtable halfwidth">
+<thead>
+  <tr><th>Name</th><th>Timestamp</th></tr>
+</thead>
+<tbody>
 <c:forEach items="${answerSheets}" var="answerSheet">
   <tr>
-<c:if test="${survey.type == 'Named'}">
-    <td>${answerSheet.author.cin}</td>
-    <td>${answerSheet.author.name}</td>
-</c:if>
-    <td><a href="view?answerSheetId=${answerSheet.id}">${answerSheet.id}</a></td>
+    <td><a href="grade?answerSheetId=${answerSheet.id}">${answerSheet.author.lastName},
+      ${answerSheet.author.firstName}</a></td>
     <td class="datetime">
-      <fmt:formatDate value="${answerSheet.date}" pattern="yyyy-MM-dd hh:mm:ss a" />
+      <fmt:formatDate value="${answerSheet.date}" pattern="MM/dd/yyyy hh:mm:ss a" />
     </td>
   </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>

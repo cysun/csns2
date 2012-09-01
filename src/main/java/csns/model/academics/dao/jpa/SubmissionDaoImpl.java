@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Assignment;
+import csns.model.academics.OnlineSubmission;
 import csns.model.academics.Section;
 import csns.model.academics.Submission;
 import csns.model.academics.dao.SubmissionDao;
@@ -69,6 +70,17 @@ public class SubmissionDaoImpl implements SubmissionDao {
             .setParameter( "student", student )
             .setParameter( "section", section )
             .getResultList();
+    }
+
+    @Override
+    public OnlineSubmission findSubmission( Long answerSheetId )
+    {
+        List<OnlineSubmission> results = entityManager.createQuery(
+            "from OnlineSubmission where answerSheet.id = :answerSheetId",
+            OnlineSubmission.class )
+            .setParameter( "answerSheetId", answerSheetId )
+            .getResultList();
+        return results.size() == 0 ? null : results.get( 0 );
     }
 
     @Override

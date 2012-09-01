@@ -329,6 +329,16 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/online/grade.jsp" />
     </definition>
 
+    <definition name="submission/online/summary" extends="layout.basic">
+        <put-attribute name="title" value="Submission Summary" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/summary.jsp" />
+    </definition>
+
+    <definition name="submission/online/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List of Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/list.jsp" />
+    </definition>
+
     <!-- ====== -->
     <!-- Survey -->
     <!-- ====== -->
@@ -398,7 +408,7 @@
     </definition>
 
     <definition name="survey/response/list" extends="layout.basic">
-        <put-attribute name="title" value="List Survey Responses" />
+        <put-attribute name="title" value="List of Survey Responses" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
     </definition>
 

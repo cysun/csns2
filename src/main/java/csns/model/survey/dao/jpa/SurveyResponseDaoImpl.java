@@ -27,8 +27,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.core.User;
-import csns.model.qa.ChoiceQuestion;
-import csns.model.qa.RatingQuestion;
 import csns.model.survey.Survey;
 import csns.model.survey.SurveyResponse;
 import csns.model.survey.dao.SurveyResponseDao;
@@ -68,39 +66,6 @@ public class SurveyResponseDaoImpl implements SurveyResponseDao {
             .setParameter( "answerSheetId", answerSheetId )
             .getResultList();
         return results.size() == 0 ? null : results.get( 0 );
-    }
-
-    @Override
-    public List<SurveyResponse> findSurveyResponses(
-        ChoiceQuestion choiceQuestion, Integer selection )
-    {
-        String query = "select response from SurveyResponse response "
-            + "join response.answerSheet.sections section "
-            + "join section.answers answer "
-            + "join answer.selections selection "
-            + "where answer.question = :question and selection = :selection "
-            + "order by response.answerSheet.date asc";
-
-        return entityManager.createQuery( query, SurveyResponse.class )
-            .setParameter( "question", choiceQuestion )
-            .setParameter( "selection", selection )
-            .getResultList();
-    }
-
-    @Override
-    public List<SurveyResponse> findSurveyResponses(
-        RatingQuestion ratingQuestion, Integer rating )
-    {
-        String query = "select response from SurveyResponse response "
-            + "join response.answerSheet.sections section "
-            + "join section.answers answer "
-            + "where answer.question = :question and answer.rating = :rating "
-            + "order by response.answerSheet.date asc";
-
-        return entityManager.createQuery( query, SurveyResponse.class )
-            .setParameter( "question", ratingQuestion )
-            .setParameter( "rating", rating )
-            .getResultList();
     }
 
     @Override

@@ -21,6 +21,7 @@ package csns.model.academics;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -40,9 +41,18 @@ public class OnlineSubmission extends Submission {
     @JoinColumn(name = "answer_sheet_id", unique = true)
     private AnswerSheet answerSheet;
 
+    @Column(nullable = false)
+    private boolean saved;
+
+    @Column(nullable = false)
+    private boolean finished;
+
     public OnlineSubmission()
     {
         super();
+
+        saved = false;
+        finished = false;
     }
 
     public OnlineSubmission( User student, OnlineAssignment assignment )
@@ -115,6 +125,26 @@ public class OnlineSubmission extends Submission {
     public void setAnswerSheet( AnswerSheet answerSheet )
     {
         this.answerSheet = answerSheet;
+    }
+
+    public boolean isSaved()
+    {
+        return saved;
+    }
+
+    public void setSaved( boolean saved )
+    {
+        this.saved = saved;
+    }
+
+    public boolean isFinished()
+    {
+        return finished;
+    }
+
+    public void setFinished( boolean finished )
+    {
+        this.finished = finished;
     }
 
 }

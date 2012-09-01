@@ -18,6 +18,7 @@
  */
 package csns.web.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,9 +37,11 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.model.qa.AnswerSheet;
 import csns.model.qa.ChoiceQuestion;
 import csns.model.qa.Question;
 import csns.model.qa.RatingQuestion;
+import csns.model.qa.dao.AnswerSheetDao;
 import csns.model.qa.dao.QuestionDao;
 import csns.model.survey.Survey;
 import csns.model.survey.SurveyResponse;
@@ -60,6 +63,9 @@ public class SurveyResponseController {
 
     @Autowired
     QuestionDao questionDao;
+
+    @Autowired
+    AnswerSheetDao answerSheetDao;
 
     @Autowired
     SurveyResponseDao surveyResponseDao;
@@ -170,8 +176,12 @@ public class SurveyResponseController {
     public String list( @RequestParam Long surveyId, ModelMap models )
     {
         Survey survey = surveyDao.getSurvey( surveyId );
+        List<AnswerSheet> answerSheets = new ArrayList<AnswerSheet>();
+        for( SurveyResponse response : survey.getResponses() )
+            answerSheets.add( response.getAnswerSheet() );
+
         models.put( "survey", survey );
-        models.put( "responses", survey.getResponses() );
+        models.put( "answerSheets", answerSheets );
         return "survey/response/list";
     }
 
@@ -186,14 +196,14 @@ public class SurveyResponseController {
 
         Survey survey = surveyDao.getSurvey( surveyId );
         Question question = questionDao.getQuestion( questionId );
-        List<SurveyResponse> responses = selection != null
-            ? surveyResponseDao.findSurveyResponses( (ChoiceQuestion) question,
-                selection ) : surveyResponseDao.findSurveyResponses(
+        List<AnswerSheet> answerSheets = selection != null
+            ? answerSheetDao.findAnswerSheets( (ChoiceQuestion) question,
+                selection ) : answerSheetDao.findAnswerSheets(
                 (RatingQuestion) question, rating );
 
         models.put( "survey", survey );
         models.put( "question", question );
-        models.put( "responses", responses );
+        models.put( "answerSheets", answerSheets );
         return "survey/response/list";
     }
 

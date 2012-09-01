@@ -81,9 +81,13 @@ public class RatingQuestion extends Question {
 
         for( Answer answer : answers )
         {
-            int selection = ((RatingAnswer) answer).getRating() - minRating;
-            ratingSelections.set( selection,
-                ratingSelections.get( selection ) + 1 );
+            Integer rating = ((RatingAnswer) answer).getRating();
+            if( rating != null )
+            {
+                int selection = rating - minRating;
+                ratingSelections.set( selection,
+                    ratingSelections.get( selection ) + 1 );
+            }
         }
 
         return ratingSelections;
@@ -95,7 +99,12 @@ public class RatingQuestion extends Question {
 
         List<Integer> ratings = new ArrayList<Integer>();
         for( Answer answer : answers )
-            ratings.add( ((RatingAnswer) answer).getRating() );
+        {
+            Integer rating = ((RatingAnswer) answer).getRating();
+            if( rating != null ) ratings.add( rating );
+        }
+        if( ratings.size() == 0 ) return null;
+
         Collections.sort( ratings );
 
         double average = 0.0;

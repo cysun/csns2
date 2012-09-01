@@ -15,7 +15,21 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><csns:truncate value="${assignment.name}" length="70" /></li>
+<li><csns:truncate value="${assignment.name}" length="60" /></li>
+<li class="align_right"><a href="email?assignmentId=${assignment.id}"><img title="Email Grades" alt="[Email Grades]"
+  src="<c:url value='/img/icons/email_go.png' />" /></a></li>
+<c:if test="${not assignment.online}">
+  <li class="align_right"><a href="<c:url value='/download?assignmentId=${assignment.id}' />"><img
+    title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a></li>
+</c:if>
+<c:if test="${assignment.online and assignment.published}">
+  <li class="align_right"><a href="online/summary?assignmentId=${assignment.id}"><img
+    title="Submission Summary" alt="[Submission Summary]" src="<c:url value='/img/icons/table_multiple.png' />" /></a></li>
+</c:if>
+<c:if test="${assignment.online and assignment.pastDue}">
+  <li class="align_right"><a href="online/autograde?assignmentId=${assignment.id}"><img
+    title="Auto Grade" alt="[Auto Grade]" src="<c:url value='/img/icons/table_multiple_check.png' />" /></a></li>
+</c:if>
 </ul>
 
 <p>Due Date: <csns:dueDate assignment="${assignment}" /></p>
@@ -24,9 +38,7 @@ $(function(){
 <p>Total points: ${assignment.totalPoints}</p>
 </c:if>
 
-<table class="outer_viewtable halfwidth">
-<tr><td>
-<table class="viewtable">
+<table class="viewtable halfwidth">
 <thead><tr><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
@@ -45,17 +57,4 @@ $(function(){
   </tr>
   </c:forEach>
 </tbody>
-</table>
-</td></tr>
-<tr class="rowtypeb">
-  <td>
-    <a href="email?assignmentId=${assignment.id}">Email Grades</a>
-    <c:if test="${not assignment.online}">
-      | <a href="<c:url value='/download?assignmentId=${assignment.id}' />">Download All Files</a>
-    </c:if>
-    <c:if test="${assignment.online and assignment.pastDue}">
-      | <a href="autoGradeAssignment.html?assignmentId=${assignment.id}">Auto Grade</a>
-    </c:if>
-  </td>
-</tr>
 </table>

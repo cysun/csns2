@@ -312,8 +312,10 @@ public class SubmissionController {
     @RequestMapping(value = "/submission/email", params = "submissionId")
     public String emailGrade( @RequestParam Long submissionId )
     {
-        emailGrade( submissionDao.getSubmission( submissionId ) );
-        return "redirect:/submission/grade?id=" + submissionId;
+        Submission submission = submissionDao.getSubmission( submissionId );
+        emailGrade( submission );
+        return submission.isOnline() ? "redirect:/submission/online/grade?id="
+            + submissionId : "redirect:/submission/grade?id=" + submissionId;
     }
 
     @RequestMapping(value = "/submission/email", params = "assignmentId")

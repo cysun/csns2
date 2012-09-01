@@ -1,37 +1,41 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
+
+<c:set var="section" value="${assignment.section}" />
 
 <script>
 $(function(){
     $("#prev").click(function(){
-        window.location.href = "results?id=${survey.id}&sectionIndex=${sectionIndex-1}"; 
+        window.location.href = "summary?assignmentId=${assignment.id}&sectionIndex=${sectionIndex-1}"; 
     });
     $("#next").click(function(){
-        window.location.href = "results?id=${survey.id}&sectionIndex=${sectionIndex+1}"; 
+        window.location.href = "summary?assignmentId=${assignment.id}&sectionIndex=${sectionIndex+1}"; 
     });
     $("#ok").click(function(){
-        window.location.href = "list"; 
+        window.location.href = "<c:url value='/submission/list?assignmentId=${assignment.id}' />"; 
     });
 });
 </script>
 
 <ul id="title">
-<li><a class="bc" href="list">Surveys</a></li>
-<li><a class="bc" href="view?id=${survey.id}&amp;sectionIndex=${sectionIndex}"><csns:truncate
-  value="${survey.name}" length="65" /></a></li>
-<li>Result Summary</li>
+<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
+<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
+<li><a class="bc" href="<c:url value='/submission/list?assignmentId=${assignment.id}' />"><csns:truncate
+  value="${assignment.name}" length="35" /></a></li>
+<li>Submission Summary</li>
 </ul>
 
-<h3>Number of responses: <a href="response/list?surveyId=${survey.id}">${survey.numOfResponses}</a></h3>
+<h3>Number of submissions: <a href="list?assignmentId=${assignment.id}">${fn:length(submissions)}</a></h3>
 
 <div class="qa_content">
-<c:if test="${survey.questionSheet.numOfSections > 1}">
+<c:if test="${assignment.questionSheet.numOfSections > 1}">
 <div id="qa_section">Section <csns:romanNumber value="${sectionIndex+1}" />.</div>
 </c:if>
 
 <ol class="qa_list">
-<c:forEach items="${survey.questionSheet.sections[sectionIndex].questions}" var="question">
+<c:forEach items="${assignment.questionSheet.sections[sectionIndex].questions}" var="question">
 <li>
   <div class="question">${question.description}</div>
   <div class="selection">
@@ -45,7 +49,7 @@ $(function(){
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <li>
         <csns:truncate value="${choice}" length="40" />
-        <a href="response/list?surveyId=${survey.id}&amp;questionId=${question.id}&amp;selection=${choiceStatus.index}">${question.choiceSelections[choiceStatus.index]}</a>
+        <a href="list?assignmentId=${assignment.id}&amp;questionId=${question.id}&amp;selection=${choiceStatus.index}">${question.choiceSelections[choiceStatus.index]}</a>
       </li>
     </c:forEach>
     </ul>
@@ -54,7 +58,7 @@ $(function(){
     <ul>
       <c:forEach begin="${question.minRating}" end="${question.maxRating}" step="1" var="rating">
       <li>${rating}:
-        <a href="response/list?surveyId=${survey.id}&amp;questionId=${question.id}&amp;rating=${rating}">${question.ratingSelections[rating-question.minRating]}</a>
+        <a href="list?assignmentId=${assignment.id}&amp;questionId=${question.id}&amp;rating=${rating}">${question.ratingSelections[rating-question.minRating]}</a>
       </li>
       </c:forEach>
       <li>Average: <b><fmt:formatNumber value="${question.ratingStats.average}"
@@ -67,10 +71,9 @@ $(function(){
     <ul>
       <c:forEach items="${question.answers}" var="answer">
       <c:if test="${not empty answer.text}">
-      <li><a href="response/view?answerSheetId=${answer.section.answerSheet.id}&amp;sectionIndex=${answer.section.index}"><c:if
-          test="${survey.type == 'Named'}">${answer.section.answerSheet.author.name}</c:if><c:if
-          test="${survey.type != 'Named'}">${answer.section.answerSheet.id}</c:if></a>:
-        ${answer.text}
+      <li><a href="grade?answerSheetId=${answer.section.answerSheet.id}&amp;sectionIndex=${answer.section.index}">${answer.section.answerSheet.author.name}</a>:
+        <c:if test="${fn:length(answer.text) <= 500}">${answer.text}</c:if>
+        <c:if test="${fn:length(answer.text) > 500}"><p>... ...</p></c:if>
       </li>
       </c:if>
       </c:forEach>
@@ -87,7 +90,7 @@ $(function(){
 <c:if test="${sectionIndex > 0}">
 <button id="prev" type="button" class="subbutton">Previous Section</button>
 </c:if>
-<c:if test="${sectionIndex < survey.questionSheet.numOfSections-1}">
+<c:if test="${sectionIndex < assignment.questionSheet.numOfSections-1}">
 <button id="next" type="button" class="subbutton" >Next Section</button>
 </c:if>
 <button id="ok" type="button" class="subbutton">OK</button>

@@ -61,10 +61,14 @@ function toggleFilePublic( fileId )
 <li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="<c:url value='/submission/list?assignmentId=${assignment.id}' />"><csns:truncate
-  value="${assignment.name}" length="40" /></a></li>
+  value="${assignment.name}" length="35" /></a></li>
 <li><csns:truncate value="${submission.student.name}" length="25" /></li>
-<li class="align_right"><a href="email?submissionId=${submission.id}"><img title="Email Grade" alt="[Email Grade]"
+<li class="align_right"><a href="../email?submissionId=${submission.id}"><img title="Email Grade" alt="[Email Grade]"
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
+<c:if test="${submission.pastDue}">
+  <li class="align_right"><a href="autograde?id=${submission.id}"><img
+    title="Auto Grade" alt="[Auto Grade]" src="<c:url value='/img/icons/table_check.png' />" /></a></li>
+</c:if>
 </ul>
 
 <p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate submission="${submission}" /></p>

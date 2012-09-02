@@ -283,6 +283,37 @@ create table assignments (
     question_sheet_id           bigint unique references question_sheets(id)
 );
 
+alter table assignments add column tsv tsvector;
+
+create function assignments_ts_trigger_function() returns trigger as $$
+declare
+    l_quarter       varchar;
+    l_course_code   varchar;
+begin
+    if new.section_id is not null then
+        select quarter(quarter) into l_quarter from sections
+            where id = new.section_id;
+        select c.code into l_course_code from sections s, courses c
+            where s.id = new.section_id and c.id = s.course_id;
+    end if;
+    new.tsv :=
+        setweight( to_tsvector(coalesce(l_quarter,'')), 'A') ||
+        setweight( to_tsvector(coalesce(l_course_code,'')), 'A') ||
+        setweight( to_tsvector(coalesce(new.name,'')), 'A' );
+    return new;
+end
+$$ language plpgsql;
+
+create trigger assignments_ts_trigger
+    before insert or update
+    on assignments
+    for each row
+    execute procedure assignments_ts_trigger_function();
+
+create index assignments_ts_index
+    on assignments
+    using gin(tsv);
+
 create table submissions (
     id              bigint primary key,
     submission_type varchar(255) not null default 'REGULAR',
@@ -412,5 +443,30 @@ $$ language plpgsql;
 create or replace function quarter() returns integer as $$
 begin
     return quarter(current_date);
+end;
+$$ language plpgsql;
+
+--
+-- Given a quarter code, returns the quarter name (e.g. Fall 2012).
+--
+create or replace function quarter( p_code integer ) returns varchar as $$
+declare
+    l_year      varchar;
+    l_quarter   varchar;
+begin
+    l_year := cast( p_code/10+1900 as varchar );
+
+    case p_code % 10
+        when 1 then
+            l_quarter = 'Winter';
+        when 3 then
+            l_quarter = 'Spring';
+        when 6 then
+            l_quarter = 'Summer';
+        else
+            l_quarter = 'Fall';
+    end case;
+
+    return l_quarter || ' ' || l_year;
 end;
 $$ language plpgsql;

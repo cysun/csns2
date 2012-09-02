@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -48,6 +49,7 @@ import csns.model.qa.Question;
 import csns.model.qa.QuestionSection;
 import csns.model.qa.RatingQuestion;
 import csns.model.qa.TextQuestion;
+import csns.security.SecurityUtils;
 import csns.web.editor.CalendarPropertyEditor;
 import csns.web.validator.AssignmentValidator;
 import csns.web.validator.QuestionValidator;
@@ -76,7 +78,8 @@ public class OnlineAssignmentController {
     }
 
     @RequestMapping("/assignment/online/list")
-    public String list( @RequestParam Long sectionId, ModelMap models )
+    public String list( @RequestParam Long sectionId,
+        @RequestParam(required = false) String term, ModelMap models )
     {
         Section section = sectionDao.getSection( sectionId );
         models.put( "section", section );
@@ -86,6 +89,12 @@ public class OnlineAssignmentController {
             if( assignment.isOnline() )
                 assignments.add( (OnlineAssignment) assignment );
         models.put( "assignments", assignments );
+
+        if( StringUtils.hasText( term ) )
+            models.put(
+                "results",
+                assignmentDao.searchOnlineAssignments( term,
+                    SecurityUtils.getUser() ) );
 
         return "assignment/online/list";
     }
@@ -115,6 +124,18 @@ public class OnlineAssignmentController {
         sessionStatus.setComplete();
         return "redirect:/assignment/online/editQuestionSheet?assignmentId="
             + assignment.getId();
+    }
+
+    @RequestMapping("/assignment/online/clone")
+    public String clone( @RequestParam Long sectionId,
+        @RequestParam Long assignmentId )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        Assignment oldAssignment = assignmentDao.getAssignment( assignmentId );
+        Assignment newAssignment = oldAssignment.clone();
+        newAssignment.setSection( section );
+        newAssignment = assignmentDao.saveAssignment( newAssignment );
+        return "redirect:/assignment/edit?id=" + newAssignment.getId();
     }
 
     @RequestMapping("/assignment/online/view")

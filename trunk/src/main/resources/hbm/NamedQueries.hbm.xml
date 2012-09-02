@@ -31,4 +31,16 @@ select * from courses where obsolete = 'f' and
 ]]>
     </sql-query>
 
+    <sql-query name="online.assignment.search">
+        <return class="csns.model.academics.OnlineAssignment" />
+<![CDATA[
+select a.* from assignments a, sections s, section_instructors i
+    where a.assignment_type = 'ONLINE' and plainto_tsquery(:term) @@ a.tsv
+    and a.section_id = s.id and s.id = i.section_id
+    and i.instructor_id = :instructorId
+    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+    limit 20
+]]>
+    </sql-query>
+
 </hibernate-mapping>

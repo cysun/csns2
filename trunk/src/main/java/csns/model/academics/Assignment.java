@@ -110,6 +110,7 @@ public class Assignment implements Serializable {
     public Assignment clone()
     {
         Assignment assignment = new Assignment();
+
         assignment.name = name;
         assignment.alias = alias;
         assignment.totalPoints = totalPoints;
@@ -117,6 +118,7 @@ public class Assignment implements Serializable {
         assignment.maxFileSize = maxFileSize;
         assignment.fileExtensions = fileExtensions;
         assignment.availableAfterDueDate = availableAfterDueDate;
+
         return assignment;
     }
 

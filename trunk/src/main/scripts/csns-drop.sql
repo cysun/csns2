@@ -4,6 +4,7 @@ set client_min_messages=WARNING;
 
 drop sequence hibernate_sequence;
 
+drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
@@ -23,6 +24,8 @@ drop table departments;
 
 alter table files drop constraint files_submission_id_fkey;
 drop table submissions;
+drop trigger assignments_ts_trigger on assignments;
+drop function assignments_ts_trigger_function();
 drop table assignments;
 
 drop table enrollments;

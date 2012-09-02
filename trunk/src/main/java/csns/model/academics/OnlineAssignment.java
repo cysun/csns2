@@ -45,6 +45,7 @@ public class OnlineAssignment extends Assignment {
         questionSheet = new QuestionSheet();
     }
 
+    @Override
     public OnlineAssignment clone()
     {
         OnlineAssignment newAssignment = new OnlineAssignment();
@@ -52,9 +53,8 @@ public class OnlineAssignment extends Assignment {
         newAssignment.name = name;
         newAssignment.alias = alias;
         newAssignment.totalPoints = totalPoints;
-        newAssignment.section = section;
-        newAssignment.questionSheet = questionSheet.clone();
         newAssignment.availableAfterDueDate = availableAfterDueDate;
+        newAssignment.questionSheet = questionSheet.clone();
 
         return newAssignment;
     }

@@ -140,26 +140,29 @@ public class SubmissionController {
             return "error";
         }
 
-        String fileName = uploadedFile.getOriginalFilename();
-        if( !isInstructor
-            && !submission.getAssignment().isFileExtensionAllowed(
-                File.getFileExtension( fileName ) ) )
+        if( !uploadedFile.isEmpty() )
         {
-            models.put( "message", "error.assignment.file.type" );
-            models.put( "backUrl", view );
-            return "error";
+            String fileName = uploadedFile.getOriginalFilename();
+            if( !isInstructor
+                && !submission.getAssignment().isFileExtensionAllowed(
+                    File.getFileExtension( fileName ) ) )
+            {
+                models.put( "message", "error.assignment.file.type" );
+                models.put( "backUrl", view );
+                return "error";
+            }
+
+            File file = new File();
+            file.setName( fileName );
+            file.setType( uploadedFile.getContentType() );
+            file.setSize( uploadedFile.getSize() );
+            file.setDate( new Date() );
+            file.setOwner( submission.getStudent() );
+            file.setSubmission( submission );
+            file = fileDao.saveFile( file );
+
+            fileIO.save( file, uploadedFile );
         }
-
-        File file = new File();
-        file.setName( fileName );
-        file.setType( uploadedFile.getContentType() );
-        file.setSize( uploadedFile.getSize() );
-        file.setDate( new Date() );
-        file.setOwner( submission.getStudent() );
-        file.setSubmission( submission );
-        file = fileDao.saveFile( file );
-
-        fileIO.save( file, uploadedFile );
 
         return "redirect:" + view;
     }

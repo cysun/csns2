@@ -10,7 +10,7 @@
 
     <appender name="file" class="org.apache.log4j.RollingFileAppender">
         <param name="Threshold" value="All" />
-        <param name="File" value="${app.dir.log}/csns.log" />
+        <param name="File" value="${app.log.dir}/csns.log" />
         <param name="Append" value="true" />
         <param name="MaxFileSize" value="10MB" />
         <param name="MaxBackupIndex" value="4" />

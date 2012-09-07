@@ -19,6 +19,7 @@
 package csns.web.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,6 +155,17 @@ public class SectionRosterController {
         return "section/roster/add";
     }
 
+    @RequestMapping(value = "/section/roster/add", params = "userId")
+    public String add( @RequestParam Long sectionId, @RequestParam Long userId )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        User student = userDao.getUser( userId );
+        Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
+        if( enrollment == null )
+            enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+        return "redirect:/section/roster?id=" + sectionId;
+    }
+
     @RequestMapping(value = "/section/roster/add", method = RequestMethod.POST)
     public String add( @ModelAttribute User user, @RequestParam Long sectionId,
         SessionStatus sessionStatus )
@@ -176,6 +188,22 @@ public class SectionRosterController {
         if( enrollment == null )
             enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
         sessionStatus.setComplete();
+        return "redirect:/section/roster?id=" + sectionId;
+    }
+
+    @RequestMapping("/section/roster/drop")
+    public String drop( @RequestParam("userId") Long ids[],
+        @RequestParam Long sectionId )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        List<User> students = userDao.getUsers( ids );
+        for( User student : students )
+        {
+            Enrollment enrollment = enrollmentDao.getEnrollment( section,
+                student );
+            enrollmentDao.deleteEnrollment( enrollment );
+        }
+
         return "redirect:/section/roster?id=" + sectionId;
     }
 

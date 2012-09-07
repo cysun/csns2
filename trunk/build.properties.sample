@@ -2,15 +2,13 @@
 ## some school-specific code.
 ## app.url is the URL by which the application will be accessed.
 ## app.email is used as the sender of the automated emails sent by the system.
-## app.email.admin is the email that the users can use to contact the system
-## administrator. Uploaded files are stored in app.dir.file, and the log files
-## are kept under app.dir.log.
+## Uploaded files are stored in app.dir.file, and the log files are kept under
+## app.dir.log.
 app.school=csula
 app.url=http://localhost:8080/csns2
 app.email=csns2@localhost.localdomain
-app.email.admin=csns2admin@localhost.localdomain
-app.dir.file=E:/Temp/csns2/files
-app.dir.log=E:/Temp/csns2/logs
+app.file.dir=E:/Temp/csns2/files
+app.log.dir=E:/Temp/csns2/logs
 
 ## set app.log.level to debug during development and info for production.
 ## app.log.request controls whether HTTP requests should be logged.

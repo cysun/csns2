@@ -44,6 +44,16 @@
         <property name="basename" value="messages" />
     </bean>
 
+    <bean id="exceptionResolver" class="csns.web.resolver.ExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="AccessDeniedException">exception/access</prop>
+                <prop key="MailException">exception/email</prop>
+            </props>
+        </property>
+        <property name="defaultErrorView" value="exception/default" />
+    </bean>
+
     <security:global-method-security pre-post-annotations="enabled" />
 
     <context:component-scan base-package="csns" use-default-filters="false">

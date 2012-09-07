@@ -25,23 +25,22 @@ import java.io.OutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.core.File;
 
+@Component
 public class FileIO {
 
+    @Value("#{applicationProperties['file.dir']}")
     private String fileDir;
 
     private static final Logger logger = LoggerFactory.getLogger( FileIO.class );
 
     public FileIO()
     {
-    }
-
-    public void setFileDir( String fileDir )
-    {
-        this.fileDir = fileDir;
     }
 
     public void save( File file, MultipartFile uploadedFile )

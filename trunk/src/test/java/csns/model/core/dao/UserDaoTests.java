@@ -18,6 +18,8 @@
  */
 package csns.model.core.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -50,6 +52,16 @@ public class UserDaoTests extends AbstractTestNGSpringContextTests {
         assert userDao.getUserByUsername( "cysun" ) != null;
         assert userDao.getUserByUsername( "jdoe1" ) != null;
         assert userDao.getUserByUsername( "jdoe2" ) != null;
+    }
+
+    @Test
+    public void getUsers()
+    {
+        Long ids[] = { 1000002L, 1000003L };
+        List<User> users = userDao.getUsers( ids );
+
+        assert users.get( 0 ).getFirstName().equals( "Jane" );
+        assert users.get( 1 ).getFirstName().equals( "John" );
     }
 
     @Test

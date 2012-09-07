@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -56,7 +57,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
-import csns.util.ApplicationProperties;
 import csns.util.DefaultUrls;
 import csns.web.validator.AddUserValidator;
 import csns.web.validator.EditUserValidator;
@@ -90,8 +90,8 @@ public class UserController {
     @Autowired
     VelocityEngine velocityEngine;
 
-    @Autowired
-    ApplicationProperties applicationProperties;
+    @Value("#{applicationProperties.email}")
+    String appEmail;
 
     private final static Logger logger = LoggerFactory.getLogger( UserController.class );
 
@@ -295,7 +295,7 @@ public class UserController {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo( user.getPrimaryEmail() );
-        message.setFrom( applicationProperties.getProperty( "app.email" ) );
+        message.setFrom( appEmail );
         message.setText( text );
         try
         {

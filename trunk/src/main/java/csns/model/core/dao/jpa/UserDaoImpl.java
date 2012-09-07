@@ -18,10 +18,15 @@
  */
 package csns.model.core.dao.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +81,27 @@ public class UserDaoImpl implements UserDao {
             .setParameter( "email", email )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
+    }
+
+    @Override
+    public List<User> getUsers( Long ids[] )
+    {
+        if( ids == null || ids.length < 1 ) return new ArrayList<User>();
+
+        CriteriaBuilder cbuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> cquery = cbuilder.createQuery( User.class );
+        Root<User> user = cquery.from( User.class );
+
+        Predicate criteria = cbuilder.equal( user.get( "id" ), ids[0] );
+        for( int i = 1; i < ids.length; ++i )
+            criteria = cbuilder.or( criteria,
+                cbuilder.equal( user.get( "id" ), ids[i] ) );
+        cquery.where( criteria );
+
+        cquery.orderBy( cbuilder.asc( user.get( "lastName" ) ),
+            cbuilder.asc( user.get( "firstName" ) ) );
+
+        return entityManager.createQuery( cquery ).getResultList();
     }
 
     @Override

@@ -16,28 +16,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.core.dao;
+package csns.web.validator;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+
 import csns.model.core.User;
+import csns.web.helper.Email;
 
-public interface UserDao {
+@Component
+public class EmailValidator extends MessageValidator {
 
-    User getUser( Long id );
+    @Override
+    public boolean supports( Class<?> clazz )
+    {
+        return Email.class.isAssignableFrom( clazz );
+    }
 
-    User getUserByCin( String cin );
+    @Override
+    public void validate( Object target, Errors errors )
+    {
+        super.validate( target, errors );
 
-    User getUserByUsername( String username );
-
-    User getUserByEmail( String email );
-
-    List<User> getUsers( Long ids[] );
-
-    List<User> searchUsers( String term );
-
-    List<User> searchUsersByPrefix( String term );
-
-    User saveUser( User user );
+        List<User> recipients = ((Email) target).getRecipients();
+        if( recipients == null || recipients.isEmpty() )
+            errors.rejectValue( "recipients", "error.field.required" );
+    }
 
 }

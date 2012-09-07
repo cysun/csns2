@@ -86,6 +86,21 @@
         <put-attribute name="content" value="/WEB-INF/content/status.jsp" />
     </definition>
 
+    <definition name="exception/default" extends="layout.bare">
+        <put-attribute name="title" value="Runtime Error" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/default.jsp" />
+    </definition>
+
+    <definition name="exception/access" extends="layout.bare">
+        <put-attribute name="title" value="Access Denied" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/access.jsp" />
+    </definition>
+
+    <definition name="exception/email" extends="layout.bare">
+        <put-attribute name="title" value="Email Error" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/email.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Admin -->
     <!-- ===== -->
@@ -410,6 +425,15 @@
     <definition name="survey/response/list" extends="layout.basic">
         <put-attribute name="title" value="List of Survey Responses" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
+    </definition>
+
+    <!-- ===== -->
+    <!-- Email -->
+    <!-- ===== -->
+
+    <definition name="email/compose" extends="layout.basic">
+        <put-attribute name="title" value="Compose Email" />
+        <put-attribute name="content" value="/WEB-INF/content/email/compose.jsp" />
     </definition>
 
 </tiles-definitions>

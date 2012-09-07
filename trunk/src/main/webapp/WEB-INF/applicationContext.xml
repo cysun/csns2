@@ -3,6 +3,7 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:util="http://www.springframework.org/schema/util"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -11,19 +12,9 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security.xsd">
-
-    <bean id="applicationProperties" class="csns.util.ApplicationProperties">
-        <property name="properties">
-            <props>
-                <prop key="app.url">${app.url}</prop>
-                <prop key="app.email">${app.email}</prop>
-                <prop key="app.email.admin">${app.email.admin}</prop>
-                <prop key="app.dir.file">${app.dir.file}</prop>
-                <prop key="app.dir.log">${app.dir.log}</prop>
-            </props>
-        </property>
-    </bean>
+        http://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:annotation-config />
 
@@ -71,10 +62,6 @@
 
     <security:global-method-security pre-post-annotations="enabled" />
 
-    <bean id="fileIO" class="csns.util.FileIO">
-        <property name="fileDir" value="${app.dir.file}" />
-    </bean>
-
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.smtp.server}" />
         <property name="username" value="${mail.smtp.username}" />
@@ -88,6 +75,9 @@
     <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="resourceLoaderPath" value="/WEB-INF/velocity" />
     </bean>
+
+    <util:properties id="applicationProperties" location="classpath:application.properties" />
+    <util:properties id="contentTypes" location="classpath:types.properties" />
 
     <context:component-scan base-package="csns">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />

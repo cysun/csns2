@@ -23,6 +23,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +72,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('DEPT_ROLE_ADMIN_' + #department.abbreviation)")
     public Department saveDepartment( Department department )
     {
         return entityManager.merge( department );

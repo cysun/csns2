@@ -23,6 +23,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.section.isInstructor(principal) or returnObject.student.id == principal.id or principal.admin")
     public Enrollment getEnrollment( Long id )
     {
         return entityManager.find( Enrollment.class, id );
@@ -70,6 +73,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
     @Override
     @Transactional
+    @PreAuthorize("#enrollment.section.isInstructor(principal) or principal.admin")
     public Enrollment saveEnrollment( Enrollment enrollment )
     {
         return entityManager.merge( enrollment );
@@ -77,6 +81,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
     @Override
     @Transactional
+    @PreAuthorize("#enrollment.section.isInstructor(principal) or principal.admin")
     public void deleteEnrollment( Enrollment enrollment )
     {
         entityManager.remove( enrollment );

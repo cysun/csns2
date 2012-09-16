@@ -195,7 +195,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return user != null && user.getId().equals( id );
     }
 
-    public boolean isSysAdmin()
+    public boolean isSysadmin()
     {
         return roles.contains( "ROLE_ADMIN" );
     }
@@ -219,13 +219,13 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         for( String role : roles )
             if( role.startsWith( "DEPT_ROLE_FACULTY_" ) ) return true;
 
-        return false;
+        return isAdmin();
     }
 
     public boolean isFaculty( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_FACULTY_" + dept );
+            && roles.contains( "DEPT_ROLE_FACULTY_" + dept ) || isAdmin( dept );
     }
 
     public boolean isInstructor()
@@ -233,13 +233,14 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         for( String role : roles )
             if( role.startsWith( "DEPT_ROLE_INSTRUCTOR_" ) ) return true;
 
-        return false;
+        return isFaculty();
     }
 
     public boolean isInstructor( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_INSTRUCTOR_" + dept );
+            && roles.contains( "DEPT_ROLE_INSTRUCTOR_" + dept )
+            || isFaculty( dept );
     }
 
     public boolean isReviewer()

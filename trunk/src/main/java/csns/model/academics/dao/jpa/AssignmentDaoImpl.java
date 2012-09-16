@@ -23,6 +23,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class AssignmentDaoImpl implements AssignmentDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.section.isInstructor(principal) or returnObject.section.isEnrolled(principal) or principal.admin")
     public Assignment getAssignment( Long id )
     {
         return entityManager.find( Assignment.class, id );
@@ -80,6 +83,7 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
     @Override
     @Transactional
+    @PreAuthorize("#assignment.section.isInstructor(principal)")
     public Assignment saveAssignment( Assignment assignment )
     {
         return entityManager.merge( assignment );

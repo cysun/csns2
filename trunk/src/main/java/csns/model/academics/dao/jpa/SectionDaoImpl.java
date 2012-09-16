@@ -23,6 +23,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class SectionDaoImpl implements SectionDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.isInstructor(principal) or returnObject.isEnrolled(principal)")
     public Section getSection( Long id )
     {
         return entityManager.find( Section.class, id );

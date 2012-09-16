@@ -23,6 +23,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.student.id == principal.id or returnObject.assignment.section.isInstructor(principal) or principal.admin")
     public Submission getSubmission( Long id )
     {
         return entityManager.find( Submission.class, id );
@@ -85,9 +88,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
 
     @Override
     @Transactional
-    public Submission saveSubmission( Submission Submission )
+    @PreAuthorize("#submission.student.id == principal.id or returnObject.assignment.section.isInstructor(principal)")
+    public Submission saveSubmission( Submission submission )
     {
-        return entityManager.merge( Submission );
+        return entityManager.merge( submission );
     }
 
 }

@@ -1,4 +1,4 @@
 <ul id="title">
 <li>Access Denied</li>
 </ul>
-<p>You do not have the authority to access the requested page. (via resolver)</p> 
+<p>You do not have authorization to perform this operation.</p> 

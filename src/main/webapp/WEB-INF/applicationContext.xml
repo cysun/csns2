@@ -55,9 +55,19 @@
         <security:remember-me data-source-ref="dataSource"/>
         <security:custom-filter ref="registrationFilter" position="LAST" />
         <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/user/**" access="hasRole('ROLE_ADMIN') or authenticated and (principal.admin or principal.faculty)" />
         <security:intercept-url pattern="/profile" access="authenticated" />
         <security:intercept-url pattern="/register" access="authenticated and principal.temporary" />
+        <security:intercept-url pattern="/user/autocomplete" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/user/**" access="authenticated and (principal.sysadmin or principal.faculty)" />
+        <security:intercept-url pattern="/course/add" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/course/edit" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/section/taken" access="authenticated" />
+        <security:intercept-url pattern="/section/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/assignment/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/submission/view" access="authenticated" />
+        <security:intercept-url pattern="/submission/upload" access="authenticated" />
+        <security:intercept-url pattern="/submission/online/edit" access="authenticated" />
+        <security:intercept-url pattern="/submission/**" access="authenticated and principal.instructor" />
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />

@@ -23,6 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,7 @@ public class DepartmentUserController {
         return "department/people";
     }
 
+    @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
     @RequestMapping(value = "/department/{dept}/personnel/{personnel}/{operation}")
     public String operation( @PathVariable String dept,
         @PathVariable String personnel, @PathVariable String operation,

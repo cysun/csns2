@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -65,82 +66,122 @@ $(function(){
 
 <div id="admin">
 <table class="viewtable">
-<tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
+<tr>
+  <th>CIN</th><th>Name</th><th>Primary Email</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th class="center"></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.administrators}" var="user">
 <tr>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/admin/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/admin/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 <div id="faculty">
 <table class="viewtable">
-<tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
+<tr>
+  <th>CIN</th><th>Name</th><th>Primary Email</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th class="center"></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.faculty}" var="user">
 <tr>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/faculty/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/faculty/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 <div id="instructor">
 <table class="viewtable">
-<tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
+<tr>
+  <th>CIN</th><th>Name</th><th>Primary Email</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th class="center"></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.instructors}" var="user">
 <tr>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/instructor/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/instructor/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 <div id="reviewer">
 <table class="viewtable">
-<tr><th>CIN</th><th>Name</th><th>Primary Email</th><th class="center"></th></tr>
+<tr>
+  <th>CIN</th><th>Name</th><th>Primary Email</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th class="center"></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.reviewers}" var="user">
 <tr>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
   <td>${user.primaryEmail}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/reviewer/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/reviewer/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 </div> <!-- tabs -->

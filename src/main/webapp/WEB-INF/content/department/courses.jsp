@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -45,14 +46,21 @@ $(function(){
 
 <div id="undergraduate">
 <table class="viewtable">
-<tr><th>Code</th><th>Name</th><th>Coordinator</th><th></th></tr>
+<tr>
+  <th>Code</th><th>Name</th><th>Coordinator</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+    <th></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.undergraduateCourses}" var="course">
 <tr>
   <td>${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/undergraduate/remove?courseId=${course.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 <c:forEach items="${department.additionalUndergraduateCourses}" var="course">
@@ -60,28 +68,40 @@ $(function(){
   <td>${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/undergraduate/remove?courseId=${course.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/undergraduate/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 <div id="graduate">
 <table class="viewtable">
-<tr><th>Code</th><th>Name</th><th>Coordinator</th><th></th></tr>
+<tr>
+  <th>Code</th><th>Name</th><th>Coordinator</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th></th>
+  </security:authorize>
+</tr>
 <c:forEach items="${department.graduateCourses}" var="course">
 <tr>
   <td>${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/graduate/remove?courseId=${course.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 <c:forEach items="${department.additionalGraduateCourses}" var="course">
@@ -89,16 +109,21 @@ $(function(){
   <td>${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/graduate/remove?courseId=${course.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
 </tr>
 </c:forEach>
 </table>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/graduate/add" method="post"><p>
 <input type="text" class="forminput add" name="name" size="40" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
+</security:authorize>
 </div>
 
 </div> <!-- end of tabs -->

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -401,7 +402,8 @@ public class SurveyController {
     }
 
     @RequestMapping("/department/{dept}/survey/results")
-    public String results( @RequestParam Long id,
+    @PreAuthorize("principal.isFaculty(#dept)")
+    public String results( @PathVariable String dept, @RequestParam Long id,
         @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
         models.put( "survey", surveyDao.getSurvey( id ) );

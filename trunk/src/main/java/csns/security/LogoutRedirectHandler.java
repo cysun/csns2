@@ -52,7 +52,7 @@ public class LogoutRedirectHandler implements LogoutSuccessHandler {
         logger.info( user.getUsername() + " signed out." );
 
         SimpleUrlLogoutSuccessHandler logoutSuccessHandler = new SimpleUrlLogoutSuccessHandler();
-        logoutSuccessHandler.setDefaultTargetUrl( defaultUrls.homeUrl( request ) );
+        logoutSuccessHandler.setDefaultTargetUrl( defaultUrls.anonymousHomeUrl( request ) );
         logoutSuccessHandler.onLogoutSuccess( request, response, authentication );
     }
 

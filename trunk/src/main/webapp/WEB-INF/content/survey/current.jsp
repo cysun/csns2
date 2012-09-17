@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -16,7 +17,9 @@ function help( type )
 </script>
 <ul id="title">
 <li><a class="bc" href="<c:url value='/department/${department.abbreviation}/' />">${department.name}</a></li>
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
 <li><a class="bc" href="list">Surveys</a></li>
+</security:authorize>
 <li>Open Surveys</li>
 </ul>
 

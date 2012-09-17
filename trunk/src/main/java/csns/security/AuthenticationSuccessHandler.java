@@ -59,7 +59,7 @@ public class AuthenticationSuccessHandler extends
         }
 
         getRedirectStrategy().sendRedirect( request, response,
-            defaultUrls.homeUrl( user ) );
+            defaultUrls.userHomeUrl( request ) );
     }
 
 }

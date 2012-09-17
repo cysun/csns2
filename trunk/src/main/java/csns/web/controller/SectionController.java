@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -114,6 +116,8 @@ public class SectionController {
         Quarter currentQuarter = new Quarter();
         if( !quarters.contains( currentQuarter ) )
             quarters.add( 0, currentQuarter );
+        Quarter nextQuarter = currentQuarter.next();
+        if( !quarters.contains( nextQuarter ) ) quarters.add( 0, nextQuarter );
 
         models.put( "quarter", quarter );
         models.put( "quarters", quarters );
@@ -124,15 +128,25 @@ public class SectionController {
 
     @RequestMapping("/section/taught")
     public String taught( @RequestParam(required = false) Quarter quarter,
-        ModelMap models, HttpSession session )
+        ModelMap models, HttpSession session, HttpServletResponse response )
     {
+        Cookie cookie = new Cookie( "default-home", "/section/taught" );
+        cookie.setPath( "/" );
+        cookie.setMaxAge( 100000000 );
+        response.addCookie( cookie );
+
         return list( "taught", quarter, models, session );
     }
 
     @RequestMapping("/section/taken")
     public String taken( @RequestParam(required = false) Quarter quarter,
-        ModelMap models, HttpSession session )
+        ModelMap models, HttpSession session, HttpServletResponse response )
     {
+        Cookie cookie = new Cookie( "default-home", "/section/taken" );
+        cookie.setPath( "/" );
+        cookie.setMaxAge( 100000000 );
+        response.addCookie( cookie );
+
         return list( "taken", quarter, models, session );
     }
 

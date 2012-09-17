@@ -24,6 +24,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,7 @@ public class SurveyDaoImpl implements SurveyDao {
     }
 
     @Override
+    @PreAuthorize("principal.isFaculty(#department.abbreviation)")
     public List<Survey> getSurveys( Department department )
     {
         String query = "from Survey where department = :department "
@@ -72,6 +74,7 @@ public class SurveyDaoImpl implements SurveyDao {
 
     @Override
     @Transactional
+    @PreAuthorize("principal.isFaculty(#survey.department.abbreviation)")
     public Survey saveSurvey( Survey survey )
     {
         return entityManager.merge( survey );

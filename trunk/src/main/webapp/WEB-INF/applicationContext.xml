@@ -47,14 +47,21 @@
         </security:authentication-provider>
     </security:authentication-manager>
 
+    <security:http pattern="/favicon.ico" security="none" />
+    <security:http pattern="/img/**" security="none" />
+    <security:http pattern="/css/**" security="none" />
+    <security:http pattern="/js/**" security="none" />
+
     <security:http use-expressions="true">
         <security:form-login login-page="/login"
             authentication-success-handler-ref="authenticationSuccessHandler"
             authentication-failure-url="/401" />
         <security:logout success-handler-ref="logoutRedirectHandler" />
         <security:remember-me data-source-ref="dataSource"/>
+        <security:custom-filter ref="departmentFilter" before="LAST" />
         <security:custom-filter ref="registrationFilter" position="LAST" />
         <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+        <security:intercept-url pattern="/department/*/people" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/profile" access="authenticated" />
         <security:intercept-url pattern="/register" access="authenticated and principal.temporary" />
         <security:intercept-url pattern="/user/autocomplete" access="authenticated and principal.instructor" />
@@ -68,6 +75,9 @@
         <security:intercept-url pattern="/submission/upload" access="authenticated" />
         <security:intercept-url pattern="/submission/online/edit" access="authenticated" />
         <security:intercept-url pattern="/submission/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/department/*/survey/current" access="permitAll" />
+        <security:intercept-url pattern="/department/*/survey/response/edit" access="permitAll" />
+        <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />
     </security:http>
 
     <security:global-method-security pre-post-annotations="enabled" />

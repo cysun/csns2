@@ -25,31 +25,40 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import csns.model.core.User;
+import csns.security.SecurityUtils;
 
 @Component
 public class DefaultUrls {
 
     public String homeUrl( HttpServletRequest request )
     {
-        String homeUrl = "/";
+        return SecurityUtils.isAuthenticated() ? userHomeUrl( request )
+            : anonymousHomeUrl( request );
+    }
 
-        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
+    public String userHomeUrl( HttpServletRequest request )
+    {
+        String homeUrl = "/section/taken";
+
+        Cookie cookie = WebUtils.getCookie( request, "default-home" );
         if( cookie != null )
-            homeUrl = "/department/" + cookie.getValue() + "/";
+            homeUrl = cookie.getValue();
+        else
+        {
+            User user = SecurityUtils.getUser();
+            if( user.isSysadmin() || user.isAdmin() )
+                homeUrl = "/user/search";
+            else if( user.isFaculty() || user.isInstructor() )
+                homeUrl = "/section/taught";
+        }
 
         return homeUrl;
     }
 
-    public String homeUrl( User user )
+    public String anonymousHomeUrl( HttpServletRequest request )
     {
-        String homeUrl = "/section/taken";
-
-        if( user.isFaculty() || user.isInstructor() )
-            homeUrl = "/section/taught";
-        else if( user.isSysadmin() || user.isAdmin() )
-            homeUrl = "/user/search";
-
-        return homeUrl;
+        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
+        return cookie != null ? "/department/" + cookie.getValue() + "/" : "/";
     }
 
 }

@@ -231,7 +231,8 @@ public class UserController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public String profile( @ModelAttribute("user") User cmd,
-        BindingResult bindingResult, SessionStatus sessionStatus )
+        HttpServletRequest request, BindingResult bindingResult,
+        SessionStatus sessionStatus )
     {
         editUserValidator.validate( cmd, bindingResult );
         if( bindingResult.hasErrors() ) return "profile";
@@ -244,7 +245,7 @@ public class UserController {
         user = userDao.saveUser( user );
 
         sessionStatus.setComplete();
-        return "redirect:" + defaultUrls.homeUrl( user );
+        return "redirect:" + defaultUrls.userHomeUrl( request );
     }
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.GET)

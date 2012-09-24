@@ -38,21 +38,14 @@ public class DefaultUrls {
 
     public String userHomeUrl( HttpServletRequest request )
     {
-        String homeUrl = "/section/taken";
+        User user = SecurityUtils.getUser();
+        if( user.isSysadmin() ) return "/admin/department/list";
 
         Cookie cookie = WebUtils.getCookie( request, "default-home" );
-        if( cookie != null )
-            homeUrl = cookie.getValue();
-        else
-        {
-            User user = SecurityUtils.getUser();
-            if( user.isSysadmin() || user.isAdmin() )
-                homeUrl = "/user/search";
-            else if( user.isFaculty() || user.isInstructor() )
-                homeUrl = "/section/taught";
-        }
+        if( cookie != null ) return cookie.getValue();
 
-        return homeUrl;
+        return user.isAdmin() ? "/user/search" : user.isFaculty()
+            || user.isInstructor() ? "/section/taught" : "/section/taken";
     }
 
     public String anonymousHomeUrl( HttpServletRequest request )

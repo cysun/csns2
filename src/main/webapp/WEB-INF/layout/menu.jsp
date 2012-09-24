@@ -6,10 +6,11 @@
 <ul class="menu">
 
 <security:authorize access="hasRole('ROLE_ADMIN')">
-  <li><a href="<c:url value='/user/search' />">Users</a></li>
   <li><a href="<c:url value='/admin/department/list' />">Departments</a></li>
+  <li><a href="<c:url value='/user/search' />">Users</a></li>
 </security:authorize>
 
+<security:authorize access="not hasRole('ROLE_ADMIN')">
 <security:authorize access="authenticated">
 <li><a href="#">Home</a>
   <div><ul>
@@ -50,7 +51,8 @@
 </li>
 </c:if> <%-- end of <c:if test="${not empty dept}"> --%>
 
-<li><a href="<c:url value='/wiki/content/csns/help' />">Help</a></li>   
+<li><a href="<c:url value='/wiki/content/csns/help' />">Help</a></li>
+</security:authorize>
 
 </ul>
 </div> <!-- end of menu -->

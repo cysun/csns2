@@ -8,6 +8,16 @@ drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
+alter table forum_topics drop constraint fk_forum_topic_last_post;
+alter table forum_topics drop constraint fk_forum_topic_first_post;
+alter table forums drop constraint fk_forum_last_post;
+drop table forum_post_attachments;
+drop table forum_posts;
+drop table forum_topics;
+drop table forum_selections;
+drop table forum_moderators;
+drop table forums;
+
 drop table surveys_taken;
 drop table survey_responses;
 drop table surveys;
@@ -46,6 +56,8 @@ drop table question_choices;
 drop table questions;
 drop table question_sections;
 drop table question_sheets;
+
+drop table subscriptions;
 
 drop table files;
 

@@ -47,6 +47,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import csns.model.forum.Forum;
 import csns.model.survey.Survey;
 
 @Entity
@@ -139,12 +140,23 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         inverseJoinColumns = { @JoinColumn(name = "survey_id", nullable = false) })
     private Set<Survey> surveysTaken;
 
+    @ManyToMany
+    @JoinTable(name = "forum_selections",
+        joinColumns = { @JoinColumn(name = "user_id") },
+        inverseJoinColumns = { @JoinColumn(name = "forum_id") })
+    private Set<Forum> forumSelections;
+
+    @Column(name = "num_of_forum_posts", nullable = false)
+    private int numOfForumPosts;
+
     public User()
     {
         enabled = true;
         temporary = false;
         roles = new HashSet<String>();
         surveysTaken = new HashSet<Survey>();
+        forumSelections = new HashSet<Forum>();
+        numOfForumPosts = 0;
     }
 
     public User clone()
@@ -577,6 +589,26 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setSurveysTaken( Set<Survey> surveysTaken )
     {
         this.surveysTaken = surveysTaken;
+    }
+
+    public Set<Forum> getForumSelections()
+    {
+        return forumSelections;
+    }
+
+    public void setForumSelections( Set<Forum> forumSelections )
+    {
+        this.forumSelections = forumSelections;
+    }
+
+    public int getNumOfForumPosts()
+    {
+        return numOfForumPosts;
+    }
+
+    public void setNumOfForumPosts( int numOfForumPosts )
+    {
+        this.numOfForumPosts = numOfForumPosts;
     }
 
 }

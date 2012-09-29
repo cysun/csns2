@@ -78,3 +78,39 @@ insert into submissions (id, student_id, assignment_id) values
     (1000602, 1000003, 1000501);
 insert into submissions (id, student_id, assignment_id) values
     (1000603, 1000002, 1000502);
+
+insert into forums (id, name, course_id) values
+    (1000700, 'CS101 Introduction to Computer Science', 1000200);
+insert into forums (id, name, course_id) values
+    (1000701, 'CS320 Web and Internet Programming', 1000201);
+insert into forums (id, name, course_id) values
+    (1000702, 'CS520 Web Programming', 1000202);
+insert into forums (id, name, course_id) values
+    (1000703, 'TECH250 Impact of Technology on Individuals and Society', 1000203);
+insert into forums (id, name, course_id) values
+    (1000704, 'MATH206 Calculus I: Differentiation', 1000204);
+insert into forums (id, name, course_id) values
+    (1000705, 'MATH207 Calculus II: Integration', 1000205);
+
+insert into forums (id, name, department_id) values (1000720, 'Announcements', 1000100);
+insert into forums (id, name, department_id) values (1000721, 'General Discussion', 1000100);
+insert into forums (id, name, department_id) values (1000722, 'Job Opportunities', 1000100);
+insert into forums (id, name, department_id) values (1000723, 'Advisement', 1000100);
+insert into forums (id, name, department_id) values (1000724, 'Announcements', 1000101);
+insert into forums (id, name, department_id) values (1000725, 'General Discussion', 1000101);
+insert into forums (id, name, department_id) values (1000726, 'Job Opportunities', 1000101);
+insert into forums (id, name, department_id) values (1000727, 'Advisement', 1000101);
+
+insert into forum_topics (id, forum_id) values (1000800, 1000700);
+
+insert into forum_posts (id, subject, content, author_id, topic_id) values
+    (1000900, 'Welcome', 'Welcome to CS101!', 1000001, 1000800);
+
+insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
+    (1001000, 'FM', 1000700, 1000001);
+insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
+    (1001001, 'FM', 1000701, 1000001);
+insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
+    (1001002, 'FM', 1000702, 1000001);
+insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
+    (1001003, 'FT', 1000800, 1000001);

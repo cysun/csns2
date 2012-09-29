@@ -51,7 +51,7 @@ public abstract class Message implements Serializable {
     @JoinTable(name = "message_attachments",
         joinColumns = @JoinColumn(name = "message_id"),
         inverseJoinColumns = @JoinColumn(name = "file_id"))
-    @OrderBy("date asc")
+    @OrderBy("name asc")
     protected List<File> attachments;
 
     @ManyToOne

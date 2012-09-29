@@ -23,8 +23,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        text varchar(255),
         rating int4,
+        text varchar(255),
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -139,6 +139,60 @@
         primary key (id)
     );
 
+    create table forum_moderators (
+        forum_id int8 not null,
+        user_id int8 not null,
+        primary key (forum_id, user_id)
+    );
+
+    create table forum_post_attachments (
+        forum_post_id int8 not null,
+        file_id int8 not null
+    );
+
+    create table forum_posts (
+        id int8 not null,
+        content varchar(255),
+        date timestamp,
+        subject varchar(255),
+        edit_date timestamp,
+        author_id int8,
+        edited_by int8,
+        topic_id int8,
+        primary key (id)
+    );
+
+    create table forum_selections (
+        user_id int8 not null,
+        forum_id int8 not null,
+        primary key (user_id, forum_id)
+    );
+
+    create table forum_topics (
+        id int8 not null,
+        deleted boolean not null,
+        num_of_views int4 not null,
+        pinned boolean not null,
+        first_post_id int8,
+        forum_id int8,
+        last_post_id int8,
+        primary key (id)
+    );
+
+    create table forums (
+        id int8 not null,
+        date timestamp,
+        description varchar(255),
+        hidden boolean not null,
+        name varchar(255) not null,
+        num_of_posts int4 not null,
+        num_of_topics int4 not null,
+        course_id int8 unique,
+        department_id int8,
+        last_post_id int8 unique,
+        primary key (id)
+    );
+
     create table grades (
         id int8 not null,
         description varchar(255),
@@ -178,13 +232,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -220,6 +274,17 @@
         answer_sheet_id int8 unique,
         primary key (id),
         unique (student_id, assignment_id)
+    );
+
+    create table subscriptions (
+        id int8 not null,
+        auto_subscribed boolean not null,
+        date timestamp not null,
+        notification_sent boolean not null,
+        subscribable_type varchar(255),
+        subscribable_id int8,
+        subscriber_id int8 not null,
+        primary key (id)
     );
 
     create table survey_responses (
@@ -261,6 +326,7 @@
         home_phone varchar(255),
         last_name varchar(255) not null,
         middle_name varchar(255),
+        num_of_forum_posts int4 not null,
         office_phone varchar(255),
         password varchar(255) not null,
         primary_email varchar(255) not null unique,
@@ -443,6 +509,81 @@
         foreign key (submission_id) 
         references submissions;
 
+    alter table forum_moderators 
+        add constraint FK7C3AF5ECE3C184AB 
+        foreign key (user_id) 
+        references users;
+
+    alter table forum_moderators 
+        add constraint FK7C3AF5ECFE5A182F 
+        foreign key (forum_id) 
+        references forums;
+
+    alter table forum_post_attachments 
+        add constraint FKB4866DEFB9895B0B 
+        foreign key (file_id) 
+        references files;
+
+    alter table forum_post_attachments 
+        add constraint FKB4866DEF20DD53E7 
+        foreign key (forum_post_id) 
+        references forum_posts;
+
+    alter table forum_posts 
+        add constraint FKEDDC4F35447A76EB 
+        foreign key (author_id) 
+        references users;
+
+    alter table forum_posts 
+        add constraint FKEDDC4F35A958756F 
+        foreign key (topic_id) 
+        references forum_topics;
+
+    alter table forum_posts 
+        add constraint FKEDDC4F357D9A8AC9 
+        foreign key (edited_by) 
+        references users;
+
+    alter table forum_selections 
+        add constraint FK91BEBA45E3C184AB 
+        foreign key (user_id) 
+        references users;
+
+    alter table forum_selections 
+        add constraint FK91BEBA45FE5A182F 
+        foreign key (forum_id) 
+        references forums;
+
+    alter table forum_topics 
+        add constraint FKD47F7202FE5A182F 
+        foreign key (forum_id) 
+        references forums;
+
+    alter table forum_topics 
+        add constraint FKD47F720217FF9A76 
+        foreign key (first_post_id) 
+        references forum_posts;
+
+    alter table forum_topics 
+        add constraint FKD47F720243B0145C 
+        foreign key (last_post_id) 
+        references forum_posts;
+
+    alter table forums 
+        add constraint FKB4601772F7F6787A 
+        foreign key (department_id) 
+        references departments;
+
+    alter table forums 
+        add constraint FKB460177290C57DA 
+        foreign key (course_id) 
+        references courses;
+
+    alter table forums 
+        add constraint FKB460177243B0145C 
+        foreign key (last_post_id) 
+        references forum_posts;
+
     alter table question_choices 
         add constraint FKCCF0F399376C843B 
         foreign key (question_id) 
@@ -492,6 +633,11 @@
         add constraint FK2912EA79AA31C1D 
         foreign key (answer_sheet_id) 
         references answer_sheets;
+
+    alter table subscriptions 
+        add constraint FK7674CAF64A4802EE 
+        foreign key (subscriber_id) 
+        references users;
 
     alter table survey_responses 
         add constraint FK86922DAD5B66DD70 

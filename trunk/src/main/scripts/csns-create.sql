@@ -10,26 +10,27 @@ create sequence hibernate_sequence minvalue 2000000;
 ---------------------
 
 create table users (
-    id              bigint primary key,
-    cin             varchar(255) not null unique,
-    username        varchar(255) not null unique,
-    password        varchar(255) not null,
-    last_name       varchar(255) not null,
-    first_name      varchar(255) not null,
-    middle_name     varchar(255),
-    gender          char(1) check( gender = 'M' or gender = 'F' ),
-    birthday        date,
-    street          varchar(255),
-    city            varchar(255),
-    state           varchar(255),
-    zip             varchar(255),
-    primary_email   varchar(255) not null unique,
-    secondary_email varchar(255),
-    cell_phone      varchar(255),
-    home_phone      varchar(255),
-    office_phone    varchar(255),
-    enabled         boolean not null default 't',
-    temporary       boolean not null default 'f'
+    id                  bigint primary key,
+    cin                 varchar(255) not null unique,
+    username            varchar(255) not null unique,
+    password            varchar(255) not null,
+    last_name           varchar(255) not null,
+    first_name          varchar(255) not null,
+    middle_name         varchar(255),
+    gender              char(1) check( gender = 'M' or gender = 'F' ),
+    birthday            date,
+    street              varchar(255),
+    city                varchar(255),
+    state               varchar(255),
+    zip                 varchar(255),
+    primary_email       varchar(255) not null unique,
+    secondary_email     varchar(255),
+    cell_phone          varchar(255),
+    home_phone          varchar(255),
+    office_phone        varchar(255),
+    enabled             boolean not null default 't',
+    temporary           boolean not null default 'f',
+    num_of_forum_posts  integer not null default 0
 );
 
 create table authorities (
@@ -67,6 +68,21 @@ create table files (
     submission_id   bigint,
     regular         boolean not null default 'f',
     deleted         boolean not null default 'f'
+);
+
+-------------------
+-- subscriptions --
+-------------------
+
+create table subscriptions (
+    id                  bigint primary key,
+    subscribable_type   char(2) not null,
+    subscribable_id     bigint not null,
+    subscriber_id       bigint not null references users(id),
+    date                timestamp not null default current_timestamp,
+    notification_sent   boolean not null default 'f',
+    auto_subscribed     boolean not null default 'f',
+  unique(subscribable_type, subscribable_id, subscriber_id)
 );
 
 --------------------------
@@ -411,6 +427,73 @@ create table surveys_taken (
     survey_id   bigint not null references surveys(id),
   primary key (user_id, survey_id)
 );
+
+------------
+-- forums --
+------------
+
+create table forums (
+    id              bigint primary key,
+    name            varchar(80) not null,
+    description     varchar(500),
+    date            timestamp default current_timestamp,
+    num_of_topics   integer not null default 0,
+    num_of_posts    integer not null default 0,
+    last_post_id    bigint unique,
+    department_id   bigint references departments(id),
+    course_id       bigint unique references courses(id),
+    hidden          boolean not null default 'f'
+);
+
+create table forum_moderators (
+    forum_id    bigint not null references forums(id),
+    user_id     bigint not null references users(id),
+  primary key (forum_id, user_id)
+);
+
+create table forum_selections (
+    user_id     bigint not null references users(id),
+    forum_id    bigint not null references forums(id),
+  primary key (user_id, forum_id)
+);
+
+create table forum_topics (
+    id              bigint primary key,
+    pinned          boolean not null default 'f',
+    num_of_views    integer not null default 0,
+    first_post_id   bigint,
+    last_post_id    bigint,
+    forum_id        bigint references forums(id),
+    deleted         boolean not null default 'f'
+);
+
+create table forum_posts (
+    id          bigint primary key,
+    subject     varchar(255),
+    content     text,
+    author_id   bigint references users(id),
+    date        timestamp default current_timestamp,
+    topic_id    bigint references forum_topics(id),
+    edited_by   bigint references users(id),
+    edit_date   timestamp
+);
+
+create table forum_post_attachments (
+    forum_post_id   bigint not null references forum_posts(id),
+    file_id         bigint not null references files(id)
+);
+
+alter table forums add constraint fk_forum_last_post
+    foreign key (last_post_id) references forum_posts(id);
+alter table forum_topics add constraint fk_forum_topic_first_post
+    foreign key (first_post_id) references forum_posts(id);
+alter table forum_topics add constraint fk_forum_topic_last_post 
+    foreign key (last_post_id) references forum_posts(id);
+
+insert into forums (id, name, description, hidden) values
+    (3000, 'CSNS', 'All things related to CSNS.', 'f');
+insert into forums (id, name, description, hidden) values
+    (3001, 'Wiki Discussion', 'Discussion of wiki pages.', 't');
 
 ------------------------------
 -- functions and procedures --

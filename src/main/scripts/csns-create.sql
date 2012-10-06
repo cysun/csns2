@@ -51,9 +51,9 @@ create table persistent_logins (
     last_used   timestamp not null
 );
 
------------
--- files --
------------
+-------------------------
+-- files and resources --
+-------------------------
 
 create table files (
     id              bigint primary key,
@@ -68,6 +68,15 @@ create table files (
     submission_id   bigint,
     regular         boolean not null default 'f',
     deleted         boolean not null default 'f'
+);
+
+create table resources (
+    id      bigint primary key,
+    name    varchar(255),
+    type    integer not null,
+    text    text,
+    file_id bigint references files(id),
+    url     varchar(2000)
 );
 
 -------------------
@@ -494,6 +503,39 @@ insert into forums (id, name, description, hidden) values
     (3000, 'CSNS', 'All things related to CSNS.', 'f');
 insert into forums (id, name, description, hidden) values
     (3001, 'Wiki Discussion', 'Discussion of wiki pages.', 't');
+
+--------------
+-- projects --
+--------------
+
+create table projects (
+    id              bigint primary key,
+    name            varchar(255) not null,
+    description     varchar(8000),
+    department_id   bigint references departments(id),
+    year            integer not null,
+    published       boolean not null default 'f'
+);
+
+create table project_advisors (
+    project_id      bigint not null references projects(id),
+    advisor_id      bigint not null references users(id),
+    advisor_order   bigint not null,
+  primary key (project_id, advisor_order)
+);
+
+create table project_members (
+    project_id  bigint not null,
+    member_id   bigint not null,
+  primary key (project_id, member_id)
+);
+
+create table project_resources (
+    project_id      bigint not null references projects(id),
+    resource_id     bigint not null references resources(id),
+    resource_order  bigint not null,
+  primary key (project_id, resource_order)
+);
 
 ------------------------------
 -- functions and procedures --

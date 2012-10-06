@@ -8,6 +8,11 @@ drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
+drop table project_resources;
+drop table project_members;
+drop table project_advisors;
+drop table projects;
+
 alter table forum_topics drop constraint fk_forum_topic_last_post;
 alter table forum_topics drop constraint fk_forum_topic_first_post;
 alter table forums drop constraint fk_forum_last_post;
@@ -59,6 +64,7 @@ drop table question_sheets;
 
 drop table subscriptions;
 
+drop table resources;
 drop table files;
 
 drop table persistent_logins;

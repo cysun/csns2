@@ -114,3 +114,15 @@ insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id
     (1001002, 'FM', 1000702, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001003, 'FT', 1000800, 1000001);
+
+insert into resources (id, name, type) values (1001100, 'Project Documentation', 1);
+insert into resources (id, name, type) values (1001101, 'Project Presentation', 1);
+
+insert into projects (id, name, department_id, year) values
+    (1001200, 'Modernize Curriculum Review Workflow', 1000100, 2013);
+insert into project_advisors (project_id, advisor_id, advisor_order) values (1001200, 1000001, 0);
+insert into project_advisors (project_id, advisor_id, advisor_order) values (1001200, 1000004, 1);
+insert into project_members (project_id, member_id) values (1001200, 1000002);
+insert into project_members (project_id, member_id) values (1001200, 1000003);
+insert into project_resources (project_id, resource_id, resource_order) values (1001200, 1001100, 0);
+insert into project_resources (project_id, resource_id, resource_order) values (1001200, 1001101, 1);

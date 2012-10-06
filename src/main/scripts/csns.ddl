@@ -201,6 +201,35 @@
         primary key (id)
     );
 
+    create table project_advisors (
+        project_id int8 not null,
+        advisor_id int8 not null,
+        advisor_order int4 not null,
+        primary key (project_id, advisor_order)
+    );
+
+    create table project_members (
+        project_id int8 not null,
+        member_id int8 not null
+    );
+
+    create table project_resources (
+        project_id int8 not null,
+        resource_id int8 not null,
+        resource_order int4 not null,
+        primary key (project_id, resource_order)
+    );
+
+    create table projects (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255) not null,
+        published boolean not null,
+        year int4 not null,
+        department_id int8,
+        primary key (id)
+    );
+
     create table question_choices (
         question_id int8 not null,
         choice varchar(255),
@@ -232,15 +261,25 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        attachment_allowed boolean not null,
-        correct_answer varchar(255),
-        text_length int4,
         max_rating int4,
         min_rating int4,
         max_selections int4,
         min_selections int4,
+        attachment_allowed boolean not null,
+        correct_answer varchar(255),
+        text_length int4,
         question_section_id int8,
         question_index int4,
+        primary key (id)
+    );
+
+    create table resources (
+        id int8 not null,
+        name varchar(255),
+        text varchar(255),
+        type int4 not null,
+        url varchar(255),
+        file_id int8,
         primary key (id)
     );
 
@@ -584,6 +623,41 @@
         foreign key (last_post_id) 
         references forum_posts;
 
+    alter table project_advisors 
+        add constraint FK8EBFEB19C30E4F1A 
+        foreign key (project_id) 
+        references projects;
+
+    alter table project_advisors 
+        add constraint FK8EBFEB19C5DD9096 
+        foreign key (advisor_id) 
+        references users;
+
+    alter table project_members 
+        add constraint FKA9E291F33C873F7C 
+        foreign key (member_id) 
+        references users;
+
+    alter table project_members 
+        add constraint FKA9E291F3C30E4F1A 
+        foreign key (project_id) 
+        references projects;
+
+    alter table project_resources 
+        add constraint FKF551B87FC30E4F1A 
+        foreign key (project_id) 
+        references projects;
+
+    alter table project_resources 
+        add constraint FKF551B87FC92D294B 
+        foreign key (resource_id) 
+        references resources;
+
+    alter table projects 
+        add constraint FKC479187AF7F6787A 
+        foreign key (department_id) 
+        references departments;
+
     alter table question_choices 
         add constraint FKCCF0F399376C843B 
         foreign key (question_id) 
@@ -603,6 +677,11 @@
         add constraint FK95C5414DC05F834D 
         foreign key (question_section_id) 
         references question_sections;
+
+    alter table resources 
+        add constraint FK89CCBE25B9895B0B 
+        foreign key (file_id) 
+        references files;
 
     alter table section_instructors 
         add constraint FK8C3CB11C644C5699 

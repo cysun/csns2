@@ -36,6 +36,7 @@ import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.model.forum.Forum;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.DepartmentValidator;
 
@@ -83,6 +84,16 @@ public class DepartmentController {
     {
         departmentValidator.validate( department, bindingResult );
         if( bindingResult.hasErrors() ) return "admin/department/add";
+
+        department.getForums().add( new Forum( "Announcements" ) );
+        department.getForums().add( new Forum( "Advisement" ) );
+        department.getForums().add( new Forum( "Job Opportunities" ) );
+        department.getForums().add( new Forum( "General Discussion" ) );
+        for( Forum forum : department.getForums() )
+        {
+            forum.setDepartment( department );
+            forum.getModerators().addAll( department.getAdministrators() );
+        }
 
         departmentDao.saveDepartment( department );
         sessionStatus.setComplete();

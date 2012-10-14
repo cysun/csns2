@@ -51,7 +51,7 @@ public class SubscriptionDaoTests extends AbstractTestNGSpringContextTests {
     @Test
     public void getSubscription()
     {
-        Forum forum = forumDao.getForum( 1000700L );
+        Forum forum = forumDao.getForum( 3000L );
         User subscriber = userDao.getUser( 1000001L );
         assert subscriptionDao.getSubscription( forum, subscriber ) != null;
     }
@@ -59,7 +59,7 @@ public class SubscriptionDaoTests extends AbstractTestNGSpringContextTests {
     @Test
     public void getSubscriptions()
     {
-        Forum forum = forumDao.getForum( 1000700L );
+        Forum forum = forumDao.getForum( 3000L );
         List<Subscription> subscriptions = subscriptionDao.getSubscriptions( forum );
         assert subscriptions.size() == 1;
         assert subscriptions.get( 0 )

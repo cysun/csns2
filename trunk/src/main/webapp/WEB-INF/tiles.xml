@@ -428,6 +428,15 @@
     </definition>
 
     <!-- ===== -->
+    <!-- Forum -->
+    <!-- ===== -->
+
+    <definition name="forum/list" extends="layout.basic">
+        <put-attribute name="title" value="Forums" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/list.jsp" />
+    </definition>
+
+    <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->
 

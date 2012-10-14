@@ -18,14 +18,23 @@
  */
 package csns.model.forum.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-@Test(groups = "ForumDaoTests")
+import csns.model.core.User;
+import csns.model.core.dao.UserDao;
+import csns.model.forum.Forum;
+
+@Test(groups = "ForumDaoTests", dependsOnGroups = "UserDaoTests")
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class ForumDaoTests extends AbstractTestNGSpringContextTests {
+
+    @Autowired
+    UserDao userDao;
 
     @Autowired
     ForumDao forumDao;
@@ -34,6 +43,36 @@ public class ForumDaoTests extends AbstractTestNGSpringContextTests {
     public void getForum()
     {
         assert forumDao.getForum( 1000700L ) != null;
+    }
+
+    @Test
+    public void getSystemForums()
+    {
+        User user = userDao.getUserByUsername( "cysun" );
+        List<Forum> forums = forumDao.getSystemForums( user );
+
+        assert forums.size() == 1;
+        assert forums.get( 0 ).getName().equals( "CSNS" );
+    }
+
+    @Test
+    public void getDepartmentForums()
+    {
+        User user = userDao.getUserByUsername( "cysun" );
+        List<Forum> forums = forumDao.getDepartmentForums( user );
+
+        assert forums.size() == 1;
+        assert forums.get( 0 ).getDepartment().getAbbreviation().equals( "cs" );
+    }
+
+    @Test
+    public void getCourseForums()
+    {
+        User user = userDao.getUserByUsername( "cysun" );
+        List<Forum> forums = forumDao.getCourseForums( user );
+
+        assert forums.size() == 1;
+        assert forums.get( 0 ).getCourse().getCode().equals( "CS520" );
     }
 
 }

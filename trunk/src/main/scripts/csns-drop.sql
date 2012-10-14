@@ -19,7 +19,6 @@ alter table forums drop constraint fk_forum_last_post;
 drop table forum_post_attachments;
 drop table forum_posts;
 drop table forum_topics;
-drop table forum_selections;
 drop table forum_moderators;
 drop table forums;
 

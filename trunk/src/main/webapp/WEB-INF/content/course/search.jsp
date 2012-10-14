@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -17,8 +18,10 @@ $(function(){
 
 <ul id="title">
 <li>Courses</li>
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <li class="align_right"><a href="add"><img title="Add" alt="[Add]"
     src="<c:url value='/img/icons/table_add.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <form action="search" method="get">

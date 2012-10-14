@@ -28,6 +28,4 @@ public interface Subscribable {
 
     String getName();
 
-    String getType();
-
 }

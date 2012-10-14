@@ -45,6 +45,7 @@ import org.springframework.web.context.WebApplicationContext;
 import csns.model.academics.Course;
 import csns.model.academics.dao.CourseDao;
 import csns.model.core.User;
+import csns.model.forum.Forum;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.CourseValidator;
 
@@ -122,7 +123,11 @@ public class CourseController {
         courseValidator.validate( course, bindingResult );
         if( bindingResult.hasErrors() ) return "course/add";
 
+        Forum forum = new Forum( course.getCode() + " " + course.getName() );
+        forum.setCourse( course );
+        course.setForum( forum );
         course = courseDao.saveCourse( course );
+
         sessionStatus.setComplete();
         return "redirect:view?id=" + course.getId();
     }

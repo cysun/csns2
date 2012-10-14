@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,10 +30,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import csns.model.core.User;
+import csns.model.forum.Forum;
 
 @Entity
 @Table(name = "departments")
@@ -133,6 +136,11 @@ public class Department implements Serializable {
     @OrderBy("code asc")
     private List<Course> additionalGraduateCourses;
 
+    @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
+        CascadeType.MERGE })
+    @OrderBy("id asc")
+    private List<Forum> forums;
+
     public Department()
     {
         administrators = new ArrayList<User>();
@@ -144,6 +152,8 @@ public class Department implements Serializable {
         additionalUndergraduateCourses = new ArrayList<Course>();
         graduateCourses = new ArrayList<Course>();
         additionalGraduateCourses = new ArrayList<Course>();
+
+        forums = new ArrayList<Forum>();
     }
 
     public Long getId()
@@ -266,6 +276,16 @@ public class Department implements Serializable {
         List<Course> additionalGraduateCourses )
     {
         this.additionalGraduateCourses = additionalGraduateCourses;
+    }
+
+    public List<Forum> getForums()
+    {
+        return forums;
+    }
+
+    public void setForums( List<Forum> forums )
+    {
+        this.forums = forums;
     }
 
 }

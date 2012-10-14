@@ -45,6 +45,8 @@
 
 <li><a href="#">Resources</a>
   <div><ul>
+    <li><a href="<c:url value='/department/${dept}/forums' />"><img alt=""
+           src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>
     <li><a href="<c:url value='/department/${dept}/survey/current' />"><img alt=""
            src="<c:url value='/img/icons/surveys.png' />" />Surveys</a></li>
   </ul></div>

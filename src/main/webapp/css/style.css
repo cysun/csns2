@@ -289,6 +289,10 @@ table {
     color:#000000;
     width:100%;
 }
+.forums table {
+    border-spacing:0;
+    border-collapse:collapse;
+}
 .forums tr.even {
     background-color:#eeeeee;
 }

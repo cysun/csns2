@@ -451,19 +451,14 @@ create table forums (
     last_post_id    bigint unique,
     department_id   bigint references departments(id),
     course_id       bigint unique references courses(id),
-    hidden          boolean not null default 'f'
+    hidden          boolean not null default 'f',
+  check ( department_id is null or course_id is null )
 );
 
 create table forum_moderators (
     forum_id    bigint not null references forums(id),
     user_id     bigint not null references users(id),
   primary key (forum_id, user_id)
-);
-
-create table forum_selections (
-    user_id     bigint not null references users(id),
-    forum_id    bigint not null references forums(id),
-  primary key (user_id, forum_id)
 );
 
 create table forum_topics (

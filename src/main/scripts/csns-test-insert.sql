@@ -93,25 +93,25 @@ insert into forums (id, name, course_id) values
     (1000705, 'MATH207 Calculus II: Integration', 1000205);
 
 insert into forums (id, name, department_id) values (1000720, 'Announcements', 1000100);
-insert into forums (id, name, department_id) values (1000721, 'General Discussion', 1000100);
+insert into forums (id, name, department_id) values (1000721, 'Advisement', 1000100);
 insert into forums (id, name, department_id) values (1000722, 'Job Opportunities', 1000100);
-insert into forums (id, name, department_id) values (1000723, 'Advisement', 1000100);
+insert into forums (id, name, department_id) values (1000723, 'General Discussion', 1000100);
 insert into forums (id, name, department_id) values (1000724, 'Announcements', 1000101);
-insert into forums (id, name, department_id) values (1000725, 'General Discussion', 1000101);
+insert into forums (id, name, department_id) values (1000725, 'Advisement', 1000101);
 insert into forums (id, name, department_id) values (1000726, 'Job Opportunities', 1000101);
-insert into forums (id, name, department_id) values (1000727, 'Advisement', 1000101);
+insert into forums (id, name, department_id) values (1000727, 'General Discussion', 1000101);
 
-insert into forum_topics (id, forum_id) values (1000800, 1000700);
+insert into forum_topics (id, forum_id) values (1000800, 3000);
 
 insert into forum_posts (id, subject, content, author_id, topic_id) values
-    (1000900, 'Welcome', 'Welcome to CS101!', 1000001, 1000800);
+    (1000900, 'Welcome', 'Welcome to CSNS', 1000001, 1000800);
 
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
-    (1001000, 'FM', 1000700, 1000001);
+    (1001000, 'FM', 3000, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
-    (1001001, 'FM', 1000701, 1000001);
+    (1001001, 'FM', 1000702, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
-    (1001002, 'FM', 1000702, 1000001);
+    (1001002, 'FM', 1000720, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001003, 'FT', 1000800, 1000001);
 

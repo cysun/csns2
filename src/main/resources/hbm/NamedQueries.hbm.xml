@@ -43,4 +43,37 @@ select a.* from assignments a, sections s, section_instructors i
 ]]>
     </sql-query>
 
+    <sql-query name="subscribed.system.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.department_id is null and f.course_id is null
+    order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="subscribed.department.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.department_id is not null
+    order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="subscribed.course.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.course_id is not null
+    order by f.name asc
+]]>
+    </sql-query>
+
 </hibernate-mapping>

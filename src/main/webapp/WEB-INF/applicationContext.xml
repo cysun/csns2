@@ -64,7 +64,7 @@
         <security:intercept-url pattern="/department/*/people" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/profile" access="authenticated" />
         <security:intercept-url pattern="/register" access="authenticated and principal.temporary" />
-        <security:intercept-url pattern="/user/autocomplete" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/user/autocomplete" access="authenticated and (principal.sysadmin or principal.instructor)" />
         <security:intercept-url pattern="/user/**" access="authenticated and (principal.sysadmin or principal.faculty)" />
         <security:intercept-url pattern="/course/add" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/course/edit" access="authenticated and principal.admin" />

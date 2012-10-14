@@ -23,8 +23,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -162,12 +162,6 @@
         primary key (id)
     );
 
-    create table forum_selections (
-        user_id int8 not null,
-        forum_id int8 not null,
-        primary key (user_id, forum_id)
-    );
-
     create table forum_topics (
         id int8 not null,
         deleted boolean not null,
@@ -263,11 +257,11 @@
         point_value int4 not null,
         max_rating int4,
         min_rating int4,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -582,16 +576,6 @@
         add constraint FKEDDC4F357D9A8AC9 
         foreign key (edited_by) 
         references users;
-
-    alter table forum_selections 
-        add constraint FK91BEBA45E3C184AB 
-        foreign key (user_id) 
-        references users;
-
-    alter table forum_selections 
-        add constraint FK91BEBA45FE5A182F 
-        foreign key (forum_id) 
-        references forums;
 
     alter table forum_topics 
         add constraint FKD47F7202FE5A182F 

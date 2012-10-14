@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,7 +61,7 @@ public class Forum implements Subscribable, Serializable {
 
     private Date date;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "forum_moderators",
         joinColumns = @JoinColumn(name = "forum_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -98,15 +99,10 @@ public class Forum implements Subscribable, Serializable {
         hidden = false;
     }
 
-    @Override
-    public String getType()
+    public Forum( String name )
     {
-        return "Forum";
-    }
-
-    public String getShortName()
-    {
-        return course == null ? name : name.substring( 0, name.indexOf( ' ' ) );
+        this();
+        this.name = name;
     }
 
     public boolean isModerator( User user )

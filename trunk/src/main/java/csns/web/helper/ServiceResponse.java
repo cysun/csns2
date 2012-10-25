@@ -16,28 +16,50 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.core.dao;
+package csns.web.helper;
 
-import java.util.List;
+public class ServiceResponse {
 
-import csns.model.core.User;
+    boolean success;
 
-public interface UserDao {
+    String message;
 
-    User getUser( Long id );
+    public ServiceResponse()
+    {
+        success = true;
+        message = "";
+    }
 
-    User getUserByCin( String cin );
+    public ServiceResponse( boolean success )
+    {
+        this.success = success;
+        this.message = "";
+    }
 
-    User getUserByUsername( String username );
+    public ServiceResponse( boolean success, String message )
+    {
+        this.success = success;
+        this.message = message;
+    }
 
-    User getUserByEmail( String email );
+    public boolean isSuccess()
+    {
+        return success;
+    }
 
-    List<User> getUsers( Long ids[] );
+    public void setSuccess( boolean success )
+    {
+        this.success = success;
+    }
 
-    List<User> searchUsers( String term );
+    public String getMessage()
+    {
+        return message;
+    }
 
-    List<User> searchUsersByPrefix( String term, int maxResults );
-
-    User saveUser( User user );
+    public void setMessage( String message )
+    {
+        this.message = message;
+    }
 
 }

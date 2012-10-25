@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.forum.Forum;
+import csns.model.forum.Topic;
 import csns.model.forum.dao.ForumDao;
 import csns.model.forum.dao.TopicDao;
 
@@ -57,7 +58,7 @@ public class SubscriptionDaoTests extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void getSubscriptions()
+    public void getForumSubscribers()
     {
         Forum forum = forumDao.getForum( 3000L );
         List<Subscription> subscriptions = subscriptionDao.getSubscriptions( forum );
@@ -66,6 +67,14 @@ public class SubscriptionDaoTests extends AbstractTestNGSpringContextTests {
             .getSubscriber()
             .getUsername()
             .equals( "cysun" );
+    }
+
+    @Test
+    public void getUserSubscriptions()
+    {
+        User user = userDao.getUser( 1000001L );
+        assert subscriptionDao.getSubscriptions( user, Forum.class ).size() == 3;
+        assert subscriptionDao.getSubscriptions( user, Topic.class ).size() == 1;
     }
 
 }

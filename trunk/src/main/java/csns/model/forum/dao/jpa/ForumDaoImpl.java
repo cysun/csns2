@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +77,15 @@ public class ForumDaoImpl implements ForumDao {
             Forum.class )
             .setParameter( "userId", user.getId() )
             .getResultList();
+    }
+
+    @Override
+    public List<Forum> searchForums( String term, int maxResults )
+    {
+        TypedQuery<Forum> query = entityManager.createNamedQuery(
+            "forum.search", Forum.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

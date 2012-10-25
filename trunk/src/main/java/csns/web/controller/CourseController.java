@@ -18,15 +18,8 @@
  */
 package csns.web.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -78,28 +71,6 @@ public class CourseController {
             courses = courseDao.searchCourses( term, -1 );
         models.addAttribute( "courses", courses );
         return "course/search";
-    }
-
-    @RequestMapping(value = "/course/autocomplete")
-    public String autocomplete( @RequestParam String term,
-        HttpServletResponse response ) throws JSONException, IOException
-    {
-        JSONArray jsonArray = new JSONArray();
-        List<Course> courses = courseDao.searchCourses( term, 10 );
-        for( Course course : courses )
-        {
-            String label = course.getCode() + " " + course.getName();
-
-            Map<String, String> json = new HashMap<String, String>();
-            json.put( "id", course.getId().toString() );
-            json.put( "value", course.getCode() );
-            json.put( "label", label );
-            jsonArray.put( json );
-        }
-
-        response.setContentType( "application/json" );
-        jsonArray.write( response.getWriter() );
-        return null;
     }
 
     @RequestMapping(value = "/course/view")

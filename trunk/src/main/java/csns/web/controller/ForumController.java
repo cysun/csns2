@@ -33,21 +33,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
+import csns.model.forum.dao.TopicDao;
 import csns.security.SecurityUtils;
 
 @Controller
 public class ForumController {
 
     @Autowired
+    UserDao userDao;
+
+    @Autowired
     ForumDao forumDao;
+
+    @Autowired
+    TopicDao topicDao;
 
     @Autowired
     DepartmentDao departmentDao;
 
-    @RequestMapping(value = "/department/{dept}/forums")
-    public String courses( @PathVariable String dept,
+    @RequestMapping(value = "/department/{dept}/forum/list")
+    public String list( @PathVariable String dept,
         @RequestParam(required = false) Boolean showAll, HttpSession session,
         ModelMap models )
     {
@@ -79,6 +88,24 @@ public class ForumController {
         models.put( "courseForums", courseForums );
 
         return "forum/list";
+    }
+
+    @RequestMapping(value = "/department/{dept}/forum/view")
+    public String view( @PathVariable String dept, @RequestParam Long id,
+        ModelMap models )
+    {
+        Forum forum = forumDao.getForum( id );
+        if( SecurityUtils.isAuthenticated() )
+        {
+            User user = userDao.getUser( SecurityUtils.getUser().getId() );
+            models.put( "isModerator", forum.isModerator( user ) );
+        }
+
+        models.put( "forum", forum );
+        models.put( "topics", topicDao.getTopics( forum ) );
+        models.put( "department", departmentDao.getDepartment( dept ) );
+
+        return "forum/view";
     }
 
 }

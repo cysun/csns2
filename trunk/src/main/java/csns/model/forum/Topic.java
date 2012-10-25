@@ -86,6 +86,12 @@ public class Topic implements Subscribable, Serializable {
         return firstPost.getSubject();
     }
 
+    @Override
+    public String getType()
+    {
+        return "Forum Topic";
+    }
+
     public Date getDate()
     {
         return firstPost.getDate();

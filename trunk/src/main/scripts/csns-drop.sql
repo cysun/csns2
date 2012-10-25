@@ -13,6 +13,8 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop trigger forums_ts_trigger on forums;
+drop function forums_ts_trigger_function();
 alter table forum_topics drop constraint fk_forum_topic_last_post;
 alter table forum_topics drop constraint fk_forum_topic_first_post;
 alter table forums drop constraint fk_forum_last_post;

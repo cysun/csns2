@@ -427,6 +427,12 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
     </definition>
 
+    <!-- ============ -->
+    <!-- Subscription -->
+    <!-- ============ -->
+
+    <definition name="subscription/forums" template="/WEB-INF/content/subscription/forums.jsp" />
+
     <!-- ===== -->
     <!-- Forum -->
     <!-- ===== -->
@@ -434,6 +440,11 @@
     <definition name="forum/list" extends="layout.basic">
         <put-attribute name="title" value="Forums" />
         <put-attribute name="content" value="/WEB-INF/content/forum/list.jsp" />
+    </definition>
+
+    <definition name="forum/view" extends="layout.basic">
+        <put-attribute name="title" value="Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/view.jsp" />
     </definition>
 
     <!-- ===== -->

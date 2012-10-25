@@ -70,6 +70,18 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
     }
 
     @Override
+    public List<Subscription> getSubscriptions( User subscriber, Class<?> clazz )
+    {
+        String query = "from Subscription where subscriber = :subscriber "
+            + "and subscribable.class = :clazz";
+
+        return entityManager.createQuery( query, Subscription.class )
+            .setParameter( "subscriber", subscriber )
+            .setParameter( "clazz", clazz.getCanonicalName() )
+            .getResultList();
+    }
+
+    @Override
     @Transactional
     public Subscription subscribe( Subscribable subscribable, User subscriber )
     {

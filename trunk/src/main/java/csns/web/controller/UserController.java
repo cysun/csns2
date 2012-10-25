@@ -18,7 +18,6 @@
  */
 package csns.web.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,11 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.velocity.app.VelocityEngine;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,26 +111,6 @@ public class UserController {
         if( StringUtils.hasText( term ) ) users = userDao.searchUsers( term );
         models.addAttribute( "users", users );
         return "user/search";
-    }
-
-    @RequestMapping(value = "/user/autocomplete")
-    public String autocomplete( @RequestParam String term,
-        HttpServletResponse response ) throws JSONException, IOException
-    {
-        JSONArray jsonArray = new JSONArray();
-        List<User> users = userDao.searchUsersByPrefix( term );
-        for( User user : users )
-        {
-            Map<String, String> json = new HashMap<String, String>();
-            json.put( "id", user.getId().toString() );
-            json.put( "value", user.getName() );
-            json.put( "label", user.getCin() + " " + user.getName() );
-            jsonArray.put( json );
-        }
-
-        response.setContentType( "application/json" );
-        jsonArray.write( response.getWriter() );
-        return null;
     }
 
     @RequestMapping(value = "/user/view")

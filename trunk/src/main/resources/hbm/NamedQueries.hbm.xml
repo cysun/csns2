@@ -39,7 +39,6 @@ select a.* from assignments a, sections s, section_instructors i
     and a.section_id = s.id and s.id = i.section_id
     and i.instructor_id = :instructorId
     order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
-    limit 20
 ]]>
     </sql-query>
 
@@ -73,6 +72,14 @@ select f.* from users u, subscriptions s, forums f
     and s.subscribable_type = 'FM' and s.subscribable_id = f.id
     and f.course_id is not null
     order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="forum.search">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from forums f, plainto_tsquery(:term) query
+    where query @@ f.tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
 

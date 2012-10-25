@@ -8,7 +8,7 @@ $(function(){
     });
     $(".add").each(function(){
         $(this).autocomplete({
-            source: "<c:url value='/course/autocomplete' />",
+            source: "<c:url value='/autocomplete/course' />",
             select: function(event, ui) {
                 if( ui.item )
                     $("<input>").attr({
@@ -80,7 +80,8 @@ $(function(){
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/undergraduate/add" method="post"><p>
-<input type="text" class="forminput add" name="name" size="40" />
+<input type="text" class="forminput add" name="name" size="40"
+    placeholder="Search for courses to add" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>
@@ -121,7 +122,8 @@ $(function(){
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/graduate/add" method="post"><p>
-<input type="text" class="forminput add" name="name" size="40" />
+<input type="text" class="forminput add" name="name" size="40"
+    placeholder="Search for courses to add" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </p></form>

@@ -217,6 +217,8 @@ table {
     border-top: 1px solid #9eb5d5;
     border-bottom: 1px solid #6e91c1;
     color:#d1e3fb;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 .viewtable tr th.sortable a {
     color:#ffffff;
@@ -226,7 +228,10 @@ table {
 }
 .viewtable tr td {
     border: 1px solid #dddddd;
-    padding:5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 1em;
+    padding-right: 1em;   
 }
 .viewtable tr td a:hover {
     color:#000;
@@ -275,14 +280,6 @@ table {
     vertical-align: middle;
     margin-left: 5px;
     margin-right: 5px;
-}
-
-.autowidth {
-    width: auto;
-}
-
-.halfwidth {
-    width: 45%;
 }
 
 .forums {
@@ -945,6 +942,13 @@ table {
     font-size:14px;
 }
 
+.autowidth {
+    width: auto;
+}
+
+.halfwidth {
+    width: 45%;
+}
 
 /************* Editor Border Fix *****************/
 .assignment_date td th,

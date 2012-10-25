@@ -22,5 +22,5 @@ $(function(){
 <ul id="title">
 <li><spring:message code="${title}" /></li>
 </ul>
-<p><spring:message code="${message}" /></p>
+<p><spring:message code="${message}" arguments="${arguments}" /></p>
 <p><button id="ok" type="button" class="subbutton">OK</button></p>

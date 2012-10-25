@@ -4,7 +4,8 @@
 <script type="text/javascript">
 $(function() {
     $("#tabs").tabs({
-        cache: false
+        cache: false,
+        ajaxOptions: { cache: false }
     });
     $("#birthday").datepicker({
         inline: true,
@@ -25,8 +26,8 @@ $(function() {
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
-  <li><a href="forum/subscriptions">Forums</a></li>
-  <li><a href="mailinglist/subscriptions">Mailing Lists</a></li>
+  <li><a href="<c:url value='/subscription/forums' />">Forum Subscriptions</a></li>
+  <li><a href="<c:url value='/subscription/mailinglist' />">Mailing List Subscriptions</a></li>
 </ul>
 <div id="account">
 <form:form modelAttribute="user">

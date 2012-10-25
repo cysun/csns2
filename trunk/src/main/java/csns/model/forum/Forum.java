@@ -105,9 +105,20 @@ public class Forum implements Subscribable, Serializable {
         this.name = name;
     }
 
+    @Override
+    public String getType()
+    {
+        return "Forum";
+    }
+
     public boolean isModerator( User user )
     {
-        return moderators.contains( user );
+        return department != null
+            && (department.getAdministrators().contains( user ) || department.getFaculty()
+                .contains( user )) || course != null
+            && course.getCoordinator() != null
+            && course.getCoordinator().equals( user )
+            || moderators.contains( user );
     }
 
     public void incrementNumOfTopics()

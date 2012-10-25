@@ -14,7 +14,7 @@ $(function() {
         }
     });
     $("#search").autocomplete({
-        source: "<c:url value='/user/autocomplete' />",
+        source: "<c:url value='/autocomplete/user' />",
         select: function(event, ui) {
             if( ui.item )
                 window.location.href = "add?userId=" + ui.item.id + "&sectionId=${param.sectionId}";
@@ -34,7 +34,8 @@ already has an account on CSNS.</p>
 
 <p>If the search function does not find the student, please fill out the
 following form to create an account for the student and add the student to
-your class.</p>
+your class. Note that you should only generate a CIN for the student if the
+student does not have one issued by the university.</p>
 
 <form:form modelAttribute="user">
 <table class="general">

@@ -5,7 +5,7 @@
 <script>
 $(function(){
     $("#admin").autocomplete({
-        source: "<c:url value='/user/autocomplete' />",
+        source: "<c:url value='/autocomplete/user' />",
         select: function(event, ui) {
             if( ui.item )
                 $("<input>").attr({

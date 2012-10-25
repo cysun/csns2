@@ -185,6 +185,22 @@
           <version>1.7</version>
       </dependency>
       <dependency>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-mapper-asl</artifactId>
+          <version>1.9.10</version>
+      </dependency>
+      <dependency>
+          <groupId>displaytag</groupId>
+          <artifactId>displaytag</artifactId>
+          <version>1.2</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>jcl104-over-slf4j</artifactId>
+            </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
           <groupId>cglib</groupId>
           <artifactId>cglib</artifactId>
           <version>2.2.2</version>
@@ -192,12 +208,12 @@
       <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>jcl-over-slf4j</artifactId>
-          <version>1.6.6</version>
+          <version>1.7.2</version>
       </dependency>
       <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-log4j12</artifactId>
-          <version>1.6.6</version>
+          <version>1.7.2</version>
       </dependency>
       <dependency>
           <groupId>javax.mail</groupId>

@@ -247,9 +247,8 @@ alter table courses add column tsv tsvector;
 
 create function courses_ts_trigger_function() returns trigger as $$
 begin
-    new.tsv :=
-        setweight( to_tsvector(coalesce(new.code,'')), 'A') ||
-        setweight( to_tsvector(coalesce(new.name,'')), 'B' );
+    new.tsv := setweight(to_tsvector(new.code), 'A') ||
+               setweight(to_tsvector(new.name), 'B');
     return new;
 end
 $$ language plpgsql;
@@ -321,10 +320,9 @@ begin
         select c.code into l_course_code from sections s, courses c
             where s.id = new.section_id and c.id = s.course_id;
     end if;
-    new.tsv :=
-        setweight( to_tsvector(coalesce(l_quarter,'')), 'A') ||
-        setweight( to_tsvector(coalesce(l_course_code,'')), 'A') ||
-        setweight( to_tsvector(coalesce(new.name,'')), 'A' );
+    new.tsv := setweight(to_tsvector(l_quarter), 'A') ||
+               setweight(to_tsvector(l_course_code), 'A') ||
+               setweight(to_tsvector(new.name), 'A');
     return new;
 end
 $$ language plpgsql;
@@ -493,6 +491,39 @@ alter table forum_topics add constraint fk_forum_topic_first_post
     foreign key (first_post_id) references forum_posts(id);
 alter table forum_topics add constraint fk_forum_topic_last_post 
     foreign key (last_post_id) references forum_posts(id);
+
+alter table forums add column tsv tsvector;
+
+create function forums_ts_trigger_function() returns trigger as $$
+declare
+    l_course        courses;
+    l_department    departments;
+begin
+    if new.course_id is not null then
+        select * into l_course from courses where id = new.course_id;
+        new.tsv := setweight(to_tsvector(l_course.code), 'A') ||
+	               setweight(to_tsvector(l_course.name), 'A');
+    elsif new.department_id is not null then
+        select * into l_department from departments where id = new.department_id;
+	    new.tsv := setweight(to_tsvector(new.name), 'A') ||
+                   setweight(to_tsvector(l_department.name), 'B') ||
+                   setweight(to_tsvector(l_department.abbreviation), 'B');
+    else
+        new.tsv := setweight(to_tsvector(new.name), 'A');
+    end if;
+    return new;
+end
+$$ language plpgsql;
+
+create trigger forums_ts_trigger
+    before insert or update
+    on forums
+    for each row
+    execute procedure forums_ts_trigger_function();
+
+create index forums_ts_index
+    on forums
+    using gin(tsv);
 
 insert into forums (id, name, description, hidden) values
     (3000, 'CSNS', 'All things related to CSNS.', 'f');

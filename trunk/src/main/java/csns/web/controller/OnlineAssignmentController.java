@@ -94,7 +94,7 @@ public class OnlineAssignmentController {
             models.put(
                 "results",
                 assignmentDao.searchOnlineAssignments( term,
-                    SecurityUtils.getUser() ) );
+                    SecurityUtils.getUser(), 20 ) );
 
         return "assignment/online/list";
     }

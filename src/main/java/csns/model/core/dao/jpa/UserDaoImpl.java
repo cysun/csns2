@@ -119,7 +119,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> searchUsersByPrefix( String term )
+    public List<User> searchUsersByPrefix( String term, int maxResults )
     {
         term = term.toLowerCase();
         String query = "from User where cin like :term || '%' "
@@ -131,7 +131,7 @@ public class UserDaoImpl implements UserDao {
 
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )
-            .setMaxResults( 10 )
+            .setMaxResults( maxResults )
             .getResultList();
     }
 

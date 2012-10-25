@@ -72,12 +72,13 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
     @Override
     public List<OnlineAssignment> searchOnlineAssignments( String term,
-        User instructor )
+        User instructor, int maxResults )
     {
         return entityManager.createNamedQuery( "online.assignment.search",
             OnlineAssignment.class )
             .setParameter( "term", term )
             .setParameter( "instructorId", instructor.getId() )
+            .setMaxResults( maxResults )
             .getResultList();
     }
 

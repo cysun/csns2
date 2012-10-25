@@ -33,7 +33,8 @@ public interface AssignmentDao {
 
     List<OnlineAssignment> getOnlineAssignments( User instructor );
 
-    List<OnlineAssignment> searchOnlineAssignments( String term, User instructor );
+    List<OnlineAssignment> searchOnlineAssignments( String term,
+        User instructor, int maxResults );
 
     Assignment saveAssignment( Assignment assignment );
 

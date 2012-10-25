@@ -38,6 +38,8 @@ public interface ForumDao {
     /** Get the course forums the user subscribed to. */
     List<Forum> getCourseForums( User user );
 
+    List<Forum> searchForums( String term, int maxResults );
+
     Forum saveForum( Forum forum );
 
 }

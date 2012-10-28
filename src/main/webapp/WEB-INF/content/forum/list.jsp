@@ -2,12 +2,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/department/${department.abbreviation}/' />">${department.name}</a></li>
 <li>Forums</li>
 <security:authorize access="authenticated">
-<li class="align_right"><a href="subscriptions"><img alt="[Forum Subscriptions]"
+<li class="align_right"><a href="<c:url value='/profile#ui-tabs-1' />"><img alt="[Forum Subscriptions]"
   title="Forum Subscriptons" src="<c:url value='/img/icons/star.png' />" /></a></li>
 </security:authorize>
 </ul>
@@ -32,7 +32,7 @@
 
 </div>
 
-<h3>Department Forums</h3>
+<h3>${department.name} Department Forums</h3>
 <table class="forums">
 <tr><th>Forum</th><th>Topics</th><th>Posts</th><th>Last Post</th></tr>
 <c:forEach items="${department.forums}" var="forum" varStatus="status">
@@ -43,8 +43,9 @@
   <td width="26%" nowrap="nowrap" class="bg1">
     <div class="last_post">
     <c:if test="${empty forum.lastPost}">No Posts</c:if>
-    <c:if test="${not empty forum.lastPost}"><a href="topic/view?idd=${forum.lastPost.topic.id}">${forum.lastPost.shortSubject}</a> <br />
-    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date.time}" pattern="HH:mm MMM dd, yyyy" />
+    <c:if test="${not empty forum.lastPost}"><a href="topic/view?id=${forum.lastPost.topic.id}"><csns:truncate
+        value="${forum.lastPost.subject}" length="30" /></a> <br />
+    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date}" pattern="HH:mm MMM dd, yyyy" />
     </c:if>
     </div>
   </td>
@@ -53,7 +54,7 @@
 </table>
 
 <c:if test="${fn:length(courseForums) > 0}">
-<h3>Course Forums</h3>
+<h3>${department.name} Course Forums</h3>
 <table class="forums">
 <tr><th>Forum</th><th>Topics</th><th>Posts</th><th>Last Post</th></tr>
 <c:forEach items="${courseForums}" var="forum" varStatus="status">
@@ -64,8 +65,9 @@
   <td width="26%" nowrap="nowrap" class="bg1">
     <div class="last_post">
     <c:if test="${empty forum.lastPost}">No Posts</c:if>
-    <c:if test="${not empty forum.lastPost}"><a href="topic/view?idd=${forum.lastPost.topic.id}">${forum.lastPost.shortSubject}</a> <br />
-    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date.time}" pattern="HH:mm MMM dd, yyyy" />
+    <c:if test="${not empty forum.lastPost}"><a href="topic/view?id=${forum.lastPost.topic.id}"><csns:truncate
+        value="${forum.lastPost.subject}" length="30" /></a> <br />
+    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date}" pattern="HH:mm MMM dd, yyyy" />
     </c:if>
     </div>
   </td>
@@ -85,8 +87,9 @@
   <td width="26%" nowrap="nowrap" class="bg1">
     <div class="last_post">
     <c:if test="${empty forum.lastPost}">No Posts</c:if>
-    <c:if test="${not empty forum.lastPost}"><a href="topic/view?idd=${forum.lastPost.topic.id}">${forum.lastPost.shortSubject}</a> <br />
-    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date.time}" pattern="HH:mm MMM dd, yyyy" />
+    <c:if test="${not empty forum.lastPost}"><a href="topic/view?id=${forum.lastPost.topic.id}"><csns:truncate
+        value="${forum.lastPost.subject}" length="30" /></a> <br />
+    by ${forum.lastPost.author.username} @ <fmt:formatDate value="${forum.lastPost.date}" pattern="HH:mm MMM dd, yyyy" />
     </c:if>
     </div>
   </td>

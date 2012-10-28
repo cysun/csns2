@@ -34,6 +34,7 @@ import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
+import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
@@ -54,6 +55,9 @@ public class ForumController {
 
     @Autowired
     DepartmentDao departmentDao;
+
+    @Autowired
+    SubscriptionDao subscriptionDao;
 
     @RequestMapping(value = "/department/{dept}/forum/list")
     public String list( @PathVariable String dept,
@@ -99,6 +103,8 @@ public class ForumController {
         {
             User user = userDao.getUser( SecurityUtils.getUser().getId() );
             models.put( "isModerator", forum.isModerator( user ) );
+            models.put( "subscription",
+                subscriptionDao.getSubscription( forum, user ) );
         }
 
         models.put( "forum", forum );

@@ -1,24 +1,63 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
+<script>
+$(function(){
+<c:if test="${not empty subscription}">
+    $("#subscribe").hide();
+</c:if>
+<c:if test="${empty subscription}">
+    $("#unsubscribe").hide();
+</c:if>
+});
+
+function subscribe()
+{
+    $.ajax({
+        url: "<c:url value='/subscription/forum/subscribe' />",
+        data: { "id": ${forum.id}, "ajax": true },
+        success: function(){
+            $("#subscribe").hide();
+            $("#unsubscribe").show();
+        },
+        cache: false
+    });
+}
+
+function unsubscribe()
+{
+    $.ajax({
+        url: "<c:url value='/subscription/forum/unsubscribe' />",
+        data: { "id": ${forum.id}, "ajax": true },
+        success: function(){
+            $("#unsubscribe").hide();
+            $("#subscribe").show();
+        },
+        cache: false
+    });
+}
+</script>
+
 <ul id="title">
-<li><a class="bc" href="<c:url value='/department/${department.abbreviation}/' />">${department.name}</a></li>
 <li><a class="bc" href="list">Forums</a></li>
 <li><csns:truncate value="${forum.name}" /><li>
-<li class="align_right"><a href="subscriptions"><img alt="[Subscribe to Forum]"
-  title="Subscribe to This Forum" src="<c:url value='/img/icons/award_star_add.png' />" /></a></li>
-<li class="align_right"><a href="subscriptions"><img alt="[Forum Subscriptions]"
+<security:authorize access="authenticated">
+<li id="subscribe" class="align_right"><a href="javascript:subscribe()"><img alt="[Subscribe to Forum]"
+  title="Subscribe to This Forum" src="<c:url value='/img/icons/star_add.png' />" /></a></li>
+<li id="unsubscribe" class="align_right"><a href="javascript:unsubscribe()"><img alt="[Unsubscribe from Forum]"
+  title="Unsubscribe from This Forum" src="<c:url value='/img/icons/star_delete.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='/profile#ui-tabs-1' />"><img alt="[Forum Subscriptions]"
   title="Forum Subscriptons" src="<c:url value='/img/icons/star.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <div id="forums_menu"> 
 <security:authorize access="authenticated">
 <span>
-<a href="createTopic.html?forumId=${forum.id}">New Topic</a>
+<a href="topic/create?forumId=${forum.id}">New Topic</a>
 </span>
 </security:authorize>
 
@@ -46,7 +85,7 @@
     <div class="pagelinks"><a href="{1}">First</a> {0} <a href="{4}">Last</a></div>
 </display:setProperty>
   <display:column title="Topics" class="cat" maxLength="100">
-    <a href="viewTopic.html?topicId=${topic.id}">
+    <a href="topic/view?id=${topic.id}">
     <c:if test="${topic.pinned}">
     <img border="0" alt="[Sticky]" title="Sticky Topic" src="<c:url value='/img/icons/forums-pin.png'/>" />
     </c:if>

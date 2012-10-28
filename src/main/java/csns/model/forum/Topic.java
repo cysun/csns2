@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,7 +54,7 @@ public class Topic implements Subscribable, Serializable {
     @Column(name = "num_of_views", nullable = false)
     private int numOfViews;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
     @OrderBy("id asc")
     private List<Post> posts;
 
@@ -65,7 +66,7 @@ public class Topic implements Subscribable, Serializable {
     @JoinColumn(name = "last_post_id")
     private Post lastPost;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "forum_id")
     private Forum forum;
 
@@ -78,6 +79,12 @@ public class Topic implements Subscribable, Serializable {
         numOfViews = 0;
         posts = new ArrayList<Post>();
         deleted = false;
+    }
+
+    public Topic( Forum forum )
+    {
+        this();
+        this.forum = forum;
     }
 
     @Override

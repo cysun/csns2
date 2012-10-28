@@ -40,10 +40,12 @@ $(function(){
 <li>Students</li>
 <li class="align_right"><a href="export?id=${section.id}&amp;format=excel"><img title="Export to Excel"
     alt="[Export to Excel]" src="<c:url value='/img/icons/export_excel.png' />" /></a></li>
-<li class="align_right"><a id="drop" href="javascript:void(0)"><img title="Drop Student(s)"
-    alt="[Drop Student(s)]" src="<c:url value='/img/icons/user_delete.png' />" /></a></li>
-<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Student(s)"
+<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Students"
     alt="[Email Student(s)]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
+<li class="align_right"><a id="drop" href="javascript:void(0)"><img title="Drop Students"
+    alt="[Drop Student(s)]" src="<c:url value='/img/icons/user_delete.png' />" /></a></li>
+<li class="align_right"><a href="roster/import?sectionId=${section.id}"><img title="Add Students"
+    alt="[Add Student(s)]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 </ul>
 
 <form id="studentsForm" method="post">

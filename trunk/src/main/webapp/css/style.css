@@ -686,6 +686,9 @@ table {
 }
 .general {
     width:100%;
+    border: 0px;
+    border-spacing: 0px;
+    border-collapse: collapse;
 }
 .general tr {
 }

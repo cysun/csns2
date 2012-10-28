@@ -104,7 +104,9 @@ insert into forums (id, name, department_id) values (1000727, 'General Discussio
 insert into forum_topics (id, forum_id) values (1000800, 3000);
 insert into forum_posts (id, subject, content, author_id, topic_id) values
     (1000900, 'Welcome', 'Welcome to CSNS', 1000001, 1000800);
-update forum_topics set first_post_id = 1000900, last_post_id = 1000900 where id = 1000800;
+update forum_topics set first_post_id=1000900, last_post_id=1000900 where id = 1000800;
+update forums set num_of_topics = 1, num_of_posts = 1, last_post_id = 1000900 where id = 3000;
+update users set num_of_forum_posts = 1 where id = 1000001;
 
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001000, 'FM', 3000, 1000001);

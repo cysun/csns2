@@ -58,6 +58,12 @@ public class Post extends Message implements Serializable {
         super();
     }
 
+    public Post( Topic topic )
+    {
+        super();
+        this.topic = topic;
+    }
+
     public Topic getTopic()
     {
         return topic;

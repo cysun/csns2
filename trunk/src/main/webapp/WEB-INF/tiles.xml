@@ -42,6 +42,12 @@
         </put-list-attribute>
     </definition>
 
+    <definition name="layout.forum" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+        </put-list-attribute>
+    </definition>
+
     <!-- ======= -->
     <!-- General -->
     <!-- ======= -->
@@ -443,8 +449,22 @@
     </definition>
 
     <definition name="forum/view" extends="layout.basic">
-        <put-attribute name="title" value="Forum" />
+        <put-attribute name="title" value="View Forum" />
         <put-attribute name="content" value="/WEB-INF/content/forum/view.jsp" />
+    </definition>
+
+    <!-- =========== -->
+    <!-- Forum Topic -->
+    <!-- =========== -->
+
+    <definition name="forum/topic/view" extends="layout.basic">
+        <put-attribute name="title" value="View Forum Topic" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />
+    </definition>
+
+    <definition name="forum/topic/create" extends="layout.forum">
+        <put-attribute name="title" value="Create Forum Topic" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/create.jsp" />
     </definition>
 
     <!-- ===== -->

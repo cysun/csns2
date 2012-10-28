@@ -343,6 +343,12 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return roles.contains( role );
     }
 
+    public int incrementNumOfForumPosts()
+    {
+        ++numOfForumPosts;
+        return numOfForumPosts;
+    }
+
     public Long getId()
     {
         return id;

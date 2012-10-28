@@ -105,6 +105,11 @@ public class Forum implements Subscribable, Serializable {
         this.name = name;
     }
 
+    public String getShortName()
+    {
+        return course != null ? course.getCode() : name;
+    }
+
     @Override
     public String getType()
     {
@@ -114,8 +119,7 @@ public class Forum implements Subscribable, Serializable {
     public boolean isModerator( User user )
     {
         return department != null
-            && (department.getAdministrators().contains( user ) || department.getFaculty()
-                .contains( user )) || course != null
+            && user.isFaculty( department.getAbbreviation() ) || course != null
             && course.getCoordinator() != null
             && course.getCoordinator().equals( user )
             || moderators.contains( user );

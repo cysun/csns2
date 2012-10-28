@@ -18,7 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.Date;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -104,7 +103,6 @@ public class EmailController {
             file.setName( uploadedFile.getOriginalFilename() );
             file.setType( uploadedFile.getContentType() );
             file.setSize( uploadedFile.getSize() );
-            file.setDate( new Date() );
             file.setOwner( user );
             file.setPublic( true );
             file = fileDao.saveFile( file );

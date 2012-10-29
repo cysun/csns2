@@ -133,9 +133,9 @@ function unpin()
           
     <div class="postdetails">
       Posted <fmt:formatDate value="${post.date}" pattern="HH:mm MMM dd, yyyy" /> |
-      <security:authorize ifAllGranted="ROLE_USER">
+      <security:authorize access="authenticated">
       <c:if test="${user.id == post.author.id || isModerator}">
-      <a href="editPost.html?postId=${post.id}">Edit</a> |
+      <a href="edit?postId=${post.id}">Edit</a> |
       </c:if>
       <a href="replyToTopic.html?topicId=${topic.id}&amp;postId=${post.id}">Reply with Quote</a>
       </security:authorize>

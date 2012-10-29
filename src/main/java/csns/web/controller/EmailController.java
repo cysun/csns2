@@ -37,9 +37,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import csns.model.core.File;
 import csns.model.core.User;
-import csns.model.core.dao.FileDao;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
@@ -52,9 +50,6 @@ public class EmailController {
 
     @Autowired
     UserDao userDao;
-
-    @Autowired
-    FileDao fileDao;
 
     @Autowired
     FileIO fileIO;
@@ -85,8 +80,8 @@ public class EmailController {
 
     @RequestMapping(value = "/email/compose", params = "send")
     public String compose( @ModelAttribute Email email,
-        @RequestParam("userId") Long ids[],
-        @RequestParam("file") MultipartFile[] uploadedFiles,
+        @RequestParam("userId") Long ids[], @RequestParam(value = "file",
+            required = false) MultipartFile[] uploadedFiles,
         @RequestParam(value = "backUrl", required = false) String backUrl,
         BindingResult result, SessionStatus sessionStatus, ModelMap models )
     {
@@ -95,20 +90,8 @@ public class EmailController {
         if( result.hasErrors() ) return "email/compose";
 
         User user = SecurityUtils.getUser();
-        for( MultipartFile uploadedFile : uploadedFiles )
-        {
-            if( uploadedFile.isEmpty() ) continue;
-
-            File file = new File();
-            file.setName( uploadedFile.getOriginalFilename() );
-            file.setType( uploadedFile.getContentType() );
-            file.setSize( uploadedFile.getSize() );
-            file.setOwner( user );
-            file.setPublic( true );
-            file = fileDao.saveFile( file );
-            fileIO.save( file, uploadedFile );
-            email.addAttachment( file );
-        }
+        if( uploadedFiles != null )
+            email.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject( email.getSubject() );

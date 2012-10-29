@@ -43,16 +43,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import csns.model.core.File;
 import csns.model.core.Subscription;
 import csns.model.core.User;
-import csns.model.core.dao.FileDao;
 import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.Post;
 import csns.model.forum.Topic;
 import csns.model.forum.dao.ForumDao;
+import csns.model.forum.dao.PostDao;
 import csns.model.forum.dao.TopicDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
@@ -68,13 +67,13 @@ public class ForumTopicController {
     UserDao userDao;
 
     @Autowired
-    FileDao fileDao;
-
-    @Autowired
     ForumDao forumDao;
 
     @Autowired
     TopicDao topicDao;
+
+    @Autowired
+    PostDao postDao;
 
     @Autowired
     SubscriptionDao subscriptionDao;
@@ -121,20 +120,7 @@ public class ForumTopicController {
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         if( uploadedFiles != null )
-            for( MultipartFile uploadedFile : uploadedFiles )
-            {
-                if( uploadedFile.isEmpty() ) continue;
-
-                File file = new File();
-                file.setName( uploadedFile.getOriginalFilename() );
-                file.setType( uploadedFile.getContentType() );
-                file.setSize( uploadedFile.getSize() );
-                file.setOwner( user );
-                file.setPublic( true );
-                file = fileDao.saveFile( file );
-                fileIO.save( file, uploadedFile );
-                post.getAttachments().add( file );
-            }
+            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
 
         post.setAuthor( user );
         post.setDate( new Date() );
@@ -172,6 +158,7 @@ public class ForumTopicController {
             massMailSender.send( email, addresses );
         }
 
+        sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/forum/topic/view?id="
             + topic.getId();
     }
@@ -186,6 +173,7 @@ public class ForumTopicController {
         if( SecurityUtils.isAuthenticated() )
         {
             User user = userDao.getUser( SecurityUtils.getUser().getId() );
+            models.put( "user", user );
             models.put( "isModerator", topic.getForum().isModerator( user ) );
             models.put( "subscription",
                 subscriptionDao.getSubscription( topic, user ) );
@@ -202,8 +190,8 @@ public class ForumTopicController {
         topic.setPinned( true );
         topicDao.saveTopic( topic );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " pinned topic "
-            + topic.getId() );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " pinned forum topic " + topic.getId() );
 
         models.put( "result", new ServiceResponse() );
         return "jsonView";
@@ -216,8 +204,8 @@ public class ForumTopicController {
         topic.setPinned( false );
         topicDao.saveTopic( topic );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " unpinned topic "
-            + topic.getId() );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " unpinned forum topic " + topic.getId() );
 
         models.put( "result", new ServiceResponse() );
         return "jsonView";
@@ -230,11 +218,44 @@ public class ForumTopicController {
         topic.setDeleted( true );
         topicDao.saveTopic( topic );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " deleted topic "
-            + topic.getId() );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted forum topic " + topic.getId() );
 
         return "redirect:/department/" + dept + "/forum/view?id="
             + topic.getForum().getId();
+    }
+
+    @RequestMapping(value = "/department/{dept}/forum/topic/edit",
+        method = RequestMethod.GET)
+    public String edit( @RequestParam Long postId, ModelMap models )
+    {
+        models.put( "post", postDao.getPost( postId ) );
+        return "forum/topic/edit";
+    }
+
+    @RequestMapping(value = "/department/{dept}/forum/topic/edit",
+        method = RequestMethod.POST)
+    public String edit(
+        @ModelAttribute Post post,
+        @PathVariable String dept,
+        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        messageValidator.validate( post, result );
+        if( result.hasErrors() ) return "forum/topic/edit";
+
+        User user = SecurityUtils.getUser();
+        post.setEditedBy( user );
+        post.setEditDate( new Date() );
+        if( uploadedFiles != null )
+            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+        post = postDao.savePost( post );
+
+        logger.info( user.getUsername() + " edited forum post " + post.getId() );
+
+        sessionStatus.setComplete();
+        return "redirect:/department/" + dept + "/forum/topic/view?id="
+            + post.getTopic().getId();
     }
 
 }

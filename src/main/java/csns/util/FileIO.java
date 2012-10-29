@@ -22,17 +22,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.core.File;
+import csns.model.core.User;
+import csns.model.core.dao.FileDao;
 
 @Component
 public class FileIO {
+
+    @Autowired
+    FileDao fileDao;
 
     @Value("#{applicationProperties['file.dir']}")
     private String fileDir;
@@ -41,6 +49,41 @@ public class FileIO {
 
     public FileIO()
     {
+    }
+
+    public File save( MultipartFile uploadedFile, User user )
+    {
+        if( uploadedFile.isEmpty() ) return null;
+
+        File file = new File();
+        file.setName( uploadedFile.getOriginalFilename() );
+        file.setType( uploadedFile.getContentType() );
+        file.setSize( uploadedFile.getSize() );
+        file.setOwner( user );
+        file.setPublic( true );
+        file = fileDao.saveFile( file );
+
+        String fileId = file.getId().toString();
+        java.io.File diskFile = new java.io.File( fileDir, fileId );
+        try
+        {
+            uploadedFile.transferTo( diskFile );
+        }
+        catch( Exception e )
+        {
+            logger.error( "Failed to save uploaded file", e );
+        }
+
+        return file;
+    }
+
+    public List<File> save( MultipartFile[] uploadedFiles, User user )
+    {
+        List<File> files = new ArrayList<File>();
+        for( MultipartFile uploadedFile : uploadedFiles )
+            if( !uploadedFile.isEmpty() )
+                files.add( save( uploadedFile, user ) );
+        return files;
     }
 
     public void save( File file, MultipartFile uploadedFile )

@@ -453,10 +453,6 @@
         <put-attribute name="content" value="/WEB-INF/content/forum/view.jsp" />
     </definition>
 
-    <!-- =========== -->
-    <!-- Forum Topic -->
-    <!-- =========== -->
-
     <definition name="forum/topic/view" extends="layout.basic">
         <put-attribute name="title" value="View Forum Topic" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />
@@ -465,6 +461,11 @@
     <definition name="forum/topic/create" extends="layout.forum">
         <put-attribute name="title" value="Create Forum Topic" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/create.jsp" />
+    </definition>
+
+    <definition name="forum/topic/edit" extends="layout.forum">
+        <put-attribute name="title" value="Edit Forum Post" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/edit.jsp" />
     </definition>
 
     <!-- ===== -->

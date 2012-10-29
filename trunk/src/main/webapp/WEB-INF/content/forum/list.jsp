@@ -17,10 +17,10 @@
 <security:authorize access="authenticated">
 <span> 
 <c:if test="${empty sessionScope.showAll}">
-  <a href="forums?showAll=true">Show All Course Forums</a>
+  <a href="list?showAll=true">Show All Course Forums</a>
 </c:if>
 <c:if test="${not empty sessionScope.showAll}">
-  <a href="forums?showAll=false">Show Only Subscribed Course Forums</a>
+  <a href="list?showAll=false">Show Only Subscribed Course Forums</a>
 </c:if>
 </span>
 </security:authorize>

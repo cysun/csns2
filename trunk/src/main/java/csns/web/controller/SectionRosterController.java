@@ -45,7 +45,9 @@ import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.GradeDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
+import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
+import csns.model.forum.Forum;
 import csns.web.helper.GradeSheet;
 
 @Controller
@@ -63,6 +65,9 @@ public class SectionRosterController {
 
     @Autowired
     EnrollmentDao enrollmentDao;
+
+    @Autowired
+    SubscriptionDao subscriptionDao;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -109,6 +114,7 @@ public class SectionRosterController {
 
         Section section = sectionDao.getSection( rosterImporter.getSection()
             .getId() );
+        Forum forum = section.getCourse().getForum();
         for( ImportedUser importedStudent : rosterImporter.getImportedStudents() )
         {
             String cin = importedStudent.getCin();
@@ -141,6 +147,8 @@ public class SectionRosterController {
                 importedStudent.setAccountCreated( false );
                 importedStudent.setAddedToSection( false );
             }
+
+            subscriptionDao.subscribe( forum, student );
         }
 
         models.put( "rosterImporter", rosterImporter );
@@ -163,6 +171,9 @@ public class SectionRosterController {
         Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
         if( enrollment == null )
             enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+
+        subscriptionDao.subscribe( section.getCourse().getForum(), student );
+
         return "redirect:/section/roster?id=" + sectionId;
     }
 
@@ -187,6 +198,9 @@ public class SectionRosterController {
         Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
         if( enrollment == null )
             enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+
+        subscriptionDao.subscribe( section.getCourse().getForum(), student );
+
         sessionStatus.setComplete();
         return "redirect:/section/roster?id=" + sectionId;
     }
@@ -202,6 +216,8 @@ public class SectionRosterController {
             Enrollment enrollment = enrollmentDao.getEnrollment( section,
                 student );
             enrollmentDao.deleteEnrollment( enrollment );
+            subscriptionDao.unsubscribe( section.getCourse().getForum(),
+                student );
         }
 
         return "redirect:/section/roster?id=" + sectionId;

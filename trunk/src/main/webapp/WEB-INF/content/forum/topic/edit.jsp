@@ -8,6 +8,20 @@ function addAttachment()
 {
     $("#attachments").append("<br /><input name='file' class='leftinput' style='width: 100%;' type='file' size='75' />");
 }
+
+function deleteAttachment( fileId )
+{
+    var msg = "Are you sure you want to remove this attachment?";
+    if( confirm(msg) )
+        $.ajax({
+            url: "deleteAttachment",
+            data: { "postId": ${post.id}, "fileId": fileId },
+            success: function(){
+                $("#attachment-"+fileId).remove();
+            },
+            cache: false
+        });
+}
 </script>
 
 <ul id="title">
@@ -45,14 +59,15 @@ function addAttachment()
   <tr>
     <th></th>
     <td>
-      <ul>
+      <table class="viewtable autowidth">
         <c:forEach items="${post.attachments}" var="attachment">
-        <li>
-          <a href="<c:url value='/download.html?fileId=${attachment.id}' />">${attachment.name}</a>
-          [<a href="deletePostAttachment.html?postId=${post.id}&amp;fileId=${attachment.id}">Delete</a>]
-        </li>
+        <tr id="attachment-${attachment.id}">
+          <td><a href="<c:url value='/download?fileId=${attachment.id}' />">${attachment.name}</a></td>
+          <td><a href="javascript:deleteAttachment(${attachment.id})"><img alt="[Delete Attachment]"
+                 title="Delete This Attachment" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+        </tr>
         </c:forEach>
-      </ul>
+      </table>
     </td>
   </tr>
 </c:if>

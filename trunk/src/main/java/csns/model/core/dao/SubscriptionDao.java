@@ -38,4 +38,6 @@ public interface SubscriptionDao {
 
     void unsubscribe( Subscribable subscribable, User subscriber );
 
+    Subscription saveSubscription( Subscription subscription );
+
 }

@@ -119,7 +119,7 @@ public class Forum implements Subscribable, Serializable {
     public boolean isModerator( User user )
     {
         return department != null
-            && user.isFaculty( department.getAbbreviation() ) || course != null
+            && user.isAdmin( department.getAbbreviation() ) || course != null
             && course.getCoordinator() != null
             && course.getCoordinator().equals( user )
             || moderators.contains( user );

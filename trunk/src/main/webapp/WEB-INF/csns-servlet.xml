@@ -30,7 +30,6 @@
 
     <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver">
         <property name="exposePathVariables" value="true" />
-        <property name="order" value="1"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
@@ -40,12 +39,6 @@
             </list>
         </property>
     </bean>
-
-    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
-        <property name="order" value="2" />
-    </bean>
-
-    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages" />

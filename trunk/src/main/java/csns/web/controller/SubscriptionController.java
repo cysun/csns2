@@ -29,6 +29,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import csns.model.core.Subscribable;
 import csns.model.core.Subscription;
@@ -38,7 +39,6 @@ import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.model.forum.dao.TopicDao;
 import csns.security.SecurityUtils;
-import csns.web.helper.ServiceResponse;
 
 @Controller
 public class SubscriptionController {
@@ -82,9 +82,7 @@ public class SubscriptionController {
         return "subscription/forums";
     }
 
-    @RequestMapping("/subscription/{type}/subscribe")
-    public String subscribe( @PathVariable String type, @RequestParam Long id,
-        @RequestParam(required = false) String ajax, ModelMap models )
+    private Subscribable subscribe( String type, Long id )
     {
         Subscribable subscribable = null;
         switch( type )
@@ -96,7 +94,8 @@ public class SubscriptionController {
                 subscribable = topicDao.getTopic( id );
                 break;
             default:
-                logger.warn( "Unspported subscribable type: " + type );
+                logger.error( "Unspported subscribable type: " + type );
+                return null;
         }
 
         User user = SecurityUtils.getUser();
@@ -104,25 +103,10 @@ public class SubscriptionController {
         logger.info( user.getUsername() + " subscribed to "
             + subscribable.getType() + " " + subscribable.getName() + "." );
 
-        if( ajax != null )
-        {
-            models.put( "result", new ServiceResponse() );
-            return "jsonView";
-        }
-        else
-        {
-            String[] arguments = { subscribable.getType(),
-                subscribable.getName() };
-            models.put( "message", "status.subscribed" );
-            models.put( "arguments", arguments );
-            return "status";
-        }
+        return subscribable;
     }
 
-    @RequestMapping("/subscription/{type}/unsubscribe")
-    public String unsubscribe( @PathVariable String type,
-        @RequestParam Long id, @RequestParam(required = false) String ajax,
-        ModelMap models )
+    private Subscribable unsubscribe( String type, Long id )
     {
         Subscribable subscribable = null;
         switch( type )
@@ -134,7 +118,8 @@ public class SubscriptionController {
                 subscribable = topicDao.getTopic( id );
                 break;
             default:
-                logger.warn( "Unspported subscribable type: " + type );
+                logger.error( "Unspported subscribable type: " + type );
+                return null;
         }
 
         User user = SecurityUtils.getUser();
@@ -142,19 +127,45 @@ public class SubscriptionController {
         logger.info( user.getUsername() + " unsubscribed from "
             + subscribable.getType() + " " + subscribable.getName() + "." );
 
-        if( ajax != null )
-        {
-            models.put( "result", new ServiceResponse() );
-            return "jsonView";
-        }
-        else
-        {
-            String[] arguments = { subscribable.getType(),
-                subscribable.getName() };
-            models.put( "message", "status.unsubscribed" );
-            models.put( "arguments", arguments );
-            return "status";
-        }
+        return subscribable;
+    }
+
+    @RequestMapping(value = "/subscription/{type}/subscribe", params = "ajax")
+    public @ResponseBody
+    String ajaxSubscribe( @PathVariable String type, @RequestParam Long id )
+    {
+        subscribe( type, id );
+        return "";
+    }
+
+    @RequestMapping(value = "/subscription/{type}/unsubscribe", params = "ajax")
+    public @ResponseBody
+    String ajaxUnsubscribe( @PathVariable String type, @RequestParam Long id )
+    {
+        unsubscribe( type, id );
+        return "";
+    }
+
+    @RequestMapping("/subscription/{type}/subscribe")
+    public String subscribe( @PathVariable String type, @RequestParam Long id,
+        ModelMap models )
+    {
+        Subscribable subscribable = subscribe( type, id );
+        String[] arguments = { subscribable.getType(), subscribable.getName() };
+        models.put( "message", "status.subscribed" );
+        models.put( "arguments", arguments );
+        return "status";
+    }
+
+    @RequestMapping("/subscription/{type}/unsubscribe")
+    public String unsubscribe( @PathVariable String type,
+        @RequestParam Long id, ModelMap models )
+    {
+        Subscribable subscribable = unsubscribe( type, id );
+        String[] arguments = { subscribable.getType(), subscribable.getName() };
+        models.put( "message", "status.unsubscribed" );
+        models.put( "arguments", arguments );
+        return "status";
     }
 
 }

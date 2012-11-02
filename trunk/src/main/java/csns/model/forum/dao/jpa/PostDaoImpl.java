@@ -18,12 +18,15 @@
  */
 package csns.model.forum.dao.jpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.forum.Forum;
 import csns.model.forum.Post;
 import csns.model.forum.dao.PostDao;
 
@@ -37,6 +40,16 @@ public class PostDaoImpl implements PostDao {
     public Post getPost( Long id )
     {
         return entityManager.find( Post.class, id );
+    }
+
+    @Override
+    public List<Post> searchPosts( Forum forum, String term, int maxResults )
+    {
+        return entityManager.createNamedQuery( "forum.post.search", Post.class )
+            .setParameter( "forumId", forum.getId() )
+            .setParameter( "term", term )
+            .setMaxResults( maxResults )
+            .getResultList();
     }
 
     @Override

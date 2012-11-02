@@ -12,9 +12,8 @@
 </security:authorize>
 </ul>
 
-<div id="forums_menu"> 
-
 <security:authorize access="authenticated">
+<div id="forums_menu"> 
 <span> 
 <c:if test="${empty sessionScope.showAll}">
   <a href="list?showAll=true">Show All Course Forums</a>
@@ -23,14 +22,8 @@
   <a href="list?showAll=false">Show Only Subscribed Course Forums</a>
 </c:if>
 </span>
-</security:authorize>
- 
-<form action="searchPosts.html" method="post">
-<input class="input_search" type="text" name="query" />
-<input class="subbutton" type="submit" name="search" value="Search" />
-</form>
-
 </div>
+</security:authorize>
 
 <h3>${department.name} Department Forums</h3>
 <table class="forums">

@@ -185,11 +185,6 @@
           <version>1.7</version>
       </dependency>
       <dependency>
-          <groupId>org.codehaus.jackson</groupId>
-          <artifactId>jackson-mapper-asl</artifactId>
-          <version>1.9.10</version>
-      </dependency>
-      <dependency>
           <groupId>displaytag</groupId>
           <artifactId>displaytag</artifactId>
           <version>1.2</version>

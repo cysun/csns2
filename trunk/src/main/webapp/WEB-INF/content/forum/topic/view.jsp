@@ -137,7 +137,7 @@ function unpin()
       <c:if test="${user.id == post.author.id || isModerator}">
       <a href="edit?postId=${post.id}">Edit</a> |
       </c:if>
-      <a href="replyToTopic.html?topicId=${topic.id}&amp;postId=${post.id}">Reply with Quote</a>
+      <a href="reply?id=${topic.id}&amp;postId=${post.id}">Reply with Quote</a>
       </security:authorize>
     </div>
     
@@ -147,7 +147,7 @@ function unpin()
     <b>Attachments</b>:
     <ul>
       <c:forEach items="${post.attachments}" var="attachment">
-      <li><a href="<c:url value='/download.html?fileId=${attachment.id}' />">${attachment.name}</a></li>
+      <li><a href="<c:url value='/download?fileId=${attachment.id}' />">${attachment.name}</a></li>
       </c:forEach>
     </ul>
     </div>

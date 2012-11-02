@@ -468,6 +468,16 @@
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/edit.jsp" />
     </definition>
 
+    <definition name="forum/topic/reply" extends="layout.forum">
+        <put-attribute name="title" value="Reply to Forum Post" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/reply.jsp" />
+    </definition>
+
+    <definition name="forum/topic/search" extends="layout.basic">
+        <put-attribute name="title" value="Forum Search Results" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/search.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

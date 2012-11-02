@@ -61,12 +61,13 @@ function unsubscribe()
 </span>
 </security:authorize>
 
-<form action="searchPosts.html" method="post">
-<input class="input_search" type="text" name="query" />
+<form action="topic/search" method="get">
+<input class="input_search" type="text" name="term" />
 <input type="hidden" name="forumId" value="${forum.id}" />
 <input class="subbutton" type="submit" name="search" value="Search" />
 </form>
 </div>
+
 <display:table name="${topics}" uid="topic" requestURI="viewForum.html" pagesize="40" class="forums">
 <display:setProperty name="paging.banner.onepage" value="" />
 <display:setProperty name="paging.banner.group_size" value="8" />

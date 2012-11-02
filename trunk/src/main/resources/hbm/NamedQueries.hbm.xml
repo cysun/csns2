@@ -83,4 +83,17 @@ select f.* from forums f, plainto_tsquery(:term) query
 ]]>
     </sql-query>
 
+    <sql-query name="forum.post.search">
+        <return class="csns.model.forum.Post" />
+<![CDATA[
+select id, date, author_id, topic_id, edited_by, edit_date,
+        ts_headline( subject, query ) as subject,
+        ts_headline( content, query, 'MaxWords=200' ) as content
+    from (select p.*, query
+        from forum_posts p, forum_topics t, plainto_tsquery(:term) query
+        where p.topic_id = t.id and t.deleted = 'f' and query @@ tsv and t.forum_id = :forumId
+        order by ts_rank(tsv, query, 16|32) desc) as results
+]]>
+    </sql-query>
+
 </hibernate-mapping>

@@ -40,6 +40,7 @@ public class DefaultUrls {
     {
         User user = SecurityUtils.getUser();
         if( user.isSysadmin() ) return "/admin/department/list";
+        if( user.isTemporary() ) return "/register";
 
         Cookie cookie = WebUtils.getCookie( request, "default-home" );
         if( cookie != null ) return cookie.getValue();

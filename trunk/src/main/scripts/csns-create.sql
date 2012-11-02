@@ -254,14 +254,10 @@ end
 $$ language plpgsql;
 
 create trigger courses_ts_trigger
-    before insert or update
-    on courses
-    for each row
-    execute procedure courses_ts_trigger_function();
+    before insert or update on courses
+    for each row execute procedure courses_ts_trigger_function();
 
-create index courses_ts_index
-    on courses
-    using gin(tsv);
+create index courses_ts_index on courses using gin(tsv);
 
 create table sections (
     id              bigint primary key,
@@ -328,14 +324,10 @@ end
 $$ language plpgsql;
 
 create trigger assignments_ts_trigger
-    before insert or update
-    on assignments
-    for each row
-    execute procedure assignments_ts_trigger_function();
+    before insert or update on assignments
+    for each row execute procedure assignments_ts_trigger_function();
 
-create index assignments_ts_index
-    on assignments
-    using gin(tsv);
+create index assignments_ts_index on assignments using gin(tsv);
 
 create table submissions (
     id              bigint primary key,
@@ -453,6 +445,40 @@ create table forums (
   check ( department_id is null or course_id is null )
 );
 
+alter table forums add column tsv tsvector;
+
+create function forums_ts_trigger_function() returns trigger as $$
+declare
+    l_course        courses;
+    l_department    departments;
+begin
+    if new.course_id is not null then
+        select * into l_course from courses where id = new.course_id;
+        new.tsv := setweight(to_tsvector(l_course.code), 'A') ||
+                   setweight(to_tsvector(l_course.name), 'A');
+    elsif new.department_id is not null then
+        select * into l_department from departments where id = new.department_id;
+        new.tsv := setweight(to_tsvector(new.name), 'A') ||
+                   setweight(to_tsvector(l_department.name), 'B') ||
+                   setweight(to_tsvector(l_department.abbreviation), 'B');
+    else
+        new.tsv := setweight(to_tsvector(new.name), 'A');
+    end if;
+    return new;
+end
+$$ language plpgsql;
+
+create trigger forums_ts_trigger
+    before insert or update on forums
+    for each row execute procedure forums_ts_trigger_function();
+
+create index forums_ts_index on forums using gin(tsv);
+
+insert into forums (id, name, description, hidden) values
+    (3000, 'CSNS', 'All things related to CSNS.', 'f');
+insert into forums (id, name, description, hidden) values
+    (3001, 'Wiki Discussion', 'Discussion of wiki pages.', 't');
+
 create table forum_moderators (
     forum_id    bigint not null references forums(id),
     user_id     bigint not null references users(id),
@@ -471,8 +497,8 @@ create table forum_topics (
 
 create table forum_posts (
     id          bigint primary key,
-    subject     varchar(255),
-    content     text,
+    subject     varchar(255) not null,
+    content     text not null,
     author_id   bigint references users(id),
     date        timestamp default current_timestamp,
     topic_id    bigint references forum_topics(id),
@@ -492,43 +518,21 @@ alter table forum_topics add constraint fk_forum_topic_first_post
 alter table forum_topics add constraint fk_forum_topic_last_post 
     foreign key (last_post_id) references forum_posts(id);
 
-alter table forums add column tsv tsvector;
+alter table forum_posts add column tsv tsvector;
 
-create function forums_ts_trigger_function() returns trigger as $$
-declare
-    l_course        courses;
-    l_department    departments;
+create function forum_posts_ts_trigger_function() returns trigger as $$
 begin
-    if new.course_id is not null then
-        select * into l_course from courses where id = new.course_id;
-        new.tsv := setweight(to_tsvector(l_course.code), 'A') ||
-	               setweight(to_tsvector(l_course.name), 'A');
-    elsif new.department_id is not null then
-        select * into l_department from departments where id = new.department_id;
-	    new.tsv := setweight(to_tsvector(new.name), 'A') ||
-                   setweight(to_tsvector(l_department.name), 'B') ||
-                   setweight(to_tsvector(l_department.abbreviation), 'B');
-    else
-        new.tsv := setweight(to_tsvector(new.name), 'A');
-    end if;
+    new.tsv := setweight(to_tsvector(new.subject), 'A') ||
+               setweight(to_tsvector(new.content), 'D' );
     return new;
 end
 $$ language plpgsql;
 
-create trigger forums_ts_trigger
-    before insert or update
-    on forums
-    for each row
-    execute procedure forums_ts_trigger_function();
+create trigger forum_posts_ts_trigger
+    before insert or update on forum_posts
+    for each row execute procedure forum_posts_ts_trigger_function();
 
-create index forums_ts_index
-    on forums
-    using gin(tsv);
-
-insert into forums (id, name, description, hidden) values
-    (3000, 'CSNS', 'All things related to CSNS.', 'f');
-insert into forums (id, name, description, hidden) values
-    (3001, 'Wiki Discussion', 'Discussion of wiki pages.', 't');
+create index forum_posts_ts_index on forum_posts using gin(tsv);
 
 --------------
 -- projects --

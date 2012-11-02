@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -41,8 +42,10 @@ public abstract class Message implements Serializable {
     @GeneratedValue
     protected Long id;
 
+    @Column(nullable = false)
     protected String subject;
 
+    @Column(nullable = false)
     protected String content;
 
     // Use @AssociationOverride to override this in subclass if necessary

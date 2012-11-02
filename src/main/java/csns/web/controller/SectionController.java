@@ -48,8 +48,12 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.Subscription;
 import csns.model.core.User;
+import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
+import csns.model.forum.Forum;
+import csns.model.forum.dao.ForumDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.QuarterPropertyEditor;
 
@@ -70,6 +74,12 @@ public class SectionController {
 
     @Autowired
     DepartmentDao departmentDao;
+
+    @Autowired
+    ForumDao forumDao;
+
+    @Autowired
+    SubscriptionDao subscriptionDao;
 
     @Autowired
     WebApplicationContext context;
@@ -156,8 +166,23 @@ public class SectionController {
     {
         Quarter quarter = new Quarter( quarterCode );
         Course course = courseDao.getCourse( courseId );
-        User instructor = SecurityUtils.getUser();
-        sectionDao.addSection( quarter, course, instructor );
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        Section section = sectionDao.addSection( quarter, course, user );
+
+        Forum forum = course.getForum();
+        Subscription subscription = subscriptionDao.getSubscription( forum,
+            user );
+        if( subscription == null )
+            subscription = subscriptionDao.subscribe( forum, user );
+
+        if( !forum.isModerator( user ) )
+        {
+            forum.getModerators().add( user );
+            forumDao.saveForum( forum );
+        }
+
+        logger.info( user.getUsername() + " added section " + course.getCode()
+            + "-" + section.getNumber() );
 
         return "redirect:/section/taught";
     }

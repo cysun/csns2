@@ -79,6 +79,12 @@
         <security:intercept-url pattern="/department/*/survey/current" access="permitAll" />
         <security:intercept-url pattern="/department/*/survey/response/edit" access="permitAll" />
         <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/forum/list" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/list" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/search" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/**" access="authenticated" />
         <security:intercept-url pattern="/subscription/**" access="authenticated" />
     </security:http>
 

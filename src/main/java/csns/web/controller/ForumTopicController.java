@@ -18,31 +18,27 @@
  */
 package csns.web.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import csns.model.core.File;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
@@ -55,8 +51,7 @@ import csns.model.forum.dao.PostDao;
 import csns.model.forum.dao.TopicDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
-import csns.util.MassMailSender;
-import csns.web.helper.ServiceResponse;
+import csns.util.NotificationService;
 import csns.web.validator.MessageValidator;
 
 @Controller
@@ -85,16 +80,7 @@ public class ForumTopicController {
     FileIO fileIO;
 
     @Autowired
-    VelocityEngine velocityEngine;
-
-    @Autowired
-    MassMailSender massMailSender;
-
-    @Value("#{applicationProperties.url}")
-    String appUrl;
-
-    @Value("#{applicationProperties.email}")
-    String appEmail;
+    NotificationService notificationService;
 
     private static final Logger logger = LoggerFactory.getLogger( ForumTopicController.class );
 
@@ -135,28 +121,12 @@ public class ForumTopicController {
 
         subscriptionDao.subscribe( topic, user );
 
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions( forum );
-        List<String> addresses = new ArrayList<String>();
-        for( Subscription subscription : subscriptions )
-            if( subscription.getSubscriber() != user )
-                addresses.add( subscription.getSubscriber().getEmail() );
-        if( addresses.size() > 0 )
-        {
-            Map<String, Object> vModels = new HashMap<String, Object>();
-            vModels.put( "topic", topic );
-            vModels.put( "dept", dept );
-            vModels.put( "appUrl", appUrl );
-            String text = VelocityEngineUtils.mergeTemplateIntoString(
-                velocityEngine, "notification.new.forum.topic.vm", vModels );
-
-            SimpleMailMessage email = new SimpleMailMessage();
-            email.setFrom( appEmail );
-            email.setTo( appEmail );
-            email.setSubject( "New Topic in CSNS Forum - "
-                + forum.getShortName() );
-            email.setText( text );
-            massMailSender.send( email, addresses );
-        }
+        String subject = "New Topic in CSNS Forum - " + forum.getShortName();
+        String vTemplate = "notification.new.forum.topic.vm";
+        Map<String, Object> vModels = new HashMap<String, Object>();
+        vModels.put( "topic", topic );
+        vModels.put( "dept", dept );
+        notificationService.notifiy( forum, subject, vTemplate, vModels, false );
 
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/forum/topic/view?id="
@@ -173,10 +143,18 @@ public class ForumTopicController {
         if( SecurityUtils.isAuthenticated() )
         {
             User user = userDao.getUser( SecurityUtils.getUser().getId() );
+
+            Subscription subscription = subscriptionDao.getSubscription( topic,
+                user );
+            if( subscription != null && subscription.isNotificationSent() )
+            {
+                subscription.setNotificationSent( false );
+                subscription = subscriptionDao.saveSubscription( subscription );
+            }
+
             models.put( "user", user );
             models.put( "isModerator", topic.getForum().isModerator( user ) );
-            models.put( "subscription",
-                subscriptionDao.getSubscription( topic, user ) );
+            models.put( "subscription", subscription );
         }
 
         models.put( "topic", topic );
@@ -184,7 +162,8 @@ public class ForumTopicController {
     }
 
     @RequestMapping("/department/{dept}/forum/topic/pin")
-    public String pin( @RequestParam Long id, ModelMap models )
+    public @ResponseBody
+    String pin( @RequestParam Long id, ModelMap models )
     {
         Topic topic = topicDao.getTopic( id );
         topic.setPinned( true );
@@ -193,12 +172,12 @@ public class ForumTopicController {
         logger.info( SecurityUtils.getUser().getUsername()
             + " pinned forum topic " + topic.getId() );
 
-        models.put( "result", new ServiceResponse() );
-        return "jsonView";
+        return "";
     }
 
     @RequestMapping("/department/{dept}/forum/topic/unpin")
-    public String unpin( @RequestParam Long id, ModelMap models )
+    public @ResponseBody
+    String unpin( @RequestParam Long id, ModelMap models )
     {
         Topic topic = topicDao.getTopic( id );
         topic.setPinned( false );
@@ -207,8 +186,7 @@ public class ForumTopicController {
         logger.info( SecurityUtils.getUser().getUsername()
             + " unpinned forum topic " + topic.getId() );
 
-        models.put( "result", new ServiceResponse() );
-        return "jsonView";
+        return "";
     }
 
     @RequestMapping("/department/{dept}/forum/topic/delete")
@@ -256,6 +234,98 @@ public class ForumTopicController {
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/forum/topic/view?id="
             + post.getTopic().getId();
+    }
+
+    @RequestMapping("/department/{dept}/forum/topic/deleteAttachment")
+    public @ResponseBody
+    String deleteAttachment( @ModelAttribute Post post,
+        @RequestParam Long fileId )
+    {
+        for( File attachment : post.getAttachments() )
+            if( attachment.getId().equals( fileId ) )
+            {
+                post.getAttachments().remove( attachment );
+                break;
+            }
+
+        return "";
+    }
+
+    @RequestMapping(value = "/department/{dept}/forum/topic/reply",
+        method = RequestMethod.GET)
+    public String reply( @RequestParam Long id,
+        @RequestParam(required = false) Long postId, ModelMap models )
+    {
+        Topic topic = topicDao.getTopic( id );
+        Post post = new Post();
+        post.setTopic( topic );
+        post.setSubject( "Re: " + topic.getName() );
+
+        if( postId != null )
+        {
+            Post replyToPost = postDao.getPost( postId );
+            StringBuffer sb = new StringBuffer();
+            sb.append( "<blockquote>" )
+                .append( "<div class=\"quote-title\">" )
+                .append( replyToPost.getAuthor().getUsername() )
+                .append( " wrote:</div>" )
+                .append( "<div class=\"quote-body\">" )
+                .append( replyToPost.getContent() )
+                .append( "</div></blockquote><br />" );
+            post.setContent( sb.toString() );
+        }
+
+        models.put( "post", post );
+        return "forum/topic/reply";
+    }
+
+    @RequestMapping(value = "/department/{dept}/forum/topic/reply",
+        method = RequestMethod.POST)
+    public String reply(
+        @ModelAttribute Post post,
+        @PathVariable String dept,
+        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        messageValidator.validate( post, result );
+        if( result.hasErrors() ) return "forum/topic/reply";
+
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        if( uploadedFiles != null )
+            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+
+        user.incrementNumOfForumPosts();
+        post.setAuthor( user );
+        post.setDate( new Date() );
+        Topic topic = post.getTopic();
+        topic.addPost( post );
+        Forum forum = topic.getForum();
+        forum.incrementNumOfPosts();
+        forum.setLastPost( post );
+        topic = topicDao.saveTopic( topic );
+
+        subscriptionDao.subscribe( topic, user );
+
+        String subject = "New Reply in CSNS Forum - " + forum.getShortName();
+        String vTemplate = "notification.new.forum.reply.vm";
+        Map<String, Object> vModels = new HashMap<String, Object>();
+        vModels.put( "topic", topic );
+        vModels.put( "dept", dept );
+        notificationService.notifiy( topic, subject, vTemplate, vModels, true );
+
+        sessionStatus.setComplete();
+        return "redirect:/department/" + dept + "/forum/topic/view?id="
+            + post.getTopic().getId();
+    }
+
+    @RequestMapping("/department/{dept}/forum/topic/search")
+    public String search( @RequestParam Long forumId,
+        @RequestParam String term, ModelMap models )
+    {
+        Forum forum = forumDao.getForum( forumId );
+        models.put( "forum", forum );
+        models.put( "posts", postDao.searchPosts( forum, term, 40 ) );
+        return "forum/topic/search";
     }
 
 }

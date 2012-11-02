@@ -61,8 +61,7 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
     @Override
     public List<Subscription> getSubscriptions( Subscribable subscribable )
     {
-        String query = "from Subscription where subscribable = :subscribable "
-            + "and notificationSent = false";
+        String query = "from Subscription where subscribable = :subscribable";
 
         return entityManager.createQuery( query, Subscription.class )
             .setParameter( "subscribable", subscribable )
@@ -100,6 +99,13 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
     {
         Subscription subscription = getSubscription( subscribable, subscriber );
         if( subscription != null ) entityManager.remove( subscription );
+    }
+
+    @Override
+    @Transactional
+    public Subscription saveSubscription( Subscription subscription )
+    {
+        return entityManager.merge( subscription );
     }
 
 }

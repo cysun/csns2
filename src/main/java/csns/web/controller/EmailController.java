@@ -37,11 +37,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import csns.helper.Email;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
-import csns.web.helper.Email;
 import csns.web.validator.EmailValidator;
 
 @Controller

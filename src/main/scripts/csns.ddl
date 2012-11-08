@@ -1,4 +1,12 @@
 
+    create table WikiPageSearchResult (
+        id int8 not null,
+        content varchar(255),
+        path varchar(255),
+        subject varchar(255),
+        primary key (id)
+    );
+
     create table answer_sections (
         id int8 not null,
         section_index int4 not null,
@@ -146,7 +154,7 @@
     );
 
     create table forum_post_attachments (
-        forum_post_id int8 not null,
+        post_id int8 not null,
         file_id int8 not null
     );
 
@@ -255,13 +263,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -369,6 +377,36 @@
         temporary boolean not null,
         username varchar(255) not null unique,
         zip varchar(255),
+        primary key (id)
+    );
+
+    create table wiki_discussions (
+        page_id int8 not null,
+        topic_id int8 not null
+    );
+
+    create table wiki_pages (
+        id int8 not null,
+        locked boolean not null,
+        password varchar(255),
+        path varchar(255) not null unique,
+        owner_id int8 not null,
+        primary key (id)
+    );
+
+    create table wiki_revision_attachments (
+        revision_id int8 not null,
+        file_id int8 not null
+    );
+
+    create table wiki_revisions (
+        id int8 not null,
+        content varchar(255) not null,
+        date timestamp,
+        subject varchar(255) not null,
+        include_sidebar boolean not null,
+        author_id int8,
+        page_id int8 not null,
         primary key (id)
     );
 
@@ -558,8 +596,8 @@
         references files;
 
     alter table forum_post_attachments 
-        add constraint FKB4866DEF20DD53E7 
-        foreign key (forum_post_id) 
+        add constraint FKB4866DEF2186D105 
+        foreign key (post_id) 
         references forum_posts;
 
     alter table forum_posts 
@@ -736,5 +774,40 @@
         add constraint FK95459D615B66DD70 
         foreign key (survey_id) 
         references surveys;
+
+    alter table wiki_discussions 
+        add constraint FKE66DD33CA958756F 
+        foreign key (topic_id) 
+        references forum_topics;
+
+    alter table wiki_discussions 
+        add constraint FKE66DD33C773840BA 
+        foreign key (page_id) 
+        references wiki_pages;
+
+    alter table wiki_pages 
+        add constraint FK24357E754FA834C3 
+        foreign key (owner_id) 
+        references users;
+
+    alter table wiki_revision_attachments 
+        add constraint FKF0800A7BB9895B0B 
+        foreign key (file_id) 
+        references files;
+
+    alter table wiki_revision_attachments 
+        add constraint FKF0800A7BD5F8FD3A 
+        foreign key (revision_id) 
+        references wiki_revisions;
+
+    alter table wiki_revisions 
+        add constraint FKE0471229447A76EB 
+        foreign key (author_id) 
+        references users;
+
+    alter table wiki_revisions 
+        add constraint FKE0471229773840BA 
+        foreign key (page_id) 
+        references wiki_pages;
 
     create sequence hibernate_sequence;

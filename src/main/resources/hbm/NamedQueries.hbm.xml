@@ -86,13 +86,23 @@ select f.* from forums f, plainto_tsquery(:term) query
     <sql-query name="forum.post.search">
         <return class="csns.model.forum.Post" />
 <![CDATA[
-select id, date, author_id, topic_id, edited_by, edit_date,
-        ts_headline( subject, query ) as subject,
-        ts_headline( content, query, 'MaxWords=200' ) as content
-    from (select p.*, query
-        from forum_posts p, forum_topics t, plainto_tsquery(:term) query
-        where p.topic_id = t.id and t.deleted = 'f' and query @@ tsv and t.forum_id = :forumId
-        order by ts_rank(tsv, query, 16|32) desc) as results
+select p.id, p.date, p.author_id, p.topic_id, p.edited_by, p.edit_date,
+        ts_headline(p.subject, query) as subject,
+        ts_headline(p.content, query, 'MaxWords=200') as content
+    from forum_posts p, forum_topics t, plainto_tsquery(:term) query
+    where p.topic_id = t.id and t.deleted = 'f' and query @@ tsv and t.forum_id = :forumId
+    order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="wiki.page.search">
+        <return class="csns.helper.WikiPageSearchResult" />
+<![CDATA[
+select id, path,
+        ts_headline(ts_subject, query) as "subject",
+        ts_headline(ts_content, query, 'MaxWords=200') as "content"
+    from wiki_pages p, plainto_tsquery(:term) query
+    where query @@ tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
 

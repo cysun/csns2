@@ -507,8 +507,9 @@ create table forum_posts (
 );
 
 create table forum_post_attachments (
-    forum_post_id   bigint not null references forum_posts(id),
-    file_id         bigint not null references files(id)
+    post_id bigint not null references forum_posts(id),
+    file_id bigint not null references files(id),
+  primary key (post_id, file_id)
 );
 
 alter table forums add constraint fk_forum_last_post
@@ -523,7 +524,7 @@ alter table forum_posts add column tsv tsvector;
 create function forum_posts_ts_trigger_function() returns trigger as $$
 begin
     new.tsv := setweight(to_tsvector(new.subject), 'A') ||
-               setweight(to_tsvector(new.content), 'D' );
+               setweight(to_tsvector(new.content), 'D');
     return new;
 end
 $$ language plpgsql;
@@ -533,6 +534,61 @@ create trigger forum_posts_ts_trigger
     for each row execute procedure forum_posts_ts_trigger_function();
 
 create index forum_posts_ts_index on forum_posts using gin(tsv);
+
+----------
+-- wiki --
+----------
+
+create table wiki_pages (
+    id          bigint primary key,
+    path        varchar(1000) not null unique,
+    owner_id    bigint not null references users(id),
+    password    varchar(255),
+    locked      boolean not null default 'f'
+);
+
+create table wiki_revisions (
+    id              bigint primary key,
+    subject         varchar(1000) not null,
+    content         text not null,
+    date            timestamp default current_timestamp,
+    author_id       bigint not null references users(id),
+    page_id         bigint not null references wiki_pages(id),
+    include_sidebar boolean not null default 'f'
+);
+
+create table wiki_revision_attachments (
+    revision_id bigint not null references wiki_revisions(id),
+    file_id     bigint not null references files(id),
+  primary key (revision_id, file_id)
+);
+
+create table wiki_discussions (
+    page_id     bigint not null references wiki_pages(id),
+    topic_id    bigint not null references forum_topics(id),
+  primary key (page_id, topic_id)
+);
+
+alter table wiki_pages add column tsv tsvector;
+alter table wiki_pages add column ts_subject varchar(1000);
+alter table wiki_pages add column ts_content text;
+
+create function wiki_revisions_ts_trigger_function() returns trigger as $$
+begin
+    update wiki_pages
+        set tsv = setweight(to_tsvector(new.subject), 'A') || setweight(to_tsvector(new.content), 'D'),
+            ts_subject = new.subject,
+            ts_content = new.content
+        where id = new.page_id;
+    return new;
+end
+$$ language plpgsql;
+
+create trigger wiki_revisions_ts_trigger
+    before insert on wiki_revisions
+    for each row execute procedure wiki_revisions_ts_trigger_function();
+
+create index wiki_pages_ts_index on wiki_pages using gin(tsv);
 
 --------------
 -- projects --

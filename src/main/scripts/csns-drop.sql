@@ -13,6 +13,13 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop trigger wiki_revisions_ts_trigger on wiki_revisions;
+drop function wiki_revisions_ts_trigger_function();
+drop table wiki_discussions;
+drop table wiki_revision_attachments;
+drop table wiki_revisions;
+drop table wiki_pages;
+
 drop trigger forum_posts_ts_trigger on forum_posts;
 drop function forum_posts_ts_trigger_function();
 alter table forum_topics drop constraint fk_forum_topic_last_post;

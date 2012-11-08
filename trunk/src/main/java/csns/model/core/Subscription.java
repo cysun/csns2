@@ -36,6 +36,7 @@ import org.hibernate.annotations.MetaValue;
 
 import csns.model.forum.Forum;
 import csns.model.forum.Topic;
+import csns.model.wiki.Page;
 
 @Entity
 @Table(name = "subscriptions")
@@ -51,7 +52,8 @@ public class Subscription implements Serializable {
         fetch = FetchType.EAGER)
     @AnyMetaDef(idType = "long", metaType = "string", metaValues = {
         @MetaValue(value = "FM", targetEntity = Forum.class),
-        @MetaValue(value = "FT", targetEntity = Topic.class) })
+        @MetaValue(value = "FT", targetEntity = Topic.class),
+        @MetaValue(value = "WP", targetEntity = Page.class) })
     @JoinColumn(name = "subscribable_id")
     private Subscribable subscribable;
 

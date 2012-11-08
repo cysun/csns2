@@ -16,33 +16,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.validator;
+package csns.model.wiki.dao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-import csns.helper.Email;
-import csns.model.core.User;
+import csns.helper.WikiPageSearchResult;
 
-@Component
-public class EmailValidator extends MessageValidator {
+@Test(groups = "PageDaoTests")
+@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
+public class PageDaoTests extends AbstractTransactionalTestNGSpringContextTests {
 
-    @Override
-    public boolean supports( Class<?> clazz )
+    @Autowired
+    PageDao pageDao;
+
+    public void searchPages()
     {
-        return Email.class.isAssignableFrom( clazz );
-    }
-
-    @Override
-    public void validate( Object target, Errors errors )
-    {
-        super.validate( target, errors );
-
-        List<User> recipients = ((Email) target).getRecipients();
-        if( recipients == null || recipients.isEmpty() )
-            errors.rejectValue( "recipients", "error.field.required" );
+        List<WikiPageSearchResult> results = pageDao.searchPages( "csns", 10 );
+        assert results.size() == 1;
     }
 
 }

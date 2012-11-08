@@ -37,6 +37,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.WebUtils;
 
+import csns.helper.GradeSheet;
 import csns.importer.ImportedUser;
 import csns.importer.RosterImporter;
 import csns.model.academics.Enrollment;
@@ -48,7 +49,6 @@ import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
-import csns.web.helper.GradeSheet;
 
 @Controller
 @SessionAttributes("rosterImporter")

@@ -16,10 +16,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.forum;
+package csns.model.wiki;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.Column;
@@ -30,68 +29,65 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import csns.model.core.Message;
-import csns.model.core.User;
 
 @Entity
-@Table(name = "forum_posts")
+@Table(name = "wiki_revisions")
 @AssociationOverride(name = "attachments",
-    joinTable = @JoinTable(name = "forum_post_attachments",
-        joinColumns = @JoinColumn(name = "post_id"),
+    joinTable = @JoinTable(name = "wiki_revision_attachments",
+        joinColumns = @JoinColumn(name = "revision_id"),
         inverseJoinColumns = @JoinColumn(name = "file_id")))
-public class Post extends Message implements Serializable {
+public class Revision extends Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
-    @JoinColumn(name = "topic_id")
-    private Topic topic;
+    @JoinColumn(name = "page_id", nullable = false)
+    private Page page;
 
-    @ManyToOne
-    @JoinColumn(name = "edited_by")
-    private User editedBy;
+    @Column(name = "include_sidebar", nullable = false)
+    private boolean includeSidebar;
 
-    @Column(name = "edit_date")
-    private Date editDate;
-
-    public Post()
+    public Revision()
     {
         super();
+        includeSidebar = false;
     }
 
-    public Post( Topic topic )
+    public Revision( Page page )
     {
-        super();
-        this.topic = topic;
+        this();
+        this.page = page;
     }
 
-    public Topic getTopic()
+    public Revision clone()
     {
-        return topic;
+        Revision newRevision = new Revision();
+        newRevision.subject = subject;
+        newRevision.content = content;
+        newRevision.includeSidebar = includeSidebar;
+        newRevision.page = page;
+
+        return newRevision;
     }
 
-    public void setTopic( Topic topic )
+    public Page getPage()
     {
-        this.topic = topic;
+        return page;
     }
 
-    public User getEditedBy()
+    public void setPage( Page page )
     {
-        return editedBy;
+        this.page = page;
     }
 
-    public void setEditedBy( User editedBy )
+    public boolean isIncludeSidebar()
     {
-        this.editedBy = editedBy;
+        return includeSidebar;
     }
 
-    public Date getEditDate()
+    public void setIncludeSidebar( boolean includeSidebar )
     {
-        return editDate;
-    }
-
-    public void setEditDate( Date editDate )
-    {
-        this.editDate = editDate;
+        this.includeSidebar = includeSidebar;
     }
 
 }

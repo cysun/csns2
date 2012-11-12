@@ -21,6 +21,7 @@ package csns.model.wiki;
 import java.io.Serializable;
 
 import javax.persistence.AssociationOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -40,7 +41,7 @@ public class Revision extends Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "page_id", nullable = false)
     private Page page;
 

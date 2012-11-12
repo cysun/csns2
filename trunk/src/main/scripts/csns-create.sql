@@ -543,6 +543,7 @@ create table wiki_pages (
     id          bigint primary key,
     path        varchar(1000) not null unique,
     owner_id    bigint not null references users(id),
+    views       integer not null default 0,
     password    varchar(255),
     locked      boolean not null default 'f'
 );

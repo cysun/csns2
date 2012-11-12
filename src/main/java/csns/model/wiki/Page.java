@@ -32,7 +32,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import csns.model.core.Subscribable;
 import csns.model.core.User;
@@ -55,6 +54,9 @@ public class Page implements Subscribable, Serializable {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Column(nullable = false)
+    private int views;
+
     private String password;
 
     @ManyToMany
@@ -68,14 +70,9 @@ public class Page implements Subscribable, Serializable {
     @Column(nullable = false)
     private boolean locked;
 
-    @Transient
-    private String subject;
-
-    @Transient
-    private String content;
-
     public Page()
     {
+        views = 0;
         discussions = new ArrayList<Topic>();
         locked = false;
     }
@@ -96,6 +93,11 @@ public class Page implements Subscribable, Serializable {
     public String getName()
     {
         return path;
+    }
+
+    public int incrementViews()
+    {
+        return ++views;
     }
 
     public Long getId()
@@ -128,6 +130,16 @@ public class Page implements Subscribable, Serializable {
         this.path = path;
     }
 
+    public int getViews()
+    {
+        return views;
+    }
+
+    public void setViews( int views )
+    {
+        this.views = views;
+    }
+
     public String getPassword()
     {
         return password;
@@ -156,26 +168,6 @@ public class Page implements Subscribable, Serializable {
     public void setLocked( boolean locked )
     {
         this.locked = locked;
-    }
-
-    public String getSubject()
-    {
-        return subject;
-    }
-
-    public void setSubject( String subject )
-    {
-        this.subject = subject;
-    }
-
-    public String getContent()
-    {
-        return content;
-    }
-
-    public void setContent( String content )
-    {
-        this.content = content;
     }
 
 }

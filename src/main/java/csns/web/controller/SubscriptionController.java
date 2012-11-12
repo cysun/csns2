@@ -38,10 +38,14 @@ import csns.model.core.dao.SubscriptionDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.model.forum.dao.TopicDao;
+import csns.model.wiki.dao.PageDao;
 import csns.security.SecurityUtils;
 
 @Controller
 public class SubscriptionController {
+
+    @Autowired
+    PageDao pageDao;
 
     @Autowired
     ForumDao forumDao;
@@ -87,6 +91,9 @@ public class SubscriptionController {
         Subscribable subscribable = null;
         switch( type )
         {
+            case "page":
+                subscribable = pageDao.getPage( id );
+                break;
             case "forum":
                 subscribable = forumDao.getForum( id );
                 break;
@@ -111,6 +118,9 @@ public class SubscriptionController {
         Subscribable subscribable = null;
         switch( type )
         {
+            case "page":
+                subscribable = pageDao.getPage( id );
+                break;
             case "forum":
                 subscribable = forumDao.getForum( id );
                 break;

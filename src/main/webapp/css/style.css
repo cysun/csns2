@@ -849,9 +849,12 @@ table {
 /**********  WIKI  **********/
 
 #wiki {
+     border-collapse: collapse;
+     border-spacing: 0px;
 }
 #wiki td {
     vertical-align:top;
+    padding: 0px;
 }
 #wiki_sidebar {
 	border:1px solid #dddddd;
@@ -888,11 +891,6 @@ table {
 }
 #wiki_content h2 {
 }
-#wiki_content p {
-	color:#444444;
-    margin: 0 0 15px 0;
-    padding:0;
-}
 #wiki_content h1 {
     font-size:24px;
 }
@@ -912,9 +910,9 @@ table {
     font-size:12px;
 }
 #wiki_content p {
-    color:#444;
     font-size:14px;
     margin: 15px 0 15px 0;
+    padding: 0;
     line-height:20px;
     text-align:justify;
 }
@@ -929,6 +927,12 @@ table {
 }
 #wiki_content td, #wiki_content th {
     border:1px solid #bbbbbb;
+}
+#wiki_pageviews {
+    text-align: right;
+    font-size: small;
+    color: #aaa;
+    width: 99%;
 }
 .wiki_edit {
     width:100%;
@@ -951,6 +955,10 @@ table {
 
 .halfwidth {
     width: 45%;
+}
+
+.tt {
+    font-family: monospace;
 }
 
 /************* Editor Border Fix *****************/

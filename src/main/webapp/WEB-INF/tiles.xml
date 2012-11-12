@@ -42,7 +42,7 @@
         </put-list-attribute>
     </definition>
 
-    <definition name="layout.forum" template="/WEB-INF/layout/template.basic.jsp">
+    <definition name="layout.editor" template="/WEB-INF/layout/template.basic.jsp">
         <put-list-attribute name="jsUrls">
             <add-attribute value="${ckeditor.url}" />
         </put-list-attribute>
@@ -458,17 +458,17 @@
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />
     </definition>
 
-    <definition name="forum/topic/create" extends="layout.forum">
+    <definition name="forum/topic/create" extends="layout.editor">
         <put-attribute name="title" value="Create Forum Topic" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/create.jsp" />
     </definition>
 
-    <definition name="forum/topic/edit" extends="layout.forum">
+    <definition name="forum/topic/edit" extends="layout.editor">
         <put-attribute name="title" value="Edit Forum Post" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/edit.jsp" />
     </definition>
 
-    <definition name="forum/topic/reply" extends="layout.forum">
+    <definition name="forum/topic/reply" extends="layout.editor">
         <put-attribute name="title" value="Reply to Forum Post" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/reply.jsp" />
     </definition>
@@ -476,6 +476,30 @@
     <definition name="forum/topic/search" extends="layout.basic">
         <put-attribute name="title" value="Forum Search Results" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/search.jsp" />
+    </definition>
+
+    <!-- ==== -->
+    <!-- Wiki -->
+    <!-- ==== -->
+
+    <definition name="wiki/page" extends="layout.basic">
+        <put-attribute name="title" value="Wiki Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/page.jsp" />
+    </definition>
+
+    <definition name="wiki/nopage" extends="layout.basic">
+        <put-attribute name="title" value="Page Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/nopage.jsp" />
+    </definition>
+
+    <definition name="wiki/password" extends="layout.basic">
+        <put-attribute name="title" value="Enter Page Password" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/password.jsp" />
+    </definition>
+
+    <definition name="wiki/edit" extends="layout.editor">
+        <put-attribute name="title" value="Edit Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/edit.jsp" />
     </definition>
 
     <!-- ===== -->

@@ -263,13 +263,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -390,6 +390,7 @@
         locked boolean not null,
         password varchar(255),
         path varchar(255) not null unique,
+        views int4 not null,
         owner_id int8 not null,
         primary key (id)
     );

@@ -34,14 +34,14 @@ function deleteAttachment( fileId )
 <form:form modelAttribute="post" enctype="multipart/form-data">
 <table class="general">
   <tr>
-    <th>Subject:</th>
+    <th>Subject</th>
     <td>
       <form:input path="subject" cssClass="leftinput" cssStyle="width: 98%;" />
       <div class="error"><form:errors path="subject" /></div>
     </td>
   </tr>
   <tr>
-    <th>Content:</th>
+    <th>Content</th>
     <td>
       <form:textarea id="textcontent" path="content" cssStyle="width: 99%;" rows="15" cols="80" />
       <div class="error"><form:errors path="content" /></div>
@@ -49,7 +49,7 @@ function deleteAttachment( fileId )
   </tr>
   <tr>
     <th>Attachments
-      (<a href="javascript:addAttachment()">+</a>):
+      (<a href="javascript:addAttachment()">+</a>)
     </th>
     <td id="attachments">
       <input name="file" class="leftinput" style="width: 100%;" type="file" size="75" />

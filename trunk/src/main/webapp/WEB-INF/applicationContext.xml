@@ -85,8 +85,10 @@
         <security:intercept-url pattern="/department/*/forum/topic/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/search" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/**" access="authenticated" />
-        <security:intercept-url pattern="/wiki/edit" access="authenticated" />
-        <security:intercept-url pattern="/wiki/move" access="authenticated" />
+        <security:intercept-url pattern="/department/*/wiki/edit" access="authenticated" />
+        <security:intercept-url pattern="/department/*/wiki/move" access="authenticated" />
+        <security:intercept-url pattern="/department/*/wiki/revert" access="authenticated" />
+        <security:intercept-url pattern="/department/*/wiki/discuss" access="authenticated" />
         <security:intercept-url pattern="/subscription/**" access="authenticated" />
     </security:http>
 

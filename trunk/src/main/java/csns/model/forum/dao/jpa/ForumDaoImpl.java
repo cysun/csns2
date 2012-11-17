@@ -44,6 +44,15 @@ public class ForumDaoImpl implements ForumDao {
     }
 
     @Override
+    public Forum getForum( String name )
+    {
+        return entityManager.createQuery( "from Forum where name = :name",
+            Forum.class )
+            .setParameter( "name", name )
+            .getSingleResult();
+    }
+
+    @Override
     public List<Forum> getSystemForums()
     {
         String query = "from Forum where department is null and course is null "

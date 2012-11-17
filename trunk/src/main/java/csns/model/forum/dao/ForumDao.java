@@ -27,6 +27,13 @@ public interface ForumDao {
 
     Forum getForum( Long id );
 
+    /**
+     * Get the forum by the given name. It is the caller's responsibility to
+     * make sure that the forum exists and the name is unique; otherwise an
+     * exception will be raised.
+     */
+    Forum getForum( String name );
+
     List<Forum> getSystemForums();
 
     /** Get the system forums the user subscribed to. */

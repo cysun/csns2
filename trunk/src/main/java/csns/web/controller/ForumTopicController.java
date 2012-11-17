@@ -112,8 +112,8 @@ public class ForumTopicController {
         post.setDate( new Date() );
         user.incrementNumOfForumPosts();
         Topic topic = post.getTopic();
-        Forum forum = topic.getForum();
         topic.addPost( post );
+        Forum forum = topic.getForum();
         forum.incrementNumOfTopics();
         forum.incrementNumOfPosts();
         forum.setLastPost( post );

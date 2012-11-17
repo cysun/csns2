@@ -1,0 +1,4 @@
+<ul>
+<li><a href="/department/$department.abbreviation/wiki/content/">$department.name Wiki</a></li>
+<li><a href="/department/$department.abbreviation/wiki/content/sidebar">Sidebar</a></li>
+</ul>

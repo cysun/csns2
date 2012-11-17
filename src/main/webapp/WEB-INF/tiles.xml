@@ -502,6 +502,31 @@
         <put-attribute name="content" value="/WEB-INF/content/wiki/edit.jsp" />
     </definition>
 
+    <definition name="wiki/move" extends="layout.basic">
+        <put-attribute name="title" value="Move Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/move.jsp" />
+    </definition>
+
+    <definition name="wiki/discussions" extends="layout.basic">
+        <put-attribute name="title" value="Page Discussions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/discussions.jsp" />
+    </definition>
+
+    <definition name="wiki/discuss" extends="layout.editor">
+        <put-attribute name="title" value="New Discussion" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/discuss.jsp" />
+    </definition>
+
+    <definition name="wiki/revisions" extends="layout.basic">
+        <put-attribute name="title" value="Page Revisions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/revisions.jsp" />
+    </definition>
+
+    <definition name="wiki/compare" extends="layout.basic">
+        <put-attribute name="title" value="Compare Revisions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/compare.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

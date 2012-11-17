@@ -45,7 +45,7 @@
 
 <li><a href="#">Resources</a>
   <div><ul>
-    <li><a href="<c:url value='/wiki/content/department/${dept}/' />"><img alt=""
+    <li><a href="<c:url value='/department/${dept}/wiki/content/' />"><img alt=""
            src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
     <li><a href="<c:url value='/department/${dept}/forum/list' />"><img alt=""
            src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>

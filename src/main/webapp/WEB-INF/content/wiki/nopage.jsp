@@ -2,10 +2,9 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
-<csns:wikiBreadcrumbs path="${path}" />
+<csns:wikiBreadcrumbs dept="${dept}" path="${path}" />
 <li class="align_right">
-  <form action="<c:url value='/wiki/search' />" method="post">
+  <form action="<c:url value='/department/${dept}/wiki/search' />" method="post">
     <input class="formselect" type="text" name="term" size="25" />
     <input class="subbutton" type="submit" name="search" value="Search" />
   </form>

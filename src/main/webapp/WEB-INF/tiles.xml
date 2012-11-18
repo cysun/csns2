@@ -527,6 +527,11 @@
         <put-attribute name="content" value="/WEB-INF/content/wiki/compare.jsp" />
     </definition>
 
+    <definition name="wiki/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Pages" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/search.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

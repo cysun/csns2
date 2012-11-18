@@ -434,4 +434,12 @@ public class WikiController {
             + page.getId();
     }
 
+    @RequestMapping("/department/{dept}/wiki/search")
+    public String search( @PathVariable String dept, @RequestParam String term,
+        ModelMap models )
+    {
+        models.put( "results", pageDao.searchPages( dept, term, 40 ) );
+        return "wiki/search";
+    }
+
 }

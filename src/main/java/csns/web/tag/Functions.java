@@ -33,4 +33,15 @@ public class Functions {
         return answer.getSelections().contains( i );
     }
 
+    /**
+     * There is a bug in the current JSTL implementation of fn:endsWith() which
+     * would cause the function to return false if the substring appears more
+     * than once in the string. This function is basically a replacement of
+     * fn:endsWith().
+     */
+    public static boolean endsWith( String s, String suffix )
+    {
+        return s.endsWith( suffix );
+    }
+
 }

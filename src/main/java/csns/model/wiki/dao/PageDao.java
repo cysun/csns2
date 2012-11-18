@@ -20,7 +20,7 @@ package csns.model.wiki.dao;
 
 import java.util.List;
 
-import csns.helper.WikiPageSearchResult;
+import csns.helper.WikiSearchResult;
 import csns.model.wiki.Page;
 
 public interface PageDao {
@@ -29,7 +29,7 @@ public interface PageDao {
 
     Page getPage( String path );
 
-    List<WikiPageSearchResult> searchPages( String term, int maxResults );
+    List<WikiSearchResult> searchPages( String dept, String term, int maxResults );
 
     Page savePage( Page page );
 

@@ -25,7 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import csns.helper.WikiPageSearchResult;
+import csns.helper.WikiSearchResult;
 
 @Test(groups = "PageDaoTests")
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
@@ -36,7 +36,7 @@ public class PageDaoTests extends AbstractTransactionalTestNGSpringContextTests 
 
     public void searchPages()
     {
-        List<WikiPageSearchResult> results = pageDao.searchPages( "csns", 10 );
+        List<WikiSearchResult> results = pageDao.searchPages( "cs", "wiki", 10 );
         assert results.size() == 1;
     }
 

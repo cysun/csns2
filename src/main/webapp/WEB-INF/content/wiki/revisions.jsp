@@ -24,8 +24,7 @@ function compareRevisions()
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
-<csns:wikiBreadcrumbs path="${page.path}" />
+<csns:wikiBreadcrumbs dept="${dept}" path="${page.path}" />
 </ul>
 
 <div id="wiki_content">

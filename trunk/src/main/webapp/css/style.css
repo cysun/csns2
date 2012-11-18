@@ -934,29 +934,13 @@ table {
     color: #aaa;
     width: 99%;
 }
-.wiki_edit {
-    width:100%;
-}
-.wiki_edit th {
-	font-size:15px;
-	padding:10px;
-	text-align:left;
-	border:1px solid #dddddd;
-    background:#eeeeee url(../img/style/general_bg.gif) repeat-x bottom center;
-}
-.wiki_edit td {
-    padding:13px 0;
-    font-size:14px;
-}
 
 .autowidth {
     width: auto;
 }
-
 .halfwidth {
     width: 45%;
 }
-
 .tt {
     font-family: monospace;
 }

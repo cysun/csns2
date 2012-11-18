@@ -2,8 +2,7 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
-<csns:wikiBreadcrumbs path="${path}" />
+<csns:wikiBreadcrumbs dept="${dept}" path="${path}" />
 </ul>
 
 <div id="wiki_content">

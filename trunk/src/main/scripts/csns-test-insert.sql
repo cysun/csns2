@@ -117,9 +117,9 @@ insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001003, 'FT', 1000800, 1000001);
 
-insert into wiki_pages (id, path, owner_id) values (1001100, '/', 1000001);
+insert into wiki_pages (id, path, owner_id) values (1001100, '/department/cs/wiki/content/', 1000001);
 insert into wiki_revisions (id, subject, content, author_id, page_id) values
-    (1001110, 'CSNS Wiki Home Page', '<h2>How to Use CSNS Wiki</h2>', 1000001, 1001100);
+    (1001110, 'Computer Science Departmen Wiki', '<h2>Computer Science Departmen Wiki</h2>', 1000001, 1001100);
 
 insert into resources (id, name, type) values (1001200, 'Project Documentation', 1);
 insert into resources (id, name, type) values (1001201, 'Project Presentation', 1);

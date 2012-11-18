@@ -22,12 +22,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * WikiPageSearchResult holds the result fields of a full text search on the
+ * WikiSearchResult holds the result fields of a full text search on the
  * wiki_pages table. It is an entity class because JPA native SQL query cannot
  * return non-entity classes.
  */
 @Entity
-public class WikiPageSearchResult {
+public class WikiSearchResult {
 
     @Id
     private Long id;
@@ -38,7 +38,7 @@ public class WikiPageSearchResult {
 
     private String content;
 
-    public WikiPageSearchResult()
+    public WikiSearchResult()
     {
     }
 

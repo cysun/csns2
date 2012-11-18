@@ -3,8 +3,7 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
-<csns:wikiBreadcrumbs path="${revision.page.path}" />
+<csns:wikiBreadcrumbs dept="${dept}" path="${revision.page.path}" />
 <li>Edit</li>
 </ul>
 

@@ -548,6 +548,8 @@ create table wiki_pages (
     locked      boolean not null default 'f'
 );
 
+create index wiki_pages_path_pattern_index on wiki_pages (path varchar_pattern_ops);
+
 create table wiki_revisions (
     id              bigint primary key,
     subject         varchar(1000) not null,

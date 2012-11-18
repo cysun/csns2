@@ -96,13 +96,14 @@ select p.id, p.date, p.author_id, p.topic_id, p.edited_by, p.edit_date,
     </sql-query>
 
     <sql-query name="wiki.page.search">
-        <return class="csns.helper.WikiPageSearchResult" />
+        <return class="csns.helper.WikiSearchResult" />
 <![CDATA[
 select id, path,
         ts_headline(ts_subject, query) as "subject",
         ts_headline(ts_content, query, 'MaxWords=200') as "content"
     from wiki_pages p, plainto_tsquery(:term) query
-    where query @@ tsv order by ts_rank(tsv, query, 16|32) desc
+    where path like '/department/' || :dept || '/%'
+    and query @@ tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
 

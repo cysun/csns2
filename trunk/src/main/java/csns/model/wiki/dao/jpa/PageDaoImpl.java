@@ -26,7 +26,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import csns.helper.WikiPageSearchResult;
+import csns.helper.WikiSearchResult;
 import csns.model.wiki.Page;
 import csns.model.wiki.dao.PageDao;
 
@@ -53,10 +53,12 @@ public class PageDaoImpl implements PageDao {
     }
 
     @Override
-    public List<WikiPageSearchResult> searchPages( String term, int maxResults )
+    public List<WikiSearchResult> searchPages( String dept, String term,
+        int maxResults )
     {
         return entityManager.createNamedQuery( "wiki.page.search",
-            WikiPageSearchResult.class )
+            WikiSearchResult.class )
+            .setParameter( "dept", dept )
             .setParameter( "term", term )
             .setMaxResults( maxResults )
             .getResultList();

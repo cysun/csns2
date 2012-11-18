@@ -18,9 +18,14 @@
  */
 package csns.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -37,6 +42,9 @@ import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
+import csns.model.wiki.Page;
+import csns.model.wiki.Revision;
+import csns.model.wiki.dao.RevisionDao;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.DepartmentValidator;
 
@@ -51,7 +59,13 @@ public class DepartmentController {
     DepartmentDao departmentDao;
 
     @Autowired
+    RevisionDao revisionDao;
+
+    @Autowired
     DepartmentValidator departmentValidator;
+
+    @Autowired
+    VelocityEngine velocityEngine;
 
     @Autowired
     WebApplicationContext context;
@@ -85,17 +99,7 @@ public class DepartmentController {
         departmentValidator.validate( department, bindingResult );
         if( bindingResult.hasErrors() ) return "admin/department/add";
 
-        department.getForums().add( new Forum( "Announcements" ) );
-        department.getForums().add( new Forum( "Advisement" ) );
-        department.getForums().add( new Forum( "Job Opportunities" ) );
-        department.getForums().add( new Forum( "General Discussion" ) );
-        for( Forum forum : department.getForums() )
-        {
-            forum.setDepartment( department );
-            forum.getModerators().addAll( department.getAdministrators() );
-        }
-
-        departmentDao.saveDepartment( department );
+        department = departmentDao.saveDepartment( department );
         sessionStatus.setComplete();
 
         String adminRole = "DEPT_ROLE_ADMIN_" + department.getAbbreviation();
@@ -105,7 +109,59 @@ public class DepartmentController {
             userDao.saveUser( user );
         }
 
+        createForums( department );
+        createWikiPages( department );
+
         return "redirect:/admin/department/list";
+    }
+
+    private void createForums( Department department )
+    {
+        String names[] = { "Announcements", "Advisement", "Job Opportunities",
+            "General Discussion" };
+
+        for( String name : names )
+        {
+            Forum forum = new Forum( name );
+            forum.getModerators().addAll( department.getAdministrators() );
+            forum.setDepartment( department );
+            department.getForums().add( forum );
+        }
+        departmentDao.saveDepartment( department );
+    }
+
+    private void createWikiPages( Department department )
+    {
+        String paths[] = {
+            "/department/" + department.getAbbreviation() + "/wiki/content/",
+            "/department/" + department.getAbbreviation()
+                + "/wiki/content/sidebar" };
+        String subjects[] = { department.getName() + " Department Wiki",
+            department.getName() + " Department Wiki Sidebar" };
+        String vTemplates[] = { "wiki.department.home.vm",
+            "wiki.department.sidebar.vm" };
+        Map<String, Object> vModels = new HashMap<String, Object>();
+        vModels.put( "department", department );
+
+        for( int i = 0; i < paths.length; ++i )
+        {
+            Revision revision = revisionDao.getRevision( paths[i] );
+            revision = revision == null ? new Revision( new Page( paths[i] ) )
+                : revision.clone();
+
+            Page page = revision.getPage();
+            page.setLocked( false );
+            page.setPassword( "" );
+            page.setOwner( department.getAdministrators().get( 0 ) );
+
+            revision.setAuthor( department.getAdministrators().get( 0 ) );
+            revision.setIncludeSidebar( true );
+            revision.setSubject( subjects[i] );
+            revision.setContent( VelocityEngineUtils.mergeTemplateIntoString(
+                velocityEngine, vTemplates[i], vModels ) );
+
+            revisionDao.saveRevision( revision );
+        }
     }
 
     @RequestMapping(value = "/admin/department/edit",

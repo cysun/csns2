@@ -1,5 +1,5 @@
 
-    create table WikiPageSearchResult (
+    create table WikiSearchResult (
         id int8 not null,
         content varchar(255),
         path varchar(255),
@@ -203,6 +203,14 @@
         primary key (id)
     );
 
+    create table news (
+        id int8 not null,
+        expire_date timestamp not null,
+        department_id int8,
+        topic_id int8 not null,
+        primary key (id)
+    );
+
     create table project_advisors (
         project_id int8 not null,
         advisor_id int8 not null,
@@ -263,11 +271,11 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
         max_rating int4,
         min_rating int4,
         question_section_id int8,
@@ -645,6 +653,16 @@
         add constraint FKB460177243B0145C 
         foreign key (last_post_id) 
         references forum_posts;
+
+    alter table news 
+        add constraint FK338AD3F7F6787A 
+        foreign key (department_id) 
+        references departments;
+
+    alter table news 
+        add constraint FK338AD3A958756F 
+        foreign key (topic_id) 
+        references forum_topics;
 
     alter table project_advisors 
         add constraint FK8EBFEB19C30E4F1A 

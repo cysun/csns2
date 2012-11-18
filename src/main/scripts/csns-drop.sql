@@ -13,6 +13,8 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop table news;
+
 drop trigger wiki_revisions_ts_trigger on wiki_revisions;
 drop function wiki_revisions_ts_trigger_function();
 drop table wiki_discussions;

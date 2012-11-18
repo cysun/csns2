@@ -593,6 +593,17 @@ create trigger wiki_revisions_ts_trigger
 
 create index wiki_pages_ts_index on wiki_pages using gin(tsv);
 
+----------
+-- news --
+----------
+
+create table news (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    topic_id        bigint not null references forum_topics(id),
+    expire_date     timestamp not null default current_timestamp + interval '7 day' 
+);
+
 --------------
 -- projects --
 --------------

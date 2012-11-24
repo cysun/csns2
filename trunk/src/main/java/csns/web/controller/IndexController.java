@@ -30,9 +30,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.news.dao.NewsDao;
 
 @Controller
 public class IndexController {
+
+    @Autowired
+    NewsDao newsDao;
 
     @Autowired
     DepartmentDao departmentDao;
@@ -57,6 +61,7 @@ public class IndexController {
         response.addCookie( cookie );
 
         models.addAttribute( "department", department );
+        models.addAttribute( "newses", newsDao.getNews( department ) );
         return "department/index";
     }
 

@@ -205,7 +205,7 @@
 
     create table news (
         id int8 not null,
-        expire_date timestamp not null,
+        expire_date timestamp,
         department_id int8,
         topic_id int8 not null,
         primary key (id)

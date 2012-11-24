@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
@@ -87,7 +88,13 @@ public class ForumController {
         }
         else
         {
-            courseForums = forumDao.getCourseForums( SecurityUtils.getUser() );
+            List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
+                SecurityUtils.getUser(), Forum.class );
+            for( Subscription subscription : subscriptions )
+            {
+                Forum forum = (Forum) subscription.getSubscribable();
+                if( forum.getCourse() != null ) courseForums.add( forum );
+            }
         }
         models.put( "courseForums", courseForums );
 

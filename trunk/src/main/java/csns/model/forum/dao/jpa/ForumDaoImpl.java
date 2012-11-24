@@ -27,7 +27,6 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import csns.model.core.User;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 
@@ -59,33 +58,6 @@ public class ForumDaoImpl implements ForumDao {
             + "and hidden = false";
 
         return entityManager.createQuery( query, Forum.class ).getResultList();
-    }
-
-    @Override
-    public List<Forum> getSystemForums( User user )
-    {
-        return entityManager.createNamedQuery( "subscribed.system.forums",
-            Forum.class )
-            .setParameter( "userId", user.getId() )
-            .getResultList();
-    }
-
-    @Override
-    public List<Forum> getDepartmentForums( User user )
-    {
-        return entityManager.createNamedQuery( "subscribed.department.forums",
-            Forum.class )
-            .setParameter( "userId", user.getId() )
-            .getResultList();
-    }
-
-    @Override
-    public List<Forum> getCourseForums( User user )
-    {
-        return entityManager.createNamedQuery( "subscribed.course.forums",
-            Forum.class )
-            .setParameter( "userId", user.getId() )
-            .getResultList();
     }
 
     @Override

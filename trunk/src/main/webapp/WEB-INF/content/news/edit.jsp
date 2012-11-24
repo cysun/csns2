@@ -4,6 +4,11 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
+$(function(){
+    $('#expireDate').datepicker({
+        inline: true
+    });
+});
 function addAttachment()
 {
     $("#attachments").append("<br /><input name='file' class='leftinput' style='width: 100%;' type='file' size='75' />");
@@ -14,36 +19,52 @@ function deleteAttachment( fileId )
     if( confirm(msg) )
         $.ajax({
             url: "deleteAttachment",
-            data: { "postId": ${post.id}, "fileId": fileId },
+            data: { "newsId": ${news.id}, "fileId": fileId },
             success: function(){
                 $("#attachment-"+fileId).remove();
             },
             cache: false
         });
 }
+function deleteNews()
+{
+    var msg = "Do you want to remove this news entry (i.e. expire it immediately)?";
+    if( confirm(msg) )
+        window.location.href = "delete?id=${news.id}";
+}
 </script>
 
 <ul id="title">
-<li><a class="bc" href="../list">Forums</a></li>
-<li><a class="bc" href="../view?id=${post.topic.forum.id}">${post.topic.forum.shortName}</a><li>
-<li><a class="bc" href="view?id=${post.topic.id}"><csns:truncate value="${post.topic.name}" length="60" /></a></li>
-<li>Edit post</li>
+  <li><a class="bc" href="current">News and Announcements</a></li>
+  <li><csns:truncate value="${news.topic.firstPost.subject}" /></li>
+  <li class="align_right"><a href="javascript:deleteNews()"><img title="Delete News"
+  alt="[Delete News]" src="<c:url value='/img/icons/newspaper_delete.png' />" /></a></li>
 </ul>
 
-<form:form modelAttribute="post" enctype="multipart/form-data">
+<form:form modelAttribute="news" enctype="multipart/form-data">
 <table class="general">
+  <tr>
+    <th>Category:</th>
+    <td>${news.topic.forum.name}</td>
+  </tr>
   <tr>
     <th>Subject</th>
     <td>
-      <form:input path="subject" cssClass="leftinput" cssStyle="width: 98%;" />
-      <div class="error"><form:errors path="subject" /></div>
+      <form:input path="topic.firstPost.subject" cssClass="leftinput" cssStyle="width: 99%;" />
+      <div class="error"><form:errors path="topic.firstPost.subject" /></div>
     </td>
   </tr>
   <tr>
     <th>Content</th>
     <td>
-      <form:textarea id="textcontent" path="content" cssStyle="width: 99%;" rows="15" cols="80" />
-      <div class="error"><form:errors path="content" /></div>
+      <form:textarea id="textcontent" path="topic.firstPost.content" cssStyle="width: 99%;" rows="15" cols="80" />
+      <div class="error"><form:errors path="topic.firstPost.content" /></div>
+    </td>
+  </tr>
+  <tr>
+    <th>Expiration Date</th>
+    <td>
+      <form:input path="expireDate" cssClass="smallinput" size="10" maxlength="10" />
     </td>
   </tr>
   <tr>
@@ -51,15 +72,15 @@ function deleteAttachment( fileId )
       (<a href="javascript:addAttachment()">+</a>)
     </th>
     <td id="attachments">
-      <input name="file" class="leftinput" style="width: 100%;" type="file" size="75" />
+      <input name="file" class="leftinput" style="width: 100%;" type="file" size="80" />
     </td>
   </tr>
-<c:if test="${fn:length(post.attachments) > 0}">
+<c:if test="${fn:length(news.topic.firstPost.attachments) > 0}">
   <tr>
     <th></th>
     <td>
       <table class="viewtable autowidth">
-        <c:forEach items="${post.attachments}" var="attachment">
+        <c:forEach items="${news.topic.firstPost.attachments}" var="attachment">
         <tr id="attachment-${attachment.id}">
           <td><a href="<c:url value='/download?fileId=${attachment.id}' />">${attachment.name}</a></td>
           <td><a href="javascript:deleteAttachment(${attachment.id})"><img alt="[Delete Attachment]"
@@ -79,6 +100,6 @@ function deleteAttachment( fileId )
 </table>
 </form:form>
 
-<script type="text/javascript">
+<script>
   CKEDITOR.replaceAll();
 </script>

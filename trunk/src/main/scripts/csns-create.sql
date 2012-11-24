@@ -601,7 +601,7 @@ create table news (
     id              bigint primary key,
     department_id   bigint references departments(id),
     topic_id        bigint not null references forum_topics(id),
-    expire_date     timestamp not null default current_timestamp + interval '7 day' 
+    expire_date     timestamp
 );
 
 --------------

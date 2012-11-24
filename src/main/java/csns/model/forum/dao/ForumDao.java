@@ -20,7 +20,6 @@ package csns.model.forum.dao;
 
 import java.util.List;
 
-import csns.model.core.User;
 import csns.model.forum.Forum;
 
 public interface ForumDao {
@@ -35,15 +34,6 @@ public interface ForumDao {
     Forum getForum( String name );
 
     List<Forum> getSystemForums();
-
-    /** Get the system forums the user subscribed to. */
-    List<Forum> getSystemForums( User user );
-
-    /** Get the department forums the user subscribed to. */
-    List<Forum> getDepartmentForums( User user );
-
-    /** Get the course forums the user subscribed to. */
-    List<Forum> getCourseForums( User user );
 
     List<Forum> searchForums( String term, int maxResults );
 

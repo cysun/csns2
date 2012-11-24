@@ -53,7 +53,7 @@ public class News implements Serializable {
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
 
-    @Column(name = "expire_date", nullable = false)
+    @Column(name = "expire_date")
     private Calendar expireDate;
 
     public News()

@@ -3,33 +3,39 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
-<img id="welcome" src="<c:url value='/img/style/welcome_banner.jpg' />" alt="welcome" />
+<script>
+function confirmRemoveNews( newsId )
+{
+    message = "Are you sure you want to remove this news entry?";
+    url = "faculty/expireNews.html?newsId=" + newsId;
+    confirmGoto( message, url );
+}
+</script>
 
-<c:if test="${fn:length(newses) == 0}">
-<ul id="title" style="margin:0;">
-<li>Welcome to the Department of ${department.name}</li>
-</ul>
-</c:if>
-
-<c:if test="${fn:length(newses) > 0}">
-<ul id="title" style="margin: 0px;">
+<ul id="title">
 <li>News and Announcements</li>
 <security:authorize access="authenticated and principal.isFaculty('${dept}')">
-<li class="align_right"><a href="news/post"><img alt="[Post News]"
+<li class="align_right"><a href="post"><img alt="[Post News]"
   title="Post News" src="<c:url value='/img/icons/newspaper_add.png' />" /></a></li>
 </security:authorize>
 </ul>
+
+<c:if test="${fn:length(newses) == 0}">
+<p>No news or announcement yet.</p>
+</c:if>
+
+<c:if test="${fn:length(newses) > 0}">
 <div id="blk">
 <c:forEach items="${newses}" var="news">
-<div class="blk_wrap">
+<div class="blk_wrap"  style="margin-top: 15px;">
   <div class="post_subject">
     <h3>${news.topic.firstPost.subject}</h3>
     <h4>Posted by ${news.topic.firstPost.author.name}
     <fmt:formatDate value="${news.topic.firstPost.date}" pattern="MM/dd/yyyy" />
     
-    [<a href="forum/topic/view?id=${news.topic.id}">Discuss</a><security:authorize
+    [<a href="../forum/topic/view?id=${news.topic.id}">Discuss</a><security:authorize
       access="authenticated and principal.isFaculty('${dept}')"> |
-    <a href="news/edit?id=${news.id}">Edit</a></security:authorize>]
+    <a href="edit?id=${news.id}">Edit</a></security:authorize>]
     </h4>
   </div>
   

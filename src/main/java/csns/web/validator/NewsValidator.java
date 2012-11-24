@@ -16,29 +16,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.forum.dao;
+package csns.web.validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import csns.model.core.dao.UserDao;
+import csns.model.news.News;
 
-@Test(groups = "ForumDaoTests", dependsOnGroups = "UserDaoTests")
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class ForumDaoTests extends AbstractTestNGSpringContextTests {
+@Component
+public class NewsValidator implements Validator {
 
-    @Autowired
-    UserDao userDao;
-
-    @Autowired
-    ForumDao forumDao;
-
-    @Test
-    public void getForum()
+    @Override
+    public boolean supports( Class<?> clazz )
     {
-        assert forumDao.getForum( 1000700L ) != null;
+        return News.class.isAssignableFrom( clazz );
+    }
+
+    @Override
+    public void validate( Object target, Errors errors )
+    {
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors,
+            "topic.firstPost.subject", "error.field.required" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors,
+            "topic.firstPost.content", "error.field.required" );
     }
 
 }

@@ -532,6 +532,25 @@
         <put-attribute name="content" value="/WEB-INF/content/wiki/search.jsp" />
     </definition>
 
+    <!-- ==== -->
+    <!-- News -->
+    <!-- ==== -->
+
+    <definition name="news/current" extends="layout.basic">
+        <put-attribute name="title" value="News and Announcements" />
+        <put-attribute name="content" value="/WEB-INF/content/news/current.jsp" />
+    </definition>
+
+    <definition name="news/post" extends="layout.qa">
+        <put-attribute name="title" value="Post News" />
+        <put-attribute name="content" value="/WEB-INF/content/news/post.jsp" />
+    </definition>
+
+    <definition name="news/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit News" />
+        <put-attribute name="content" value="/WEB-INF/content/news/edit.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

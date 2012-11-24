@@ -25,17 +25,12 @@
 </security:authorize>
 
 <c:if test="${not empty dept}">
-<security:authorize access="authenticated and principal.isFaculty('${dept}')">
-<li><a href="#">Department</a>
+<li><a href="<c:url value='/department/${dept}/' />">Department</a>
   <div><ul>
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
     <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
            src="<c:url value='/img/icons/users.png' />" />People</a></li>
-  </ul></div>
-</li>
 </security:authorize>
-
-<li><a href="#">Curriculum</a>
-  <div><ul>
     <li><a href="<c:url value='/department/${dept}/courses' />"><img alt=""
            src="<c:url value='/img/icons/courses.png' />" />Courses</a></li>
     <li><a href="<c:url value='/department/${dept}/projects'/>"><img alt=""
@@ -45,6 +40,8 @@
 
 <li><a href="#">Resources</a>
   <div><ul>
+    <li><a href="<c:url value='/department/${dept}/news/current' />"><img alt=""
+           src="<c:url value='/img/icons/newspaper.png' />" />News</a></li>
     <li><a href="<c:url value='/department/${dept}/wiki/content/' />"><img alt=""
            src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
     <li><a href="<c:url value='/department/${dept}/forum/list' />"><img alt=""

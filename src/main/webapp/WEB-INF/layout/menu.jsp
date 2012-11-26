@@ -42,7 +42,7 @@
   <div><ul>
     <li><a href="<c:url value='/department/${dept}/news/current' />"><img alt=""
            src="<c:url value='/img/icons/newspaper.png' />" />News</a></li>
-    <li><a href="<c:url value='/department/${dept}/wiki/content/' />"><img alt=""
+    <li><a href="<c:url value='/wiki/content/department/${dept}/' />"><img alt=""
            src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
     <li><a href="<c:url value='/department/${dept}/forum/list' />"><img alt=""
            src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>

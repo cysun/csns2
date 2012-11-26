@@ -81,6 +81,11 @@
         <path>/WEB-INF/tags/wikiBreadcrumbs.tag</path>
     </tag-file>
 
+    <tag-file>
+        <name>wikiSearchForm</name>
+        <path>/WEB-INF/tags/wikiSearchForm.tag</path>
+    </tag-file>
+
     <function>
         <name>isSelectionCorrect</name>
         <function-class>csns.web.tag.Functions</function-class>

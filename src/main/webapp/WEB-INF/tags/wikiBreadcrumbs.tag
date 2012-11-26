@@ -2,10 +2,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 <%@ tag body-content="empty" trimDirectiveWhitespaces="true" %>
-<%@ attribute name="dept" required="true" rtexprvalue="true" type="java.lang.String" %>
 <%@ attribute name="path" required="true" rtexprvalue="true" type="java.lang.String" %>
 
-<c:set var="prefix" value="/department/${dept}/wiki/content/" />
+<c:set var="prefix" value="/wiki/content/" />
 <li><a class="bc" href="<c:url value='${prefix}' />">Wiki</a></li>
 <c:set var="currentFullPath" value="${prefix}" />
 <c:forTokens items="${fn:substringAfter(path,prefix)}" delims="/" var="p" varStatus="status">

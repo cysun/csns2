@@ -214,8 +214,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
 
     public boolean isAdmin( String dept )
     {
-        return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_ADMIN_" + dept );
+        return roles.contains( "DEPT_ROLE_ADMIN_" + dept );
     }
 
     public boolean isFaculty()

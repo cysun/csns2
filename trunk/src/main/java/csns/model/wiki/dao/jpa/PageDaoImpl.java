@@ -53,12 +53,10 @@ public class PageDaoImpl implements PageDao {
     }
 
     @Override
-    public List<WikiSearchResult> searchPages( String dept, String term,
-        int maxResults )
+    public List<WikiSearchResult> searchPages( String term, int maxResults )
     {
         return entityManager.createNamedQuery( "wiki.page.search",
             WikiSearchResult.class )
-            .setParameter( "dept", dept )
             .setParameter( "term", term )
             .setMaxResults( maxResults )
             .getResultList();

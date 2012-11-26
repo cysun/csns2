@@ -15,7 +15,7 @@ function compareRevisions()
     if( numOfRevisionsChecked == 2 )
     {
         var form = document.getElementById( "revisionsForm" );
-        form.action = "<c:url value='/department/${dept}/wiki/compare' />";
+        form.action = "<c:url value='/wiki/compare' />";
         form.submit();
     }
     else
@@ -24,7 +24,7 @@ function compareRevisions()
 </script>
 
 <ul id="title">
-<csns:wikiBreadcrumbs dept="${dept}" path="${page.path}" />
+<csns:wikiBreadcrumbs path="${page.path}" />
 </ul>
 
 <div id="wiki_content">

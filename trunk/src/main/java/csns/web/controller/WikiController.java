@@ -47,7 +47,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -110,9 +109,20 @@ public class WikiController {
 
     private static final Logger logger = LoggerFactory.getLogger( WikiController.class );
 
-    @RequestMapping("/department/{dept}/wiki/content/**")
-    public String view( @PathVariable String dept,
-        @RequestParam(required = false) Long revisionId,
+    private String getDept( String path )
+    {
+        String prefix = "/wiki/content/department/";
+
+        if( !path.startsWith( prefix ) ) return null;
+
+        int beginIndex = prefix.length();
+        int endIndex = path.indexOf( '/', beginIndex );
+        return endIndex > 0 ? path.substring( beginIndex, endIndex ) : null;
+    }
+
+    // @RequestMapping("/department/{dept}/wiki/content/**")
+    @RequestMapping("/wiki/content/**")
+    public String view( @RequestParam(required = false) Long revisionId,
         HttpServletRequest request, ModelMap models )
     {
         String path = (String) request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE );
@@ -130,17 +140,20 @@ public class WikiController {
         pageDao.savePage( revision.getPage() );
         models.put( "revision", revision );
 
+        String dept = getDept( path );
         if( revision.isIncludeSidebar() )
-            models.put(
-                "sidebar",
-                revisionDao.getRevision( "/department/" + dept
-                    + "/wiki/content/sidebar" ) );
+        {
+            String sidebar = dept == null ? "/wiki/content/sidebar"
+                : "/wiki/content/department/" + dept + "/sidebar";
+            models.put( "sidebar", revisionDao.getRevision( sidebar ) );
+        }
 
         if( SecurityUtils.isAuthenticated() )
         {
             User user = SecurityUtils.getUser();
             models.put( "user", user );
-            models.put( "isAdmin", user.isAdmin( dept ) );
+            models.put( "isAdmin",
+                dept == null ? user.isSysadmin() : user.isAdmin( dept ) );
 
             Subscription subscription = subscriptionDao.getSubscription(
                 revision.getPage(), user );
@@ -158,8 +171,7 @@ public class WikiController {
         return "wiki/page";
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/password",
-        method = RequestMethod.POST)
+    @RequestMapping(value = "/wiki/password", method = RequestMethod.POST)
     public String password( @RequestParam String path,
         @RequestParam String password, HttpSession session )
     {
@@ -169,10 +181,9 @@ public class WikiController {
         return "redirect:" + path;
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/edit",
-        method = RequestMethod.GET)
-    public String edit( @PathVariable String dept, @RequestParam String path,
-        ModelMap models, HttpSession session )
+    @RequestMapping(value = "/wiki/edit", method = RequestMethod.GET)
+    public String edit( @RequestParam String path, ModelMap models,
+        HttpSession session )
     {
         Revision revision = revisionDao.getRevision( path );
 
@@ -185,9 +196,10 @@ public class WikiController {
                 return "wiki/password";
 
             User user = SecurityUtils.getUser();
+            String dept = getDept( path );
             if( page.isLocked()
                 && !page.getOwner().getId().equals( user.getId() )
-                && !user.isAdmin( dept ) )
+                && (dept == null ? !user.isSysadmin() : !user.isAdmin( dept )) )
             {
                 models.put( "message", "error.wiki.not.owner" );
                 return "error";
@@ -200,8 +212,7 @@ public class WikiController {
         return "wiki/edit";
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/edit",
-        method = RequestMethod.POST)
+    @RequestMapping(value = "/wiki/edit", method = RequestMethod.POST)
     public String edit( @ModelAttribute Revision revision, HttpSession session,
         BindingResult result, SessionStatus sessionStatus )
     {
@@ -235,17 +246,25 @@ public class WikiController {
         return "redirect:" + page.getPath();
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/move",
-        method = RequestMethod.GET)
-    public String move( @RequestParam String from )
+    @RequestMapping(value = "/wiki/move", method = RequestMethod.GET)
+    public String move( @RequestParam String from, ModelMap models )
     {
+        Page page = pageDao.getPage( from );
+        User user = SecurityUtils.getUser();
+        String dept = getDept( from );
+        if( !page.getOwner().getId().equals( user.getId() )
+            && (dept == null ? !user.isSysadmin() : user.isAdmin( dept )) )
+        {
+            models.put( "message", "error.wiki.not.owner" );
+            return "error";
+        }
+
         return "wiki/move";
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/move",
-        method = RequestMethod.POST)
-    public String move( @PathVariable String dept, @RequestParam String from,
-        @RequestParam String to, ModelMap models )
+    @RequestMapping(value = "/wiki/move", method = RequestMethod.POST)
+    public String move( @RequestParam String from, @RequestParam String to,
+        ModelMap models )
     {
         if( pageDao.getPage( to ) != null )
         {
@@ -254,16 +273,10 @@ public class WikiController {
         }
 
         Page page = pageDao.getPage( from );
-        User user = SecurityUtils.getUser();
-        if( !page.getOwner().getId().equals( user.getId() )
-            && !user.isAdmin( dept ) )
-        {
-            models.put( "message", "error.wiki.not.owner" );
-            return "error";
-        }
-
         page.setPath( to );
         page = pageDao.savePage( page );
+
+        User user = SecurityUtils.getUser();
         logger.info( "Wiki page " + from + " moved to " + to + " by "
             + user.getUsername() );
 
@@ -280,7 +293,7 @@ public class WikiController {
         return "redirect:" + to;
     }
 
-    @RequestMapping("/department/{dept}/wiki/revisions")
+    @RequestMapping("/wiki/revisions")
     public String revisions( @RequestParam Long id, ModelMap models )
     {
         Page page = pageDao.getPage( id );
@@ -289,16 +302,16 @@ public class WikiController {
         return "wiki/revisions";
     }
 
-    @RequestMapping("/department/{dept}/wiki/revert")
-    public String revert( @PathVariable String dept,
-        @RequestParam Long revisionId, HttpSession session, ModelMap models )
+    @RequestMapping("/wiki/revert")
+    public String revert( @RequestParam Long revisionId, HttpSession session,
+        ModelMap models )
     {
         Revision revision = revisionDao.getRevision( revisionId );
         Page page = revision.getPage();
-
         User user = SecurityUtils.getUser();
+        String dept = getDept( page.getPath() );
         if( page.isLocked() && !page.getOwner().getId().equals( user.getId() )
-            && !user.isAdmin( dept ) )
+            && (dept == null ? !user.isSysadmin() : !user.isAdmin( dept )) )
         {
             models.put( "message", "error.wiki.not.owner" );
             return "error";
@@ -321,7 +334,7 @@ public class WikiController {
         return "redirect:" + page.getPath();
     }
 
-    @RequestMapping("/department/{dept}/wiki/compare")
+    @RequestMapping("/wiki/compare")
     public String compare( @RequestParam("revisionId") Long[] ids,
         ModelMap models ) throws Exception
     {
@@ -372,15 +385,14 @@ public class WikiController {
         return new TextNodeComparator( domTreeBuilder, locale );
     }
 
-    @RequestMapping("/department/{dept}/wiki/discussions")
+    @RequestMapping("/wiki/discussions")
     public String discussions( @RequestParam Long id, ModelMap models )
     {
         models.put( "page", pageDao.getPage( id ) );
         return "wiki/discussions";
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/discuss",
-        method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/discuss", method = RequestMethod.GET)
     public String discuss( @RequestParam Long pageId, ModelMap models )
     {
         Forum forum = forumDao.getForum( "Wiki Discussion" );
@@ -389,13 +401,10 @@ public class WikiController {
         return "wiki/discuss";
     }
 
-    @RequestMapping(value = "/department/{dept}/wiki/discuss",
-        method = RequestMethod.POST)
-    public String discuss(
-        @PathVariable String dept,
-        @ModelAttribute Post post,
-        @RequestParam Long pageId,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+    @RequestMapping(value = "/wiki/discuss", method = RequestMethod.POST)
+    public String discuss( @ModelAttribute Post post,
+        @RequestParam Long pageId, @RequestParam(value = "file",
+            required = false) MultipartFile[] uploadedFiles,
         BindingResult result, SessionStatus sessionStatus )
     {
         messageValidator.validate( post, result );
@@ -430,15 +439,13 @@ public class WikiController {
         vModels.put( "topic", topic );
         notificationService.notifiy( page, subject, vTemplate, vModels, false );
 
-        return "redirect:/department/" + dept + "/wiki/discussions?id="
-            + page.getId();
+        return "redirect:/wiki/discussions?id=" + page.getId();
     }
 
-    @RequestMapping("/department/{dept}/wiki/search")
-    public String search( @PathVariable String dept, @RequestParam String term,
-        ModelMap models )
+    @RequestMapping("/wiki/search")
+    public String search( @RequestParam String term, ModelMap models )
     {
-        models.put( "results", pageDao.searchPages( dept, term, 40 ) );
+        models.put( "results", pageDao.searchPages( term, 40 ) );
         return "wiki/search";
     }
 

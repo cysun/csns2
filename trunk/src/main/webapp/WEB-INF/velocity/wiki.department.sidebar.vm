@@ -1,4 +1,5 @@
 <ul>
-<li><a href="/department/$department.abbreviation/wiki/content/">$department.name Department Wiki</a></li>
-<li><a href="/department/$department.abbreviation/wiki/content/sidebar">Sidebar</a></li>
+<li><a href="/wiki/content/department/$department.abbreviation/">$department.name Department Wiki</a></li>
+<li><a href="/wiki/content/department/$department.abbreviation/sidebar">Sidebar</a></li>
+<li><a href="/wiki/content/csns/">CSNS Documentation</a></li>
 </ul>

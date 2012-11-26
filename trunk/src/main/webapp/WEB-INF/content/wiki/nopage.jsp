@@ -2,19 +2,14 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<csns:wikiBreadcrumbs dept="${dept}" path="${path}" />
-<li class="align_right">
-  <form action="<c:url value='/department/${dept}/wiki/search' />" method="post">
-    <input class="formselect" type="text" name="term" size="25" />
-    <input class="subbutton" type="submit" name="search" value="Search" />
-  </form>
-</li>
+<csns:wikiBreadcrumbs path="${path}" />
+<csns:wikiSearchForm />
 </ul>
 
 <div id="wiki_content">
 <p>The page <span class="tt">${path}</span> you are trying to access does not
 exist. Do you want to create this page?
-<a href="<c:url value='/department/${dept}/wiki/edit?path=${path}' />">Yes</a>
-<a href="<c:url value='/department/${dept}/wiki/content/' />">No</a>
+<a href="<c:url value='/wiki/edit?path=${path}' />">Yes</a>
+<a href="<c:url value='/wiki/content/' />">No</a>
 </p>
 </div>

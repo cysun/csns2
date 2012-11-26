@@ -1,14 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/department/${dept}/wiki/content/' />">Wiki</a></li>
-<li class="align_right">
-  <form action="<c:url value='/department/${dept}/wiki/search' />" method="post">
-    <input class="formselect" type="text" name="term" size="25" />
-    <input class="subbutton" type="submit" name="search" value="Search" />
-  </form>
-</li>
+<li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
+<csns:wikiSearchForm />
 </ul>
 
 <div id="wiki_content">

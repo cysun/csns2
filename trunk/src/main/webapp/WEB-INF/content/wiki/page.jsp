@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="security"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns"%>
 
 <script>
@@ -19,7 +18,7 @@ $(function(){
 function revert()
 {
     var message = "Are you sure you want to revert the page back to this revision?";
-    var url = "<c:url value='/department/${dept}/wiki/revert?revisionId=' />" + "${param.revisionId}";
+    var url = "<c:url value='/wiki/revert?revisionId=' />" + "${param.revisionId}";
     if( confirm(message) ) window.location.href = url;
 }
 
@@ -51,13 +50,8 @@ function unsubscribe()
 </script>
 
 <ul id="title">
-  <csns:wikiBreadcrumbs dept="${dept}" path="${path}" />
-  <li class="align_right">
-    <form action="<c:url value='/department/${dept}/wiki/search' />" method="post">
-      <input class="formselect" type="text" name="term" size="25" />
-      <input class="subbutton" type="submit" name="search" value="Search" />
-    </form>
-  </li>
+<csns:wikiBreadcrumbs path="${path}" />
+<csns:wikiSearchForm />
 </ul>
 
 <div id="opbar">
@@ -65,14 +59,14 @@ function unsubscribe()
   <a id="subscribe" href="javascript:subscribe()">Subscribe</a>
   <a id="unsubscribe" href="javascript:unsubscribe()">Unsubscribe</a>
 </security:authorize>
-  <a href="<c:url value='/department/${dept}/wiki/discussions?id=${revision.page.id}' />">Discussions</a>
-  <a href="<c:url value='/department/${dept}/wiki/revisions?id=${revision.page.id}' />">Revisions</a>
+  <a href="<c:url value='/wiki/discussions?id=${revision.page.id}' />">Discussions</a>
+  <a href="<c:url value='/wiki/revisions?id=${revision.page.id}' />">Revisions</a>
 <security:authorize access="authenticated">
 <c:if test="${not revision.page.locked or user.id == revision.page.owner.id or isAdmin}">
   <c:if test="${user.id == revision.page.owner.id or isAdmin}">
-  <a href="<c:url value='/department/${dept}/wiki/move?from=${path}' />">Move</a>
+  <a href="<c:url value='/wiki/move?from=${path}' />">Move</a>
   </c:if>
-  <a href="<c:url value='/department/${dept}/wiki/edit?path=${path}' />">Edit</a>
+  <a href="<c:url value='/wiki/edit?path=${path}' />">Edit</a>
   <c:if test="${not empty param.revisionId}">
   <a href="javascript:revert()">Revert to This Revision</a>
   </c:if>

@@ -102,8 +102,7 @@ select id, path,
         ts_headline(ts_subject, query) as "subject",
         ts_headline(ts_content, query, 'MaxWords=200') as "content"
     from wiki_pages p, plainto_tsquery(:term) query
-    where path like '/department/' || :dept || '/%'
-    and query @@ tsv order by ts_rank(tsv, query, 16|32) desc
+    where query @@ tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
 

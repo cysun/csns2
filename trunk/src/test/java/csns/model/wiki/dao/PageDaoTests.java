@@ -36,7 +36,7 @@ public class PageDaoTests extends AbstractTransactionalTestNGSpringContextTests 
 
     public void searchPages()
     {
-        List<WikiSearchResult> results = pageDao.searchPages( "cs", "wiki", 10 );
+        List<WikiSearchResult> results = pageDao.searchPages( "wiki", 10 );
         assert results.size() == 1;
     }
 

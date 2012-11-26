@@ -10,7 +10,7 @@ function addAttachment()
 </script>
 
 <ul id="title">
-<csns:wikiBreadcrumbs dept="${dept}" path="${page.path}" />
+<csns:wikiBreadcrumbs path="${page.path}" />
 <li><a class="bc" href="<c:url value='/wiki/discussions?id=${page.id}' />">Discussions</a>
 <li>New Discussion</li>
 </ul>

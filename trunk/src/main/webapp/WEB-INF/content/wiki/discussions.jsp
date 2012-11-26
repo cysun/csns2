@@ -3,11 +3,11 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<csns:wikiBreadcrumbs dept="${dept}" path="${page.path}" />
+<csns:wikiBreadcrumbs path="${page.path}" />
 </ul>
 
 <div id="opbar">
-<a href="<c:url value='/department/${dept}/wiki/discuss?pageId=${page.id}' />">Start a Discussion</a>
+<a href="<c:url value='/wiki/discuss?pageId=${page.id}' />">Start a Discussion</a>
 </div>
 
 <div id="wiki_content">

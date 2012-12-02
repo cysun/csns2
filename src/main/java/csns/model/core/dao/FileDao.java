@@ -27,6 +27,8 @@ public interface FileDao {
 
     File getFile( Long id );
 
+    File getCKEditorFolder( User owner );
+
     List<File> listFiles( User owner );
 
     List<File> listFiles( File parent );
@@ -38,4 +40,5 @@ public interface FileDao {
     File saveFile( File file );
 
     long getDiskUsage( User user );
+
 }

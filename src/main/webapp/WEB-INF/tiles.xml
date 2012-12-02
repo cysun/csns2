@@ -577,6 +577,12 @@
         <put-attribute name="content" value="/WEB-INF/content/file/move.jsp" />
     </definition>
 
+    <!-- ======== -->
+    <!-- CKEditor -->
+    <!-- ======== -->
+
+    <definition name="ckeditor/upload" template="/WEB-INF/content/ckeditor/upload.jsp" />
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

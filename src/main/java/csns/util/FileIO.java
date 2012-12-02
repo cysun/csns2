@@ -19,6 +19,7 @@
 package csns.util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -129,6 +130,30 @@ public class FileIO {
         {
             logger.error( "Failed to copy file to output", e );
         }
+    }
+
+    public void copy( File from, File to )
+    {
+        try
+        {
+            String fileId = to.getId().toString();
+            java.io.File diskFile = new java.io.File( fileDir, fileId );
+            FileOutputStream out = new FileOutputStream( diskFile );
+            copy( from, out );
+            out.close();
+        }
+        catch( Exception e )
+        {
+            logger.error( "Failed to copy file to output", e );
+        }
+    }
+
+    public void delete( File file )
+    {
+        String fileId = file.getId().toString();
+        java.io.File diskFile = new java.io.File( fileDir, fileId );
+        if( !diskFile.delete() )
+            logger.error( "Failed to delete file " + diskFile.getAbsolutePath() );
     }
 
 }

@@ -20,7 +20,6 @@ $(function(){
         $("#unpin").hide();
     </c:if>
 });
-
 function subscribe()
 {
     $.ajax({
@@ -33,7 +32,6 @@ function subscribe()
         cache: false
     });
 }
-
 function unsubscribe()
 {
     $.ajax({
@@ -46,14 +44,12 @@ function unsubscribe()
         cache: false
     });
 }
-
 function deleteTopic()
 {
     var msg = "Are you sure you want to delete this topic?";
     if( confirm(msg) )
         window.location.href = "delete?id=${topic.id}";
 }
-
 function pin()
 {
     $.ajax({
@@ -65,7 +61,6 @@ function pin()
         cache: false
     });
 }
-
 function unpin()
 {
     $.ajax({

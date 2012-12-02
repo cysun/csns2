@@ -30,7 +30,8 @@ create table users (
     office_phone        varchar(255),
     enabled             boolean not null default 't',
     temporary           boolean not null default 'f',
-    num_of_forum_posts  integer not null default 0
+    num_of_forum_posts  integer not null default 0,
+    disk_quota          integer not null default 200
 );
 
 create table authorities (

@@ -551,6 +551,32 @@
         <put-attribute name="content" value="/WEB-INF/content/news/edit.jsp" />
     </definition>
 
+    <!-- ============ -->
+    <!-- File Manager -->
+    <!-- ============ -->
+
+    <definition name="file/view" extends="layout.basic">
+        <put-attribute name="title" value="View Files" />
+        <put-attribute name="content" value="/WEB-INF/content/file/view.jsp" />
+    </definition>
+
+    <definition name="file/toggle" template="/WEB-INF/content/file/toggle.jsp" />
+
+    <definition name="file/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/edit.jsp" />
+    </definition>
+
+    <definition name="file/copy" extends="layout.basic">
+        <put-attribute name="title" value="Copy File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/copy.jsp" />
+    </definition>
+
+    <definition name="file/move" extends="layout.basic">
+        <put-attribute name="title" value="Move File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/move.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Email -->
     <!-- ===== -->

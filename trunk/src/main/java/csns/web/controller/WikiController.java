@@ -348,43 +348,6 @@ public class WikiController {
         return "wiki/compare";
     }
 
-    private String diff( Revision oldRevision, Revision newRevision )
-        throws Exception
-    {
-        StringWriter result = new StringWriter();
-        TransformerHandler transformerHandler = ((SAXTransformerFactory) TransformerFactory.newInstance()).newTransformerHandler();
-        transformerHandler.setResult( new StreamResult( result ) );
-        XslFilter xslFilter = new XslFilter();
-        ContentHandler contentHandler = xslFilter.xsl( transformerHandler,
-            "xsl/diff2html.xsl" );
-
-        contentHandler.startDocument();
-        HtmlSaxDiffOutput diffOutput = new HtmlSaxDiffOutput(
-            contentHandler,
-            "diff" );
-        HTMLDiffer differ = new HTMLDiffer( diffOutput );
-        TextNodeComparator leftComparator = createComparator( oldRevision );
-        TextNodeComparator rightComparator = createComparator( newRevision );
-        differ.diff( leftComparator, rightComparator );
-        contentHandler.endDocument();
-
-        return result.toString();
-    }
-
-    private TextNodeComparator createComparator( Revision revision )
-        throws IOException, SAXException
-    {
-        Locale locale = Locale.getDefault();
-        HtmlCleaner cleaner = new HtmlCleaner();
-        DomTreeBuilder domTreeBuilder = new DomTreeBuilder();
-
-        InputSource inputSource = new InputSource( new ByteArrayInputStream(
-            revision.getContent().getBytes( "UTF-8" ) ) );
-        cleaner.cleanAndParse( inputSource, domTreeBuilder );
-
-        return new TextNodeComparator( domTreeBuilder, locale );
-    }
-
     @RequestMapping("/wiki/discussions")
     public String discussions( @RequestParam Long id, ModelMap models )
     {
@@ -447,6 +410,43 @@ public class WikiController {
     {
         models.put( "results", pageDao.searchPages( term, 40 ) );
         return "wiki/search";
+    }
+
+    private String diff( Revision oldRevision, Revision newRevision )
+        throws Exception
+    {
+        StringWriter result = new StringWriter();
+        TransformerHandler transformerHandler = ((SAXTransformerFactory) TransformerFactory.newInstance()).newTransformerHandler();
+        transformerHandler.setResult( new StreamResult( result ) );
+        XslFilter xslFilter = new XslFilter();
+        ContentHandler contentHandler = xslFilter.xsl( transformerHandler,
+            "xsl/diff2html.xsl" );
+
+        contentHandler.startDocument();
+        HtmlSaxDiffOutput diffOutput = new HtmlSaxDiffOutput(
+            contentHandler,
+            "diff" );
+        HTMLDiffer differ = new HTMLDiffer( diffOutput );
+        TextNodeComparator leftComparator = createComparator( oldRevision );
+        TextNodeComparator rightComparator = createComparator( newRevision );
+        differ.diff( leftComparator, rightComparator );
+        contentHandler.endDocument();
+
+        return result.toString();
+    }
+
+    private TextNodeComparator createComparator( Revision revision )
+        throws IOException, SAXException
+    {
+        Locale locale = Locale.getDefault();
+        HtmlCleaner cleaner = new HtmlCleaner();
+        DomTreeBuilder domTreeBuilder = new DomTreeBuilder();
+
+        InputSource inputSource = new InputSource( new ByteArrayInputStream(
+            revision.getContent().getBytes( "UTF-8" ) ) );
+        cleaner.cleanAndParse( inputSource, domTreeBuilder );
+
+        return new TextNodeComparator( domTreeBuilder, locale );
     }
 
 }

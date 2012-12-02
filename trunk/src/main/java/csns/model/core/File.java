@@ -102,6 +102,27 @@ public class File implements Serializable {
         deleted = false;
     }
 
+    public File clone()
+    {
+        File newFile = new File();
+
+        newFile.name = name;
+        newFile.type = type;
+        newFile.size = size;
+        newFile.date = new Date();
+
+        newFile.parent = parent;
+
+        newFile.isFolder = isFolder;
+        newFile.isPublic = isPublic;
+        newFile.submission = submission;
+
+        newFile.regular = regular;
+        newFile.deleted = deleted;
+
+        return newFile;
+    }
+
     public boolean isSameFile( File file )
     {
         return file != null && file.getId().equals( id );

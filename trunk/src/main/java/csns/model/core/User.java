@@ -142,6 +142,9 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @Column(name = "num_of_forum_posts", nullable = false)
     private int numOfForumPosts;
 
+    @Column(name = "disk_quota", nullable = false)
+    private int diskQuota;
+
     public User()
     {
         enabled = true;
@@ -149,6 +152,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         roles = new HashSet<String>();
         surveysTaken = new HashSet<Survey>();
         numOfForumPosts = 0;
+        diskQuota = 200;
     }
 
     public User clone()
@@ -596,6 +600,16 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setNumOfForumPosts( int numOfForumPosts )
     {
         this.numOfForumPosts = numOfForumPosts;
+    }
+
+    public int getDiskQuota()
+    {
+        return diskQuota;
+    }
+
+    public void setDiskQuota( int diskQuota )
+    {
+        this.diskQuota = diskQuota;
     }
 
 }

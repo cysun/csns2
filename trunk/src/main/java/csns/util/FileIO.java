@@ -54,6 +54,11 @@ public class FileIO {
 
     public File save( MultipartFile uploadedFile, User user )
     {
+        return save( uploadedFile, user, null );
+    }
+
+    public File save( MultipartFile uploadedFile, User user, File parent )
+    {
         if( uploadedFile.isEmpty() ) return null;
 
         File file = new File();
@@ -61,6 +66,7 @@ public class FileIO {
         file.setType( uploadedFile.getContentType() );
         file.setSize( uploadedFile.getSize() );
         file.setOwner( user );
+        file.setParent( parent );
         file.setPublic( true );
         file = fileDao.saveFile( file );
 

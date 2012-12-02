@@ -46,6 +46,27 @@ public class FileDaoImpl implements FileDao {
     }
 
     @Override
+    public File getCKEditorFolder( User owner )
+    {
+        String name = "ckeditor_files";
+        String query = "from File where owner = :owner and name = :name "
+            + "and folder = true and regular = false";
+
+        List<File> results = entityManager.createQuery( query, File.class )
+            .setParameter( "owner", owner )
+            .setParameter( "name", name )
+            .getResultList();
+
+        if( results.size() > 0 ) return results.get( 0 );
+
+        File file = new File();
+        file.setName( name );
+        file.setOwner( owner );
+        file.setFolder( true );
+        return saveFile( file );
+    }
+
+    @Override
     public List<File> listFiles( User owner )
     {
         String query = "from File where owner = :owner and parent is null "

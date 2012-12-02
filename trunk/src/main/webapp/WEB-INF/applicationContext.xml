@@ -93,6 +93,7 @@
         <security:intercept-url pattern="/department/*/news/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/file/view" access="permitAll" />
         <security:intercept-url pattern="/file/**" access="authenticated" />
+        <security:intercept-url pattern="/ckeditor/**" access="authenticated" />
         <security:intercept-url pattern="/subscription/**" access="authenticated" />
     </security:http>
 

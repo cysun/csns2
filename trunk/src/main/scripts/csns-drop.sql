@@ -13,6 +13,12 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop trigger mailinglist_messages_ts_trigger on mailinglist_messages;
+drop function mailinglist_messages_ts_trigger_function();
+drop table mailinglist_message_attachments;
+drop table mailinglist_messages;
+drop table mailinglists;
+
 drop table news;
 
 drop trigger wiki_revisions_ts_trigger on wiki_revisions;

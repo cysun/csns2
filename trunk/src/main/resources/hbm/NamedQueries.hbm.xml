@@ -106,4 +106,16 @@ select id, path,
 ]]>
     </sql-query>
 
+    <sql-query name="mailinglist.message.search">
+        <return class="csns.model.mailinglist.Message" />
+<![CDATA[
+select id, date, author_id, mailinglist_id,
+        ts_headline( subject, query ) as subject,
+        ts_headline( content, query, 'MaxWords=25' ) as content
+    from mailinglist_messages, plainto_tsquery(:term) query
+    where mailinglist_id = :mailinglistId and query @@ tsv
+    order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
 </hibernate-mapping>

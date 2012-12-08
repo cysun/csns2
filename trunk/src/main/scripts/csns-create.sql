@@ -605,6 +605,54 @@ create table news (
     expire_date     timestamp
 );
 
+------------------
+-- mailinglists --
+------------------
+
+create table mailinglists (
+    id              bigint primary key,
+    name            varchar(255) not null,
+    description     varchar(4092),
+    department_id   bigint references departments(id),
+  unique (department_id, name)
+);
+
+create table mailinglist_messages (
+    id              bigint primary key,
+    subject         varchar(255) not null,
+    content         varchar(8092) not null,
+    date            timestamp default current_timestamp,
+    author_id       bigint not null references users(id),
+    mailinglist_id  bigint references mailinglists(id)
+);
+
+create table mailinglist_message_attachments (
+    message_id  bigint not null references mailinglist_messages(id),
+    file_id     bigint not null references files(id),
+  primary key (message_id, file_id)
+);
+
+alter table mailinglist_messages add column tsv tsvector;
+
+create function mailinglist_messages_ts_trigger_function() returns trigger as $$
+declare
+    author users%rowtype;
+begin
+	select * into author from users where id = new.author_id;
+    new.tsv := setweight(to_tsvector(author.first_name), 'A')
+        || setweight(to_tsvector(author.first_name), 'A')
+        || setweight(to_tsvector(new.subject), 'A')
+        || setweight(to_tsvector(new.content), 'D');
+    return new;
+end
+$$ language plpgsql;
+
+create trigger mailinglist_messages_ts_trigger
+    before insert or update on mailinglist_messages
+    for each row execute procedure mailinglist_messages_ts_trigger_function();
+
+create index mailinglist_messages_ts_index on mailinglist_messages using gin(tsv);
+
 --------------
 -- projects --
 --------------

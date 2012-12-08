@@ -117,18 +117,62 @@ insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001003, 'FT', 1000800, 1000001);
 
-insert into wiki_pages (id, path, owner_id) values (1001100, '/wiki/content/department/cs/', 1000001);
+insert into mailinglists (id, name, description, department_id) values
+    (1001101, 'cs-students', 'All the students in the department.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001102, 'cs-undergrads', 'Undergradudate students in the department.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001103, 'cs-grads', 'Graduate students in the department.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001104, 'cs-grads-g0', 'Graduate students with G0 standing (Incoming).', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001105, 'cs-grads-g1', 'Graduate students with G1 standing (Conditionally Classified).', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001106, 'cs-grads-g2', 'Graduate students with G2 standing (Classified).', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001107, 'cs-grads-g3', 'Graduate students with G3 standing (Candidacy).', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001108, 'cs-alumni', 'All the alumni of the department.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001109, 'cs-alumni-undergrad', 'Alumni of the undergraduate program.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001110, 'cs-alumni-grad', 'Alumni of the graduate program.', 1000100);
+insert into mailinglists (id, name, description, department_id) values
+    (1001111, 'math-students', 'All the students in the department.', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001112, 'math-undergrads', 'Undergradudate students in the department.', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001113, 'math-grads', 'Graduate students in the department.', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001114, 'math-grads-g0', 'Graduate students with G0 standing (Incoming).', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001115, 'math-grads-g1', 'Graduate students with G1 standing (Conditionally Classified).', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001116, 'math-grads-g2', 'Graduate students with G2 standing (Classified).', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001117, 'math-grads-g3', 'Graduate students with G3 standing (Candidacy).', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001118, 'math-alumni', 'All the alumni of the department.', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001119, 'math-alumni-undergrad', 'Alumni of the undergraduate program.', 1000101);
+insert into mailinglists (id, name, description, department_id) values
+    (1001120, 'math-alumni-grad', 'Alumni of the graduate program.', 1000101);
+
+insert into mailinglist_messages (id, subject, content, author_id, mailinglist_id ) values
+    (1001150, 'Welcome to CS Department Mailing List', 'Hello, Student!', 1000004, 1001101);
+
+insert into wiki_pages (id, path, owner_id) values (1001200, '/wiki/content/department/cs/', 1000001);
 insert into wiki_revisions (id, subject, content, author_id, page_id) values
-    (1001110, 'Computer Science Departmen Wiki', '<h2>Computer Science Departmen Wiki</h2>', 1000001, 1001100);
+    (1001210, 'Computer Science Departmen Wiki', '<h2>Computer Science Departmen Wiki</h2>', 1000001, 1001200);
 
-insert into resources (id, name, type) values (1001200, 'Project Documentation', 1);
-insert into resources (id, name, type) values (1001201, 'Project Presentation', 1);
+-- insert into resources (id, name, type) values (1001200, 'Project Documentation', 1);
+-- insert into resources (id, name, type) values (1001201, 'Project Presentation', 1);
 
-insert into projects (id, name, department_id, year) values
-    (1001300, 'Modernize Curriculum Review Workflow', 1000100, 2013);
-insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000001, 0);
-insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000004, 1);
-insert into project_members (project_id, member_id) values (1001300, 1000002);
-insert into project_members (project_id, member_id) values (1001300, 1000003);
-insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001200, 0);
-insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001201, 1);
+-- insert into projects (id, name, department_id, year) values
+--    (1001300, 'Modernize Curriculum Review Workflow', 1000100, 2013);
+-- insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000001, 0);
+-- insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000004, 1);
+-- insert into project_members (project_id, member_id) values (1001300, 1000002);
+-- insert into project_members (project_id, member_id) values (1001300, 1000003);
+-- insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001200, 0);
+-- insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001201, 1);

@@ -36,6 +36,7 @@ import javax.persistence.Table;
 
 import csns.model.core.User;
 import csns.model.forum.Forum;
+import csns.model.mailinglist.Mailinglist;
 
 @Entity
 @Table(name = "departments")
@@ -141,6 +142,11 @@ public class Department implements Serializable {
     @OrderBy("id asc")
     private List<Forum> forums;
 
+    @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
+        CascadeType.MERGE })
+    @OrderBy("id asc")
+    private List<Mailinglist> mailinglists;
+
     public Department()
     {
         administrators = new ArrayList<User>();
@@ -154,6 +160,7 @@ public class Department implements Serializable {
         additionalGraduateCourses = new ArrayList<Course>();
 
         forums = new ArrayList<Forum>();
+        mailinglists = new ArrayList<Mailinglist>();
     }
 
     public Long getId()
@@ -286,6 +293,16 @@ public class Department implements Serializable {
     public void setForums( List<Forum> forums )
     {
         this.forums = forums;
+    }
+
+    public List<Mailinglist> getMailinglists()
+    {
+        return mailinglists;
+    }
+
+    public void setMailinglists( List<Mailinglist> mailinglists )
+    {
+        this.mailinglists = mailinglists;
     }
 
 }

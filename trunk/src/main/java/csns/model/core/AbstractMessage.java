@@ -34,7 +34,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OrderBy;
 
 @MappedSuperclass
-public abstract class Message implements Serializable {
+public abstract class AbstractMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,7 +63,7 @@ public abstract class Message implements Serializable {
 
     protected Date date;
 
-    public Message()
+    public AbstractMessage()
     {
         attachments = new ArrayList<File>();
     }

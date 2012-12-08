@@ -16,40 +16,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics.dao;
+package csns.model.mailinglist.dao;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-@Test(groups = "ProjectDaoTests", dependsOnGroups = "DepartmentDaoTests")
+import csns.model.mailinglist.Mailinglist;
+import csns.model.mailinglist.Message;
+
+@Test(groups = "MessageDaoTests", dependsOnGroups = "MailinglistDaoTests")
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class ProjectDaoTests extends
-    AbstractTransactionalTestNGSpringContextTests {
+public class MessageDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    DepartmentDao departmentDao;
+    MailinglistDao mailinglistDao;
 
     @Autowired
-    ProjectDao projectDao;
+    MessageDao messageDao;
 
     @Test
-    public void getProjects()
+    public void searchMessages()
     {
-/*
-        Department cs = departmentDao.getDepartment( "cs" );
-        List<Project> projects = projectDao.getProjects( cs, 2013 );
-        assert projects.size() >= 1;
+        Mailinglist mailinglist = mailinglistDao.getMailinglist( 1001101L );
+        List<Message> messages = messageDao.searchMessages( mailinglist,
+            "welcome", 10 );
 
-        Project project = projects.get( 0 );
-        assert project.getAdvisors().get( 0 ).getUsername().equals( "cysun" );
-        assert project.getMembers().size() == 2;
-        assert project.getResources()
-            .get( 0 )
-            .getName()
-            .equals( "Project Documentation" );
-*/
+        assert messages.get( 0 ).getAuthor().getUsername().equals( "rpamula" );
     }
 
 }

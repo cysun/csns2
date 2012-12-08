@@ -29,7 +29,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import csns.model.core.Message;
+import csns.model.core.AbstractMessage;
 
 @Entity
 @Table(name = "wiki_revisions")
@@ -37,7 +37,7 @@ import csns.model.core.Message;
     joinTable = @JoinTable(name = "wiki_revision_attachments",
         joinColumns = @JoinColumn(name = "revision_id"),
         inverseJoinColumns = @JoinColumn(name = "file_id")))
-public class Revision extends Message implements Serializable {
+public class Revision extends AbstractMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

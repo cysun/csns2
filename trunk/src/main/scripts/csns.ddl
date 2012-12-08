@@ -203,6 +203,30 @@
         primary key (id)
     );
 
+    create table mailinglist_message_attachments (
+        message_id int8 not null,
+        file_id int8 not null
+    );
+
+    create table mailinglist_messages (
+        id int8 not null,
+        content varchar(255) not null,
+        date timestamp,
+        subject varchar(255) not null,
+        author_id int8,
+        mailinglist_id int8,
+        primary key (id)
+    );
+
+    create table mailinglists (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255) not null,
+        department_id int8,
+        primary key (id),
+        unique (department_id, name)
+    );
+
     create table news (
         id int8 not null,
         expire_date timestamp,
@@ -273,11 +297,11 @@
         point_value int4 not null,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -654,6 +678,31 @@
         add constraint FKB460177243B0145C 
         foreign key (last_post_id) 
         references forum_posts;
+
+    alter table mailinglist_message_attachments 
+        add constraint FK6BDFCC22B9895B0B 
+        foreign key (file_id) 
+        references files;
+
+    alter table mailinglist_message_attachments 
+        add constraint FK6BDFCC22348C3C77 
+        foreign key (message_id) 
+        references mailinglist_messages;
+
+    alter table mailinglist_messages 
+        add constraint FK7B4FD2E2BA7D82B7 
+        foreign key (mailinglist_id) 
+        references mailinglists;
+
+    alter table mailinglist_messages 
+        add constraint FK7B4FD2E2447A76EB 
+        foreign key (author_id) 
+        references users;
+
+    alter table mailinglists 
+        add constraint FK7C78C7AAF7F6787A 
+        foreign key (department_id) 
+        references departments;
 
     alter table news 
         add constraint FK338AD3F7F6787A 

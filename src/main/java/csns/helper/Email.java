@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Properties;
 
 import csns.model.core.File;
-import csns.model.core.Message;
+import csns.model.core.AbstractMessage;
 import csns.model.core.User;
 
-public class Email extends Message {
+public class Email extends AbstractMessage {
 
     private static final long serialVersionUID = 1L;
 

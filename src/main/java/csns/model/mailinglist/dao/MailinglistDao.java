@@ -16,31 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.validator;
+package csns.model.mailinglist.dao;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+import csns.model.mailinglist.Mailinglist;
 
-import csns.model.core.AbstractMessage;
+public interface MailinglistDao {
 
-@Component
-public class MessageValidator implements Validator {
-
-    @Override
-    public boolean supports( Class<?> clazz )
-    {
-        return AbstractMessage.class.isAssignableFrom( clazz );
-    }
-
-    @Override
-    public void validate( Object target, Errors errors )
-    {
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "subject",
-            "error.field.required" );
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "content",
-            "error.field.required" );
-    }
+    Mailinglist getMailinglist( Long id );
 
 }

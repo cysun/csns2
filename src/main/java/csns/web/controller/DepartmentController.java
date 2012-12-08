@@ -42,6 +42,7 @@ import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
+import csns.model.mailinglist.Mailinglist;
 import csns.model.wiki.Page;
 import csns.model.wiki.Revision;
 import csns.model.wiki.dao.RevisionDao;
@@ -110,6 +111,7 @@ public class DepartmentController {
         }
 
         createForums( department );
+        createMailinglists( department );
         createWikiPages( department );
 
         return "redirect:/admin/department/list";
@@ -127,6 +129,35 @@ public class DepartmentController {
             forum.setDepartment( department );
             department.getForums().add( forum );
         }
+
+        departmentDao.saveDepartment( department );
+    }
+
+    private void createMailinglists( Department department )
+    {
+        String names[] = { "students", "undergrads", "grads", "grads-g0",
+            "grads-g1", "grads-g2", "grads-g3", "alumni", "alumni-undergrad",
+            "alumni-grad" };
+        String descriptions[] = { "All the students in the department.",
+            "Undergradudate students in the department.",
+            "Graduate students in the department.",
+            "Graduate students with G0 standing (Incoming).",
+            "Graduate students with G1 standing (Conditionally Classified).",
+            "Graduate students with G2 standing (Classified).",
+            "Graduate students with G3 standing (Candidacy).",
+            "All the alumni of the department.",
+            "Alumni of the undergraduate program.",
+            "Alumni of the graduate program." };
+
+        for( int i = 0; i < names.length; ++i )
+        {
+            Mailinglist mailinglist = new Mailinglist();
+            mailinglist.setName( names[i] );
+            mailinglist.setDescription( descriptions[i] );
+            mailinglist.setDepartment( department );
+            department.getMailinglists().add( mailinglist );
+        }
+
         departmentDao.saveDepartment( department );
     }
 

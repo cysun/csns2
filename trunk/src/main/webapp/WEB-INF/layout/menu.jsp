@@ -27,8 +27,6 @@
 <c:if test="${not empty dept}">
 <li><a href="<c:url value='/department/${dept}/' />">Department</a>
   <div><ul>
-    <li><a href="<c:url value='/department/${dept}/news/current' />"><img alt=""
-           src="<c:url value='/img/icons/newspaper.png' />" />News</a></li>
 <security:authorize access="authenticated and principal.isFaculty('${dept}')">
     <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
            src="<c:url value='/img/icons/users.png' />" />People</a></li>
@@ -44,10 +42,14 @@
   <div><ul>
     <li><a href="<c:url value='/wiki/content/department/${dept}/' />"><img alt=""
            src="<c:url value='/img/icons/wiki.png' />" />Wiki</a></li>
+    <li><a href="<c:url value='/department/${dept}/news/current' />"><img alt=""
+           src="<c:url value='/img/icons/newspaper.png' />" />News</a></li>
     <li><a href="<c:url value='/department/${dept}/forum/list' />"><img alt=""
            src="<c:url value='/img/icons/forums.png' />" />Forums</a></li>
     <li><a href="<c:url value='/department/${dept}/survey/current' />"><img alt=""
            src="<c:url value='/img/icons/surveys.png' />" />Surveys</a></li>
+    <li><a href="<c:url value='/department/${dept}/mailinglist/list' />"><img alt=""
+           src="<c:url value='/img/icons/mailinglists.png' />" />Mailing Lists</a></li>
 <security:authorize access="authenticated">
     <li><a href="<c:url value='/file/' />"><img alt=""
            src="<c:url value='/img/icons/file_manager.png' />" />File Manager</a></li>

@@ -38,6 +38,8 @@ import csns.model.core.dao.SubscriptionDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.model.forum.dao.TopicDao;
+import csns.model.mailinglist.Mailinglist;
+import csns.model.mailinglist.dao.MailinglistDao;
 import csns.model.wiki.dao.PageDao;
 import csns.security.SecurityUtils;
 
@@ -52,6 +54,9 @@ public class SubscriptionController {
 
     @Autowired
     TopicDao topicDao;
+
+    @Autowired
+    MailinglistDao mailinglistDao;
 
     @Autowired
     SubscriptionDao subscriptionDao;
@@ -86,6 +91,17 @@ public class SubscriptionController {
         return "subscription/forums";
     }
 
+    @RequestMapping("/subscription/mailinglists")
+    public String mailinglistSubscriptions( ModelMap models )
+    {
+        User user = SecurityUtils.getUser();
+        List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
+            user, Mailinglist.class );
+
+        models.put( "subscriptions", subscriptions );
+        return "subscription/mailinglists";
+    }
+
     private Subscribable subscribe( String type, Long id )
     {
         Subscribable subscribable = null;
@@ -99,6 +115,9 @@ public class SubscriptionController {
                 break;
             case "topic":
                 subscribable = topicDao.getTopic( id );
+                break;
+            case "mailinglist":
+                subscribable = mailinglistDao.getMailinglist( id );
                 break;
             default:
                 logger.error( "Unspported subscribable type: " + type );
@@ -126,6 +145,9 @@ public class SubscriptionController {
                 break;
             case "topic":
                 subscribable = topicDao.getTopic( id );
+                break;
+            case "mailinglist":
+                subscribable = mailinglistDao.getMailinglist( id );
                 break;
             default:
                 logger.error( "Unspported subscribable type: " + type );

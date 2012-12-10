@@ -18,10 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.Properties;
-
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +37,7 @@ import csns.helper.Email;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.EmailUtils;
 import csns.util.FileIO;
 import csns.web.validator.EmailValidator;
 
@@ -55,13 +52,13 @@ public class EmailController {
     FileIO fileIO;
 
     @Autowired
+    EmailUtils emailUtils;
+
+    @Autowired
     MailSender mailSender;
 
     @Autowired
     EmailValidator emailValidator;
-
-    @Resource(name = "applicationProperties")
-    Properties applicationProperties;
 
     private static final Logger logger = LoggerFactory.getLogger( EmailController.class );
 
@@ -70,7 +67,7 @@ public class EmailController {
         @RequestParam(value = "userId", required = false) Long ids[],
         ModelMap models )
     {
-        Email email = new Email( applicationProperties );
+        Email email = new Email();
         email.setAuthor( SecurityUtils.getUser() );
         email.setRecipients( userDao.getUsers( ids ) );
 
@@ -95,14 +92,17 @@ public class EmailController {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject( email.getSubject() );
-        message.setText( email.getContent() );
+        message.setText( emailUtils.getText( email ) );
         message.setFrom( user.getPrimaryEmail() );
         message.setCc( user.getPrimaryEmail() );
-        message.setTo( email.getTo() );
+        String addresses[] = emailUtils.getAddresses( email.getRecipients() )
+            .toArray( new String[0] );
+        message.setTo( addresses );
 
         mailSender.send( message );
         sessionStatus.setComplete();
-        logger.info( user.getUsername() + " sent email to " + email.getTo() );
+        logger.info( user.getUsername() + " sent email to "
+            + addresses.toString() );
 
         models.put( "backUrl", backUrl );
         models.put( "message", "status.email.sent" );

@@ -55,11 +55,11 @@ public class Mailinglist implements Subscribable, Serializable {
     private Department department;
 
     @Transient
-    private int subscriberCount;
+    private long subscriptionCount;
 
     public Mailinglist()
     {
-        subscriberCount = 0;
+        subscriptionCount = 0;
     }
 
     @Override
@@ -108,14 +108,14 @@ public class Mailinglist implements Subscribable, Serializable {
         this.department = department;
     }
 
-    public int getSubscriberCount()
+    public long getSubscriptionCount()
     {
-        return subscriberCount;
+        return subscriptionCount;
     }
 
-    public void setSubscriberCount( int subscriberCount )
+    public void setSubscriptionCount( long subscriptionCount )
     {
-        this.subscriberCount = subscriberCount;
+        this.subscriptionCount = subscriptionCount;
     }
 
 }

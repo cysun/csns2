@@ -46,6 +46,12 @@ public class Message extends AbstractMessage {
         super();
     }
 
+    public Message( Mailinglist mailinglist )
+    {
+        super();
+        this.mailinglist = mailinglist;
+    }
+
     public Mailinglist getMailinglist()
     {
         return mailinglist;

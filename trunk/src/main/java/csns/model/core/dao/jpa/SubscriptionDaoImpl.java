@@ -81,6 +81,16 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
     }
 
     @Override
+    public long getSubscriptionCount( Subscribable subscribable )
+    {
+        String query = "select count(*) from Subscription where subscribable = :subscribable";
+        Long result = entityManager.createQuery( query, Long.class )
+            .setParameter( "subscribable", subscribable )
+            .getSingleResult();
+        return result != null ? result : 0;
+    }
+
+    @Override
     @Transactional
     public Subscription subscribe( Subscribable subscribable, User subscriber )
     {

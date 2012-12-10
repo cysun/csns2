@@ -29,6 +29,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import csns.model.core.AbstractMessage;
+import csns.model.core.Subscribable;
+
 /**
  * Sometimes an email server may reject an email as spam if the list of
  * recipients is too long. MassMailSender breaks the list of recipients into
@@ -40,6 +43,9 @@ public class MassMailSender {
 
     @Autowired
     JavaMailSender mailSender;
+
+    @Autowired
+    EmailUtils emailUtils;
 
     int maxRecipientsPerMessage = 30;
 
@@ -68,9 +74,20 @@ public class MassMailSender {
                 {
                     logger.warn( e.getMessage() );
                 }
+                logger.debug( "sent email to " + bccAddresses.toString() );
                 bccAddresses.clear();
             }
         }
+    }
+
+    public void send( AbstractMessage message, Subscribable subscribable )
+    {
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setSubject( message.getSubject() );
+        email.setText( emailUtils.getText( message ) );
+        email.setFrom( message.getAuthor().getPrimaryEmail() );
+        email.setTo( emailUtils.getAppEmail() );
+        send( email, emailUtils.getAddresses( subscribable ) );
     }
 
 }

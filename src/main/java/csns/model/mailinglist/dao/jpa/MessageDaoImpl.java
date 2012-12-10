@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.mailinglist.Mailinglist;
 import csns.model.mailinglist.Message;
@@ -66,6 +67,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
+    @Transactional
     public Message saveMessage( Message message )
     {
         return entityManager.merge( message );

@@ -34,6 +34,8 @@ public interface SubscriptionDao {
 
     List<Subscription> getSubscriptions( User subscriber, Class<?> clazz );
 
+    long getSubscriptionCount( Subscribable subscribable );
+
     Subscription subscribe( Subscribable subscribable, User subscriber );
 
     void unsubscribe( Subscribable subscribable, User subscriber );

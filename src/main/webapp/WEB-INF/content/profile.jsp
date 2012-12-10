@@ -20,14 +20,14 @@ $(function() {
 </script>
 
 <ul id="title">
-<li>${user.name}</li>
+<li>${user.name}'s Profile</li>
 </ul>
 
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
   <li><a href="<c:url value='/subscription/forums' />">Forum Subscriptions</a></li>
-  <li><a href="<c:url value='/subscription/mailinglist' />">Mailing List Subscriptions</a></li>
+  <li><a href="<c:url value='/subscription/mailinglists' />">Mailing List Subscriptions</a></li>
 </ul>
 <div id="account">
 <form:form modelAttribute="user">

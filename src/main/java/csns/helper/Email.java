@@ -20,9 +20,7 @@ package csns.helper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import csns.model.core.File;
 import csns.model.core.AbstractMessage;
 import csns.model.core.User;
 
@@ -30,49 +28,11 @@ public class Email extends AbstractMessage {
 
     private static final long serialVersionUID = 1L;
 
-    private final String attachmentDownloadUrl;
-
     private List<User> recipients;
 
-    private List<File> attachments;
-
-    public Email( Properties applicationProperties )
+    public Email()
     {
-        super();
-
-        attachmentDownloadUrl = applicationProperties.getProperty( "url" )
-            + "/download?fileId=";
-
         recipients = new ArrayList<User>();
-        attachments = new ArrayList<File>();
-    }
-
-    public void addAttachment( File file )
-    {
-        if( attachments == null ) attachments = new ArrayList<File>();
-        attachments.add( file );
-
-        StringBuffer sb = new StringBuffer();
-        int index = attachments.size();
-        if( index == 1 ) sb.append( "\n\n[Attachments]\n\n" );
-        sb.append( "\t(" )
-            .append( index )
-            .append( ") " )
-            .append( file.getName() )
-            .append( " - " )
-            .append( attachmentDownloadUrl )
-            .append( file.getId() )
-            .append( "\n" );
-
-        content += sb;
-    }
-
-    public String[] getTo()
-    {
-        String to[] = new String[recipients.size()];
-        for( int i = 0; i < recipients.size(); ++i )
-            to[i] = recipients.get( i ).getPrimaryEmail();
-        return to;
     }
 
     public List<User> getRecipients()
@@ -83,16 +43,6 @@ public class Email extends AbstractMessage {
     public void setRecipients( List<User> recipients )
     {
         this.recipients = recipients;
-    }
-
-    public List<File> getAttachments()
-    {
-        return attachments;
-    }
-
-    public void setAttachments( List<File> attachments )
-    {
-        this.attachments = attachments;
     }
 
 }

@@ -439,6 +439,8 @@
 
     <definition name="subscription/forums" template="/WEB-INF/content/subscription/forums.jsp" />
 
+    <definition name="subscription/mailinglists" template="/WEB-INF/content/subscription/mailinglists.jsp" />
+
     <!-- ===== -->
     <!-- Forum -->
     <!-- ===== -->
@@ -575,6 +577,35 @@
     <definition name="file/move" extends="layout.basic">
         <put-attribute name="title" value="Move File" />
         <put-attribute name="content" value="/WEB-INF/content/file/move.jsp" />
+    </definition>
+
+    <!-- ============ -->
+    <!-- Mailing List -->
+    <!-- ============ -->
+
+    <definition name="mailinglist/list" extends="layout.basic">
+        <put-attribute name="title" value="Mailing Lists" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/list.jsp" />
+    </definition>
+
+    <definition name="mailinglist/view" extends="layout.basic">
+        <put-attribute name="title" value="Mailing List" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/view.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/compose" extends="layout.basic">
+        <put-attribute name="title" value="Email to  Mailing List" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/compose.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/view" extends="layout.basic">
+        <put-attribute name="title" value="View Message" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/view.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Messages" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/search.jsp" />
     </definition>
 
     <!-- ======== -->

@@ -653,6 +653,167 @@ create trigger mailinglist_messages_ts_trigger
 
 create index mailinglist_messages_ts_index on mailinglist_messages using gin(tsv);
 
+---------------
+-- standings --
+---------------
+
+create table standings (
+    id          bigint primary key,
+    symbol      varchar(255) not null unique,
+    name        varchar(255),
+    description varchar(8000)
+);
+
+insert into standings (id, symbol, name, description) values 
+    (4000, 'B', 'Undergraduate',
+      'Undergraduate student.');
+insert into standings (id, symbol, name, description) values 
+    (4002, 'BC','Grad Check for a BS/BA Degree',
+      'Undergradudate students who have requested grad check.');
+insert into standings (id, symbol, name, description) values 
+    (4004, 'BG','Graduated with BS/BA Degree',
+      'Graduated with a Bachelor''s Degree.');
+insert into standings (id, symbol, name, description) values 
+    (4010, 'G0', 'Incoming Graduate Student',
+      'Incoming graduate student.');
+insert into standings (id, symbol, name, description) values 
+    (4012, 'G1', 'Conditionaly Classified Graduate',
+      'Graduate students who have not completed all prerequisite courses.');
+insert into standings (id, symbol, name, description) values 
+    (4014, 'G2', 'Classified Graduate',
+      'Graduate students who have completed all prerequiste courses but ' ||
+      'have not yet fullfilled the requirements for Candidacy.');
+insert into standings (id, symbol, name, description) values 
+    (4016, 'G3', 'Candidacy Graduate',
+      'Graduate students who have met the Candidacy requirements, which ' ||
+      'include completion of all core courses, completion of at least half ' ||
+      ' of the remaining course requirements, passing WPE, and declaring a ' ||
+      ' thesis/project or comprehensive exam option.');
+insert into standings (id, symbol, name, description) values 
+    (4018, 'GC', 'Grad Check for an MS Degree',
+      'Gradudate students who have requested grad check.');
+insert into standings (id, symbol, name, description) values 
+    (4020, 'GG', 'Graduated with MS Degree',
+      'Graduated with an Master''s Degree.');
+insert into standings (id, symbol, name, description) values 
+    (4030, 'NG', 'Not Graduated',
+      'The student did not graduate for some reason. For example, ' ||
+      'the student was disqualified from the program, or dropped out of ' ||
+      'the program, or simply stopped taking classes.');
+
+create table standing_mailinglists_to_subscribe (
+    standing_id     bigint not null references standings(id),
+    mailinglist     varchar(255)
+);
+
+create table standing_mailinglists_to_unsubscribe (
+    standing_id     bigint not null references standings(id),
+    mailinglist     varchar(255)
+);
+
+-- mailing list membership for B Standing
+insert into standing_mailinglists_to_subscribe values (4000, 'students');
+insert into standing_mailinglists_to_subscribe values (4000, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'grads');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni-grad');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni');
+insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni-undergrad');
+
+-- mailing list membership for BG Standing
+insert into standing_mailinglists_to_subscribe values (4004, 'alumni');
+insert into standing_mailinglists_to_subscribe values (4004, 'alumni-undergrad');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'students');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'grads');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4004, 'alumni-grad');
+
+-- mailing list membership for G0 Standing
+insert into standing_mailinglists_to_subscribe values (4010, 'students');
+insert into standing_mailinglists_to_subscribe values (4010, 'grads');
+insert into standing_mailinglists_to_subscribe values (4010, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4010, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4010, 'alumni-grad');
+
+-- mailing list membership for G1 Standing
+insert into standing_mailinglists_to_subscribe values (4012, 'students');
+insert into standing_mailinglists_to_subscribe values (4012, 'grads');
+insert into standing_mailinglists_to_subscribe values (4012, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4012, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4012, 'alumni-grad');
+
+-- mailing list membership for G2 Standing
+insert into standing_mailinglists_to_subscribe values (4014, 'students');
+insert into standing_mailinglists_to_subscribe values (4014, 'grads');
+insert into standing_mailinglists_to_subscribe values (4014, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4014, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4014, 'alumni-grad');
+
+-- Mailing list membership for G3 Standing
+insert into standing_mailinglists_to_subscribe values (4016, 'students');
+insert into standing_mailinglists_to_subscribe values (4016, 'grads');
+insert into standing_mailinglists_to_subscribe values (4016, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4016, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4016, 'alumni-grad');
+
+-- mailing list membership for GG Standing
+insert into standing_mailinglists_to_subscribe values (4020, 'alumni');
+insert into standing_mailinglists_to_subscribe values (4020, 'alumni-grad');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'students');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'grads');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g3');
+
+-- mailing list membership for NG Standing
+insert into standing_mailinglists_to_unsubscribe values (4030, 'students');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'undergrads');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'grads');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g0');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g1');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g2');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g3');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni-undergrad');
+insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni-grad');
+
+create table academic_standings (
+    id              bigint primary key,
+    student_id      bigint references users(id),
+    department_id   bigint references departments(id),
+    standing_id     bigint references standings(id),
+    quarter         integer,
+  unique (student_id, department_id, standing_id)
+);
+
+create table current_standings (
+    student_id              bigint not null references users(id),
+    department_id           bigint not null references departments(id),
+    academic_standing_id    bigint unique not null references academic_standings(id),
+  primary key (student_id, department_id)
+);
+
 --------------
 -- projects --
 --------------

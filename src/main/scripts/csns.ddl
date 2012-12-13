@@ -7,6 +7,16 @@
         primary key (id)
     );
 
+    create table academic_standings (
+        id int8 not null,
+        quarter int4,
+        department_id int8,
+        standing_id int8,
+        student_id int8,
+        primary key (id),
+        unique (student_id, department_id, standing_id)
+    );
+
     create table answer_sections (
         id int8 not null,
         section_index int4 not null,
@@ -70,6 +80,14 @@
         coordinator_id int8,
         syllabus_id int8,
         primary key (id)
+    );
+
+    create table current_standings (
+        student_id int8 not null,
+        academic_standing_id int8 not null,
+        department_id int8 not null,
+        primary key (student_id, department_id),
+        unique (academic_standing_id)
     );
 
     create table department_additional_graduate_courses (
@@ -295,13 +313,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        attachment_allowed boolean not null,
+        correct_answer varchar(255),
+        text_length int4,
         max_selections int4,
         min_selections int4,
         max_rating int4,
         min_rating int4,
-        attachment_allowed boolean not null,
-        correct_answer varchar(255),
-        text_length int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -331,6 +349,24 @@
         course_id int8 not null,
         primary key (id),
         unique (quarter, course_id, number)
+    );
+
+    create table standing_mailinglists_to_subscribe (
+        standing_id int8 not null,
+        mailinglist varchar(255)
+    );
+
+    create table standing_mailinglists_to_unsubscribe (
+        standing_id int8 not null,
+        mailinglist varchar(255)
+    );
+
+    create table standings (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255),
+        symbol varchar(255) not null unique,
+        primary key (id)
     );
 
     create table submissions (
@@ -444,6 +480,21 @@
         primary key (id)
     );
 
+    alter table academic_standings 
+        add constraint FKC635A86FF7F6787A 
+        foreign key (department_id) 
+        references departments;
+
+    alter table academic_standings 
+        add constraint FKC635A86F288D1E3A 
+        foreign key (standing_id) 
+        references standings;
+
+    alter table academic_standings 
+        add constraint FKC635A86FAEFD183B 
+        foreign key (student_id) 
+        references users;
+
     alter table answer_sections 
         add constraint FK96B4258F9AA31C1D 
         foreign key (answer_sheet_id) 
@@ -503,6 +554,21 @@
         add constraint FK391923B85EEDFE02 
         foreign key (syllabus_id) 
         references files;
+
+    alter table current_standings 
+        add constraint FKE2274261F7F6787A 
+        foreign key (department_id) 
+        references departments;
+
+    alter table current_standings 
+        add constraint FKE2274261C68B1129 
+        foreign key (academic_standing_id) 
+        references academic_standings;
+
+    alter table current_standings 
+        add constraint FKE2274261AEFD183B 
+        foreign key (student_id) 
+        references users;
 
     alter table department_additional_graduate_courses 
         add constraint FKE15B3A6FF7F6787A 
@@ -788,6 +854,16 @@
         add constraint FK38805E2E90C57DA 
         foreign key (course_id) 
         references courses;
+
+    alter table standing_mailinglists_to_subscribe 
+        add constraint FKBF643CC8288D1E3A 
+        foreign key (standing_id) 
+        references standings;
+
+    alter table standing_mailinglists_to_unsubscribe 
+        add constraint FK67DEA2CF288D1E3A 
+        foreign key (standing_id) 
+        references standings;
 
     alter table submissions 
         add constraint FK2912EA73583829A 

@@ -13,6 +13,12 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop table current_standings;
+drop table academic_standings;
+drop table standing_mailinglists_to_unsubscribe;
+drop table standing_mailinglists_to_subscribe;
+drop table standings;
+
 drop trigger mailinglist_messages_ts_trigger on mailinglist_messages;
 drop function mailinglist_messages_ts_trigger_function();
 drop table mailinglist_message_attachments;

@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -35,6 +36,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,6 +50,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import csns.model.academics.AcademicStanding;
+import csns.model.academics.Department;
 import csns.model.survey.Survey;
 
 @Entity
@@ -132,6 +137,13 @@ public class User implements Serializable, Cloneable, Comparable<User>,
 
     @Transient
     String password2;
+
+    @OneToMany
+    @JoinTable(name = "current_standings",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "academic_standing_id"))
+    @MapKeyJoinColumn(name = "department_id")
+    private Map<Department, AcademicStanding> currentStandings;
 
     @ManyToMany
     @JoinTable(name = "surveys_taken",
@@ -580,6 +592,17 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setPassword2( String password2 )
     {
         this.password2 = password2;
+    }
+
+    public Map<Department, AcademicStanding> getCurrentStandings()
+    {
+        return currentStandings;
+    }
+
+    public void setCurrentStandings(
+        Map<Department, AcademicStanding> currentStandings )
+    {
+        this.currentStandings = currentStandings;
     }
 
     public Set<Survey> getSurveysTaken()

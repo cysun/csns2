@@ -326,6 +326,11 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return primaryEmail != null ? primaryEmail : secondaryEmail;
     }
 
+    public AcademicStanding getCurrentStanding( Department department )
+    {
+        return currentStandings.get( department );
+    }
+
     @Override
     public Collection<GrantedAuthority> getAuthorities()
     {

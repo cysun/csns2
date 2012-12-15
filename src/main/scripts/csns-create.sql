@@ -701,102 +701,42 @@ insert into standings (id, symbol, name, description) values
       'the student was disqualified from the program, or dropped out of ' ||
       'the program, or simply stopped taking classes.');
 
-create table standing_mailinglists_to_subscribe (
-    standing_id     bigint not null references standings(id),
-    mailinglist     varchar(255)
-);
-
-create table standing_mailinglists_to_unsubscribe (
+create table standing_mailinglists (
     standing_id     bigint not null references standings(id),
     mailinglist     varchar(255)
 );
 
 -- mailing list membership for B Standing
-insert into standing_mailinglists_to_subscribe values (4000, 'students');
-insert into standing_mailinglists_to_subscribe values (4000, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'grads');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni-grad');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni');
-insert into standing_mailinglists_to_unsubscribe values (4000, 'alumni-undergrad');
+insert into standing_mailinglists values (4000, 'students');
+insert into standing_mailinglists values (4000, 'undergrads');
 
 -- mailing list membership for BG Standing
-insert into standing_mailinglists_to_subscribe values (4004, 'alumni');
-insert into standing_mailinglists_to_subscribe values (4004, 'alumni-undergrad');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'students');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'grads');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4004, 'alumni-grad');
+insert into standing_mailinglists values (4004, 'alumni');
+insert into standing_mailinglists values (4004, 'alumni-undergrad');
 
 -- mailing list membership for G0 Standing
-insert into standing_mailinglists_to_subscribe values (4010, 'students');
-insert into standing_mailinglists_to_subscribe values (4010, 'grads');
-insert into standing_mailinglists_to_subscribe values (4010, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4010, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4010, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4010, 'alumni-grad');
+insert into standing_mailinglists values (4010, 'students');
+insert into standing_mailinglists values (4010, 'grads');
+insert into standing_mailinglists values (4010, 'grads-g0');
 
 -- mailing list membership for G1 Standing
-insert into standing_mailinglists_to_subscribe values (4012, 'students');
-insert into standing_mailinglists_to_subscribe values (4012, 'grads');
-insert into standing_mailinglists_to_subscribe values (4012, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4012, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4012, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4012, 'alumni-grad');
+insert into standing_mailinglists values (4012, 'students');
+insert into standing_mailinglists values (4012, 'grads');
+insert into standing_mailinglists values (4012, 'grads-g1');
 
 -- mailing list membership for G2 Standing
-insert into standing_mailinglists_to_subscribe values (4014, 'students');
-insert into standing_mailinglists_to_subscribe values (4014, 'grads');
-insert into standing_mailinglists_to_subscribe values (4014, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4014, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4014, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4014, 'alumni-grad');
+insert into standing_mailinglists values (4014, 'students');
+insert into standing_mailinglists values (4014, 'grads');
+insert into standing_mailinglists values (4014, 'grads-g2');
 
 -- Mailing list membership for G3 Standing
-insert into standing_mailinglists_to_subscribe values (4016, 'students');
-insert into standing_mailinglists_to_subscribe values (4016, 'grads');
-insert into standing_mailinglists_to_subscribe values (4016, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4016, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4016, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4016, 'alumni-grad');
+insert into standing_mailinglists values (4016, 'students');
+insert into standing_mailinglists values (4016, 'grads');
+insert into standing_mailinglists values (4016, 'grads-g3');
 
 -- mailing list membership for GG Standing
-insert into standing_mailinglists_to_subscribe values (4020, 'alumni');
-insert into standing_mailinglists_to_subscribe values (4020, 'alumni-grad');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'students');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'grads');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4020, 'grads-g3');
-
--- mailing list membership for NG Standing
-insert into standing_mailinglists_to_unsubscribe values (4030, 'students');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'undergrads');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'grads');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g0');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g1');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g2');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'grads-g3');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni-undergrad');
-insert into standing_mailinglists_to_unsubscribe values (4030, 'alumni-grad');
+insert into standing_mailinglists values (4020, 'alumni');
+insert into standing_mailinglists values (4020, 'alumni-grad');
 
 create table academic_standings (
     id              bigint primary key,
@@ -813,6 +753,59 @@ create table current_standings (
     academic_standing_id    bigint unique not null references academic_standings(id),
   primary key (student_id, department_id)
 );
+
+create or replace function mailinglist_subscription_on_standing_change_trigger_function()
+    returns trigger as $$
+declare
+    l_dept              varchar;
+    l_mailinglist       varchar;
+    l_standing_id       standings.id%type;
+    l_mailinglist_id    mailinglists.id%type;
+    l_subscription_id   subscriptions.id%type;
+begin
+    if tg_op = 'DELETE' or tg_op = 'UPDATE' then
+        select abbreviation into l_dept from departments
+            where id = old.department_id;
+        select standing_id into l_standing_id from academic_standings
+            where id = old.academic_standing_id;
+        for l_mailinglist in select mailinglist from standing_mailinglists
+            where standing_id = l_standing_id loop
+                delete from subscriptions where subscriber_id = old.student_id
+                    and subscribable_type = 'ML' and auto_subscribed = 't'
+                    and subscribable_id = (select id from mailinglists
+                        where name = l_dept || '-' || l_mailinglist);
+        end loop;
+	end if;
+	
+    if tg_op = 'INSERT' or tg_op = 'UPDATE' then
+        select abbreviation into l_dept from departments
+            where id = new.department_id;
+        select standing_id into l_standing_id from academic_standings
+            where id = new.academic_standing_id;
+        for l_mailinglist in select mailinglist from standing_mailinglists
+            where standing_id = l_standing_id loop
+            select id into l_mailinglist_id from mailinglists
+                where name = l_dept || '-' || l_mailinglist;
+            select id into l_subscription_id from subscriptions
+                where subscribable_id = l_mailinglist_id
+                and subscriber_id = new.student_id
+                and subscribable_type = 'ML';
+            if not found then
+                insert into subscriptions (id, subscribable_type, subscribable_id,
+                    subscriber_id, auto_subscribed) values (
+                    nextval('hibernate_sequence'), 'ML', l_mailinglist_id,
+                    new.student_id, 't');
+            end if;
+        end loop;
+    end if;
+
+    return null; 
+end
+$$ language plpgsql;
+
+create trigger mailinglist_subscription_on_standing_change_trigger
+    after insert or update or delete on current_standings
+    for each row execute procedure mailinglist_subscription_on_standing_change_trigger_function();
 
 --------------
 -- projects --

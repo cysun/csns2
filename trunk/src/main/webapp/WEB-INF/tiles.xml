@@ -120,11 +120,6 @@
         <put-attribute name="content" value="/WEB-INF/content/user/search.jsp" />
     </definition>
 
-    <definition name="user/view" extends="layout.jqueryui">
-        <put-attribute name="title" value="View User" />
-        <put-attribute name="content" value="/WEB-INF/content/user/view.jsp" />
-    </definition>
-
     <definition name="user/add" extends="layout.jqueryui">
         <put-attribute name="title" value="Add User" />
         <put-attribute name="content" value="/WEB-INF/content/user/add.jsp" />
@@ -149,6 +144,13 @@
         <put-attribute name="title" value="Reset Password" />
         <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
     </definition>
+
+    <definition name="user/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/view.jsp" />
+    </definition>
+
+    <definition name="user/standings" template="/WEB-INF/content/user/standings.jsp" />
 
     <!-- ====== -->
     <!-- Course -->

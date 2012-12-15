@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <script>
-$(function() {
+$(function(){
     $("#birthday").datepicker({
         inline: true,
         changeMonth: true,

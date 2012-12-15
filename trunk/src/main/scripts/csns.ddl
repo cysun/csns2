@@ -351,12 +351,7 @@
         unique (quarter, course_id, number)
     );
 
-    create table standing_mailinglists_to_subscribe (
-        standing_id int8 not null,
-        mailinglist varchar(255)
-    );
-
-    create table standing_mailinglists_to_unsubscribe (
+    create table standing_mailinglists (
         standing_id int8 not null,
         mailinglist varchar(255)
     );
@@ -855,13 +850,8 @@
         foreign key (course_id) 
         references courses;
 
-    alter table standing_mailinglists_to_subscribe 
-        add constraint FKBF643CC8288D1E3A 
-        foreign key (standing_id) 
-        references standings;
-
-    alter table standing_mailinglists_to_unsubscribe 
-        add constraint FK67DEA2CF288D1E3A 
+    alter table standing_mailinglists 
+        add constraint FK851450BD288D1E3A 
         foreign key (standing_id) 
         references standings;
 

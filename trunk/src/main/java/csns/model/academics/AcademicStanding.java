@@ -94,7 +94,9 @@ public class AcademicStanding implements Serializable,
     @Override
     public String toString()
     {
-        return "[" + student + ", " + standing + ", " + quarter + "]";
+        return "[" + student.getCin() + ", " + department.getAbbreviation()
+            + ", " + standing.getSymbol() + ", " + quarter.getShortString()
+            + "]";
     }
 
     public Long getId()

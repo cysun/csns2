@@ -2,7 +2,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
-$(function() {
+$(function(){
+    $.ajaxSetup({ cache: false });
     $("#tabs").tabs({
         cache: false
     });
@@ -19,7 +20,7 @@ $(function() {
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
-  <li><a href="standings">Standings</a></li>
+  <li><a href="standings?userId=${user.id}">Standings</a></li>
   <li><a href="coursework">Course Work</a></li>
   <li><a href="advisement">Advisement</a></li>
 </ul>

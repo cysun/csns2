@@ -48,22 +48,16 @@ public class Standing implements Serializable, Comparable<Standing> {
 
     private String description;
 
+    /** The mailing lists a student with this standing should subscribe. */
     @ElementCollection
-    @CollectionTable(name = "standing_mailinglists_to_subscribe",
+    @CollectionTable(name = "standing_mailinglists",
         joinColumns = @JoinColumn(name = "standing_id"))
     @Column(name = "mailinglist")
-    private Set<String> mailinglistsToSubscribe;
-
-    @ElementCollection
-    @CollectionTable(name = "standing_mailinglists_to_unsubscribe",
-        joinColumns = @JoinColumn(name = "standing_id"))
-    @Column(name = "mailinglist")
-    private Set<String> mailinglistsToUnsubscribe;
+    private Set<String> mailinglists;
 
     public Standing()
     {
-        mailinglistsToSubscribe = new HashSet<String>();
-        mailinglistsToUnsubscribe = new HashSet<String>();
+        mailinglists = new HashSet<String>();
     }
 
     @Override
@@ -121,25 +115,14 @@ public class Standing implements Serializable, Comparable<Standing> {
         this.description = description;
     }
 
-    public Set<String> getMailinglistsToSubscribe()
+    public Set<String> getMailinglists()
     {
-        return mailinglistsToSubscribe;
+        return mailinglists;
     }
 
-    public void setMailinglistsToSubscribe( Set<String> mailinglistsToSubscribe )
+    public void setMailinglists( Set<String> mailinglists )
     {
-        this.mailinglistsToSubscribe = mailinglistsToSubscribe;
-    }
-
-    public Set<String> getMailinglistsToUnsubscribe()
-    {
-        return mailinglistsToUnsubscribe;
-    }
-
-    public void setMailinglistsToUnsubscribe(
-        Set<String> mailinglistsToUnsubscribe )
-    {
-        this.mailinglistsToUnsubscribe = mailinglistsToUnsubscribe;
+        this.mailinglists = mailinglists;
     }
 
 }

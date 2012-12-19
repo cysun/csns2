@@ -17,6 +17,24 @@
         unique (student_id, department_id, standing_id)
     );
 
+    create table advisement_record_attachments (
+        record_id int8 not null,
+        file_id int8 not null
+    );
+
+    create table advisement_records (
+        id int8 not null,
+        comment varchar(255),
+        date timestamp,
+        deleted boolean not null,
+        editable boolean not null,
+        emailed_to_students boolean not null,
+        for_advisors_only boolean not null,
+        advisor_id int8,
+        student_id int8,
+        primary key (id)
+    );
+
     create table answer_sections (
         id int8 not null,
         section_index int4 not null,
@@ -68,6 +86,28 @@
     create table authorities (
         user_id int8 not null,
         role varchar(255)
+    );
+
+    create table course_substitutions (
+        id int8 not null,
+        advisement_record_id int8,
+        original_course_id int8,
+        substitute_course_id int8,
+        primary key (id)
+    );
+
+    create table course_transfers (
+        id int8 not null,
+        advisement_record_id int8,
+        course_id int8,
+        primary key (id)
+    );
+
+    create table course_waivers (
+        id int8 not null,
+        advisement_record_id int8,
+        course_id int8,
+        primary key (id)
     );
 
     create table courses (
@@ -313,13 +353,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_selections int4,
         min_selections int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -490,6 +530,26 @@
         foreign key (student_id) 
         references users;
 
+    alter table advisement_record_attachments 
+        add constraint FKC40A95BB9895B0B 
+        foreign key (file_id) 
+        references files;
+
+    alter table advisement_record_attachments 
+        add constraint FKC40A95B9D06760A 
+        foreign key (record_id) 
+        references advisement_records;
+
+    alter table advisement_records 
+        add constraint FK5AB4FF49AEFD183B 
+        foreign key (student_id) 
+        references users;
+
+    alter table advisement_records 
+        add constraint FK5AB4FF49C5DD9096 
+        foreign key (advisor_id) 
+        references users;
+
     alter table answer_sections 
         add constraint FK96B4258F9AA31C1D 
         foreign key (answer_sheet_id) 
@@ -539,6 +599,41 @@
         add constraint FK2B0F1321E3C184AB 
         foreign key (user_id) 
         references users;
+
+    alter table course_substitutions 
+        add constraint FK12AF43F2DF387E75 
+        foreign key (substitute_course_id) 
+        references courses;
+
+    alter table course_substitutions 
+        add constraint FK12AF43F25E5E8AEC 
+        foreign key (original_course_id) 
+        references courses;
+
+    alter table course_substitutions 
+        add constraint FK12AF43F2E3403151 
+        foreign key (advisement_record_id) 
+        references advisement_records;
+
+    alter table course_transfers 
+        add constraint FKBB48FAC490C57DA 
+        foreign key (course_id) 
+        references courses;
+
+    alter table course_transfers 
+        add constraint FKBB48FAC4E3403151 
+        foreign key (advisement_record_id) 
+        references advisement_records;
+
+    alter table course_waivers 
+        add constraint FKA0B4AC6B90C57DA 
+        foreign key (course_id) 
+        references courses;
+
+    alter table course_waivers 
+        add constraint FKA0B4AC6BE3403151 
+        foreign key (advisement_record_id) 
+        references advisement_records;
 
     alter table courses 
         add constraint FK391923B8AFCBF26 

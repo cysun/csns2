@@ -39,7 +39,7 @@ public class FileDaoImpl implements FileDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.public or authenticated and returnObject.owner.id == principal.id or returnObject.submission != null and returnObject.submission.assignment.section.isInstructor(principal)")
+    @PostAuthorize("returnObject.public or authenticated and (returnObject.owner.id == principal.id or principal.faculty or returnObject.submission != null and returnObject.submission.assignment.section.isInstructor(principal))")
     public File getFile( Long id )
     {
         return entityManager.find( File.class, id );
@@ -114,7 +114,7 @@ public class FileDaoImpl implements FileDao {
 
     @Override
     @Transactional
-    @PreAuthorize("#file.parent == null and #file.owner.id == principal.id or #file.submission != null and #file.submission.assignment.section.isInstructor(principal) or #file.parent != null and #file.parent.owner.id == principal.id")
+    @PreAuthorize("authenticated and (#file.parent == null and #file.owner.id == principal.id or principal.faculty or #file.submission != null and #file.submission.assignment.section.isInstructor(principal) or #file.parent != null and #file.parent.owner.id == principal.id)")
     public File saveFile( File file )
     {
         return entityManager.merge( file );

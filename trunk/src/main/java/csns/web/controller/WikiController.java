@@ -375,7 +375,8 @@ public class WikiController {
 
         User user = SecurityUtils.getUser();
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
 
         post.setAuthor( user );
         post.setDate( new Date() );
@@ -423,8 +424,7 @@ public class WikiController {
             "xsl/diff2html.xsl" );
 
         contentHandler.startDocument();
-        HtmlSaxDiffOutput diffOutput = new HtmlSaxDiffOutput(
-            contentHandler,
+        HtmlSaxDiffOutput diffOutput = new HtmlSaxDiffOutput( contentHandler,
             "diff" );
         HTMLDiffer differ = new HTMLDiffer( diffOutput );
         TextNodeComparator leftComparator = createComparator( oldRevision );

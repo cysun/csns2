@@ -30,15 +30,15 @@ function deleteStanding( id )
 </c:if>
 
 <c:if test="${fn:length(currentStandings) > 0}">
-<h3>Current Standings</h3>
+<h4>Current Standings</h4>
 <ul>
   <c:forEach items="${currentStandings}" var="currentStanding">
   <li>${currentStanding.standing.symbol} - ${currentStanding.standing.name} in ${currentStanding.department.name}</li>
   </c:forEach>
 </ul>
 
-<h3>Standing History</h3>
-<table class="viewtable">
+<h4>Standing History</h4>
+<table class="viewtable autowidth">
   <tr>
     <th>Department</th><th>Standing</th><th>Quarter</th>
     <c:if test="${isFaculty}"><th></th></c:if>

@@ -85,8 +85,8 @@ public class MailinglistMessageController {
         message.setAuthor( user );
         message.setDate( new Date() );
         if( uploadedFiles != null )
-            message.getAttachments()
-                .addAll( fileIO.save( uploadedFiles, user ) );
+            message.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
 
         message = messageDao.saveMessage( message );
         massMailSender.send( message, message.getMailinglist() );

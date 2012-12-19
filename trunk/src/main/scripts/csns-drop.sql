@@ -13,6 +13,12 @@ drop table project_members;
 drop table project_advisors;
 drop table projects;
 
+drop table course_waivers;
+drop table course_transfers;
+drop table course_substitutions;
+drop table advisement_record_attachments;
+drop table advisement_records;
+
 drop trigger mailinglist_subscription_on_standing_change_trigger on current_standings;
 drop function mailinglist_subscription_on_standing_change_trigger_function();
 drop table current_standings;

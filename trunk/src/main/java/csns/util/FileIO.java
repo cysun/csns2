@@ -52,12 +52,13 @@ public class FileIO {
     {
     }
 
-    public File save( MultipartFile uploadedFile, User user )
+    public File save( MultipartFile uploadedFile, User user, boolean isPublic )
     {
-        return save( uploadedFile, user, null );
+        return save( uploadedFile, user, null, isPublic );
     }
 
-    public File save( MultipartFile uploadedFile, User user, File parent )
+    public File save( MultipartFile uploadedFile, User user, File parent,
+        boolean isPublic )
     {
         if( uploadedFile.isEmpty() ) return null;
 
@@ -67,7 +68,7 @@ public class FileIO {
         file.setSize( uploadedFile.getSize() );
         file.setOwner( user );
         file.setParent( parent );
-        file.setPublic( true );
+        file.setPublic( isPublic );
         file = fileDao.saveFile( file );
 
         String fileId = file.getId().toString();
@@ -84,12 +85,13 @@ public class FileIO {
         return file;
     }
 
-    public List<File> save( MultipartFile[] uploadedFiles, User user )
+    public List<File> save( MultipartFile[] uploadedFiles, User user,
+        boolean isPublic )
     {
         List<File> files = new ArrayList<File>();
         for( MultipartFile uploadedFile : uploadedFiles )
             if( !uploadedFile.isEmpty() )
-                files.add( save( uploadedFile, user ) );
+                files.add( save( uploadedFile, user, isPublic ) );
         return files;
     }
 

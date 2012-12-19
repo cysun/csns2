@@ -46,7 +46,7 @@ public class CKEditorController {
     {
         User user = SecurityUtils.getUser();
         File parent = fileDao.getCKEditorFolder( user );
-        File file = fileIO.save( uploadedFile, user, parent );
+        File file = fileIO.save( uploadedFile, user, parent, true );
 
         models.put( "file", file );
         return "ckeditor/upload";

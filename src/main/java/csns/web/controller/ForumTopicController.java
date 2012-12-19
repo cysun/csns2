@@ -106,7 +106,8 @@ public class ForumTopicController {
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
 
         post.setAuthor( user );
         post.setDate( new Date() );
@@ -226,7 +227,8 @@ public class ForumTopicController {
         post.setEditedBy( user );
         post.setEditDate( new Date() );
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
         post = postDao.savePost( post );
 
         logger.info( user.getUsername() + " edited forum post " + post.getId() );
@@ -292,7 +294,8 @@ public class ForumTopicController {
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
 
         user.incrementNumOfForumPosts();
         post.setAuthor( user );

@@ -88,7 +88,8 @@ public class EmailController {
 
         User user = SecurityUtils.getUser();
         if( uploadedFiles != null )
-            email.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            email.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject( email.getSubject() );

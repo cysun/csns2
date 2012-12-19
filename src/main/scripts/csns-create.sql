@@ -807,6 +807,47 @@ create trigger mailinglist_subscription_on_standing_change_trigger
     after insert or update or delete on current_standings
     for each row execute procedure mailinglist_subscription_on_standing_change_trigger_function();
 
+----------------
+-- advisement --
+----------------
+
+create table advisement_records (
+    id                  bigint primary key,
+    student_id          bigint references users(id),
+    advisor_id          bigint references users(id),
+    comment             varchar(8000),
+    date                timestamp default current_timestamp,
+    editable            boolean not null default 't',
+    for_advisors_only   boolean not null default 'f',
+    emailed_to_students boolean not null default 'f',
+    deleted             boolean not null default 'f'
+);
+
+create table advisement_record_attachments (
+    record_id   bigint not null references advisement_records(id),
+    file_id     bigint not null references files(id),
+  primary key (record_id, file_id)
+);
+
+create table course_substitutions (
+    id                      bigint primary key,
+    original_course_id      bigint references courses(id),
+    substitute_course_id    bigint references courses(id),
+    advisement_record_id    bigint references advisement_records(id)
+);
+
+create table course_transfers (
+    id                      bigint primary key,
+    course_id               bigint references courses(id),
+    advisement_record_id    bigint references advisement_records(id)
+);
+
+create table course_waivers (
+    id                      bigint primary key,
+    course_id               bigint references courses(id),
+    advisement_record_id    bigint references advisement_records(id)
+);
+
 --------------
 -- projects --
 --------------

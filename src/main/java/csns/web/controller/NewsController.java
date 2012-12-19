@@ -125,7 +125,8 @@ public class NewsController {
         Post post = news.getTopic().getFirstPost();
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
         post.setAuthor( user );
         post.setDate( new Date() );
 
@@ -164,7 +165,8 @@ public class NewsController {
         Post post = news.getTopic().getFirstPost();
         User user = SecurityUtils.getUser();
         if( uploadedFiles != null )
-            post.getAttachments().addAll( fileIO.save( uploadedFiles, user ) );
+            post.getAttachments().addAll(
+                fileIO.save( uploadedFiles, user, true ) );
         post.setEditedBy( user );
         post.setEditDate( new Date() );
         postDao.savePost( post );

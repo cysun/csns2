@@ -945,6 +945,17 @@ table {
     font-family: monospace;
 }
 
+.general-attachments {
+    border: 1px solid #dddddd;
+    background-color:#ffffff;
+    margin:0 0 10px 0;
+    padding:10px;
+}
+.general-attachments ul {
+    margin:5px 20px;
+    padding:0;
+}
+
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

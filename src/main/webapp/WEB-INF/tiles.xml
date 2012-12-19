@@ -16,6 +16,21 @@
         <put-attribute name="menu" value="" />
     </definition>
 
+    <definition name="layout.alljs" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery.jeditable.mini.js" />
+            <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.js" />
+            <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+        </put-list-attribute>
+    </definition>
+
     <definition name="layout.jqueryui" template="/WEB-INF/layout/template.basic.jsp">
         <put-list-attribute name="cssUrls">
             <add-attribute value="${jqueryui.css}" />
@@ -145,12 +160,16 @@
         <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
     </definition>
 
-    <definition name="user/view" extends="layout.jqueryui">
+    <definition name="user/view" extends="layout.alljs">
         <put-attribute name="title" value="View User" />
         <put-attribute name="content" value="/WEB-INF/content/user/view.jsp" />
     </definition>
 
     <definition name="user/standings" template="/WEB-INF/content/user/standings.jsp" />
+
+    <definition name="user/courses" template="/WEB-INF/content/user/courses.jsp" />
+
+    <definition name="user/advisement" template="/WEB-INF/content/user/advisement.jsp" />
 
     <!-- ====== -->
     <!-- Course -->

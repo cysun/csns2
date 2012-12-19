@@ -5,7 +5,20 @@
 $(function(){
     $.ajaxSetup({ cache: false });
     $("#tabs").tabs({
-        cache: false
+        cache: false,
+        load: function( event, ui ){
+            $("form").hide();
+            $(".toggle").click(function(){
+               $("#"+$(this).attr("id")+"Form").toggle();
+            });
+            $("textarea").each(function(){
+                var cke = CKEDITOR.instances[$(this).attr("id")];
+                if( cke ) CKEDITOR.remove(cke);
+                CKEDITOR.replace( $(this).attr("id"), {
+                  toolbar : "BasicWithAttach"
+                });
+            });
+        }
     });
 });
 </script>
@@ -21,8 +34,8 @@ $(function(){
 <ul>
   <li><a href="#account">Account</a></li>
   <li><a href="standings?userId=${user.id}">Standings</a></li>
-  <li><a href="coursework">Course Work</a></li>
-  <li><a href="advisement">Advisement</a></li>
+  <li><a href="courses?userId=${user.id}">Course Work</a></li>
+  <li><a href="advisement?userId=${user.id}">Advisement</a></li>
 </ul>
 <div id="account">
 <table class="general">

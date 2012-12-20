@@ -20,7 +20,6 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taken' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><csns:truncate value="${submission.assignment.name}" length="60" /></li>
 <c:if test="${assignment.availableAfterDueDate || not assignment.pastDue}">
@@ -29,7 +28,29 @@ $(function(){
 </c:if>
 </ul>
 
-<p>Due Date: <csns:dueDate submission="${submission}" /></p>
+<table class="general autowidth">
+<c:if test="${assignment.description != null}">
+<tr>
+  <th>Description</th>
+  <td>
+    <c:choose>
+      <c:when test="${assignment.description.type == 'TEXT'}">
+        <a href="../assignment/description?assignmentId=${assignment.id}">View</a>
+      </c:when>
+      <c:when test="${assignment.description.type == 'FILE'}">
+        <a href="../assignment/description?assignmentId=${assignment.id}">${assignment.description.file.name}</a>
+      </c:when>
+      <c:otherwise>
+        <a href="${assignment.description.url}">${assignment.description.url}</a>
+      </c:otherwise>
+    </c:choose>
+  </td>
+</tr>
+</c:if>
+<tr>
+  <th>Due Date</th><td><csns:dueDate submission="${submission}" /></td>
+</tr>
+</table>
 
 <c:if test="${not empty assignment.totalPoints}">
 <p>Total points: ${assignment.totalPoints}</p>

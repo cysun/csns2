@@ -40,7 +40,7 @@ public class Resource implements Serializable {
 
     private String name;
 
-    private int type;
+    private ResourceType type;
 
     private String text;
 
@@ -52,7 +52,6 @@ public class Resource implements Serializable {
 
     public Resource()
     {
-        type = ResourceType.TEXT;
     }
 
     public Long getId()
@@ -75,12 +74,12 @@ public class Resource implements Serializable {
         this.name = name;
     }
 
-    public int getType()
+    public ResourceType getType()
     {
         return type;
     }
 
-    public void setType( int type )
+    public void setType( ResourceType type )
     {
         this.type = type;
     }

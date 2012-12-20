@@ -18,12 +18,8 @@
  */
 package csns.model.core;
 
-public class ResourceType {
+public enum ResourceType {
 
-    public static final int TEXT = 0;
-
-    public static final int FILE = 1;
-
-    public static final int URL = 2;
+    NONE, TEXT, FILE, URL
 
 }

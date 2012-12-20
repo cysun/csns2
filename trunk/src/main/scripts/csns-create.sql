@@ -293,6 +293,7 @@ create table assignments (
     id                          bigint primary key,
     assignment_type             varchar(255) not null default 'REGULAR',
     name                        varchar(255) not null,
+    resource_id                 bigint references resources(id),
     alias                       varchar(255) not null,
     total_points                varchar(255),
     section_id                  bigint references sections(id),

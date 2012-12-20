@@ -78,6 +78,7 @@
         name varchar(255) not null,
         publish_date timestamp,
         total_points varchar(255),
+        resource_id int8,
         section_id int8,
         question_sheet_id int8 unique,
         primary key (id)
@@ -369,7 +370,7 @@
         id int8 not null,
         name varchar(255),
         text varchar(255),
-        type int4 not null,
+        type int4,
         url varchar(255),
         file_id int8,
         primary key (id)
@@ -589,6 +590,11 @@
         add constraint FK68455346DA3A2B9A 
         foreign key (section_id) 
         references sections;
+
+    alter table assignments 
+        add constraint FK68455346C92D294B 
+        foreign key (resource_id) 
+        references resources;
 
     alter table assignments 
         add constraint FK68455346810289CD 

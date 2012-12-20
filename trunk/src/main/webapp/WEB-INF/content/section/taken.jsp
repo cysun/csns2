@@ -15,7 +15,7 @@ $(function(){
 </script>
 
 <ul id="title">
-  <li>Sections</li>
+  <li>Student's Home</li>
   <li class="align_right">
     <select class="formselect" name="quarter">
       <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>

@@ -77,28 +77,6 @@ public class OnlineAssignmentController {
             new CalendarPropertyEditor() );
     }
 
-    @RequestMapping("/assignment/online/list")
-    public String list( @RequestParam Long sectionId,
-        @RequestParam(required = false) String term, ModelMap models )
-    {
-        Section section = sectionDao.getSection( sectionId );
-        models.put( "section", section );
-
-        List<OnlineAssignment> assignments = new ArrayList<OnlineAssignment>();
-        for( Assignment assignment : section.getAssignments() )
-            if( assignment.isOnline() )
-                assignments.add( (OnlineAssignment) assignment );
-        models.put( "assignments", assignments );
-
-        if( StringUtils.hasText( term ) )
-            models.put(
-                "results",
-                assignmentDao.searchOnlineAssignments( term,
-                    SecurityUtils.getUser(), 20 ) );
-
-        return "assignment/online/list";
-    }
-
     @RequestMapping(value = "/assignment/online/create",
         method = RequestMethod.GET)
     public String create( @RequestParam Long sectionId, ModelMap models )
@@ -330,6 +308,28 @@ public class OnlineAssignmentController {
         response.getWriter().print( "" );
 
         return null;
+    }
+
+    @RequestMapping("/assignment/online/search")
+    public String search( @RequestParam Long sectionId,
+        @RequestParam(required = false) String term, ModelMap models )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "section", section );
+
+        List<OnlineAssignment> assignments = new ArrayList<OnlineAssignment>();
+        for( Assignment assignment : section.getAssignments() )
+            if( assignment.isOnline() )
+                assignments.add( (OnlineAssignment) assignment );
+        models.put( "assignments", assignments );
+
+        if( StringUtils.hasText( term ) )
+            models.put(
+                "results",
+                assignmentDao.searchOnlineAssignments( term,
+                    SecurityUtils.getUser(), 20 ) );
+
+        return "assignment/online/search";
     }
 
 }

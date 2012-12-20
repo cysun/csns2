@@ -14,7 +14,6 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taken' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="list?assignmentId=${assignment.id}">${assignment.name}</a></li>
 <li><a class="bc" href="grade?id=${submission.id}">${submission.student.name}</a></li>

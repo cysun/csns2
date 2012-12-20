@@ -47,7 +47,7 @@ function publish( id )
 </script>
 
 <ul id="title">
-  <li>Sections</li>
+  <li>Instructor's Home</li>
   <li class="align_right">
     <select class="formselect" name="quarter">
       <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>
@@ -91,7 +91,7 @@ function publish( id )
   </tr>
   <tr class="rowtypeb">
     <td colspan="2">
-      <a href="<c:url value='/assignment/add?sectionId=${section.id}' />">Add Assignment</a> |
+      <a href="<c:url value='/assignment/create?sectionId=${section.id}' />">Create Assignment</a> |
       <a href="roster?id=${section.id}">View Students</a> |
       <a href="roster/import?sectionId=${section.id}">Enroll Students</a> |
       <a href="<c:url value='/assessment/editCourseJournal.html?sectionId=${section.id}'/>">Assessment</a>

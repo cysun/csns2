@@ -7,7 +7,6 @@
 <c:set var="answerSheet" value="${submission.answerSheet}" />
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taken' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><csns:truncate value="${assignment.name}" length="70" /></li>
 </ul>

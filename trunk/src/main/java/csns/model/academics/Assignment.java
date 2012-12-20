@@ -36,12 +36,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.springframework.util.StringUtils;
 
 import csns.model.academics.Section;
+import csns.model.core.Resource;
 
 @Entity
 @Table(name = "assignments")
@@ -58,6 +60,10 @@ public class Assignment implements Serializable {
 
     @Column(nullable = false)
     protected String name;
+
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinColumn(name = "resource_id")
+    protected Resource description;
 
     @Column(nullable = false)
     protected String alias;
@@ -93,8 +99,6 @@ public class Assignment implements Serializable {
 
     public Assignment()
     {
-        publishDate = Calendar.getInstance();
-
         dueDate = Calendar.getInstance();
         dueDate.add( Calendar.DATE, 7 );
         dueDate.set( Calendar.HOUR_OF_DAY, 23 );
@@ -170,6 +174,16 @@ public class Assignment implements Serializable {
     public void setName( String name )
     {
         this.name = name;
+    }
+
+    public Resource getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( Resource description )
+    {
+        this.description = description;
     }
 
     public String getAlias()

@@ -12,37 +12,11 @@ function clone( id )
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>Online Assignments</li>
 <li class="align_right"><a href="create?sectionId=${section.id}"><img alt="[Create Online Assignment]"
   title="Create Online Assignment" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
 </ul>
-
-<c:if test="${fn:length(assignments) > 0}">
-<table class="viewtable">
-<thead>
-  <tr><th>Name</th><th>Publish Date</th><th>Due Date</th><th></th></tr>
-</thead>
-<tbody>
-  <c:forEach items="${assignments}" var="assignment">
-  <tr>
-    <td>
-      ${assignment.name}
-    </td>
-    <td class="datetime"><csns:publishDate assignment="${assignment}" /></td>
-    <td class="datetime"><csns:dueDate assignment="${assignment}" /></td>
-    <td class="action">
-      <a href="clone?id=${assignment.id}' />"><img alt="[Clone Assignment]" 
-         title="Clone Assignment" src="<c:url value='/img/icons/script_code.png'/>" /></a>
-      <a href="edit?id=${assignment.id}"><img alt="[Edit Assignment]"
-         title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
-    </td>
-  </tr>
-  </c:forEach>
-</tbody>
-</table>
-</c:if>
 
 <form method="get">
 <p><input name="term" type="text" value="${param.term}" class="forminput" size="40" />

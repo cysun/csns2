@@ -35,7 +35,6 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taught' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>Students</li>
 <li class="align_right"><a href="export?id=${section.id}&amp;format=excel"><img title="Export to Excel"

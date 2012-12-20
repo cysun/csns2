@@ -22,7 +22,6 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taken' />">${section.quarter}</a></li>
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>${submission.assignment.name}</li>
 </ul>

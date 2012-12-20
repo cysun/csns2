@@ -697,7 +697,6 @@ table {
     border:1px solid #dddddd;
 }
 .general th {
-    width: 10%;
     text-align: right;
     white-space: nowrap;
     font: bold 13px arial;

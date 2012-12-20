@@ -41,7 +41,6 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="taught">${section.quarter}</a></li>
 <li><a class="bc" href="taught#section-${section.id}">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="roster?id=${section.id}">Students</a></li>
 <li>${enrollment.student.name}</li>

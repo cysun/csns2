@@ -22,10 +22,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,11 +41,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.File;
+import csns.model.core.Resource;
+import csns.model.core.ResourceType;
+import csns.security.SecurityUtils;
+import csns.util.FileIO;
 import csns.web.editor.CalendarPropertyEditor;
 import csns.web.validator.AssignmentValidator;
 
@@ -59,6 +68,14 @@ public class AssignmentController {
     @Autowired
     AssignmentValidator assignmentValidator;
 
+    @Autowired
+    FileIO fileIO;
+
+    @javax.annotation.Resource(name = "contentTypes")
+    Properties contentTypes;
+
+    private static final Logger logger = LoggerFactory.getLogger( AssignmentController.class );
+
     @InitBinder
     public void initBinder( WebDataBinder binder )
     {
@@ -66,21 +83,32 @@ public class AssignmentController {
             new CalendarPropertyEditor() );
     }
 
-    @RequestMapping(value = "/assignment/add", method = RequestMethod.GET)
-    public String add( @RequestParam Long sectionId, ModelMap models )
+    @RequestMapping(value = "/assignment/create", method = RequestMethod.GET)
+    public String create( @RequestParam Long sectionId, ModelMap models )
     {
         Assignment assignment = new Assignment();
         assignment.setSection( sectionDao.getSection( sectionId ) );
-        models.addAttribute( "assignment", assignment );
-        return "assignment/add";
+        assignment.setDescription( new Resource() );
+        models.put( "assignment", assignment );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "assignment/create";
     }
 
-    @RequestMapping(value = "/assignment/add", method = RequestMethod.POST)
-    public String add( @ModelAttribute Assignment assignment,
+    @RequestMapping(value = "/assignment/create", method = RequestMethod.POST)
+    public String create(
+        @ModelAttribute Assignment assignment,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
         BindingResult result, SessionStatus sessionStatus )
     {
-        assignmentValidator.validate( assignment, result );
-        if( result.hasErrors() ) return "assignment/add";
+        assignmentValidator.validate( assignment, uploadedFile, result );
+        if( result.hasErrors() ) return "assignment/create";
+
+        Resource description = assignment.getDescription();
+        if( description.getType() == ResourceType.NONE )
+            assignment.setDescription( null );
+        else if( description.getType() == ResourceType.FILE )
+            description.setFile( fileIO.save( uploadedFile,
+                SecurityUtils.getUser(), false ) );
 
         assignment = assignmentDao.saveAssignment( assignment );
         sessionStatus.setComplete();
@@ -91,17 +119,33 @@ public class AssignmentController {
     @RequestMapping(value = "/assignment/edit", method = RequestMethod.GET)
     public String edit( @RequestParam Long id, ModelMap models )
     {
-        models.addAttribute( "assignment", assignmentDao.getAssignment( id ) );
-        return "assignment/edit";
+        Assignment assignment = assignmentDao.getAssignment( id );
+        models.put( "assignment", assignment );
+        return assignment.isOnline() ? "assignment/online/edit"
+            : "assignment/edit";
     }
 
     @RequestMapping(value = "/assignment/edit", method = RequestMethod.POST)
-    public String edit( @ModelAttribute Assignment assignment,
+    public String edit(
+        @ModelAttribute Assignment assignment,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
         HttpServletRequest request, BindingResult result,
         SessionStatus sessionStatus )
     {
-        assignmentValidator.validate( assignment, result );
-        if( result.hasErrors() ) return "assignment/edit";
+        assignmentValidator.validate( assignment, uploadedFile, result );
+        if( result.hasErrors() )
+            return assignment.isOnline() ? "assignment/online/edit"
+                : "assignment/edit";
+
+        if( !assignment.isOnline() )
+        {
+            Resource description = assignment.getDescription();
+            if( description.getType() == ResourceType.NONE )
+                assignment.setDescription( null );
+            else if( description.getType() == ResourceType.FILE )
+                description.setFile( fileIO.save( uploadedFile,
+                    SecurityUtils.getUser(), false ) );
+        }
 
         assignment = assignmentDao.saveAssignment( assignment );
         sessionStatus.setComplete();
@@ -139,6 +183,39 @@ public class AssignmentController {
             dateFormat.format( assignment.getPublishDate().getTime() ) );
 
         return null;
+    }
+
+    @RequestMapping("/assignment/description")
+    public String description( @RequestParam Long assignmentId,
+        ModelMap models, HttpServletResponse response ) throws IOException
+    {
+        Assignment assignment = assignmentDao.getAssignment( assignmentId );
+
+        switch( assignment.getDescription().getType() )
+        {
+            case TEXT:
+                models.put( "assignment", assignment );
+                return "assignment/description";
+
+            case FILE:
+                File file = assignment.getDescription().getFile();
+                String contentType = contentTypes.getProperty( file.getFileExtension()
+                    .toLowerCase() );
+                if( contentType == null ) contentType = file.getType();
+
+                response.setContentType( contentType );
+                response.setHeader( "Content-Length", file.getSize().toString() );
+                response.setHeader( "Content-Disposition", "inline; filename="
+                    + file.getName().replace( ' ', '_' ) );
+                fileIO.copy( file, response.getOutputStream() );
+                return null;
+
+            default:
+                logger.warn( "Invalid resource type: "
+                    + assignment.getDescription().getType() );
+                models.put( "message", "error.resource.type.invalid" );
+                return "error";
+        }
     }
 
 }

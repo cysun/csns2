@@ -54,6 +54,19 @@ insert into sections values (1000300, 1109, 1000204, 1);
 insert into sections values (1000301, quarter(), 1000201, 1);
 insert into sections values (1000302, quarter(), 1000202, 1);
 
+insert into forums (id, name, course_id) values
+    (1000700, 'CS101 Introduction to Computer Science', 1000200);
+insert into forums (id, name, course_id) values
+    (1000701, 'CS320 Web and Internet Programming', 1000201);
+insert into forums (id, name, course_id) values
+    (1000702, 'CS520 Web Programming', 1000202);
+insert into forums (id, name, course_id) values
+    (1000703, 'TECH250 Impact of Technology on Individuals and Society', 1000203);
+insert into forums (id, name, course_id) values
+    (1000704, 'MATH206 Calculus I: Differentiation', 1000204);
+insert into forums (id, name, course_id) values
+    (1000705, 'MATH207 Calculus II: Integration', 1000205);
+
 insert into section_instructors values (1000300, 1000001, 0);
 insert into section_instructors values (1000301, 1000001, 0);
 insert into section_instructors values (1000302, 1000001, 0);
@@ -79,19 +92,6 @@ insert into submissions (id, student_id, assignment_id) values
 insert into submissions (id, student_id, assignment_id) values
     (1000603, 1000002, 1000502);
 
-insert into forums (id, name, course_id) values
-    (1000700, 'CS101 Introduction to Computer Science', 1000200);
-insert into forums (id, name, course_id) values
-    (1000701, 'CS320 Web and Internet Programming', 1000201);
-insert into forums (id, name, course_id) values
-    (1000702, 'CS520 Web Programming', 1000202);
-insert into forums (id, name, course_id) values
-    (1000703, 'TECH250 Impact of Technology on Individuals and Society', 1000203);
-insert into forums (id, name, course_id) values
-    (1000704, 'MATH206 Calculus I: Differentiation', 1000204);
-insert into forums (id, name, course_id) values
-    (1000705, 'MATH207 Calculus II: Integration', 1000205);
-
 insert into forums (id, name, department_id) values (1000720, 'Announcements', 1000100);
 insert into forums (id, name, department_id) values (1000721, 'Advisement', 1000100);
 insert into forums (id, name, department_id) values (1000722, 'Job Opportunities', 1000100);
@@ -110,8 +110,6 @@ update users set num_of_forum_posts = 1 where id = 1000001;
 
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001000, 'FM', 3000, 1000001);
-insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
-    (1001001, 'FM', 1000702, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values
     (1001002, 'FM', 1000720, 1000001);
 insert into subscriptions (id, subscribable_type, subscribable_id, subscriber_id) values

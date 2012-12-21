@@ -90,6 +90,7 @@ create table subscriptions (
     subscribable_id     bigint not null,
     subscriber_id       bigint not null references users(id),
     date                timestamp not null default current_timestamp,
+    quarter             integer,
     notification_sent   boolean not null default 'f',
     auto_subscribed     boolean not null default 'f',
   unique(subscribable_type, subscribable_id, subscriber_id)
@@ -537,6 +538,77 @@ create trigger forum_posts_ts_trigger
 
 create index forum_posts_ts_index on forum_posts using gin(tsv);
 
+create function subscribe_to_course_forum( p_user_id bigint, p_section_id bigint)
+    returns void as $$
+declare
+    l_current_quarter   integer default quarter();
+    l_section_quarter   integer;
+    l_course_id         courses.id%type;
+    l_forum_id          forums.id%type;
+begin
+    select course_id into l_course_id from sections where id = p_section_id;
+    select id into l_forum_id from forums where course_id = l_course_id;
+    if not exists (select * from subscriptions where subscribable_type = 'FM'
+            and subscribable_id = l_forum_id and subscriber_id = p_user_id) then
+        select quarter into l_section_quarter from sections where id = p_section_id;
+        insert into subscriptions (id, subscribable_type, subscribable_id,
+            subscriber_id, quarter, auto_subscribed) values
+            (nextval('hibernate_sequence'), 'FM', l_forum_id, p_user_id,
+            l_section_quarter, 't');
+    end if;
+end;
+$$ language plpgsql;
+
+create function unsubscribe_from_course_forum(p_user_id bigint, p_section_id bigint)
+    returns void as $$
+declare
+    l_current_quarter   integer default quarter();
+    l_section_quarter   integer;
+    l_course_id         courses.id%type;
+    l_forum_id          forums.id%type;
+begin
+    select course_id into l_course_id from sections where id = p_section_id;
+    select id into l_forum_id from forums where course_id = l_course_id;
+    delete from subscriptions where subscribable_type = 'FM'
+        and subscribable_id = l_forum_id
+        and subscriber_id = p_user_id
+        and auto_subscribed = 't';
+end;
+$$ language plpgsql;
+
+create function section_instructors_subscription_trigger_function()
+    returns trigger as $$
+begin
+    if tg_op = 'DELETE' or tg_op = 'UPDATE' then
+        perform unsubscribe_from_course_forum(old.instructor_id, old.section_id);
+    end if;
+    if tg_op = 'INSERT' or tg_op = 'UPDATE' then
+        perform subscribe_to_course_forum(new.instructor_id, new.section_id);
+    end if;
+    return null;
+end
+$$ language plpgsql;
+
+create trigger section_instructors_subscription_trigger
+    after insert or update or delete on section_instructors
+    for each row execute procedure section_instructors_subscription_trigger_function();
+
+create function enrollment_subscription_trigger_function() returns trigger as $$
+begin
+    if tg_op = 'DELETE' or tg_op = 'UPDATE' then
+        perform unsubscribe_from_course_forum(old.student_id, old.section_id);
+    end if;
+    if tg_op = 'INSERT' or tg_op = 'UPDATE' then
+        perform subscribe_to_course_forum(new.student_id, new.section_id);
+    end if;
+    return null;
+end
+$$ language plpgsql;
+
+create trigger enrollment_subscription_trigger
+    after insert or update or delete on enrollments
+    for each row execute procedure enrollment_subscription_trigger_function();
+
 ----------
 -- wiki --
 ----------
@@ -695,9 +767,12 @@ insert into standings (id, symbol, name, description) values
       'Gradudate students who have requested grad check.');
 insert into standings (id, symbol, name, description) values 
     (4020, 'GG', 'Graduated with MS Degree',
-      'Graduated with an Master''s Degree.');
+      'Graduated with a Master''s Degree.');
+insert into standings (id, symbol, name, description) values
+    (4030, 'HG', 'Graduated from Blended BS/MS Program',
+      'Graduated from the Blended BS/MS program.');
 insert into standings (id, symbol, name, description) values 
-    (4030, 'NG', 'Not Graduated',
+    (4040, 'NG', 'Not Graduated',
       'The student did not graduate for some reason. For example, ' ||
       'the student was disqualified from the program, or dropped out of ' ||
       'the program, or simply stopped taking classes.');
@@ -739,6 +814,11 @@ insert into standing_mailinglists values (4016, 'grads-g3');
 insert into standing_mailinglists values (4020, 'alumni');
 insert into standing_mailinglists values (4020, 'alumni-grad');
 
+-- mailing list membership for HG Standing
+insert into standing_mailinglists values (4030, 'alumni');
+insert into standing_mailinglists values (4030, 'alumni-undergrad');
+insert into standing_mailinglists values (4030, 'alumni-grad');
+
 create table academic_standings (
     id              bigint primary key,
     student_id      bigint references users(id),
@@ -770,7 +850,7 @@ begin
         select standing_id into l_standing_id from academic_standings
             where id = old.academic_standing_id;
         for l_mailinglist in select mailinglist from standing_mailinglists
-            where standing_id = l_standing_id loop
+            where standing_id = l_standing_id and mailinglist not like 'alumni%' loop
                 delete from subscriptions where subscriber_id = old.student_id
                     and subscribable_type = 'ML' and auto_subscribed = 't'
                     and subscribable_id = (select id from mailinglists

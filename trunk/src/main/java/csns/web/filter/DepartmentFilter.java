@@ -40,7 +40,7 @@ public class DepartmentFilter extends OncePerRequestFilter {
     {
         String contextPath = request.getContextPath();
         String path = request.getRequestURI().substring( contextPath.length() );
-        logger.debug( path );
+        Cookie cookie = WebUtils.getCookie( request, "default-dept" );
 
         if( path.startsWith( "/department/" ) )
         {
@@ -48,16 +48,19 @@ public class DepartmentFilter extends OncePerRequestFilter {
             int endIndex = path.indexOf( "/", beginIndex );
             String dept = path.substring( beginIndex, endIndex );
             request.setAttribute( "dept", dept );
-            logger.debug( "dept=" + dept );
+
+            if( cookie == null )
+            {
+                cookie = new Cookie( "default-dept", dept );
+                cookie.setPath( "/" );
+                cookie.setMaxAge( 100000000 );
+                response.addCookie( cookie );
+            }
         }
         else
         {
-            Cookie cookie = WebUtils.getCookie( request, "default-dept" );
             if( cookie != null )
-            {
                 request.setAttribute( "dept", cookie.getValue() );
-                logger.debug( "default-dept=" + cookie.getValue() );
-            }
         }
 
         filterChain.doFilter( request, response );

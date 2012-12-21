@@ -99,8 +99,7 @@ public class UserController {
     public void initBinder( WebDataBinder binder )
     {
         binder.registerCustomEditor( Date.class, new CustomDateEditor(
-            new SimpleDateFormat( "MM/dd/yyyy" ),
-            true ) );
+            new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
     }
 
     @RequestMapping(value = "/user/search")
@@ -195,33 +194,6 @@ public class UserController {
 
         sessionStatus.setComplete();
         return "redirect:/j_spring_security_logout";
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String profile( ModelMap models )
-    {
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        models.put( "user", user );
-        return "profile";
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public String profile( @ModelAttribute("user") User cmd,
-        HttpServletRequest request, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        editUserValidator.validate( cmd, bindingResult );
-        if( bindingResult.hasErrors() ) return "profile";
-
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        user.copySelfEditableFieldsFrom( cmd );
-        String password = cmd.getPassword1();
-        if( StringUtils.hasText( password ) )
-            user.setPassword( passwordEncoder.encodePassword( password, null ) );
-        user = userDao.saveUser( user );
-
-        sessionStatus.setComplete();
-        return "redirect:" + defaultUrls.userHomeUrl( request );
     }
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.GET)

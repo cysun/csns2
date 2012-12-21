@@ -21,7 +21,10 @@ package csns.model.core;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,6 +37,7 @@ import org.hibernate.annotations.Any;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.MetaValue;
 
+import csns.model.academics.Quarter;
 import csns.model.forum.Forum;
 import csns.model.forum.Topic;
 import csns.model.mailinglist.Mailinglist;
@@ -65,6 +69,11 @@ public class Subscription implements Serializable {
 
     @Column(nullable = false)
     private Date date;
+
+    @Embedded
+    @AttributeOverrides({ @AttributeOverride(name = "code",
+        column = @Column(name = "quarter")) })
+    private Quarter quarter;
 
     /**
      * notificationSent is used as a flag to avoid repeated notifications. Some
@@ -135,6 +144,16 @@ public class Subscription implements Serializable {
     public void setDate( Date date )
     {
         this.date = date;
+    }
+
+    public Quarter getQuarter()
+    {
+        return quarter;
+    }
+
+    public void setQuarter( Quarter quarter )
+    {
+        this.quarter = quarter;
     }
 
     public boolean isNotificationSent()

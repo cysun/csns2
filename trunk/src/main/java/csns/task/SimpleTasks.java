@@ -16,31 +16,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics.dao;
+package csns.task;
 
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import csns.model.academics.Standing;
+import csns.model.core.dao.SubscriptionDao;
 
-@Test(groups = "StandingDaoTests")
-@ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class StandingDaoTests extends AbstractTestNGSpringContextTests {
+@Component
+public class SimpleTasks {
+
+    private static final Logger logger = LoggerFactory.getLogger( SimpleTasks.class );
 
     @Autowired
-    StandingDao standingDao;
+    SubscriptionDao subscriptionDao;
 
-    @Test
-    public void getStandings()
+    // Run this task every Monday at 1:01:01AM.
+    @Scheduled(cron = "1 1 1 ? * 1")
+    public void autoUnsubscribe()
     {
-        List<Standing> standings = standingDao.getStandings();
-
-        assert standings.size() == 11;
-        assert standings.get( 0 ).getSymbol().equals( "B" );
+        int n = subscriptionDao.autoUnsubscribe();
+        logger.info( "Removed " + n + " subscriptions." );
     }
 
 }

@@ -73,7 +73,6 @@ public class SubscriptionDaoTests extends AbstractTestNGSpringContextTests {
     public void getUserSubscriptions()
     {
         User user = userDao.getUser( 1000001L );
-        assert subscriptionDao.getSubscriptions( user, Forum.class ).size() == 3;
         assert subscriptionDao.getSubscriptions( user, Topic.class ).size() == 1;
     }
 

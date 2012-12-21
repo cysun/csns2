@@ -150,11 +150,6 @@
         <put-attribute name="content" value="/WEB-INF/content/register.jsp" />
     </definition>
 
-    <definition name="profile" extends="layout.jqueryui">
-        <put-attribute name="title" value="User Profile" />
-        <put-attribute name="content" value="/WEB-INF/content/profile.jsp" />
-    </definition>
-
     <definition name="resetPassword" extends="layout.basic">
         <put-attribute name="title" value="Reset Password" />
         <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
@@ -170,6 +165,19 @@
     <definition name="user/courses" template="/WEB-INF/content/user/courses.jsp" />
 
     <definition name="user/advisement" template="/WEB-INF/content/user/advisement.jsp" />
+
+    <!-- ======= -->
+    <!-- Profile -->
+    <!-- ======= -->
+
+    <definition name="profile/account" extends="layout.jqueryui">
+        <put-attribute name="title" value="User Profile" />
+        <put-attribute name="content" value="/WEB-INF/content/profile/account.jsp" />
+    </definition>
+
+    <definition name="profile/forums" template="/WEB-INF/content/profile/forums.jsp" />
+
+    <definition name="profile/mailinglists" template="/WEB-INF/content/profile/mailinglists.jsp" />
 
     <!-- ====== -->
     <!-- Course -->
@@ -463,14 +471,6 @@
         <put-attribute name="title" value="List of Survey Responses" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
     </definition>
-
-    <!-- ============ -->
-    <!-- Subscription -->
-    <!-- ============ -->
-
-    <definition name="subscription/forums" template="/WEB-INF/content/subscription/forums.jsp" />
-
-    <definition name="subscription/mailinglists" template="/WEB-INF/content/subscription/mailinglists.jsp" />
 
     <!-- ===== -->
     <!-- Forum -->

@@ -48,9 +48,7 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
-import csns.model.core.Subscription;
 import csns.model.core.User;
-import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
@@ -77,9 +75,6 @@ public class SectionController {
 
     @Autowired
     ForumDao forumDao;
-
-    @Autowired
-    SubscriptionDao subscriptionDao;
 
     @Autowired
     WebApplicationContext context;
@@ -170,11 +165,6 @@ public class SectionController {
         Section section = sectionDao.addSection( quarter, course, user );
 
         Forum forum = course.getForum();
-        Subscription subscription = subscriptionDao.getSubscription( forum,
-            user );
-        if( subscription == null )
-            subscription = subscriptionDao.subscribe( forum, user );
-
         if( !forum.isModerator( user ) )
         {
             forum.getModerators().add( user );

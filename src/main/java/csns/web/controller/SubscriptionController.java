@@ -18,9 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import csns.model.core.Subscribable;
-import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
-import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.model.forum.dao.TopicDao;
-import csns.model.mailinglist.Mailinglist;
 import csns.model.mailinglist.dao.MailinglistDao;
 import csns.model.wiki.dao.PageDao;
 import csns.security.SecurityUtils;
@@ -62,45 +56,6 @@ public class SubscriptionController {
     SubscriptionDao subscriptionDao;
 
     private static final Logger logger = LoggerFactory.getLogger( SubscriptionController.class );
-
-    @RequestMapping("/subscription/forums")
-    public String forumSubscriptions( ModelMap models )
-    {
-        User user = SecurityUtils.getUser();
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
-            user, Forum.class );
-
-        List<Forum> departmentForums = new ArrayList<Forum>();
-        List<Forum> courseForums = new ArrayList<Forum>();
-        List<Forum> otherForums = new ArrayList<Forum>();
-        for( Subscription subscription : subscriptions )
-        {
-            Forum forum = (Forum) subscription.getSubscribable();
-            if( forum.getDepartment() != null )
-                departmentForums.add( forum );
-            else if( forum.getCourse() != null )
-                courseForums.add( forum );
-            else
-                otherForums.add( forum );
-        }
-
-        models.put( "departmentForums", departmentForums );
-        models.put( "courseForums", courseForums );
-        models.put( "otherForums", otherForums );
-
-        return "subscription/forums";
-    }
-
-    @RequestMapping("/subscription/mailinglists")
-    public String mailinglistSubscriptions( ModelMap models )
-    {
-        User user = SecurityUtils.getUser();
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
-            user, Mailinglist.class );
-
-        models.put( "subscriptions", subscriptions );
-        return "subscription/mailinglists";
-    }
 
     private Subscribable subscribe( String type, Long id )
     {

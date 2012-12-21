@@ -26,8 +26,8 @@ $(function() {
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
-  <li><a href="<c:url value='/subscription/forums' />">Forum Subscriptions</a></li>
-  <li><a href="<c:url value='/subscription/mailinglists' />">Mailing List Subscriptions</a></li>
+  <li><a href="<c:url value='/profile/forums' />">Forum Subscriptions</a></li>
+  <li><a href="<c:url value='/profile/mailinglists' />">Mailing List Subscriptions</a></li>
 </ul>
 <div id="account">
 <form:form modelAttribute="user">

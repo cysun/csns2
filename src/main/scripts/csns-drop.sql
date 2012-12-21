@@ -41,6 +41,13 @@ drop table wiki_revision_attachments;
 drop table wiki_revisions;
 drop table wiki_pages;
 
+drop trigger enrollment_subscription_trigger on enrollments;
+drop function enrollment_subscription_trigger_function();
+drop trigger section_instructors_subscription_trigger on section_instructors;
+drop function section_instructors_subscription_trigger_function();
+drop function unsubscribe_from_course_forum(bigint,bigint);
+drop function subscribe_to_course_forum(bigint,bigint);
+
 drop trigger forum_posts_ts_trigger on forum_posts;
 drop function forum_posts_ts_trigger_function();
 alter table forum_topics drop constraint fk_forum_topic_last_post;

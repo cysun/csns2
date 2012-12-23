@@ -116,8 +116,8 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @Column(name = "home_phone")
     private String homePhone;
 
-    @Column(name = "office_phone")
-    private String officePhone;
+    @Column(name = "work_phone")
+    private String workPhone;
 
     @Column(nullable = false)
     private boolean enabled;
@@ -197,7 +197,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         secondaryEmail = user.secondaryEmail;
         cellPhone = user.cellPhone;
         homePhone = user.homePhone;
-        officePhone = user.officePhone;
+        workPhone = user.workPhone;
     }
 
     public int compareTo( User user )
@@ -549,14 +549,14 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         this.homePhone = homePhone;
     }
 
-    public String getOfficePhone()
+    public String getWorkPhone()
     {
-        return officePhone;
+        return workPhone;
     }
 
-    public void setOfficePhone( String officePhone )
+    public void setWorkPhone( String workPhone )
     {
-        this.officePhone = officePhone;
+        this.workPhone = workPhone;
     }
 
     public boolean isEnabled()

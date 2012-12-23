@@ -24,7 +24,6 @@ function clone( id )
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/department/${department.abbreviation}/' />">${department.name}</a></li>
 <li>Surveys</li>
 <li class="align_right"><a href="create"><img alt="[Create Survey]"
   title="Create Survey" src="<c:url value='/img/icons/script_add.png' />" /></a></li>

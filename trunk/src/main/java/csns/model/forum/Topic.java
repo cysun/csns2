@@ -67,7 +67,7 @@ public class Topic implements Subscribable, Serializable {
     private Post lastPost;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    @JoinColumn(name = "forum_id")
+    @JoinColumn(name = "forum_id", nullable = false)
     private Forum forum;
 
     @Column(nullable = false)

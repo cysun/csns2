@@ -68,8 +68,8 @@ $(function(){
     <td>${user.homePhone}</td>
   </tr>
   <tr>
-    <th>Office Phone</th>
-    <td>${user.officePhone}</td>
+    <th>Work Phone</th>
+    <td>${user.workPhone}</td>
   </tr>
   <tr>
     <th>Address</th>

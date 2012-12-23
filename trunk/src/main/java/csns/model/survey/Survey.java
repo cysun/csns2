@@ -53,7 +53,8 @@ public class Survey implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    private String type;
+    @Column(nullable = false)
+    private SurveyType type;
 
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "question_sheet_id", nullable = false, unique = true)
@@ -137,12 +138,12 @@ public class Survey implements Serializable {
         this.name = name;
     }
 
-    public String getType()
+    public SurveyType getType()
     {
         return type;
     }
 
-    public void setType( String type )
+    public void setType( SurveyType type )
     {
         this.type = type;
     }

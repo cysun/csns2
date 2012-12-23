@@ -27,7 +27,7 @@ create table users (
     secondary_email     varchar(255),
     cell_phone          varchar(255),
     home_phone          varchar(255),
-    office_phone        varchar(255),
+    work_phone          varchar(255),
     enabled             boolean not null default 't',
     temporary           boolean not null default 'f',
     num_of_forum_posts  integer not null default 0,
@@ -164,7 +164,7 @@ create table answers (
     answer_index        integer not null,
     question_id         bigint references questions(id),
     rating              integer,
-    text                varchar(8000),
+    text                text,
     attachment_id       bigint unique references files(id),
   unique (answer_section_id, answer_index)
 );
@@ -358,7 +358,7 @@ create table departments (
     id              bigint primary key,
     name            varchar(255) not null unique,
     abbreviation    varchar(255) not null unique,
-    welcome_message varchar(8000)
+    welcome_message text
 );
 
 create table department_administrators (
@@ -408,7 +408,7 @@ create table department_additional_graduate_courses (
 create table surveys (
     id                  bigint primary key,
     name                varchar(255) not null,
-    type                varchar(255) default 'ANONYMOUS',
+    type                integer not null default 0,
     question_sheet_id   bigint not null unique references question_sheets(id),
     publish_date        timestamp,
     close_date          timestamp,
@@ -437,7 +437,7 @@ create table surveys_taken (
 create table forums (
     id              bigint primary key,
     name            varchar(80) not null,
-    description     varchar(500),
+    description     varchar(255),
     date            timestamp default current_timestamp,
     num_of_topics   integer not null default 0,
     num_of_posts    integer not null default 0,
@@ -494,7 +494,7 @@ create table forum_topics (
     num_of_views    integer not null default 0,
     first_post_id   bigint,
     last_post_id    bigint,
-    forum_id        bigint references forums(id),
+    forum_id        bigint not null references forums(id),
     deleted         boolean not null default 'f'
 );
 
@@ -502,7 +502,7 @@ create table forum_posts (
     id          bigint primary key,
     subject     varchar(255) not null,
     content     text not null,
-    author_id   bigint references users(id),
+    author_id   bigint not null references users(id),
     date        timestamp default current_timestamp,
     topic_id    bigint references forum_topics(id),
     edited_by   bigint references users(id),
@@ -653,7 +653,8 @@ alter table wiki_pages add column ts_content text;
 create function wiki_revisions_ts_trigger_function() returns trigger as $$
 begin
     update wiki_pages
-        set tsv = setweight(to_tsvector(new.subject), 'A') || setweight(to_tsvector(new.content), 'D'),
+        set tsv = setweight(to_tsvector(new.subject), 'A') ||
+                  setweight(to_tsvector(new.content), 'D'),
             ts_subject = new.subject,
             ts_content = new.content
         where id = new.page_id;
@@ -684,10 +685,9 @@ create table news (
 
 create table mailinglists (
     id              bigint primary key,
-    name            varchar(255) not null,
+    name            varchar(255) not null unique,
     description     varchar(4092),
-    department_id   bigint references departments(id),
-  unique (department_id, name)
+    department_id   bigint references departments(id)
 );
 
 create table mailinglist_messages (
@@ -894,8 +894,8 @@ create trigger mailinglist_subscription_on_standing_change_trigger
 
 create table advisement_records (
     id                  bigint primary key,
-    student_id          bigint references users(id),
-    advisor_id          bigint references users(id),
+    student_id          bigint not null references users(id),
+    advisor_id          bigint not null references users(id),
     comment             varchar(8000),
     date                timestamp default current_timestamp,
     editable            boolean not null default 't',

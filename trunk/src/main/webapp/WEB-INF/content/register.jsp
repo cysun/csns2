@@ -11,7 +11,7 @@ $(function() {
     });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
-    $("#officePhone").mask("(999) 999-9999");
+    $("#workPhone").mask("(999) 999-9999");
     $("#confirm").dialog({
         title: "Confirmation",
         autoOpen: false,
@@ -109,9 +109,9 @@ $(function() {
     </td>
   </tr>
   <tr>
-    <th>Office Phone</th>
+    <th>Work Phone</th>
     <td>
-      <form:input path="officePhone" cssClass="forminput" placeholder="(###) ###-####" />
+      <form:input path="workPhone" cssClass="forminput" placeholder="(###) ###-####" />
     </td>
   </tr>
   <tr>

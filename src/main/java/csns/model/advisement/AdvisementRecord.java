@@ -48,11 +48,11 @@ public class AdvisementRecord implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
     @ManyToOne
-    @JoinColumn(name = "advisor_id")
+    @JoinColumn(name = "advisor_id", nullable = false)
     private User advisor;
 
     private String comment;

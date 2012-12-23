@@ -30,8 +30,8 @@
         editable boolean not null,
         emailed_to_students boolean not null,
         for_advisors_only boolean not null,
-        advisor_id int8,
-        student_id int8,
+        advisor_id int8 not null,
+        student_id int8 not null,
         primary key (id)
     );
 
@@ -235,7 +235,7 @@
         num_of_views int4 not null,
         pinned boolean not null,
         first_post_id int8,
-        forum_id int8,
+        forum_id int8 not null,
         last_post_id int8,
         primary key (id)
     );
@@ -282,8 +282,7 @@
         description varchar(255),
         name varchar(255) not null,
         department_id int8,
-        primary key (id),
-        unique (department_id, name)
+        primary key (id)
     );
 
     create table news (
@@ -356,11 +355,11 @@
         point_value int4 not null,
         max_selections int4,
         min_selections int4,
-        max_rating int4,
-        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -447,7 +446,7 @@
         deleted boolean not null,
         name varchar(255) not null,
         publish_date timestamp,
-        type varchar(255),
+        type int4 not null,
         author_id int8 not null,
         department_id int8,
         question_sheet_id int8 not null unique,
@@ -474,7 +473,6 @@
         last_name varchar(255) not null,
         middle_name varchar(255),
         num_of_forum_posts int4 not null,
-        office_phone varchar(255),
         password varchar(255) not null,
         primary_email varchar(255) not null unique,
         secondary_email varchar(255),
@@ -482,6 +480,7 @@
         street varchar(255),
         temporary boolean not null,
         username varchar(255) not null unique,
+        work_phone varchar(255),
         zip varchar(255),
         primary key (id)
     );

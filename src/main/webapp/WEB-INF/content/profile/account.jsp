@@ -15,7 +15,7 @@ $(function() {
     });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
-    $("#officePhone").mask("(999) 999-9999");
+    $("#workPhone").mask("(999) 999-9999");
 });
 </script>
 
@@ -103,9 +103,9 @@ $(function() {
     </td>
   </tr>
   <tr>
-    <th>Office Phone</th>
+    <th>Work Phone</th>
     <td>
-      <form:input path="officePhone" cssClass="forminput" placeholder="(###) ###-####" />
+      <form:input path="workPhone" cssClass="forminput" placeholder="(###) ###-####" />
     </td>
   </tr>
   <tr>

@@ -50,6 +50,7 @@ import csns.model.qa.QuestionSection;
 import csns.model.qa.RatingQuestion;
 import csns.model.qa.TextQuestion;
 import csns.model.survey.Survey;
+import csns.model.survey.SurveyType;
 import csns.model.survey.dao.SurveyDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.CalendarPropertyEditor;
@@ -124,6 +125,7 @@ public class SurveyController {
     public String create( ModelMap models )
     {
         models.put( "survey", new Survey() );
+        models.put( "surveyTypes", SurveyType.values() );
         return "survey/create";
     }
 
@@ -150,6 +152,7 @@ public class SurveyController {
     public String edit( @RequestParam Long id, ModelMap models )
     {
         models.put( "survey", surveyDao.getSurvey( id ) );
+        models.put( "surveyTypes", SurveyType.values() );
         return "survey/edit";
     }
 
@@ -160,7 +163,7 @@ public class SurveyController {
         SessionStatus sessionStatus )
     {
         surveyValidator.validate( survey, result );
-        if( result.hasErrors() ) return "assignment/edit";
+        if( result.hasErrors() ) return "survey/edit";
 
         survey = surveyDao.saveSurvey( survey );
         sessionStatus.setComplete();

@@ -28,15 +28,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Department;
 import csns.model.core.Subscribable;
 
 @Entity
-@Table(name = "mailinglists",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
-        "name" }))
+@Table(name = "mailinglists")
 public class Mailinglist implements Subscribable, Serializable {
 
     private static final long serialVersionUID = 1L;

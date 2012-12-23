@@ -18,12 +18,8 @@
  */
 package csns.model.survey;
 
-public class SurveyType {
+public enum SurveyType {
 
-    public static final String ANONYMOUS = "Anonymous";
-
-    public static final String RECORDED = "Recorded";
-
-    public static final String NAMED = "Named";
+    ANONYMOUS, RECORDED, NAMED;
 
 }

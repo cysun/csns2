@@ -29,9 +29,7 @@ $(function(){
     <th>Type</th>
     <td>
       <form:select path="type">
-        <form:option value="Anonymous"/>
-        <form:option value="Recorded"/>
-        <form:option value="Named"/>
+        <form:options items="${surveyTypes}" />
       </form:select>
     </td>
   </tr>

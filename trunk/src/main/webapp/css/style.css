@@ -249,13 +249,6 @@ table {
 .viewtable tr.even .cat a:hover {
     background-color:#d6dbf0;
 }*/
-.viewtable tr th.shrink, .viewtable tr td.shrink {
-    width: 1%;
-    padding-left: 1em;
-    padding-right: 1em;
-    text-align: center;
-    white-space: nowrap;
-}
 .viewtable tr th.action, .viewtable tr td.action, .outer_viewtable tr td.action {
     width: 10%;
     padding-left: 1em;
@@ -943,7 +936,6 @@ table {
 .tt {
     font-family: monospace;
 }
-
 .general-attachments {
     border: 1px solid #dddddd;
     background-color:#ffffff;
@@ -954,7 +946,16 @@ table {
     margin:5px 20px;
     padding:0;
 }
-
+.help img {
+    border: 0px;
+    vertical-align: bottom;
+}
+tr th.shrink, tr td.shrink {
+    width: 1%;
+    padding-left: 1em;
+    padding-right: 1em;
+    white-space: nowrap;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

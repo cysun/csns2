@@ -1,15 +1,29 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
     $('#expireDate').datepicker({
         inline: true
     });
+    $("textarea").each(function(){
+        CKEDITOR.replace( $(this).attr("id"), {
+          toolbar : "Default"
+        });
+    });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
 function addAttachment()
 {
     $("#attachments").append("<br /><input name='file' class='leftinput' style='width: 100%;' type='file' size='75' />");
+}
+function help( name )
+{
+    $("#help-"+name).dialog("open");
 }
 </script>
 
@@ -45,7 +59,7 @@ function addAttachment()
     </td>
   </tr>
   <tr>
-    <th>Expiration Date</th>
+    <th><csns:help name="expdate">Expiration Date</csns:help></th>
     <td>
       <form:input path="expireDate" cssClass="smallinput" size="10" maxlength="10" />
     </td>
@@ -67,6 +81,6 @@ function addAttachment()
 </table>
 </form:form>
 
-<script>
-  CKEDITOR.replaceAll();
-</script>
+<div id="help-expdate" class="help">
+Each news entry should have an <em>expiration date</em>, after which the
+entry will be removed automatically from the front page.</div>

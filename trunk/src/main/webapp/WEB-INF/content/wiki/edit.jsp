@@ -2,6 +2,24 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
+<script>
+$(function(){
+    $("textarea").each(function(){
+        CKEDITOR.replace( $(this).attr("id"), {
+          toolbar : "Default"
+        });
+    });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
+});
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
+</script>
+
 <ul id="title">
 <csns:wikiBreadcrumbs path="${revision.page.path}" />
 <li>Edit</li>
@@ -11,7 +29,7 @@
 <input type="hidden" name="path" value="${param.path}" />
 <table class="general">
 <tr>
-  <th>Title</th>
+  <th><csns:help name="title">Title</csns:help></th>
   <td>
     <form:input path="subject" cssClass="leftinput" cssStyle="width: 98%;" />
     <div class="error"><form:errors path="subject" /></div>
@@ -27,8 +45,10 @@
   <th>Options</th>
   <td>
     Include Sidebar: <form:checkbox path="includeSidebar" cssStyle="margin-right: 1em;" />
-    Locked: <form:checkbox path="page.locked" cssStyle="margin-right: 1em;" />
-    Password: <form:input path="page.password" cssClass="leftinput" /> 
+    <csns:help name="locked" img="false">Locked</csns:help>:
+      <form:checkbox path="page.locked" cssStyle="margin-right: 1em;" />
+    <csns:help name="password" img="false">Password</csns:help>:
+      <form:input path="page.password" cssClass="leftinput" /> 
   </td>
 </tr>
 <tr>
@@ -38,6 +58,16 @@
 </table>
 </form:form>
 
-<script type="text/javascript">
-  CKEDITOR.replaceAll();
-</script>
+<div id="help-title" class="help">
+<em>Title</em> will be displayed in the title bar of a browser window.</div>
+
+<div id="help-locked" class="help">
+A locked page can only be edited by its original author.</div>
+
+<div id="help-password" class="help">
+<p>You may specify a <em>password</em> to protect this page so that anyone
+who tries to access this page must enter the password first. Note that this
+password is for this page only, i.e. it has nothing to do with your account
+password or anything.</p>
+<p>If you don't want this page to be password-protected, simply leave this
+field empty.</p></div>

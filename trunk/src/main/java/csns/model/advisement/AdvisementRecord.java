@@ -76,7 +76,7 @@ public class AdvisementRecord implements Serializable {
     private boolean forAdvisorsOnly;
 
     // Whether the comment has been emailed to the student.
-    @Column(name = "emailed_to_students", nullable = false)
+    @Column(name = "emailed_to_student", nullable = false)
     private boolean emailedToStudent;
 
     private boolean deleted;

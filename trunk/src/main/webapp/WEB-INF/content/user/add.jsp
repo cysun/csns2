@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -17,7 +18,15 @@ $(function(){
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#workPhone").mask("(999) 999-9999");
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
 </script>
 
 <ul id="title">
@@ -46,7 +55,7 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
-    <th>CIN *</th>
+    <th><csns:help name="cin">CIN</csns:help> *</th>
     <td>
       <form:input path="cin" cssClass="forminput" />
       <button id="generate_cin" class="subbutton">Generate</button>
@@ -127,3 +136,10 @@ they will be asked to choose their own username and password.</p>
   </tr>
 </table>
 </form:form>
+
+<div id="help-cin" class="help">
+<p>If you are creating an account for a user who does not have a CIN, e.g.
+a faculty member, please click on <span class="tt">Generate CIN</span> to
+generate a CIN number for this user.</p>
+<p>Note that CIN is very important for the system, so if a user does have a CIN,
+please enter the real CIN; otherwise there will be problems later.</p></div>

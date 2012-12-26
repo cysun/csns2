@@ -530,7 +530,7 @@
         <put-attribute name="content" value="/WEB-INF/content/wiki/password.jsp" />
     </definition>
 
-    <definition name="wiki/edit" extends="layout.editor">
+    <definition name="wiki/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Page" />
         <put-attribute name="content" value="/WEB-INF/content/wiki/edit.jsp" />
     </definition>

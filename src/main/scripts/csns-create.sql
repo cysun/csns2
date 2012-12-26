@@ -900,7 +900,7 @@ create table advisement_records (
     date                timestamp default current_timestamp,
     editable            boolean not null default 't',
     for_advisors_only   boolean not null default 'f',
-    emailed_to_students boolean not null default 'f',
+    emailed_to_student  boolean not null default 'f',
     deleted             boolean not null default 'f'
 );
 

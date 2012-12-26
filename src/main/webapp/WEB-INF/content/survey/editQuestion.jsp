@@ -37,6 +37,24 @@ function deleteQuestion()
 </script>
 </c:if>
 
+<script>
+$(function(){
+    $("textarea").each(function(){
+        CKEDITOR.replace( $(this).attr("id"), {
+          toolbar : "Default"
+        });
+    });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
+});
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
+</script>
+
 <ul id="title">
 <li><a class="bc" href="list">Surveys</a></li>
 <li><a class="bc" href="editQuestionSheet?surveyId=${survey.id}&amp;sectionIndex=${param.sectionIndex}"><csns:truncate
@@ -80,7 +98,7 @@ Number of choices: <form:input path="numOfChoices" cssStyle="width: 2em;" />
 </c:when>
 
 <c:when test="${question.type == 'TEXT'}">
-<h4>Text Length:
+<h4><csns:help name="txtlength" img="false">Text Length</csns:help>:
 <form:input path="textLength" cssClass="forminput" cssStyle="width: 4em;" />
 </h4>
 </c:when>
@@ -92,6 +110,8 @@ Number of choices: <form:input path="numOfChoices" cssStyle="width: 2em;" />
 <input class="subbutton" type="submit" value="Save" />
 </form:form>
 
-<script type="text/javascript">
-  CKEDITOR.replaceAll();
-</script>
+<div id="help-txtlength" class="help">
+<em>Text length</em> determines whether a text field or a text area will be
+used for the answer of this question. A text field will be used if the text
+length is 60 or less; otherwise a text area will be used.
+</div>

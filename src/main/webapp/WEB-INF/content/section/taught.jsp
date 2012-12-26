@@ -81,6 +81,10 @@ function publish( id )
               <a href="<c:url value='/assignment/online/view?id=${assignment.id}' />"><img alt="[View Assignment]" 
                  title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
             </c:if>
+            <c:if test="${not assignment.online and assignment.description != null}">
+              <a href="<c:url value='/assignment/description?assignmentId=${assignment.id}' />"><img alt="[View Assignment]" 
+                 title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
+            </c:if>
             <a href="<c:url value='/assignment/edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
                title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
           </td>

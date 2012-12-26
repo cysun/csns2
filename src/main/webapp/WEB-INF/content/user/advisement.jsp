@@ -1,6 +1,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
+
+<script>
+$(function(){
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
+});
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
+</script>
 
 <c:if test="${fn:length(advisementRecords) == 0}">
 <p>No advisement information on record.</p>
@@ -10,7 +24,8 @@
 
 <form id="addAdvisementForm" action="advisement/add" enctype="multipart/form-data" method="post">
   <textarea id="t" name="comment" rows="5" cols="80"></textarea>
-  <p>For advisors only: <input type="checkbox" name="forAdvisorsOnly" value="true" /></p>
+  <p><csns:help name="fao" img="false">For advisors only</csns:help>:
+  <input type="checkbox" name="forAdvisorsOnly" value="true" /></p>
   <p><input type="hidden" name="userId" value="${user.id}" />
   <input type="submit" name="submit" class="subbutton" value="OK" /></p>
 </form>
@@ -39,3 +54,7 @@
 </c:forEach>
 </table>
 </c:if>
+
+<div id="help-fao" class="help">
+The student won't be able to see the comments marked as <em>for advisors
+only</em>.</div>

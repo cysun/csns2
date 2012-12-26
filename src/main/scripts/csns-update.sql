@@ -179,6 +179,9 @@ alter table assignments alter section_id type bigint;
 alter table assignments add column publish_date timestamp;
 update assignments a set publish_date = q.publish_date from question_sheets q
     where a.question_sheet_id = q.id;
+update assignments a set publish_date = due_date - interval '1 week'
+    where publish_date is null and due_date is not null
+    and due_date < current_timestamp;
 alter table assignments rename allowed_max_file_size to max_file_size;
 alter table assignments rename allowed_file_extensions to file_extensions;
 alter table assignments rename viewable_after_close to available_after_due_date;
@@ -695,6 +698,8 @@ alter table advisement_records rename for_advisor_only to for_advisors_only;
 alter table advisement_records alter for_advisors_only set not null;
 alter table advisement_records alter emailed_to_student set not null;
 alter table advisement_records add column deleted boolean not null default 'f';
+update advisement_records set comment = '<p>' || comment || '</p>'
+    where comment is not null;
 
 create table advisement_record_attachments (
     record_id   bigint not null references advisement_records(id),

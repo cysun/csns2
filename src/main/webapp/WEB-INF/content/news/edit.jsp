@@ -8,6 +8,15 @@ $(function(){
     $('#expireDate').datepicker({
         inline: true
     });
+    $("textarea").each(function(){
+        CKEDITOR.replace( $(this).attr("id"), {
+          toolbar : "Default"
+        });
+    });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
 function addAttachment()
 {
@@ -31,6 +40,10 @@ function deleteNews()
     var msg = "Do you want to remove this news entry (i.e. expire it immediately)?";
     if( confirm(msg) )
         window.location.href = "delete?id=${news.id}";
+}
+function help( name )
+{
+    $("#help-"+name).dialog("open");
 }
 </script>
 
@@ -62,7 +75,7 @@ function deleteNews()
     </td>
   </tr>
   <tr>
-    <th>Expiration Date</th>
+    <th><csns:help name="expdate">Expiration Date</csns:help></th>
     <td>
       <form:input path="expireDate" cssClass="smallinput" size="10" maxlength="10" />
     </td>
@@ -100,6 +113,6 @@ function deleteNews()
 </table>
 </form:form>
 
-<script>
-  CKEDITOR.replaceAll();
-</script>
+<div id="help-expdate" class="help">
+Each news entry should have an <em>expiration date</em>, after which the
+entry will be removed automatically from the front page.</div>

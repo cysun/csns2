@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +46,6 @@ import csns.model.academics.Assignment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
-import csns.model.core.File;
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
 import csns.security.SecurityUtils;
@@ -71,9 +69,6 @@ public class AssignmentController {
     @Autowired
     FileIO fileIO;
 
-    @javax.annotation.Resource(name = "contentTypes")
-    Properties contentTypes;
-
     private static final Logger logger = LoggerFactory.getLogger( AssignmentController.class );
 
     @InitBinder
@@ -81,6 +76,33 @@ public class AssignmentController {
     {
         binder.registerCustomEditor( Calendar.class,
             new CalendarPropertyEditor() );
+    }
+
+    @RequestMapping("/assignment/view")
+    public String view( @RequestParam Long id, ModelMap models,
+        HttpServletResponse response )
+    {
+        Assignment assignment = assignmentDao.getAssignment( id );
+
+        switch( assignment.getDescription().getType() )
+        {
+            case TEXT:
+                models.put( "assignment", assignment );
+                return "assignment/view";
+
+            case FILE:
+                fileIO.write( assignment.getDescription().getFile(), response );
+                return null;
+
+            case URL:
+                return "redirect:" + assignment.getDescription().getUrl();
+
+            default:
+                logger.warn( "Invalid resource type: "
+                    + assignment.getDescription().getType() );
+                models.put( "message", "error.resource.type.invalid" );
+                return "error";
+        }
     }
 
     @RequestMapping(value = "/assignment/create", method = RequestMethod.GET)
@@ -142,7 +164,8 @@ public class AssignmentController {
             Resource description = assignment.getDescription();
             if( description.getType() == ResourceType.NONE )
                 assignment.setDescription( null );
-            else if( description.getType() == ResourceType.FILE )
+            else if( description.getType() == ResourceType.FILE
+                && uploadedFile != null && !uploadedFile.isEmpty() )
                 description.setFile( fileIO.save( uploadedFile,
                     SecurityUtils.getUser(), false ) );
         }
@@ -183,39 +206,6 @@ public class AssignmentController {
             dateFormat.format( assignment.getPublishDate().getTime() ) );
 
         return null;
-    }
-
-    @RequestMapping("/assignment/description")
-    public String description( @RequestParam Long assignmentId,
-        ModelMap models, HttpServletResponse response ) throws IOException
-    {
-        Assignment assignment = assignmentDao.getAssignment( assignmentId );
-
-        switch( assignment.getDescription().getType() )
-        {
-            case TEXT:
-                models.put( "assignment", assignment );
-                return "assignment/description";
-
-            case FILE:
-                File file = assignment.getDescription().getFile();
-                String contentType = contentTypes.getProperty( file.getFileExtension()
-                    .toLowerCase() );
-                if( contentType == null ) contentType = file.getType();
-
-                response.setContentType( contentType );
-                response.setHeader( "Content-Length", file.getSize().toString() );
-                response.setHeader( "Content-Disposition", "inline; filename="
-                    + file.getName().replace( ' ', '_' ) );
-                fileIO.copy( file, response.getOutputStream() );
-                return null;
-
-            default:
-                logger.warn( "Invalid resource type: "
-                    + assignment.getDescription().getType() );
-                models.put( "message", "error.resource.type.invalid" );
-                return "error";
-        }
     }
 
 }

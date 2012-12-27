@@ -25,6 +25,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +49,9 @@ public class FileIO {
 
     @Value("#{applicationProperties['file.dir']}")
     private String fileDir;
+
+    @Resource(name = "contentTypes")
+    Properties contentTypes;
 
     private static final Logger logger = LoggerFactory.getLogger( FileIO.class );
 
@@ -162,6 +169,26 @@ public class FileIO {
         java.io.File diskFile = new java.io.File( fileDir, fileId );
         if( !diskFile.delete() )
             logger.error( "Failed to delete file " + diskFile.getAbsolutePath() );
+    }
+
+    public void write( File file, HttpServletResponse response )
+    {
+        String contentType = contentTypes.getProperty( file.getFileExtension()
+            .toLowerCase() );
+        if( contentType == null ) contentType = file.getType();
+
+        try
+        {
+            response.setContentType( contentType );
+            response.setHeader( "Content-Length", file.getSize().toString() );
+            response.setHeader( "Content-Disposition", "inline; filename="
+                + file.getName().replace( ' ', '_' ) );
+            copy( file, response.getOutputStream() );
+        }
+        catch( Exception e )
+        {
+            logger.error( "Fail to write file to response", e );
+        }
     }
 
 }

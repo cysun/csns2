@@ -106,23 +106,60 @@ public class SubmissionController {
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
         Submission submission = submissionDao.getSubmission( user, assignment );
         if( submission == null )
-            submission = submissionDao.saveSubmission( new Submission(
-                user,
+            submission = submissionDao.saveSubmission( new Submission( user,
                 assignment ) );
 
         models.put( "submission", submission );
         return "submission/view";
     }
 
-    @RequestMapping(value = "/submission/upload", method = RequestMethod.GET)
+    @RequestMapping(value = "/submission/description")
+    public String description( @RequestParam Long assignmentId,
+        ModelMap models, HttpServletResponse response )
+    {
+        Assignment assignment = assignmentDao.getAssignment( assignmentId );
+        if( !assignment.isPublished() )
+        {
+            models.put( "message", "error.assignment.unpublished" );
+            return "error";
+        }
+        if( assignment.isPastDue() && !assignment.isAvailableAfterDueDate() )
+        {
+            models.put( "message", "error.assignment.unavailable" );
+            return "error";
+        }
+
+        switch( assignment.getDescription().getType() )
+        {
+            case TEXT:
+                models.put( "assignment", assignment );
+                return "submission/description";
+
+            case FILE:
+                fileIO.write( assignment.getDescription().getFile(), response );
+                return null;
+
+            case URL:
+                return "redirect:" + assignment.getDescription().getUrl();
+
+            default:
+                logger.warn( "Invalid resource type: "
+                    + assignment.getDescription().getType() );
+                models.put( "message", "error.resource.type.invalid" );
+                return "error";
+        }
+    }
+
+    @RequestMapping(value = "/submission/add", method = RequestMethod.GET)
     public String upload( @RequestParam Long id, ModelMap models )
     {
         models.put( "submission", submissionDao.getSubmission( id ) );
-        return "submission/upload";
+        return "submission/add";
     }
 
     @RequestMapping(value = "/submission/upload", method = RequestMethod.POST)
     public String upload( @RequestParam Long id,
+        @RequestParam boolean additional,
         @RequestParam MultipartFile uploadedFile, ModelMap models )
     {
         User user = SecurityUtils.getUser();
@@ -130,7 +167,7 @@ public class SubmissionController {
         boolean isInstructor = submission.getAssignment()
             .getSection()
             .isInstructor( user );
-        String view = isInstructor ? "/submission/upload?id=" + id
+        String view = additional && isInstructor ? "/submission/add?id=" + id
             : "/submission/view?id=" + id;
 
         if( !isInstructor && submission.isPastDue() )

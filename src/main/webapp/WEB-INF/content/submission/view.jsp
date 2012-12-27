@@ -21,7 +21,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><csns:truncate value="${submission.assignment.name}" length="60" /></li>
+<li><csns:truncate value="${submission.assignment.name}" length="40" /></li>
 <c:if test="${assignment.availableAfterDueDate || not assignment.pastDue}">
 <li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img
   title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a>
@@ -29,16 +29,16 @@ $(function(){
 </ul>
 
 <table class="general autowidth">
-<c:if test="${assignment.description != null}">
+<c:if test="${assignment.description != null and (assignment.availableAfterDueDate || not assignment.pastDue)}">
 <tr>
   <th>Description</th>
   <td>
     <c:choose>
       <c:when test="${assignment.description.type == 'TEXT'}">
-        <a href="../assignment/description?assignmentId=${assignment.id}">View</a>
+        <a href="description?assignmentId=${assignment.id}">View</a>
       </c:when>
       <c:when test="${assignment.description.type == 'FILE'}">
-        <a href="../assignment/description?assignmentId=${assignment.id}">${assignment.description.file.name}</a>
+        <a href="description?assignmentId=${assignment.id}">${assignment.description.file.name}</a>
       </c:when>
       <c:otherwise>
         <a href="${assignment.description.url}">${assignment.description.url}</a>
@@ -47,20 +47,24 @@ $(function(){
   </td>
 </tr>
 </c:if>
+<c:if test="${not empty assignment.totalPoints}">
+<tr>
+  <th>Total points</th><td>${assignment.totalPoints}</td>
+</tr>
+</c:if>
 <tr>
   <th>Due Date</th><td><csns:dueDate submission="${submission}" /></td>
 </tr>
 </table>
 
-<c:if test="${not empty assignment.totalPoints}">
-<p>Total points: ${assignment.totalPoints}</p>
-</c:if>
+<p></p>
 
 <c:if test="${not submission.pastDue}">
 <form method="post" action="upload" enctype="multipart/form-data"><p>
 File: <input type="file" name="uploadedFile" size="50" />
 <input type="submit" class="subbutton" value="Upload" />
 <input type="hidden" name="id" value="${submission.id}" />
+<input type="hidden" name="additional" value="false" />
 </p></form>
 </c:if>
 

@@ -60,7 +60,7 @@ function toggleFilePublic( fileId )
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img
   title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a></li>
-<li class="align_right"><a href="<c:url value='upload?id=${submission.id}' />"><img
+<li class="align_right"><a href="<c:url value='add?id=${submission.id}' />"><img
   title="Upload Additional Files" alt="[Upload Additional Files]" src="<c:url value='/img/icons/upload.png' />" /></a></li>
 </ul>
 

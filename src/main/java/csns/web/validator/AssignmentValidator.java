@@ -67,6 +67,7 @@ public class AssignmentValidator implements Validator {
 
         if( !assignment.isOnline()
             && assignment.getDescription().getType() == ResourceType.FILE
+            && assignment.getDescription().getFile() == null
             && (uploadedFile == null || uploadedFile.isEmpty()) )
             errors.rejectValue( "description.file", "error.field.required" );
     }

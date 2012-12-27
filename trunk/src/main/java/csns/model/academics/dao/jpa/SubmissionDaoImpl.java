@@ -88,7 +88,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
 
     @Override
     @Transactional
-    @PreAuthorize("#submission.student.id == principal.id or returnObject.assignment.section.isInstructor(principal)")
+    @PreAuthorize("#submission.student.id == principal.id or #submission.assignment.section.isInstructor(principal)")
     public Submission saveSubmission( Submission submission )
     {
         return entityManager.merge( submission );

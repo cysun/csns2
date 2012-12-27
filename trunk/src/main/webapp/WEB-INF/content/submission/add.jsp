@@ -14,16 +14,17 @@ $(function(){
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
+<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="list?assignmentId=${assignment.id}">${assignment.name}</a></li>
 <li><a class="bc" href="grade?id=${submission.id}">${submission.student.name}</a></li>
-<li>Upload Files</li>
+<li>Upload Additional Files</li>
 </ul>
 
 <form method="post" action="upload" enctype="multipart/form-data"><p>
 File: <input type="file" name="uploadedFile" size="50" />
 <input type="submit" class="subbutton" value="Upload" />
 <input type="hidden" name="id" value="${submission.id}" />
+<input type="hidden" name="additional" value="true" />
 </p></form>
 
 <table class="viewtable">

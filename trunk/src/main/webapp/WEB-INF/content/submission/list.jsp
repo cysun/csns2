@@ -42,17 +42,20 @@ $(function(){
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr>
-<c:if test="${not assignment.online}">
-    <td><a href="grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a></td>
-    <td class="center">${fn:length(submission.files)}</td>
-</c:if>
-<c:if test="${assignment.online}">
-    <td><a href="online/grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a></td>
-</c:if>
-    <td class="center">
-      <c:if test="${not submission.gradeMailed}"><b>${submission.grade}</b></c:if>
-      <c:if test="${submission.gradeMailed}">${submission.grade}</c:if>
+    <td>
+      <c:if test="${not empty submission.grade and not submission.gradeMailed}"><img
+        src="<c:url value='/img/icons/email.png' />" alt="[Email]" /></c:if>
+      <c:if test="${not assignment.online}">
+        <a href="grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a>
+      </c:if>
+      <c:if test="${assignment.online}">
+        <a href="online/grade?id=${submission.id}">${submission.student.lastName}, ${submission.student.firstName}</a>
+      </c:if>
     </td>
+    <c:if test="${not assignment.online}">
+    <td class="center">${fn:length(submission.files)}</td>
+    </c:if>
+    <td class="center">${submission.grade}</td>
   </tr>
   </c:forEach>
 </tbody>

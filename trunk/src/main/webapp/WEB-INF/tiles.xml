@@ -287,6 +287,11 @@
     <!-- Assignment -->
     <!-- ========== -->
 
+    <definition name="assignment/view" extends="layout.basic">
+        <put-attribute name="title" value="View Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/view.jsp" />
+    </definition>
+
     <definition name="assignment/create" extends="layout.qa">
         <put-attribute name="title" value="Create Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/create.jsp" />
@@ -295,11 +300,6 @@
     <definition name="assignment/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
-    </definition>
-
-    <definition name="assignment/description" extends="layout.basic">
-        <put-attribute name="title" value="Assignment Description" />
-        <put-attribute name="content" value="/WEB-INF/content/assignment/description.jsp" />
     </definition>
 
     <!-- ================== -->
@@ -355,6 +355,11 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/view.jsp" />
     </definition>
 
+    <definition name="submission/description" extends="layout.basic">
+        <put-attribute name="title" value="View Assignment Description" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/description.jsp" />
+    </definition>
+
     <definition name="submission/list" extends="layout.jqueryui">
         <put-attribute name="title" value="List Submissions" />
         <put-attribute name="content" value="/WEB-INF/content/submission/list.jsp" />
@@ -365,9 +370,9 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/grade.jsp" />
     </definition>
 
-    <definition name="submission/upload" extends="layout.jqueryui">
-        <put-attribute name="title" value="Upload Files" />
-        <put-attribute name="content" value="/WEB-INF/content/submission/upload.jsp" />
+    <definition name="submission/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Upload Additional Files" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/add.jsp" />
     </definition>
 
     <!-- ================= -->

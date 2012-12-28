@@ -152,7 +152,7 @@ public class DepartmentController {
         for( int i = 0; i < names.length; ++i )
         {
             Mailinglist mailinglist = new Mailinglist();
-            mailinglist.setName( names[i] );
+            mailinglist.setName( department.getAbbreviation() + "-" + names[i] );
             mailinglist.setDescription( descriptions[i] );
             mailinglist.setDepartment( department );
             department.getMailinglists().add( mailinglist );
@@ -164,9 +164,9 @@ public class DepartmentController {
     private void createWikiPages( Department department )
     {
         String paths[] = {
-            "/department/" + department.getAbbreviation() + "/wiki/content/",
-            "/department/" + department.getAbbreviation()
-                + "/wiki/content/sidebar" };
+            "/wiki/content/department/" + department.getAbbreviation() + "/",
+            "/wiki/content/department/" + department.getAbbreviation()
+                + "/sidebar" };
         String subjects[] = { department.getName() + " Department Wiki",
             department.getName() + " Department Wiki Sidebar" };
         String vTemplates[] = { "wiki.department.home.vm",

@@ -465,6 +465,14 @@ alter table wiki_pages alter owner_id type bigint;
 alter table wiki_pages add column views integer not null default 0;
 create index wiki_pages_path_pattern_index on wiki_pages (path varchar_pattern_ops);
 
+update wiki_pages set path = '/wiki/content/department/cs/'
+    where path = '/wiki/content/';
+update wiki_pages set path = '/wiki/content/department/cs/sidebar'
+    where path = '/wiki/content/Sidebar';
+update wiki_pages set path = '/wiki/content/department/cs' ||
+    substring(path from char_length('/wiki/content/'))
+    where path like '/wiki/content/assessment/%';
+
 alter table wiki_revisions alter id type bigint;
 alter table wiki_revisions alter subject set not null;
 alter table wiki_revisions alter content set not null;

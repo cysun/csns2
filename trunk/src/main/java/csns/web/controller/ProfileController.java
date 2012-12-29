@@ -18,17 +18,22 @@
  */
 package csns.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +68,13 @@ public class ProfileController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @InitBinder
+    public void initBinder( WebDataBinder binder )
+    {
+        binder.registerCustomEditor( Date.class, new CustomDateEditor(
+            new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
+    }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile( ModelMap models )

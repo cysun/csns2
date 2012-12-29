@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -53,7 +54,7 @@ public class File implements Serializable {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "owner_id")
     private User owner;
 
@@ -63,7 +64,7 @@ public class File implements Serializable {
      * created by the file manager), this field be used to reference the
      * "previous version" of the file.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private File parent;
 
@@ -77,7 +78,7 @@ public class File implements Serializable {
      * If this field is not null, it means that this file is part of an
      * assignment submission.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_id")
     private Submission submission;
 

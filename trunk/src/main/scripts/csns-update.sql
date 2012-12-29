@@ -161,6 +161,8 @@ create trigger courses_ts_trigger
 
 create index courses_ts_index on courses using gin(tsv);
 
+update courses set tsv = setweight(to_tsvector(code), 'A') || setweight(to_tsvector(name), 'B');
+
 alter table sections alter id type bigint;
 alter table sections alter course_id type bigint;
 alter table instructors rename to section_instructors;
@@ -354,6 +356,18 @@ create trigger forums_ts_trigger
 
 create index forums_ts_index on forums using gin(tsv);
 
+update forums f set tsv = setweight(to_tsvector(c.code), 'A') ||
+    setweight(to_tsvector(c.name), 'A') from courses c
+    where f.course_id is not null and f.course_id = c.id;
+
+update forums f set tsv = setweight(to_tsvector(f.name), 'A') ||
+    setweight(to_tsvector(d.name), 'B') ||
+    setweight(to_tsvector(d.abbreviation), 'B') from departments d
+    where f.department_id is not null and f.department_id = d.id;
+
+update forums set tsv = setweight(to_tsvector(name), 'A')
+    where course_id is null and department_id is null;
+
 alter table forum_moderators alter forum_id type bigint;
 alter table forum_moderators alter user_id type bigint;
 
@@ -373,6 +387,14 @@ alter table forum_posts alter edited_by type bigint;
 alter table forum_post_attachments rename forum_post_id to post_id;
 alter table forum_post_attachments alter post_id type bigint;
 alter table forum_post_attachments alter file_id type bigint;
+
+alter table forum_topics add column last_post_date timestamp;
+alter table forum_topics add column num_of_posts integer;
+update forum_topics f set last_post_date = p.date from forum_posts p
+    where f.last_post_id = p.id;
+update forum_topics f set num_of_posts = (select count(*) from forum_posts
+    where topic_id = f.id);
+alter table forum_topics alter num_of_posts set not null;
 
 drop trigger forum_posts_ts_trigger on forum_posts;
 drop function forum_posts_ts_trigger_function();
@@ -570,6 +592,11 @@ update mailinglists set id = 20018 where id = 20011;
 update mailinglist_messages set mailinglist_id = 20018 where mailinglist_id = 20011;
 update mailinglists set id = 20003 where id = 20001;
 update mailinglist_messages set mailinglist_id = 20003 where mailinglist_id = 20001;
+
+update subscriptions set subscribable_id = 20016 where subscribable_id = 20003 and subscribable_type = 'ML';
+update subscriptions set subscribable_id = 20017 where subscribable_id = 20010 and subscribable_type = 'ML';
+update subscriptions set subscribable_id = 20018 where subscribable_id = 20011 and subscribable_type = 'ML';
+update subscriptions set subscribable_id = 20003 where subscribable_id = 20001 and subscribable_type = 'ML';
 
 alter table mailinglist_messages add foreign key (mailinglist_id) references mailinglists(id);
 

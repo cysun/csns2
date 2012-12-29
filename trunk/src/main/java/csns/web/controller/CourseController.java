@@ -117,6 +117,7 @@ public class CourseController {
         courseValidator.validate( course, bindingResult );
         if( bindingResult.hasErrors() ) return "course/edit";
 
+        course.getForum().setName( course.getCode() + " " + course.getName() );
         course = courseDao.saveCourse( course );
         sessionStatus.setComplete();
         return "redirect:view?id=" + course.getId();

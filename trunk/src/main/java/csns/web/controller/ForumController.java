@@ -115,7 +115,6 @@ public class ForumController {
         }
 
         models.put( "forum", forum );
-        models.put( "topics", topicDao.getTopics( forum ) );
         models.put( "department", departmentDao.getDepartment( dept ) );
 
         return "forum/view";

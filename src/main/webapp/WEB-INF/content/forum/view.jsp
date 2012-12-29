@@ -68,7 +68,7 @@ function unsubscribe()
 </form>
 </div>
 
-<display:table name="${topics}" uid="topic" requestURI="viewForum.html" pagesize="40" class="forums">
+<display:table name="${forum.topics}" uid="topic" requestURI="view" pagesize="30" class="forums">
 <display:setProperty name="paging.banner.onepage" value="" />
 <display:setProperty name="paging.banner.group_size" value="8" />
 <display:setProperty name="paging.banner.no_items_found" value="" />
@@ -95,6 +95,7 @@ function unsubscribe()
     </c:if>
     ${topic.name}</a>
   </display:column>
+
   <display:column title="Replies" class="bg1 postdetails center" style="width:7%;">${topic.numOfReplies}</display:column>
   <display:column title="Author" class="bg1 name center" style="width:7%;">${topic.firstPost.author.username}</display:column>
   <display:column title="Views" class="bg1 postdetails center" style="width:7%;">${topic.numOfViews}</display:column>

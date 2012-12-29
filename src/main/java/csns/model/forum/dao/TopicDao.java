@@ -18,16 +18,11 @@
  */
 package csns.model.forum.dao;
 
-import java.util.List;
-
-import csns.model.forum.Forum;
 import csns.model.forum.Topic;
 
 public interface TopicDao {
 
     Topic getTopic( Long id );
-
-    List<Topic> getTopics( Forum forum );
 
     Topic saveTopic( Topic topic );
 

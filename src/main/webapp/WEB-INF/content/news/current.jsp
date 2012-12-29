@@ -3,15 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
-<script>
-function confirmRemoveNews( newsId )
-{
-    message = "Are you sure you want to remove this news entry?";
-    url = "faculty/expireNews.html?newsId=" + newsId;
-    confirmGoto( message, url );
-}
-</script>
-
 <ul id="title">
 <li>News and Announcements</li>
 <security:authorize access="authenticated and principal.isFaculty('${dept}')">

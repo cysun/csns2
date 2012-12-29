@@ -18,15 +18,12 @@
  */
 package csns.model.forum.dao.jpa;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import csns.model.forum.Forum;
 import csns.model.forum.Topic;
 import csns.model.forum.dao.TopicDao;
 
@@ -40,17 +37,6 @@ public class TopicDaoImpl implements TopicDao {
     public Topic getTopic( Long id )
     {
         return entityManager.find( Topic.class, id );
-    }
-
-    @Override
-    public List<Topic> getTopics( Forum forum )
-    {
-        String query = "from Topic where forum = :forum and deleted = false "
-            + "order by pinned desc, lastPost.date desc";
-
-        return entityManager.createQuery( query, Topic.class )
-            .setParameter( "forum", forum )
-            .getResultList();
     }
 
     @Override

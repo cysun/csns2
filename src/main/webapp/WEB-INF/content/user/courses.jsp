@@ -34,6 +34,7 @@ $(function(){
 </script>
 
 <h4>Courses Taken</h4>
+<c:if test="${fn:length(coursesTaken) > 0}">
 <table class="viewtable autowidth">
 <thead>
   <tr><th>Quarter</th><th>Course</th><th>Instructor</th><th>Grade</th></tr>
@@ -49,6 +50,10 @@ $(function(){
   </c:forEach>
 </tbody>
 </table>
+</c:if>
+<c:if test="${fn:length(coursesTaken) == 0}">
+<p>No course on record.</p>
+</c:if>
 
 <h4>Course Substitutions</h4>
 <c:if test="${fn:length(courseSubstitutions) > 0}">

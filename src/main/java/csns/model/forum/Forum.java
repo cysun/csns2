@@ -21,18 +21,22 @@ package csns.model.forum;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import csns.model.academics.Course;
@@ -77,13 +81,17 @@ public class Forum implements Subscribable, Serializable {
     @JoinColumn(name = "last_post_id", unique = true)
     private Post lastPost;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", unique = true)
     private Course course;
+
+    @OneToMany(mappedBy = "forum")
+    @OrderBy("pinned desc, lastPostDate desc")
+    private List<Topic> topics;
 
     /**
      * Hidden forums are not shown in forum listings, e.g. Wiki Discussion.
@@ -244,6 +252,16 @@ public class Forum implements Subscribable, Serializable {
     public void setHidden( boolean hidden )
     {
         this.hidden = hidden;
+    }
+
+    public List<Topic> getTopics()
+    {
+        return topics;
+    }
+
+    public void setTopics( List<Topic> topics )
+    {
+        this.topics = topics;
     }
 
 }

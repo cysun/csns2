@@ -41,7 +41,7 @@ public class CKEditorController {
     FileIO fileIO;
 
     @RequestMapping("/ckeditor/upload")
-    public String upload( @RequestParam("file") MultipartFile uploadedFile,
+    public String upload( @RequestParam("upload") MultipartFile uploadedFile,
         ModelMap models )
     {
         User user = SecurityUtils.getUser();

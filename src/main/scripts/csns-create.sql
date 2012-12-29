@@ -494,6 +494,8 @@ create table forum_topics (
     num_of_views    integer not null default 0,
     first_post_id   bigint,
     last_post_id    bigint,
+    last_post_date  timestamp,
+    num_of_posts    integer not null default 0,
     forum_id        bigint not null references forums(id),
     deleted         boolean not null default 'f'
 );

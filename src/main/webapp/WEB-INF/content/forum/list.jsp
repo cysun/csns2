@@ -52,7 +52,7 @@
 <tr><th>Forum</th><th>Topics</th><th>Posts</th><th>Last Post</th></tr>
 <c:forEach items="${courseForums}" var="forum" varStatus="status">
 <tr<c:if test="${status.index%2 eq 0}"> class="even"</c:if>>
-  <td class="cat"><a href="view?id=${forum.id}">${forum.course.code} ${forum.course.name}</a></td>
+  <td class="cat"><a href="view?id=${forum.id}">${forum.name}</a></td>
   <td width="7%" class="center bg1">${forum.numOfTopics}</td>
   <td width="7%" class="center bg1">${forum.numOfPosts}</td>
   <td width="26%" nowrap="nowrap" class="bg1">

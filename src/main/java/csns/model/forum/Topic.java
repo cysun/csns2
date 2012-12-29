@@ -35,6 +35,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import csns.model.core.Subscribable;
 import csns.model.core.User;
 
@@ -66,8 +68,19 @@ public class Topic implements Subscribable, Serializable {
     @JoinColumn(name = "last_post_id")
     private Post lastPost;
 
+    // JPA currently does not support lastPost.date in @OrderBy, so we have
+    // to duplicate it here.
+    @Column(name = "last_post_date")
+    private Date lastPostDate;
+
+    @Column(name = "num_of_posts", nullable = false)
+    private int numOfPosts;
+
+    // The cascade here would update the lastPost field in Forum where a
+    // new post is added.
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "forum_id", nullable = false)
+    @Where(clause = "deleted=false")
     private Forum forum;
 
     @Column(nullable = false)
@@ -78,6 +91,7 @@ public class Topic implements Subscribable, Serializable {
         pinned = false;
         numOfViews = 0;
         posts = new ArrayList<Post>();
+        numOfPosts = 0;
         deleted = false;
     }
 
@@ -112,13 +126,15 @@ public class Topic implements Subscribable, Serializable {
     public void addPost( Post post )
     {
         posts.add( post );
-        lastPost = post;
         if( posts.size() == 1 ) firstPost = post;
+        lastPost = post;
+        lastPostDate = lastPost.getDate();
+        ++numOfPosts;
     }
 
     public int getNumOfReplies()
     {
-        return posts.size() - 1;
+        return numOfPosts - 1;
     }
 
     public boolean togglePinned()
@@ -189,6 +205,26 @@ public class Topic implements Subscribable, Serializable {
     public void setLastPost( Post lastPost )
     {
         this.lastPost = lastPost;
+    }
+
+    public Date getLastPostDate()
+    {
+        return lastPostDate;
+    }
+
+    public void setLastPostDate( Date lastPostDate )
+    {
+        this.lastPostDate = lastPostDate;
+    }
+
+    public int getNumOfPosts()
+    {
+        return numOfPosts;
+    }
+
+    public void setNumOfPosts( int numOfPosts )
+    {
+        this.numOfPosts = numOfPosts;
     }
 
     public Forum getForum()

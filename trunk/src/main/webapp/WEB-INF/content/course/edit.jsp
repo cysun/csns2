@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -10,7 +11,15 @@ $(function(){
                 $("input[name='coordinator']").val(ui.item.id);
         }
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
 </script>
 
 <ul id="title">
@@ -21,7 +30,7 @@ $(function(){
 <form:form modelAttribute="course">
 <table class="general">
   <tr>
-    <th>Code *</th>
+    <th><csns:help name="code">Code</csns:help> *</th>
     <td>
       <form:input path="code" cssClass="forminput" />
       <div class="error"><form:errors path="code" /></div>
@@ -53,3 +62,7 @@ $(function(){
   </tr>
 </table>
 </form:form>
+
+<div id="help-code" class="help">A course code must consist of uppercase letters
+followed by a number, and optionally, followed by another uppercase letter, e.g.
+<span class="tt">CS101</span> or <span class="tt">CS496A</span>.</div>

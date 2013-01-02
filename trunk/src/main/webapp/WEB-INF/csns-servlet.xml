@@ -19,6 +19,7 @@
     <mvc:resources mapping="/img/**" location="/img/" cache-period="31556926" />
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/robots.txt" location="/robots.txt" cache-period="31556926" />
 
     <mvc:view-controller path="/login" view-name="login" />
     <mvc:view-controller path="/400" view-name="400" />

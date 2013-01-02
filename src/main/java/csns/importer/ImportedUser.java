@@ -45,7 +45,7 @@ public class ImportedUser {
     {
         name = name.trim();
         int index1 = name.indexOf( ',' );
-        int index2 = name.indexOf( ' ' );
+        int index2 = name.indexOf( ' ', index1 );
 
         lastName = name.substring( 0, index1 );
         if( index2 > 0 )

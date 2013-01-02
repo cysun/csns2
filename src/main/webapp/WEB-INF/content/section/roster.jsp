@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <c:set var="section" value="${gradeSheet.section}"/>
@@ -6,7 +7,7 @@
 <script>
 $(function(){
    $("table").tablesorter({
-      sortList: [[0,0]]
+      sortList: [[1,0]]
    });
    $("select").each(function(){
        $(this).change(function(event){
@@ -47,6 +48,7 @@ $(function(){
     alt="[Add Student(s)]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 </ul>
 
+<p>Total Students: ${fn:length(gradeSheet.studentGrades)}</p>
 <form id="studentsForm" method="post">
 <table class="viewtable">
 <thead>

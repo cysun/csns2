@@ -18,6 +18,7 @@
  */
 package csns.model.academics.dao.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.SectionDao;
@@ -40,32 +42,49 @@ public class SectionDaoImpl implements SectionDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.isInstructor(principal) or returnObject.isEnrolled(principal)")
+    @PostAuthorize("returnObject.isInstructor(principal) or returnObject.isEnrolled(principal) or principal.admin")
     public Section getSection( Long id )
     {
         return entityManager.find( Section.class, id );
     }
 
-    @Override
-    public List<Section> getSections( Quarter quarter )
+    public List<Section> getUndergraduateSections( Department department,
+        Quarter quarter )
     {
-        String query = "from Section where quarter = :quarter "
-            + "order by course.code asc, number asc";
+        String query = "select s from Section s, "
+            + "Department d join d.undergraduateCourses c "
+            + "where d = :department and s.quarter = :quarter and s.course = c "
+            + "and s.instructors is not empty "
+            + "order by c.code asc, s.number asc";
 
         return entityManager.createQuery( query, Section.class )
+            .setParameter( "department", department )
+            .setParameter( "quarter", quarter )
+            .getResultList();
+    }
+
+    public List<Section> getGraduateSections( Department department,
+        Quarter quarter )
+    {
+        String query = "select s from Section s, "
+            + "Department d join d.graduateCourses c "
+            + "where d = :department and s.quarter = :quarter and s.course = c "
+            + "and s.instructors is not empty "
+            + "order by c.code asc, s.number asc";
+
+        return entityManager.createQuery( query, Section.class )
+            .setParameter( "department", department )
             .setParameter( "quarter", quarter )
             .getResultList();
     }
 
     @Override
-    public List<Section> getSections( Course course )
+    public List<Section> getSections( Department department, Quarter quarter )
     {
-        String query = "from Section where course = :course "
-            + "order by quarter desc, number asc";
-
-        return entityManager.createQuery( query, Section.class )
-            .setParameter( "course", course )
-            .getResultList();
+        List<Section> sections = new ArrayList<Section>();
+        sections.addAll( getUndergraduateSections( department, quarter ) );
+        sections.addAll( getGraduateSections( department, quarter ) );
+        return sections;
     }
 
     @Override

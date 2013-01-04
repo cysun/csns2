@@ -26,14 +26,14 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.annotations.Test;
 
 import csns.model.academics.Assignment;
-import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Test(groups = "SectionDaoTests", dependsOnGroups = { "UserDaoTests",
-    "CourseDaoTests" })
+    "DepartmentDaoTests" })
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class SectionDaoTests extends
     AbstractTransactionalTestNGSpringContextTests {
@@ -42,7 +42,7 @@ public class SectionDaoTests extends
     UserDao userDao;
 
     @Autowired
-    CourseDao courseDao;
+    DepartmentDao departmentDao;
 
     @Autowired
     SectionDao sectionDao;
@@ -54,17 +54,10 @@ public class SectionDaoTests extends
     }
 
     @Test
-    public void getSectionsByQuarter()
+    public void getSections()
     {
-        Quarter f10 = new Quarter( 1109 );
-        assert sectionDao.getSections( f10 ).size() == 1;
-    }
-
-    @Test
-    public void getSectionsByCourse()
-    {
-        Course cs520 = courseDao.getCourse( "CS520" );
-        assert sectionDao.getSections( cs520 ).size() == 1;
+        Department department = departmentDao.getDepartment( "cs" );
+        assert sectionDao.getSections( department, new Quarter() ).size() == 2;
     }
 
     @Test

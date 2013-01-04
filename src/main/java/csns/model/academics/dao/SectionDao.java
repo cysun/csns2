@@ -21,6 +21,7 @@ package csns.model.academics.dao;
 import java.util.List;
 
 import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.core.User;
@@ -29,9 +30,7 @@ public interface SectionDao {
 
     Section getSection( Long id );
 
-    List<Section> getSections( Quarter quarter );
-
-    List<Section> getSections( Course course );
+    List<Section> getSections( Department department, Quarter quarter );
 
     List<Section> getSectionsByInstructor( User instructor, Quarter quarter );
 

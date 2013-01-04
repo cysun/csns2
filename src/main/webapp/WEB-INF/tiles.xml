@@ -237,6 +237,16 @@
         <put-attribute name="content" value="/WEB-INF/content/department/courses.jsp" />
     </definition>
 
+    <definition name="department/sections" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/department/sections.jsp" />
+    </definition>
+
+    <definition name="department/section" extends="layout.jqueryui">
+        <put-attribute name="title" value="Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section.jsp" />
+    </definition>
+
     <!-- ======= -->
     <!-- Section -->
     <!-- ======= -->

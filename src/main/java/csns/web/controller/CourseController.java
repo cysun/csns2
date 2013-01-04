@@ -34,11 +34,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Course;
 import csns.model.academics.dao.CourseDao;
 import csns.model.core.User;
 import csns.model.forum.Forum;
+import csns.security.SecurityUtils;
+import csns.util.FileIO;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.CourseValidator;
 
@@ -51,6 +54,9 @@ public class CourseController {
 
     @Autowired
     CourseValidator courseValidator;
+
+    @Autowired
+    FileIO fileIO;
 
     @Autowired
     WebApplicationContext context;
@@ -80,19 +86,25 @@ public class CourseController {
         return "course/view";
     }
 
-    @RequestMapping(value = "/course/add", method = RequestMethod.GET)
-    public String add( ModelMap models )
+    @RequestMapping(value = "/course/create", method = RequestMethod.GET)
+    public String create( ModelMap models )
     {
         models.put( "course", new Course() );
-        return "course/add";
+        return "course/create";
     }
 
-    @RequestMapping(value = "/course/add", method = RequestMethod.POST)
-    public String add( @ModelAttribute Course course,
+    @RequestMapping(value = "/course/create", method = RequestMethod.POST)
+    public String create(
+        @ModelAttribute Course course,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         courseValidator.validate( course, bindingResult );
-        if( bindingResult.hasErrors() ) return "course/add";
+        if( bindingResult.hasErrors() ) return "course/create";
+
+        if( uploadedFile != null && !uploadedFile.isEmpty() )
+            course.setSyllabus( fileIO.save( uploadedFile,
+                SecurityUtils.getUser(), true ) );
 
         Forum forum = new Forum( course.getCode() + " " + course.getName() );
         forum.setCourse( course );
@@ -111,11 +123,17 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/course/edit", method = RequestMethod.POST)
-    public String edit( @ModelAttribute Course course,
+    public String edit(
+        @ModelAttribute Course course,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         courseValidator.validate( course, bindingResult );
         if( bindingResult.hasErrors() ) return "course/edit";
+
+        if( uploadedFile != null && !uploadedFile.isEmpty() )
+            course.setSyllabus( fileIO.save( uploadedFile,
+                SecurityUtils.getUser(), true ) );
 
         course.getForum().setName( course.getCode() + " " + course.getName() );
         course = courseDao.saveCourse( course );

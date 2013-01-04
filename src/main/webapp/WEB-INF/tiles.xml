@@ -193,9 +193,9 @@
         <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
     </definition>
 
-    <definition name="course/add" extends="layout.jqueryui">
-        <put-attribute name="title" value="Add Course" />
-        <put-attribute name="content" value="/WEB-INF/content/course/add.jsp" />
+    <definition name="course/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/create.jsp" />
     </definition>
 
     <definition name="course/edit" extends="layout.jqueryui">

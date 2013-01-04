@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     @Transactional
+    @PreAuthorize("principal.admin or principal.id == #course.coordinator.id")
     public Course saveCourse( Course course )
     {
         return entityManager.merge( course );

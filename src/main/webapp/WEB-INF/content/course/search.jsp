@@ -18,8 +18,8 @@ $(function(){
 
 <ul id="title">
 <li>Courses</li>
-<security:authorize access="authenticated and principal.isAdmin('${dept}')">
-<li class="align_right"><a href="add"><img title="Add" alt="[Add]"
+<security:authorize access="authenticated and principal.admin">
+<li class="align_right"><a href="create"><img title="Create Course" alt="[Create Course]"
     src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </security:authorize>
 </ul>
@@ -30,17 +30,13 @@ $(function(){
 </form>
 
 <c:if test="${not empty courses}">
-<table class="viewtable">
-<tr><th>Code</th><th>Name</th><th>Coordinator</th><th></th></tr>
+<table class="viewtable autowidth">
+<tr><th>Code</th><th>Name</th><th>Coordinator</th></tr>
 <c:forEach items="${courses}" var="course">
 <tr>
   <td>${course.code}</td>
   <td><a href="view?id=${course.id}">${course.name}</a></td>
   <td class="center">${course.coordinator.name}</td>
-  <td class="center">
-    <a href="edit?id=${course.id}"><img title="Edit" alt="[Edit]"
-       src="<c:url value='/img/icons/table_edit.png' />" /></a>
-  </td>
 </tr>
 </c:forEach>
 </table>

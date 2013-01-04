@@ -23,31 +23,45 @@ function help( name )
 </script>
 
 <ul id="title">
-<li><a class="bc" href="search">Courses</a></li>
-<li>${course.code}</li>
+<c:choose>
+  <c:when test="${not empty dept}">
+    <li><a class="bc" href="<c:url value='/department/${dept}/courses' />">Courses</a></li>
+  </c:when>
+  <c:otherwise>
+    <li><a class="bc" href="search">Courses</a></li>
+  </c:otherwise>
+</c:choose>
+<li><a class="bc" href="view?id=${course.id}">${course.code}</a></li>
+<li>Edit</li>
 </ul>
 
-<form:form modelAttribute="course">
-<table class="general">
+<form:form modelAttribute="course" enctype="multipart/form-data">
+<table class="general autowidth">
   <tr>
     <th><csns:help name="code">Code</csns:help> *</th>
     <td>
-      <form:input path="code" cssClass="forminput" />
+      <form:input path="code" cssClass="forminput" cssStyle="width: 100px;" />
       <div class="error"><form:errors path="code" /></div>
     </td>
   </tr>
   <tr>
     <th>Name *</th>
     <td>
-      <form:input path="name" cssClass="forminput" />
+      <form:input path="name" cssClass="forminput" cssStyle="width: 600px;" />
       <div class="error"><form:errors path="name" /></div>
     </td>
   </tr>
   <tr>
     <th>Coordinator</th>
     <td>
-      <input id="coordinator" name="cname" class="forminput" value="${course.coordinator.name}" />
+      <input id="coordinator" name="cname" class="forminput" value="${course.coordinator.name}" style="width: 600px;" />
       <input name="coordinator" type="hidden" value="${course.coordinator.id}" />
+    </td>
+  </tr>
+  <tr>
+    <th>Syllabus</th>
+    <td>
+      <input name="file" type="file" class="forminput" style="width: 600px;" />
     </td>
   </tr>
   <tr>

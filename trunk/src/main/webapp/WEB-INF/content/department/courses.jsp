@@ -35,8 +35,8 @@ $(function(){
 <li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
 <li>${department.name}</li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-<li class="align_right"><a href="<c:url value='/course/add' />"><img title="Add"
-    alt="[Add]" src="<c:url value='/img/icons/table_add.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='/course/create' />"><img title="Create Course"
+    alt="[Create Course]" src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </security:authorize>
 </ul>
 

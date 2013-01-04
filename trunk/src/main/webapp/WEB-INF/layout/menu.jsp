@@ -16,10 +16,10 @@
   <div><ul>
     <security:authorize access="principal.instructor">
     <li><a href="<c:url value='/section/taught' />"><img alt=""
-         src="<c:url value='/img/icons/instructor.png' />" />Instructor</a></li>
+         src="<c:url value='/img/icons/user_suit.png' />" />Instructor</a></li>
     </security:authorize>
     <li><a href="<c:url value='/section/taken' />"><img alt=""
-           src="<c:url value='/img/icons/student.png' />" />Student</a></li>
+           src="<c:url value='/img/icons/user_green.png' />" />Student</a></li>
   </ul></div>
 </li>
 </security:authorize>
@@ -29,10 +29,12 @@
   <div><ul>
 <security:authorize access="authenticated and principal.isFaculty('${dept}')">
     <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
-           src="<c:url value='/img/icons/users.png' />" />People</a></li>
+           src="<c:url value='/img/icons/group.png' />" />People</a></li>
 </security:authorize>
     <li><a href="<c:url value='/department/${dept}/courses' />"><img alt=""
-           src="<c:url value='/img/icons/courses.png' />" />Courses</a></li>
+           src="<c:url value='/img/icons/books.png' />" />Courses</a></li>
+    <li><a href="<c:url value='/department/${dept}/sections' />"><img alt=""
+           src="<c:url value='/img/icons/blackboard_sum.png' />" />Sections</a></li>
   </ul></div>
 </li>
 

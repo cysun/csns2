@@ -1,3 +1,6 @@
+--
+-- Convert CSNS Schema to CSNS2 Schema
+--
 set client_min_messages=WARNING;
 
 drop sequence log_sequence;

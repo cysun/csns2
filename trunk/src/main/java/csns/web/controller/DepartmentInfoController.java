@@ -228,7 +228,7 @@ public class DepartmentInfoController {
         Section section = sectionDao.getSection( id );
         models.put( "department", departmentDao.getDepartment( dept ) );
         models.put( "gradeSheet", new GradeSheet( section ) );
-        return "department/section";
+        return "section/view";
     }
 
 }

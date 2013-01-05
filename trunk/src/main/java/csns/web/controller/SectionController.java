@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import csns.helper.GradeSheet;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.Quarter;
@@ -193,6 +195,7 @@ public class SectionController {
         for( User instructor : section.getInstructors() )
             if( instructor.getId().equals( user.getId() ) )
             {
+                section.setDeleted( true );
                 section.getInstructors().remove( instructor );
                 sectionDao.saveSection( section );
                 break;
@@ -257,6 +260,25 @@ public class SectionController {
         }
 
         return "redirect:/section/edit?id=" + id;
+    }
+
+    @RequestMapping(value = "/section/search")
+    public String search( @RequestParam(required = false) String term,
+        ModelMap models )
+    {
+        List<Section> sections = null;
+        if( StringUtils.hasText( term ) )
+            sections = sectionDao.searchSections( term, 40 );
+        models.addAttribute( "sections", sections );
+        return "section/search";
+    }
+
+    @RequestMapping("/section/view")
+    public String view( @RequestParam Long id, ModelMap models )
+    {
+        Section section = sectionDao.getSection( id );
+        models.put( "gradeSheet", new GradeSheet( section ) );
+        return "section/view";
     }
 
 }

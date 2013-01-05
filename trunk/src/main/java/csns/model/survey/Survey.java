@@ -27,6 +27,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -56,7 +57,8 @@ public class Survey implements Serializable {
     @Column(nullable = false)
     private SurveyType type;
 
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST },
+        fetch = FetchType.LAZY)
     @JoinColumn(name = "question_sheet_id", nullable = false, unique = true)
     private QuestionSheet questionSheet;
 

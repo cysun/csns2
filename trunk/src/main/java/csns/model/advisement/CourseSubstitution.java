@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -50,7 +51,8 @@ public class CourseSubstitution implements Serializable,
     @JoinColumn(name = "substitute_course_id")
     private Course substitute;
 
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST },
+        fetch = FetchType.LAZY)
     @JoinColumn(name = "advisement_record_id")
     private AdvisementRecord advisementRecord;
 

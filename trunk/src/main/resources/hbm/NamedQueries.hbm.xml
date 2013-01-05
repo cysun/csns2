@@ -31,6 +31,14 @@ select * from courses where obsolete = 'f' and
 ]]>
     </sql-query>
 
+    <sql-query name="section.search">
+        <return class="csns.model.academics.Section" />
+<![CDATA[
+select * from sections where deleted = 'f' and plainto_tsquery(:term) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+]]>
+    </sql-query>
+
     <sql-query name="online.assignment.search">
         <return class="csns.model.academics.OnlineAssignment" />
 <![CDATA[

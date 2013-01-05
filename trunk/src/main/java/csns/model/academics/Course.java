@@ -61,7 +61,7 @@ public class Course implements Serializable, Comparable<Course> {
     @JoinColumn(name = "coordinator_id")
     private User coordinator;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "syllabus_id")
     private File syllabus;
 

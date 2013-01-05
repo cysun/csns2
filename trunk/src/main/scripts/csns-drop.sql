@@ -82,7 +82,11 @@ drop function assignments_ts_trigger_function();
 drop table assignments;
 
 drop table enrollments;
+drop trigger section_instructors_ts_trigger on section_instructors;
+drop function section_instructors_ts_trigger_function();
 drop table section_instructors;
+drop trigger sections_ts_trigger on sections;
+drop function  sections_ts_trigger_function();
 drop table sections;
 drop trigger courses_ts_trigger on courses;
 drop function courses_ts_trigger_function();

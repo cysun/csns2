@@ -38,7 +38,7 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>Students</li>
-<li class="align_right"><a href="export?id=${section.id}&amp;format=excel"><img title="Export to Excel"
+<li class="align_right"><a href="roster/export?id=${section.id}"><img title="Export to Excel"
     alt="[Export to Excel]" src="<c:url value='/img/icons/export_excel.png' />" /></a></li>
 <li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Students"
     alt="[Email Student(s)]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>

@@ -80,11 +80,15 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderBy("name asc")
     private List<Assignment> assignments;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
     public Section()
     {
         number = 1;
         instructors = new ArrayList<User>();
         enrollments = new ArrayList<Enrollment>();
+        deleted = false;
     }
 
     @Override
@@ -189,6 +193,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setAssignments( List<Assignment> assignments )
     {
         this.assignments = assignments;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

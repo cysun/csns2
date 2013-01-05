@@ -266,8 +266,29 @@ create table sections (
     quarter         integer not null,
     course_id       bigint not null references courses(id),
     number          integer not null default 1,
+    deleted         boolean not null default 'f',
   unique (quarter, course_id, number)
 );
+
+alter table sections add column tsv tsvector;
+
+create function sections_ts_trigger_function() returns trigger as $$
+declare
+    l_course    courses%rowtype;
+begin
+	select * into l_course from courses where id = new.course_id;
+    new.tsv := setweight(to_tsvector(l_course.code), 'A') ||
+               setweight(to_tsvector(l_course.name), 'B') ||
+               setweight(to_tsvector(quarter(new.quarter)), 'A');
+    return new;
+end
+$$ language plpgsql;
+
+create trigger sections_ts_trigger
+    before insert on sections
+    for each row execute procedure sections_ts_trigger_function();
+
+create index sections_ts_index on sections using gin(tsv);
 
 create table section_instructors (
     section_id          bigint not null references sections(id),
@@ -275,6 +296,24 @@ create table section_instructors (
     instructor_order    integer not null,
   primary key (section_id, instructor_order)
 );
+
+create function section_instructors_ts_trigger_function() returns trigger as $$
+declare
+    l_user    users%rowtype;
+begin
+    select * into l_user from users where id = new.instructor_id;
+    update sections set tsv = tsv ||
+        setweight(to_tsvector(l_user.first_name), 'A') ||
+        setweight(to_tsvector(l_user.last_name), 'A') ||
+        setweight(to_tsvector(l_user.username), 'A')
+        where id = new.section_id;
+    return null;
+end
+$$ language plpgsql;
+
+create trigger section_instructors_ts_trigger
+    after insert on section_instructors
+    for each row execute procedure section_instructors_ts_trigger_function();
 
 create table enrollments (
     id              bigint primary key,

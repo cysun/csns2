@@ -72,7 +72,9 @@
         <security:intercept-url pattern="/user/**" access="authenticated and (principal.sysadmin or principal.faculty)" />
         <security:intercept-url pattern="/course/add" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/course/edit" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/section/search" access="permitAll" />
         <security:intercept-url pattern="/section/taken" access="authenticated" />
+        <security:intercept-url pattern="/section/view" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/section/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/assignment/description" access="authenticated" />
         <security:intercept-url pattern="/assignment/**" access="authenticated and principal.instructor" />

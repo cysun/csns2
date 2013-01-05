@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Repository;
@@ -114,6 +115,15 @@ public class SectionDaoImpl implements SectionDao {
             .setParameter( "student", student )
             .setParameter( "quarter", quarter )
             .getResultList();
+    }
+
+    @Override
+    public List<Section> searchSections( String term, int maxResults )
+    {
+        TypedQuery<Section> query = entityManager.createNamedQuery(
+            "section.search", Section.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

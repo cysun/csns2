@@ -18,16 +18,26 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,6 +79,9 @@ public class SectionRosterController {
 
     @Autowired
     WebApplicationContext context;
+
+    @Resource(name = "contentTypes")
+    Properties contentTypes;
 
     @RequestMapping("/section/roster")
     public String roster( @RequestParam Long id, ModelMap models )
@@ -207,6 +220,57 @@ public class SectionRosterController {
         }
 
         return "redirect:/section/roster?id=" + sectionId;
+    }
+
+    @RequestMapping("/section/roster/export")
+    public String export( @RequestParam Long id, HttpServletResponse response )
+        throws IOException
+    {
+        Section section = sectionDao.getSection( id );
+        GradeSheet gradeSheet = new GradeSheet( section );
+
+        response.setContentType( contentTypes.getProperty( "xlsx" ) );
+        response.setHeader( "Content-Disposition", "attachment; filename="
+            + section.getCourse().getCode() + "-"
+            + section.getQuarter().getShortString() + ".xlsx" );
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet( "Grades" );
+
+        int n = section.getAssignments().size();
+        Row row = sheet.createRow( 0 );
+        row.createCell( 0 ).setCellValue( "Name" );
+        for( int i = 0; i < n; ++i )
+            row.createCell( i + 1 ).setCellValue(
+                section.getAssignments().get( i ).getAlias() );
+        row.createCell( n + 1 ).setCellValue( "Grade" );
+
+        int rowIndex = 1;
+        Map<Enrollment, String[]> studentGrades = gradeSheet.getStudentGrades();
+        for( Enrollment enrollment : studentGrades.keySet() )
+        {
+            row = sheet.createRow( rowIndex++ );
+            row.createCell( 0 ).setCellValue(
+                enrollment.getStudent().getLastName() + ", "
+                    + enrollment.getStudent().getFirstName() );
+            for( int i = 0; i < n; ++i )
+            {
+                Cell cell = row.createCell( i + 1 );
+                String grade = studentGrades.get( enrollment )[i];
+                if( StringUtils.hasText( grade )
+                    && grade.matches( "-?\\d+(\\.\\d+)?" ) )
+                    cell.setCellValue( Double.parseDouble( grade ) );
+                else
+                    cell.setCellValue( grade );
+            }
+            if( enrollment.getGrade() != null )
+                row.createCell( n + 1 ).setCellValue(
+                    enrollment.getGrade().getSymbol() );
+        }
+
+        wb.write( response.getOutputStream() );
+
+        return null;
     }
 
 }

@@ -242,11 +242,6 @@
         <put-attribute name="content" value="/WEB-INF/content/department/sections.jsp" />
     </definition>
 
-    <definition name="department/section" extends="layout.jqueryui">
-        <put-attribute name="title" value="Section" />
-        <put-attribute name="content" value="/WEB-INF/content/department/section.jsp" />
-    </definition>
-
     <!-- ======= -->
     <!-- Section -->
     <!-- ======= -->
@@ -291,6 +286,16 @@
     <definition name="section/grade" extends="layout.jqueryui">
         <put-attribute name="title" value="Grade Student" />
         <put-attribute name="content" value="/WEB-INF/content/section/grade.jsp" />
+    </definition>
+
+    <definition name="section/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/search.jsp" />
+    </definition>
+
+    <definition name="section/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Section" />
+        <put-attribute name="content" value="/WEB-INF/content/section/view.jsp" />
     </definition>
 
     <!-- ========== -->

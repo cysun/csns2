@@ -36,6 +36,8 @@ public interface SectionDao {
 
     List<Section> getSectionsByStudent( User student, Quarter quarter );
 
+    List<Section> searchSections( String term, int maxResults );
+
     Section addSection( Quarter quarter, Course course, User instructor );
 
     Section saveSection( Section section );

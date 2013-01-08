@@ -3,6 +3,11 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
+$(function(){
+    $("#tabs").tabs({
+        cache: false
+    }); 
+});
 function publish( id )
 {
     var msg = "Do you want to publish this survey now?";
@@ -29,17 +34,89 @@ function clone( id )
   title="Create Survey" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
 </ul>
 
-<c:if test="${fn:length(surveys) == 0}">
-<p>No surveys found.</p>
+<div id="tabs">
+<ul>
+  <li><a href="#unpublished">Unpublished</a></li>
+  <li><a href="#open">Open</a></li>
+  <li><a href="closed">Closed</a></li>
+  <li><a href="#search">Search</a>
+</ul>
+
+<div id="unpublished">
+<c:if test="${fn:length(unpublishedSurveys) == 0}">
+<p>No unpublished surveys.</p>
 </c:if>
 
-<c:if test="${fn:length(surveys) > 0}">
+<c:if test="${fn:length(unpublishedSurveys) > 0}">
 <table class="viewtable">
 <thead>
   <tr><th>Name</th><th>Author</th><th>Published</th><th>Closed</th><th></th></tr>
 </thead>
 <tbody>
-  <c:forEach items="${surveys}" var="survey">
+  <c:forEach items="${unpublishedSurveys}" var="survey">
+  <tr>
+    <td><a href="view?id=${survey.id}">${survey.name}</a></td>
+    <td class="shrink">${survey.author.username}</td>
+    <td class="date"><csns:publishDate survey="${survey}" /></td>
+    <td class="date"><csns:closeDate survey="${survey}" /></td>
+    <td class="action">
+      <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
+         title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
+      <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"
+         title="Edit Survey" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
+    </td>
+  </tr>
+  </c:forEach>
+</tbody>
+</table>
+</c:if>
+</div>
+
+<div id="open">
+<c:if test="${fn:length(openSurveys) == 0}">
+<p>No open surveys.</p>
+</c:if>
+
+<c:if test="${fn:length(openSurveys) > 0}">
+<table class="viewtable">
+<thead>
+  <tr><th>Name</th><th>Author</th><th>Published</th><th>Closed</th><th></th></tr>
+</thead>
+<tbody>
+  <c:forEach items="${openSurveys}" var="survey">
+  <tr>
+    <td><a href="view?id=${survey.id}">${survey.name}</a></td>
+    <td class="shrink">${survey.author.username}</td>
+    <td class="date"><csns:publishDate survey="${survey}" /></td>
+    <td class="date"><csns:closeDate survey="${survey}" /></td>
+    <td class="action">
+      <a href="results?id=${survey.id}"><img alt="[Results]" 
+         title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a>
+      <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
+         title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
+      <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"
+         title="Edit Survey" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
+    </td>
+  </tr>
+  </c:forEach>
+</tbody>
+</table>
+</c:if>
+</div>
+
+<div id="search">
+<form action="search" method="post">
+<p><input  name="term" type="text" class="leftinput" style="width: 15em;" value="${surveySearchTerm}"/>
+<input name="search" type="submit" value="Search" class="subbutton" /></p>
+</form>
+
+<c:if test="${fn:length(surveySearchResults) > 0}">
+<table class="viewtable">
+<thead>
+  <tr><th>Name</th><th>Author</th><th>Published</th><th>Closed</th><th></th></tr>
+</thead>
+<tbody>
+  <c:forEach items="${surveySearchResults}" var="survey">
   <tr>
     <td><a href="view?id=${survey.id}">${survey.name}</a></td>
     <td class="shrink">${survey.author.username}</td>
@@ -60,3 +137,6 @@ function clone( id )
 </tbody>
 </table>
 </c:if>
+</div>
+
+</div> <!-- tabs -->

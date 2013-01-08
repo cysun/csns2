@@ -63,6 +63,8 @@ drop table forums;
 
 drop table surveys_taken;
 drop table survey_responses;
+drop trigger surveys_ts_trigger on surveys;
+drop function surveys_ts_trigger_function();
 drop table surveys;
 
 drop table department_additional_graduate_courses;

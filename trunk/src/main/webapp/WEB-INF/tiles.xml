@@ -428,10 +428,12 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/current.jsp" />
     </definition>
 
-    <definition name="survey/list" extends="layout.basic">
+    <definition name="survey/list" extends="layout.jqueryui">
         <put-attribute name="title" value="List Surveys" />
         <put-attribute name="content" value="/WEB-INF/content/survey/list.jsp" />
     </definition>
+
+    <definition name="survey/closed" template="/WEB-INF/content/survey/closed.jsp" />
 
     <definition name="survey/view" extends="layout.basic">
         <put-attribute name="title" value="View Survey" />

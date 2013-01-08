@@ -68,8 +68,8 @@ $(function(){
       <c:forEach items="${question.answers}" var="answer">
       <c:if test="${not empty answer.text}">
       <li><a href="response/view?answerSheetId=${answer.section.answerSheet.id}&amp;sectionIndex=${answer.section.index}"><c:if
-          test="${survey.type == 'Named'}">${answer.section.answerSheet.author.name}</c:if><c:if
-          test="${survey.type != 'Named'}">${answer.section.answerSheet.id}</c:if></a>:
+          test="${survey.type == 'NAMED'}">${answer.section.answerSheet.author.name}</c:if><c:if
+          test="${survey.type != 'NAMED'}">${answer.section.answerSheet.id}</c:if></a>:
         ${answer.text}
       </li>
       </c:if>

@@ -33,6 +33,49 @@ public class RosterParserImpl implements RosterParser {
     @Override
     public List<ImportedUser> parse( String text )
     {
+        Scanner scanner = new Scanner( text );
+        scanner.useDelimiter( "\\s*\\r\\n|\\s*\\r|\\s*\\n" );
+        String first = scanner.next().trim();
+        scanner.close();
+
+        return first.equals( "1" ) ? parse1( text ) : parse2( text );
+    }
+
+    /**
+     * This parser handles the format under CSULA Baseline -> CSULA Student
+     * Records -> Class Roster on GET.
+     */
+    public List<ImportedUser> parse1( String text )
+    {
+        List<ImportedUser> students = new ArrayList<ImportedUser>();
+
+        Scanner scanner = new Scanner( text );
+        scanner.useDelimiter( "\\s*\\r\\n|\\s*\\r|\\s*\\n" );
+        while( scanner.hasNext() )
+        {
+            String cin = scanner.next();
+            while( !cin.matches( "\\d{9}" ) && scanner.hasNext() )
+                cin = scanner.next();
+
+            if( cin.matches( "\\d{9}" ) )
+            {
+                ImportedUser student = new ImportedUser();
+                student.setCin( cin );
+                student.setName( scanner.next() );
+                students.add( student );
+            }
+        }
+        scanner.close();
+
+        return students;
+    }
+
+    /**
+     * This parser handles the format under Self Service -> Faculty Center -> My
+     * Schedule on GET.
+     */
+    public List<ImportedUser> parse2( String text )
+    {
         List<ImportedUser> students = new ArrayList<ImportedUser>();
 
         Scanner scanner = new Scanner( text );

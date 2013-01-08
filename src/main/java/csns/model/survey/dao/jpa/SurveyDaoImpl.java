@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -45,13 +46,47 @@ public class SurveyDaoImpl implements SurveyDao {
     }
 
     @Override
-    public List<Survey> getCurrentSurveys( Department department )
+    public List<Survey> getOpenSurveys( Department department )
     {
         Calendar now = Calendar.getInstance();
         String query = "from Survey where publishDate < :now "
             + "and (closeDate is null or closeDate > :now) "
             + "and department = :department and deleted = false "
             + "order by name asc";
+
+        return entityManager.createQuery( query, Survey.class )
+            .setParameter( "now", now )
+            .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
+    @PreAuthorize("principal.isFaculty(#department.abbreviation)")
+    public List<Survey> getClosedSurveys( Department department )
+    {
+        Calendar now = Calendar.getInstance();
+        String query = "from Survey where publishDate is not null and "
+            + "closeDate is not null and closeDate < :now "
+            + "and department = :department and deleted = false "
+            + "order by closeDate desc";
+
+        return entityManager.createQuery( query, Survey.class )
+            .setMaxResults( 25 )
+            .setParameter( "now", now )
+            .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
+    @PreAuthorize("principal.isFaculty(#department.abbreviation)")
+    public List<Survey> getUnpublishedSurveys( Department department )
+    {
+        Calendar now = Calendar.getInstance();
+        String query = "from Survey where "
+            + "(closeDate is null or closeDate > :now) "
+            + "and (publishDate is null or publishDate > :now) "
+            + "and department = :department and deleted = false "
+            + "order by closeDate desc";
 
         return entityManager.createQuery( query, Survey.class )
             .setParameter( "now", now )
@@ -68,7 +103,20 @@ public class SurveyDaoImpl implements SurveyDao {
 
         return entityManager.createQuery( query, Survey.class )
             .setParameter( "department", department )
-            .setMaxResults( 25 )
+            .setMaxResults( 30 )
+            .getResultList();
+    }
+
+    @Override
+    @PreAuthorize("principal.isFaculty(#department.abbreviation)")
+    public List<Survey> searchSurveys( Department department, String term,
+        int maxResults )
+    {
+        TypedQuery<Survey> query = entityManager.createNamedQuery(
+            "survey.search", Survey.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "departmentId", department.getId() )
+            .setParameter( "term", term )
             .getResultList();
     }
 

@@ -457,6 +457,27 @@ create table surveys (
     deleted             boolean not null default 'f'
 );
 
+alter table surveys add column tsv tsvector;
+
+create function surveys_ts_trigger_function() returns trigger as $$
+declare
+    l_author    users%rowtype;
+begin
+	select * into l_author from users where id = new.author_id;
+    new.tsv := setweight(to_tsvector(new.name), 'A') ||
+               setweight(to_tsvector(l_author.first_name), 'A') ||
+               setweight(to_tsvector(l_author.last_name), 'A') ||
+               setweight(to_tsvector(l_author.username), 'A');
+    return new;
+end
+$$ language plpgsql;
+
+create trigger surveys_ts_trigger
+    before insert or update on surveys
+    for each row execute procedure surveys_ts_trigger_function();
+
+create index surveys_ts_index on surveys using gin(tsv);
+
 create table survey_responses (
     id              bigint primary key,
     survey_id       bigint not null references surveys(id),

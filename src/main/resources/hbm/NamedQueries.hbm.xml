@@ -83,6 +83,15 @@ select f.* from users u, subscriptions s, forums f
 ]]>
     </sql-query>
 
+    <sql-query name="survey.search">
+        <return class="csns.model.survey.Survey" />
+<![CDATA[
+select s.* from surveys s, plainto_tsquery(:term) query
+    where s.department_id = :departmentId and deleted = 'f'
+    and query @@ s.tsv order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
     <sql-query name="forum.search">
         <return class="csns.model.forum.Forum" />
 <![CDATA[

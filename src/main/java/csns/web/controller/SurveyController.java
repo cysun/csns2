@@ -23,9 +23,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -85,7 +87,7 @@ public class SurveyController {
     {
         Department department = departmentDao.getDepartment( dept );
         models.put( "department", department );
-        models.put( "surveys", surveyDao.getCurrentSurveys( department ) );
+        models.put( "surveys", surveyDao.getOpenSurveys( department ) );
         return "survey/current";
     }
 
@@ -94,8 +96,29 @@ public class SurveyController {
     {
         Department department = departmentDao.getDepartment( dept );
         models.put( "department", department );
-        models.put( "surveys", surveyDao.getSurveys( department ) );
+        models.put( "openSurveys", surveyDao.getOpenSurveys( department ) );
+        models.put( "unpublishedSurveys",
+            surveyDao.getUnpublishedSurveys( department ) );
         return "survey/list";
+    }
+
+    @RequestMapping("/department/{dept}/survey/closed")
+    public String closed( @PathVariable String dept, ModelMap models )
+    {
+        Department department = departmentDao.getDepartment( dept );
+        models.put( "closedSurveys", surveyDao.getClosedSurveys( department ) );
+        return "survey/closed";
+    }
+
+    @RequestMapping("/department/{dept}/survey/search")
+    public String search( @PathVariable String dept, @RequestParam String term,
+        HttpSession session )
+    {
+        Department department = departmentDao.getDepartment( dept );
+        List<Survey> surveys = surveyDao.searchSurveys( department, term, 20 );
+        session.setAttribute( "surveySearchTerm", term );
+        session.setAttribute( "surveySearchResults", surveys );
+        return "redirect:/department/" + dept + "/survey/list#search";
     }
 
     @RequestMapping("/department/{dept}/survey/view")

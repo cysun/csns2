@@ -30,9 +30,12 @@ public class Email extends AbstractMessage {
 
     private List<User> recipients;
 
+    private boolean useSecondaryEmail;
+
     public Email()
     {
         recipients = new ArrayList<User>();
+        useSecondaryEmail = false;
     }
 
     public List<User> getRecipients()
@@ -43,6 +46,16 @@ public class Email extends AbstractMessage {
     public void setRecipients( List<User> recipients )
     {
         this.recipients = recipients;
+    }
+
+    public boolean isUseSecondaryEmail()
+    {
+        return useSecondaryEmail;
+    }
+
+    public void setUseSecondaryEmail( boolean useSecondaryEmail )
+    {
+        this.useSecondaryEmail = useSecondaryEmail;
     }
 
 }

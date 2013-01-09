@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <script>
 $(function(){
@@ -21,6 +22,14 @@ $(function(){
         }
     });
 });
+function email( address )
+{
+    var url = "<c:url value='/email/compose?userId=${user.id}' />";
+    url += "&amp;backUrl=/user/view&#63;id=${user.id}";
+    if( address == 2 )
+        url += "&amp;useSecondaryEmail=true";
+    window.location.href=url;
+}
 </script>
 
 <ul id="title">
@@ -53,11 +62,15 @@ $(function(){
   </tr>
   <tr>
     <th>Primary Email</th>
-    <td>${user.primaryEmail}</td>
+    <td><a href="javascript:email(1)">${user.primaryEmail}</a></td>
   </tr>
   <tr>
     <th>Secondary Email</th>
-    <td>${user.secondaryEmail}</td>
+    <td>
+      <c:if test="${fn:length(user.secondaryEmail) > 1}">
+      <a href="javascript:email(2)">${user.secondaryEmail}</a>
+      </c:if>
+    </td>
   </tr>
   <tr>
     <th>Cell Phone</th>

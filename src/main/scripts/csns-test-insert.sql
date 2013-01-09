@@ -164,14 +164,8 @@ insert into wiki_pages (id, path, owner_id) values (1001200, '/wiki/content/depa
 insert into wiki_revisions (id, subject, content, author_id, page_id) values
     (1001210, 'Computer Science Departmen Wiki', '<h2>Computer Science Departmen Wiki</h2>', 1000001, 1001200);
 
--- insert into resources (id, name, type) values (1001200, 'Project Documentation', 1);
--- insert into resources (id, name, type) values (1001201, 'Project Presentation', 1);
-
--- insert into projects (id, name, department_id, year) values
---    (1001300, 'Modernize Curriculum Review Workflow', 1000100, 2013);
--- insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000001, 0);
--- insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000004, 1);
--- insert into project_members (project_id, member_id) values (1001300, 1000002);
--- insert into project_members (project_id, member_id) values (1001300, 1000003);
--- insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001200, 0);
--- insert into project_resources (project_id, resource_id, resource_order) values (1001300, 1001201, 1);
+insert into projects (id, name, department_id, year) values
+    (1001300, 'Modernize Curriculum Review Workflow', 1000100, 2013);
+insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000001, 0);
+insert into project_students (project_id, student_id) values (1001300, 1000002);
+insert into project_students (project_id, student_id) values (1001300, 1000003);

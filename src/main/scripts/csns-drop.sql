@@ -9,7 +9,7 @@ drop function quarter();
 drop function quarter(date);
 
 drop table project_resources;
-drop table project_members;
+drop table project_students;
 drop table project_advisors;
 drop table projects;
 

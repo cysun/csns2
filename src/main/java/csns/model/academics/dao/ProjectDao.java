@@ -29,6 +29,8 @@ public interface ProjectDao {
 
     List<Project> getProjects( Department department, int year );
 
+    List<Integer> getProjectYears( Department department );
+
     Project saveProject( Project project );
 
 }

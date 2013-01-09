@@ -45,11 +45,22 @@ public class ProjectDaoImpl implements ProjectDao {
     public List<Project> getProjects( Department department, int year )
     {
         String query = "from Project where department = :department "
-            + "and year = :year order by name asc";
+            + "and year = :year and deleted = false order by name asc";
 
         return entityManager.createQuery( query, Project.class )
             .setParameter( "department", department )
             .setParameter( "year", year )
+            .getResultList();
+    }
+
+    @Override
+    public List<Integer> getProjectYears( Department department )
+    {
+        String query = "select year from Project where department = :department "
+            + "order by year desc";
+
+        return entityManager.createQuery( query, Integer.class )
+            .setParameter( "department", department )
             .getResultList();
     }
 

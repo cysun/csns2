@@ -59,8 +59,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -302,11 +302,6 @@
         primary key (project_id, advisor_order)
     );
 
-    create table project_members (
-        project_id int8 not null,
-        member_id int8 not null
-    );
-
     create table project_resources (
         project_id int8 not null,
         resource_id int8 not null,
@@ -314,8 +309,14 @@
         primary key (project_id, resource_order)
     );
 
+    create table project_students (
+        project_id int8 not null,
+        student_id int8 not null
+    );
+
     create table projects (
         id int8 not null,
+        deleted boolean not null,
         description varchar(255),
         name varchar(255) not null,
         published boolean not null,
@@ -889,16 +890,6 @@
         foreign key (advisor_id) 
         references users;
 
-    alter table project_members 
-        add constraint FKA9E291F33C873F7C 
-        foreign key (member_id) 
-        references users;
-
-    alter table project_members 
-        add constraint FKA9E291F3C30E4F1A 
-        foreign key (project_id) 
-        references projects;
-
     alter table project_resources 
         add constraint FKF551B87FC30E4F1A 
         foreign key (project_id) 
@@ -908,6 +899,16 @@
         add constraint FKF551B87FC92D294B 
         foreign key (resource_id) 
         references resources;
+
+    alter table project_students 
+        add constraint FK28F717FEC30E4F1A 
+        foreign key (project_id) 
+        references projects;
+
+    alter table project_students 
+        add constraint FK28F717FEAEFD183B 
+        foreign key (student_id) 
+        references users;
 
     alter table projects 
         add constraint FKC479187AF7F6787A 

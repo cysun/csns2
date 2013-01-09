@@ -65,11 +65,14 @@ public class EmailController {
     @RequestMapping("/email/compose")
     public String compose(
         @RequestParam(value = "userId", required = false) Long ids[],
+        @RequestParam(required = false) Boolean useSecondaryEmail,
         ModelMap models )
     {
         Email email = new Email();
         email.setAuthor( SecurityUtils.getUser() );
         email.setRecipients( userDao.getUsers( ids ) );
+        if( useSecondaryEmail != null )
+            email.setUseSecondaryEmail( useSecondaryEmail );
 
         models.put( "email", email );
         return "email/compose";
@@ -96,8 +99,8 @@ public class EmailController {
         message.setText( emailUtils.getText( email ) );
         message.setFrom( user.getPrimaryEmail() );
         message.setCc( user.getPrimaryEmail() );
-        String addresses[] = emailUtils.getAddresses( email.getRecipients() )
-            .toArray( new String[0] );
+        String addresses[] = emailUtils.getAddresses( email.getRecipients(),
+            email.isUseSecondaryEmail() ).toArray( new String[0] );
         message.setTo( addresses );
 
         mailSender.send( message );

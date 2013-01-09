@@ -62,11 +62,11 @@ public class Project implements Serializable {
     private List<User> advisors;
 
     @ManyToMany
-    @JoinTable(name = "project_members",
+    @JoinTable(name = "project_students",
         joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "member_id"))
+        inverseJoinColumns = @JoinColumn(name = "student_id"))
     @OrderBy("firstName asc")
-    private List<User> members;
+    private List<User> students;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "project_resources",
@@ -84,14 +84,18 @@ public class Project implements Serializable {
     @Column(nullable = false)
     private boolean published;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
     public Project()
     {
         advisors = new ArrayList<User>();
-        members = new ArrayList<User>();
+        students = new ArrayList<User>();
         resources = new ArrayList<Resource>();
 
         year = Calendar.getInstance().get( Calendar.YEAR );
         published = false;
+        deleted = false;
     }
 
     public Long getId()
@@ -134,14 +138,14 @@ public class Project implements Serializable {
         this.advisors = advisors;
     }
 
-    public List<User> getMembers()
+    public List<User> getStudents()
     {
-        return members;
+        return students;
     }
 
-    public void setMembers( List<User> members )
+    public void setStudents( List<User> students )
     {
-        this.members = members;
+        this.students = students;
     }
 
     public List<Resource> getResources()
@@ -182,6 +186,16 @@ public class Project implements Serializable {
     public void setPublished( boolean published )
     {
         this.published = published;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

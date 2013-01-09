@@ -1001,7 +1001,8 @@ create table projects (
     description     varchar(8000),
     department_id   bigint references departments(id),
     year            integer not null,
-    published       boolean not null default 'f'
+    published       boolean not null default 'f',
+    deleted         boolean not null default 'f'
 );
 
 create table project_advisors (
@@ -1011,10 +1012,10 @@ create table project_advisors (
   primary key (project_id, advisor_order)
 );
 
-create table project_members (
-    project_id  bigint not null,
-    member_id   bigint not null,
-  primary key (project_id, member_id)
+create table project_students (
+    project_id  bigint not null references projects(id),
+    student_id  bigint not null references users(id),
+  primary key (project_id, student_id)
 );
 
 create table project_resources (

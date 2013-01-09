@@ -24,6 +24,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import csns.model.core.AbstractMessage;
 import csns.model.core.File;
@@ -44,12 +45,24 @@ public class EmailUtils {
     @Autowired
     SubscriptionDao subscriptionDao;
 
-    public List<String> getAddresses( List<User> users )
+    public List<String> getAddresses( List<User> users,
+        boolean useSecondaryEmail )
     {
         List<String> addresses = new ArrayList<String>();
         for( User user : users )
-            addresses.add( user.getPrimaryEmail() );
+        {
+            if( useSecondaryEmail
+                && StringUtils.hasText( user.getSecondaryEmail() ) )
+                addresses.add( user.getSecondaryEmail() );
+            else
+                addresses.add( user.getPrimaryEmail() );
+        }
         return addresses;
+    }
+
+    public List<String> getAddresses( List<User> users )
+    {
+        return getAddresses( users, false );
     }
 
     public List<String> getAddresses( Subscribable subscribable )

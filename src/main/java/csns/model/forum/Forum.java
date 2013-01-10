@@ -39,6 +39,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.core.Subscribable;
@@ -91,6 +93,7 @@ public class Forum implements Subscribable, Serializable {
 
     @OneToMany(mappedBy = "forum")
     @OrderBy("pinned desc, lastPostDate desc")
+    @Where(clause = "deleted='f'")
     private List<Topic> topics;
 
     /**

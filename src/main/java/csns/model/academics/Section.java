@@ -40,6 +40,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Where;
+
 import csns.model.core.User;
 
 @Entity
@@ -78,6 +80,7 @@ public class Section implements Serializable, Comparable<Section> {
     @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
         CascadeType.PERSIST })
     @OrderBy("name asc")
+    @Where(clause = "deleted='f'")
     private List<Assignment> assignments;
 
     @Column(nullable = false)

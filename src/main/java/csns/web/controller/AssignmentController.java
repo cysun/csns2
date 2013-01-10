@@ -43,7 +43,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Assignment;
-import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
@@ -182,11 +181,11 @@ public class AssignmentController {
     public String delete( @RequestParam Long id )
     {
         Assignment assignment = assignmentDao.getAssignment( id );
-        Section section = assignment.getSection();
-        assignment.setSection( null );
+        assignment.setDeleted( true );
         assignmentDao.saveAssignment( assignment );
 
-        return "redirect:/section/taught#section-" + section.getId();
+        return "redirect:/section/taught#section-"
+            + assignment.getSection().getId();
     }
 
     @RequestMapping("/assignment/publish")

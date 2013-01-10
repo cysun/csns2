@@ -78,7 +78,7 @@ public class Assignment implements Serializable {
     protected Calendar dueDate;
 
     @ManyToOne
-    @JoinColumn(name = "section_id")
+    @JoinColumn(name = "section_id", nullable = false)
     protected Section section;
 
     @Column(name = "max_file_size")
@@ -93,6 +93,9 @@ public class Assignment implements Serializable {
     @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
         CascadeType.PERSIST })
     protected List<Submission> submissions;
+
+    @Column(nullable = false)
+    protected boolean deleted;
 
     @Transient
     protected Set<String> fileExtensionSet;
@@ -109,6 +112,7 @@ public class Assignment implements Serializable {
         submissions = new ArrayList<Submission>();
         fileExtensionSet = new HashSet<String>();
         availableAfterDueDate = true;
+        deleted = false;
     }
 
     public Assignment clone()
@@ -264,6 +268,16 @@ public class Assignment implements Serializable {
     public void setAvailableAfterDueDate( boolean availableAfterDueDate )
     {
         this.availableAfterDueDate = availableAfterDueDate;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
     public List<Submission> getSubmissions()

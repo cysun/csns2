@@ -336,13 +336,14 @@ create table assignments (
     resource_id                 bigint references resources(id),
     alias                       varchar(255) not null,
     total_points                varchar(255),
-    section_id                  bigint references sections(id),
+    section_id                  bigint not null references sections(id),
     publish_date                timestamp,
     due_date                    timestamp,
     max_file_size               bigint,
     file_extensions             varchar(255),
     available_after_due_date    boolean not null default 't',
-    question_sheet_id           bigint unique references question_sheets(id)
+    question_sheet_id           bigint unique references question_sheets(id),
+    deleted                     boolean not null default 'f'
 );
 
 alter table assignments add column tsv tsvector;

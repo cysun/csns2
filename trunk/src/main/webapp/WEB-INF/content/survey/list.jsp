@@ -38,8 +38,8 @@ function clone( id )
 <ul>
   <li><a href="#unpublished">Unpublished</a></li>
   <li><a href="#open">Open</a></li>
-  <li><a href="closed">Closed</a></li>
-  <li><a href="#search">Search</a>
+  <li><a href="closed">Closed Recently</a></li>
+  <li><a href="#search">All</a>
 </ul>
 
 <div id="unpublished">

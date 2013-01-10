@@ -35,8 +35,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Where;
-
 import csns.model.core.Subscribable;
 import csns.model.core.User;
 
@@ -80,7 +78,6 @@ public class Topic implements Subscribable, Serializable {
     // new post is added.
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "forum_id", nullable = false)
-    @Where(clause = "deleted=false")
     private Forum forum;
 
     @Column(nullable = false)

@@ -30,7 +30,7 @@ function deleteAssignment( id )
 {
     var msg = "Are you sure you want to delete this assignment?";
     if( confirm(msg) )
-        window.location.href = "../delete?id=" + id;
+        window.location.href = "delete?id=" + id;
 }
 function help( name )
 {

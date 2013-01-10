@@ -37,7 +37,7 @@ $(function(){
 <p>Total points: ${assignment.totalPoints}</p>
 </c:if>
 
-<table class="viewtable halfwidth">
+<table class="viewtable autowidth">
 <thead><tr><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">

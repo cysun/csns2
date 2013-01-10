@@ -1,12 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="survey" value="${response.survey}" />
 <c:set var="answerSheet" value="${response.answerSheet}" />
 
 <ul id="title">
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
 <li><a class="bc" href="../list">Surveys</a></li>
+</security:authorize>
 <li><a class="bc" href="../current">Open Surveys</a></li>
 <li>${survey.name}</li>
 </ul>

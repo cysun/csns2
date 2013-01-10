@@ -3,7 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:if test="${survey.type != 'Named'}">
+<c:if test="${survey.type != 'NAMED'}">
 <script>
 $(function(){
     $(".viewtable").addClass("halfwidth");
@@ -53,14 +53,14 @@ $(function(){
 <c:if test="${fn:length(answerSheets) > 0}">
 <table class="viewtable">
   <tr>
-<c:if test="${survey.type == 'Named'}">
+<c:if test="${survey.type == 'NAMED'}">
     <th>CIN</th><th>Name</th>
 </c:if>
     <th>Response ID</th><th>Timestamp</th>
   </tr>
 <c:forEach items="${answerSheets}" var="answerSheet">
   <tr>
-<c:if test="${survey.type == 'Named'}">
+<c:if test="${survey.type == 'NAMED'}">
     <td>${answerSheet.author.cin}</td>
     <td>${answerSheet.author.name}</td>
 </c:if>

@@ -21,6 +21,7 @@ package csns.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
@@ -59,6 +60,9 @@ public class EmailController {
 
     @Autowired
     EmailValidator emailValidator;
+
+    @Value("#{applicationProperties.email}")
+    private String appEmail;
 
     private static final Logger logger = LoggerFactory.getLogger( EmailController.class );
 
@@ -101,7 +105,13 @@ public class EmailController {
         message.setCc( user.getPrimaryEmail() );
         String addresses[] = emailUtils.getAddresses( email.getRecipients(),
             email.isUseSecondaryEmail() ).toArray( new String[0] );
-        message.setTo( addresses );
+        if( addresses.length > 1 )
+        {
+            message.setTo( appEmail );
+            message.setBcc( addresses );
+        }
+        else
+            message.setTo( addresses );
 
         mailSender.send( message );
         sessionStatus.setComplete();

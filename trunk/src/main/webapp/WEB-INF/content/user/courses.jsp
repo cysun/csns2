@@ -4,10 +4,7 @@
 
  <script>
 $(function(){
-    $("table").tablesorter({
-        sortList: [[0,0]]
-     });
-
+    $("table").tablesorter();
     $(".add").each(function(){
         $(this).autocomplete({
             source: "<c:url value='/autocomplete/course' />",

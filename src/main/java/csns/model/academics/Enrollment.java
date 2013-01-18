@@ -35,7 +35,7 @@ import csns.model.core.User;
 @Table(name = "enrollments",
     uniqueConstraints = @UniqueConstraint(columnNames = { "section_id",
         "student_id" }))
-public class Enrollment implements Serializable {
+public class Enrollment implements Serializable, Comparable<Enrollment> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,6 +70,18 @@ public class Enrollment implements Serializable {
         this();
         this.section = section;
         this.student = student;
+    }
+
+    @Override
+    public int compareTo( Enrollment enrollment )
+    {
+        if( enrollment == null )
+            throw new IllegalArgumentException( "Cannot compare to NULL." );
+
+        int cmp = section.compareTo( enrollment.section );
+        if( cmp != 0 ) return cmp;
+
+        return student.compareTo( enrollment.student );
     }
 
     public Long getId()

@@ -37,8 +37,8 @@ $(function(){
     <td>${student.lastName}</td>
     <td>${student.firstName}</td>
     <td>${student.middleName}</td>
-    <td>${student.addedToSection}</td>
-    <td>${student.accountCreated}</td>
+    <td>${student.newEnrollment}</td>
+    <td>${student.newAccount}</td>
   </tr>
   </c:forEach>
 </table>

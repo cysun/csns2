@@ -3,6 +3,7 @@
 
 <script>
 $(function(){
+    $("table").tablesorter();
     $("select[name='quarter'] option").each(function(){
        if( $(this).val() == ${quarter.code}) 
            $(this).attr('selected', true);
@@ -22,6 +23,10 @@ $(function(){
     <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>
   </select>
 </li>
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<li class="align_right"><a href="section/import?quarter=${quarter.code}"><img alt="[Import Section]"
+  title="Import Section" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <table class="viewtable">

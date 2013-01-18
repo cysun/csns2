@@ -49,6 +49,21 @@ public class SectionDaoImpl implements SectionDao {
         return entityManager.find( Section.class, id );
     }
 
+    @Override
+    public Section getSection( Quarter quarter, Course course, int number )
+    {
+        String query = "from Section where quarter = :quarter "
+            + "and course = :course and number = :number";
+
+        List<Section> sections = entityManager.createQuery( query,
+            Section.class )
+            .setParameter( "quarter", quarter )
+            .setParameter( "course", course )
+            .setParameter( "number", number )
+            .getResultList();
+        return sections.size() == 0 ? null : sections.get( 0 );
+    }
+
     public List<Section> getUndergraduateSections( Department department,
         Quarter quarter )
     {
@@ -100,6 +115,23 @@ public class SectionDaoImpl implements SectionDao {
         return entityManager.createQuery( query, Section.class )
             .setParameter( "instructor", instructor )
             .setParameter( "quarter", quarter )
+            .getResultList();
+    }
+
+    @Override
+    public List<Section> getSectionsByInstructor( User instructor,
+        Quarter quarter, Course course )
+    {
+        String query = "select section from Section section "
+            + "join section.instructors instructor "
+            + "where instructor = :instructor and section.quarter = :quarter "
+            + "and section.course = :course "
+            + "order by section.course.code asc, section.number asc";
+
+        return entityManager.createQuery( query, Section.class )
+            .setParameter( "instructor", instructor )
+            .setParameter( "quarter", quarter )
+            .setParameter( "course", course )
             .getResultList();
     }
 

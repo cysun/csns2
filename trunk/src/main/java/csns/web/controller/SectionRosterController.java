@@ -140,19 +140,19 @@ public class SectionRosterController {
                 student.setTemporary( true );
                 student = userDao.saveUser( student );
                 enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-                importedStudent.setAccountCreated( true );
-                importedStudent.setAddedToSection( true );
+                importedStudent.setNewAccount( true );
+                importedStudent.setNewEnrollment( true );
             }
             else if( !section.isEnrolled( student ) )
             {
                 enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-                importedStudent.setAccountCreated( false );
-                importedStudent.setAddedToSection( true );
+                importedStudent.setNewAccount( false );
+                importedStudent.setNewEnrollment( true );
             }
             else
             {
-                importedStudent.setAccountCreated( false );
-                importedStudent.setAddedToSection( false );
+                importedStudent.setNewAccount( false );
+                importedStudent.setNewEnrollment( false );
             }
         }
 

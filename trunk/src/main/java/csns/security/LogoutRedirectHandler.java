@@ -48,8 +48,13 @@ public class LogoutRedirectHandler implements LogoutSuccessHandler {
         HttpServletResponse response, Authentication authentication )
         throws IOException, ServletException
     {
-        User user = (User) authentication.getPrincipal();
-        logger.info( user.getUsername() + " signed out." );
+        // authentication could be null if the session already expired or the
+        // user clicked the logout link twice.
+        if( authentication != null )
+        {
+            User user = (User) authentication.getPrincipal();
+            logger.info( user.getUsername() + " signed out." );
+        }
 
         SimpleUrlLogoutSuccessHandler logoutSuccessHandler = new SimpleUrlLogoutSuccessHandler();
         logoutSuccessHandler.setDefaultTargetUrl( defaultUrls.anonymousHomeUrl( request ) );

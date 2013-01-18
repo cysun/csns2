@@ -30,9 +30,14 @@ public interface SectionDao {
 
     Section getSection( Long id );
 
+    Section getSection( Quarter quarter, Course course, int number );
+
     List<Section> getSections( Department department, Quarter quarter );
 
     List<Section> getSectionsByInstructor( User instructor, Quarter quarter );
+
+    List<Section> getSectionsByInstructor( User instructor, Quarter quarter,
+        Course course );
 
     List<Section> getSectionsByStudent( User student, Quarter quarter );
 

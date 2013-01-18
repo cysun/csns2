@@ -237,9 +237,24 @@
         <put-attribute name="content" value="/WEB-INF/content/department/courses.jsp" />
     </definition>
 
-    <definition name="department/sections" extends="layout.basic">
+    <definition name="department/sections" extends="layout.jqueryui">
         <put-attribute name="title" value="Sections" />
         <put-attribute name="content" value="/WEB-INF/content/department/sections.jsp" />
+    </definition>
+
+    <definition name="department/section/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import0.jsp" />
+    </definition>
+
+    <definition name="department/section/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import1.jsp" />
+    </definition>
+
+    <definition name="department/section/import2" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import2.jsp" />
     </definition>
 
     <!-- ======= -->

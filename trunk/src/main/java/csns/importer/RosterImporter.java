@@ -47,6 +47,12 @@ public class RosterImporter {
         importedStudents = new ArrayList<ImportedUser>();
     }
 
+    public void clear()
+    {
+        importedStudents.clear();
+        text = "";
+    }
+
     public Section getSection()
     {
         return section;

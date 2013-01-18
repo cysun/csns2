@@ -32,13 +32,18 @@ public class ImportedUser {
 
     String middleName;
 
-    boolean accountCreated;
+    String grade;
 
-    boolean addedToSection;
+    String oldGrade;
+
+    boolean isNewAccount;
+
+    boolean isNewEnrollment;
 
     public ImportedUser()
     {
-        accountCreated = false;
+        isNewAccount = false;
+        isNewEnrollment = false;
     }
 
     public void setName( String name )
@@ -100,24 +105,44 @@ public class ImportedUser {
         this.middleName = middleName;
     }
 
-    public boolean isAccountCreated()
+    public String getGrade()
     {
-        return accountCreated;
+        return grade;
     }
 
-    public void setAccountCreated( boolean accountCreated )
+    public void setGrade( String grade )
     {
-        this.accountCreated = accountCreated;
+        this.grade = grade;
     }
 
-    public boolean isAddedToSection()
+    public String getOldGrade()
     {
-        return addedToSection;
+        return oldGrade;
     }
 
-    public void setAddedToSection( boolean addedToSection )
+    public void setOldGrade( String oldGrade )
     {
-        this.addedToSection = addedToSection;
+        this.oldGrade = oldGrade;
+    }
+
+    public boolean isNewAccount()
+    {
+        return isNewAccount;
+    }
+
+    public void setNewAccount( boolean isNewAccount )
+    {
+        this.isNewAccount = isNewAccount;
+    }
+
+    public boolean isNewEnrollment()
+    {
+        return isNewEnrollment;
+    }
+
+    public void setNewEnrollment( boolean isNewEnrollment )
+    {
+        this.isNewEnrollment = isNewEnrollment;
     }
 
 }

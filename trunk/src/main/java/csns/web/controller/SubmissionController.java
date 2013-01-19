@@ -197,8 +197,10 @@ public class SubmissionController {
             file.setOwner( submission.getStudent() );
             file.setSubmission( submission );
             file = fileDao.saveFile( file );
-
             fileIO.save( file, uploadedFile );
+
+            submission.incrementFileCount();
+            submissionDao.saveSubmission( submission );
         }
 
         return "redirect:" + view;
@@ -213,8 +215,12 @@ public class SubmissionController {
         {
             file.setSubmission( null );
             fileDao.saveFile( file );
+            submission.decrementFileCount();
+            submissionDao.saveSubmission( submission );
         }
 
+        logger.info( SecurityUtils.getUser().getUsername() + " removed file "
+            + file.getId() + " from submission " + submission.getId() );
         return "redirect:/submission/view?id=" + submission.getId();
     }
 

@@ -53,7 +53,7 @@ $(function(){
       </c:if>
     </td>
     <c:if test="${not assignment.online}">
-    <td class="center">${fn:length(submission.files)}</td>
+    <td class="center">${submission.fileCount}</td>
     </c:if>
     <td class="center">${submission.grade}</td>
   </tr>

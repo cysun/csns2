@@ -381,6 +381,7 @@ create table submissions (
     grade           varchar(255),
     comments        text,
     grade_mailed    boolean not null default 'f',
+    file_count      integer not null default 0,
     answer_sheet_id bigint unique references answer_sheets(id),
     saved           boolean not null default 'f',
     finished        boolean not null default 'f',

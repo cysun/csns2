@@ -63,10 +63,6 @@ public class Submission implements Serializable {
     @JoinColumn(name = "assignment_id", nullable = false)
     protected Assignment assignment;
 
-    @OneToMany(mappedBy = "submission")
-    @OrderBy("name asc")
-    protected List<File> files;
-
     @Column(name = "due_date")
     protected Calendar dueDate;
 
@@ -77,10 +73,18 @@ public class Submission implements Serializable {
     @Column(name = "grade_mailed", nullable = false)
     protected boolean gradeMailed;
 
+    @Column(name = "file_count", nullable = false)
+    protected int fileCount;
+
+    @OneToMany(mappedBy = "submission")
+    @OrderBy("name asc")
+    protected List<File> files;
+
     public Submission()
     {
-        files = new ArrayList<File>();
         gradeMailed = false;
+        fileCount = 0;
+        files = new ArrayList<File>();
     }
 
     public Submission( User student, Assignment assignment )
@@ -93,6 +97,16 @@ public class Submission implements Serializable {
     public boolean isOnline()
     {
         return false;
+    }
+
+    public void incrementFileCount()
+    {
+        ++fileCount;
+    }
+
+    public void decrementFileCount()
+    {
+        --fileCount;
     }
 
     public File getFileByName( String fileName )
@@ -143,16 +157,6 @@ public class Submission implements Serializable {
         this.assignment = assignment;
     }
 
-    public List<File> getFiles()
-    {
-        return files;
-    }
-
-    public void setFiles( List<File> files )
-    {
-        this.files = files;
-    }
-
     public Calendar getDueDate()
     {
         return dueDate;
@@ -191,6 +195,26 @@ public class Submission implements Serializable {
     public void setGradeMailed( boolean gradeMailed )
     {
         this.gradeMailed = gradeMailed;
+    }
+
+    public int getFileCount()
+    {
+        return fileCount;
+    }
+
+    public void setFileCount( int fileCount )
+    {
+        this.fileCount = fileCount;
+    }
+
+    public List<File> getFiles()
+    {
+        return files;
+    }
+
+    public void setFiles( List<File> files )
+    {
+        this.files = files;
     }
 
 }

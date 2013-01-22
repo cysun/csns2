@@ -83,6 +83,7 @@
         <security:intercept-url pattern="/submission/upload" access="authenticated" />
         <security:intercept-url pattern="/submission/remove" access="authenticated" />
         <security:intercept-url pattern="/submission/online/edit" access="authenticated" />
+        <security:intercept-url pattern="/submission/online/view" access="authenticated" />
         <security:intercept-url pattern="/submission/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/department/*/people" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/section" access="authenticated and principal.admin" />

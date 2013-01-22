@@ -257,6 +257,11 @@
         <put-attribute name="content" value="/WEB-INF/content/department/section/import2.jsp" />
     </definition>
 
+    <definition name="department/projects" extends="layout.jqueryui">
+        <put-attribute name="title" value="Projects" />
+        <put-attribute name="content" value="/WEB-INF/content/department/projects.jsp" />
+    </definition>
+
     <!-- ======= -->
     <!-- Section -->
     <!-- ======= -->

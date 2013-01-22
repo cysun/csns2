@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
@@ -47,6 +48,7 @@ $(function(){
 </ul>
 
 <div id="undergraduate">
+<c:if test="${fn:length(department.undergraduateCourses) + fn:length(department.additionalUndergraduateCourses) > 0}">
 <table class="viewtable">
 <tr>
   <th>Code</th><th>Name</th><th>Coordinator</th>
@@ -77,6 +79,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/undergraduate/add" method="post"><p>
@@ -89,6 +92,7 @@ $(function(){
 </div>
 
 <div id="graduate">
+<c:if test="${fn:length(department.graduateCourses) + fn:length(department.additionalGraduateCourses) > 0}">
 <table class="viewtable">
 <tr>
   <th>Code</th><th>Name</th><th>Coordinator</th>
@@ -119,6 +123,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="course/graduate/add" method="post"><p>

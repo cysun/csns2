@@ -63,6 +63,7 @@ $(function(){
     <th>CIN *</th>
     <td>
       <form:input path="cin" cssClass="forminput" />
+      <button id="generate_cin" class="subbutton">Generate</button>
       <div class="error"><form:errors path="cin" /></div>
     </td>
   </tr>

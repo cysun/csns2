@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
@@ -65,6 +66,7 @@ $(function(){
 </div>
 
 <div id="admin">
+<c:if test="${fn:length(department.administrators) > 0}">
 <table class="viewtable">
 <tr>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -84,6 +86,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/admin/add" method="post"><p>
@@ -96,6 +99,7 @@ $(function(){
 </div>
 
 <div id="faculty">
+<c:if test="${fn:length(department.faculty) > 0}">
 <table class="viewtable">
 <tr>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -115,6 +119,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/faculty/add" method="post"><p>
@@ -127,6 +132,7 @@ $(function(){
 </div>
 
 <div id="instructor">
+<c:if test="${fn:length(department.instructors) > 0}">
 <table class="viewtable">
 <tr>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -146,6 +152,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/instructor/add" method="post"><p>
@@ -158,6 +165,7 @@ $(function(){
 </div>
 
 <div id="reviewer">
+<c:if test="${fn:length(department.reviewers) > 0}">
 <table class="viewtable">
 <tr>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -177,6 +185,7 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <form action="personnel/reviewer/add" method="post"><p>

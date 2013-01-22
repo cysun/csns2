@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
@@ -29,6 +30,7 @@ $(function(){
 </security:authorize>
 </ul>
 
+<c:if test="${fn:length(sections) > 0}">
 <table class="viewtable">
 <tr>
   <th>Code</th><th>Name</th><th>Instructor</th>
@@ -55,3 +57,4 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+</c:if>

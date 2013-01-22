@@ -35,6 +35,10 @@
            src="<c:url value='/img/icons/books.png' />" />Courses</a></li>
     <li><a href="<c:url value='/department/${dept}/sections' />"><img alt=""
            src="<c:url value='/img/icons/blackboard_sum.png' />" />Sections</a></li>
+<%--
+    <li><a href="<c:url value='/department/${dept}/projects' />"><img alt=""
+           src="<c:url value='/img/icons/bricks.png' />" />Projects</a></li>
+ --%>
   </ul></div>
 </li>
 

@@ -27,6 +27,8 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 
@@ -52,12 +54,32 @@ public class ForumDaoImpl implements ForumDao {
     }
 
     @Override
+    public Forum getForum( Course course )
+    {
+        return entityManager.createQuery( "from Forum where course = :course",
+            Forum.class )
+            .setParameter( "course", course )
+            .getSingleResult();
+    }
+
+    @Override
     public List<Forum> getSystemForums()
     {
         String query = "from Forum where department is null and course is null "
             + "and hidden = false";
 
         return entityManager.createQuery( query, Forum.class ).getResultList();
+    }
+
+    @Override
+    public List<Forum> getCourseForums( Department department )
+    {
+        String query = "from Forum where course.department = :department "
+            + "and course.obsolete = false order by course.code asc";
+
+        return entityManager.createQuery( query, Forum.class )
+            .setParameter( "department", department )
+            .getResultList();
     }
 
     @Override

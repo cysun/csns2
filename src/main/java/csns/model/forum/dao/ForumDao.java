@@ -20,6 +20,8 @@ package csns.model.forum.dao;
 
 import java.util.List;
 
+import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.forum.Forum;
 
 public interface ForumDao {
@@ -33,7 +35,11 @@ public interface ForumDao {
      */
     Forum getForum( String name );
 
+    Forum getForum( Course course );
+
     List<Forum> getSystemForums();
+
+    List<Forum> getCourseForums( Department department );
 
     List<Forum> searchForums( String term, int maxResults );
 

@@ -166,7 +166,7 @@ public class SectionController {
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         Section section = sectionDao.addSection( quarter, course, user );
 
-        Forum forum = course.getForum();
+        Forum forum = forumDao.getForum( course );
         if( !forum.isModerator( user ) )
         {
             forum.getModerators().add( user );
@@ -208,8 +208,7 @@ public class SectionController {
     public String edit( @RequestParam Long id, ModelMap models )
     {
         Section section = sectionDao.getSection( id );
-        Department department = departmentDao.getDepartment( section.getCourse()
-            .getDepartmentCode() );
+        Department department = section.getCourse().getDepartment();
 
         List<User> instructors = new ArrayList<User>();
         instructors.addAll( department.getFaculty() );

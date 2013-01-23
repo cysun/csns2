@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.Subscription;
@@ -81,10 +80,7 @@ public class ForumController {
         if( SecurityUtils.isAnonymous()
             || session.getAttribute( "showAll" ) != null )
         {
-            for( Course course : department.getUndergraduateCourses() )
-                courseForums.add( course.getForum() );
-            for( Course course : department.getGraduateCourses() )
-                courseForums.add( course.getForum() );
+            courseForums = forumDao.getCourseForums( department );
         }
         else
         {

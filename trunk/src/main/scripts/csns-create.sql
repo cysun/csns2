@@ -236,6 +236,7 @@ insert into grades (id, symbol, value, description) values
 
 create table courses (
     id              bigint primary key,
+    department_id   bigint,
     code            varchar(255) not null unique,
     name            varchar(255) not null,
     min_units       integer not null default 4,
@@ -441,6 +442,9 @@ create table department_additional_graduate_courses (
     department_id   bigint not null references departments(id),
     course_id       bigint not null references courses(id)
 );
+
+alter table courses add constraint courses_department_fk
+    foreign key (department_id) references departments(id);
 
 -------------
 -- surveys --

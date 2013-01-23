@@ -67,6 +67,7 @@ drop trigger surveys_ts_trigger on surveys;
 drop function surveys_ts_trigger_function();
 drop table surveys;
 
+alter table courses drop constraint courses_department_fk;
 drop table department_additional_graduate_courses;
 drop table department_graduate_courses;
 drop table department_additional_undergraduate_courses;

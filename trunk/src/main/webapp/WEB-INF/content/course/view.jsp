@@ -20,6 +20,9 @@
 
 <table class="general autowidth">
   <tr>
+    <th>Department</th>
+    <td>${course.department.name}</td>
+  <tr>
     <th>Code</th>
     <td>${course.code}</td>
   </tr>

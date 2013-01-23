@@ -135,8 +135,8 @@ public class DepartmentInfoController {
     {
         Department department = departmentDao.getDepartment( dept );
         Course course = courseDao.getCourse( courseId );
-        boolean isDepartmentCourse = course.getCode().startsWith(
-            dept.toUpperCase() );
+        boolean isDepartmentCourse = course.getDepartment() != null
+            && course.getDepartment().getId().equals( department.getId() );
 
         List<Course> courses;
         switch( level )

@@ -20,7 +20,6 @@ package csns.model.academics;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +32,6 @@ import javax.persistence.Table;
 
 import csns.model.core.File;
 import csns.model.core.User;
-import csns.model.forum.Forum;
 
 @Entity
 @Table(name = "courses")
@@ -44,6 +42,10 @@ public class Course implements Serializable, Comparable<Course> {
     @Id
     @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @Column(nullable = false, unique = true)
     private String code;
@@ -65,10 +67,6 @@ public class Course implements Serializable, Comparable<Course> {
     @JoinColumn(name = "syllabus_id")
     private File syllabus;
 
-    @OneToOne(mappedBy = "course", fetch = FetchType.LAZY, cascade = {
-        CascadeType.PERSIST, CascadeType.MERGE })
-    private Forum forum;
-
     @Column(nullable = false)
     private boolean obsolete;
 
@@ -87,13 +85,13 @@ public class Course implements Serializable, Comparable<Course> {
         return getCode().compareTo( course.getCode() );
     }
 
-    public String getDepartmentCode()
+    public String getDept()
     {
         int index;
         for( index = 0; index < code.length(); ++index )
             if( Character.isDigit( code.charAt( index ) ) ) break;
 
-        return code.substring( 0, index );
+        return code.substring( 0, index ).toLowerCase();
     }
 
     public Long getId()
@@ -104,6 +102,16 @@ public class Course implements Serializable, Comparable<Course> {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public Department getDepartment()
+    {
+        return department;
+    }
+
+    public void setDepartment( Department department )
+    {
+        this.department = department;
     }
 
     public String getCode()
@@ -164,16 +172,6 @@ public class Course implements Serializable, Comparable<Course> {
     public void setSyllabus( File syllabus )
     {
         this.syllabus = syllabus;
-    }
-
-    public Forum getForum()
-    {
-        return forum;
-    }
-
-    public void setForum( Forum forum )
-    {
-        this.forum = forum;
     }
 
     public boolean isObsolete()

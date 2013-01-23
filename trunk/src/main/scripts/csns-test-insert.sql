@@ -30,18 +30,18 @@ insert into department_faculty values (1000100, 1000004);
 insert into department_faculty values (1000100, 1000001);
 insert into department_instructors values (1000100, 1000002);
 
-insert into courses (id, code, name, coordinator_id) values
-    (1000200, 'CS101', 'Introduction to Computer Science', null);
-insert into courses (id, code, name, coordinator_id) values
-    (1000201, 'CS320', 'Web and Internet Programming', 1000001);
-insert into courses (id, code, name, coordinator_id) values
-    (1000202, 'CS520', 'Web Programming', null);
+insert into courses (id, department_id, code, name, coordinator_id) values
+    (1000200, 1000100, 'CS101', 'Introduction to Computer Science', null);
+insert into courses (id, department_id, code, name, coordinator_id) values
+    (1000201, 1000100, 'CS320', 'Web and Internet Programming', 1000001);
+insert into courses (id, department_id, code, name, coordinator_id) values
+    (1000202, 1000100, 'CS520', 'Web Programming', null);
 insert into courses (id, code, name, coordinator_id) values
     (1000203, 'TECH250', 'Impact of Technology on Individuals and Society', null);
-insert into courses (id, code, name, coordinator_id) values
-    (1000204, 'MATH206', 'Calculus I: Differentiation', null);
-insert into courses (id, code, name, coordinator_id) values
-    (1000205, 'MATH207', 'Calculus II: Integration', null);
+insert into courses (id, department_id, code, name, coordinator_id) values
+    (1000204, 1000101, 'MATH206', 'Calculus I: Differentiation', null);
+insert into courses (id, department_id, code, name, coordinator_id) values
+    (1000205, 1000101, 'MATH207', 'Calculus II: Integration', null);
 
 insert into department_undergraduate_courses values (1000100, 1000200);
 insert into department_undergraduate_courses values (1000100, 1000201);

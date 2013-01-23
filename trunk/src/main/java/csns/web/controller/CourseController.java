@@ -38,8 +38,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Course;
 import csns.model.academics.dao.CourseDao;
+import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.forum.Forum;
+import csns.model.forum.dao.ForumDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 import csns.web.editor.UserPropertyEditor;
@@ -51,6 +53,12 @@ public class CourseController {
 
     @Autowired
     CourseDao courseDao;
+
+    @Autowired
+    ForumDao forumDao;
+
+    @Autowired
+    DepartmentDao departmentDao;
 
     @Autowired
     CourseValidator courseValidator;
@@ -106,10 +114,12 @@ public class CourseController {
             course.setSyllabus( fileIO.save( uploadedFile,
                 SecurityUtils.getUser(), true ) );
 
+        course.setDepartment( departmentDao.getDepartment( course.getDept() ) );
+        course = courseDao.saveCourse( course );
+
         Forum forum = new Forum( course.getCode() + " " + course.getName() );
         forum.setCourse( course );
-        course.setForum( forum );
-        course = courseDao.saveCourse( course );
+        forumDao.saveForum( forum );
 
         sessionStatus.setComplete();
         return "redirect:view?id=" + course.getId();
@@ -135,8 +145,13 @@ public class CourseController {
             course.setSyllabus( fileIO.save( uploadedFile,
                 SecurityUtils.getUser(), true ) );
 
-        course.getForum().setName( course.getCode() + " " + course.getName() );
+        course.setDepartment( departmentDao.getDepartment( course.getDept() ) );
         course = courseDao.saveCourse( course );
+
+        Forum forum = forumDao.getForum( course );
+        forum.setName( course.getCode() + " " + course.getName() );
+        forumDao.saveForum( forum );
+
         sessionStatus.setComplete();
         return "redirect:view?id=" + course.getId();
     }

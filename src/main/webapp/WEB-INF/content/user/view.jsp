@@ -25,7 +25,7 @@ $(function(){
 function email( address )
 {
     var url = "<c:url value='/email/compose?userId=${user.id}' />";
-    url += "&amp;backUrl=/user/view&#63;id=${user.id}";
+    url += "&backUrl=/user/view?id=${user.id}";
     if( address == 2 )
         url += "&amp;useSecondaryEmail=true";
     window.location.href=url;
@@ -47,7 +47,7 @@ function email( address )
   <li><a href="advisement?userId=${user.id}">Advisement</a></li>
 </ul>
 <div id="account">
-<table class="general">
+<table class="general autowidth">
   <tr>
     <th>Name</th>
     <td>${user.firstName} ${user.middleName} ${user.lastName}</td>

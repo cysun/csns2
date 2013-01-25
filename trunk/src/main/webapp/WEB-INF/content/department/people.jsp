@@ -39,12 +39,35 @@ $(function(){
            });
        });
     });
+    $(".selectAll").toggle(
+            function(){ 
+                $(this).parents("form").find(":checkbox[name='userId']").attr("checked",true);
+            },
+            function(){
+                $(this).parents("form").find(":checkbox[name='userId']").attr("checked",false);
+            }
+    );
+    $("#email").click(function(){
+        var form = "#" + $(".ui-tabs-panel:not(.ui-tabs-hide)").attr("id") + "Form";
+        if( $(form).find(":checkbox[name='userId']:checked").length == 0 )
+            alert( "Please select the user(s) to contact." );
+        else
+             $(form).attr("action", "<c:url value='/email/compose' />").submit();            
+    });
 });
+function email( userId )
+{
+    var url = "<c:url value='/email/compose?userId=' />" + userId;
+    url += "&backUrl=/department/" + "${dept}" + "/people%23" + $(".ui-tabs-panel:not(.ui-tabs-hide)").attr("id");
+    window.location.href=url;
+}
 </script>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/user/search' />">Users</a></li>
 <li>${department.name}</li>
+<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email User(s)"
+    alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add"
     alt="[Add]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 </ul>
@@ -67,8 +90,10 @@ $(function(){
 
 <div id="admin">
 <c:if test="${fn:length(department.administrators) > 0}">
+<form id="adminForm" method="post">
 <table class="viewtable">
 <tr>
+  <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <th class="center"></th>
@@ -76,9 +101,10 @@ $(function(){
 </tr>
 <c:forEach items="${department.administrators}" var="user">
 <tr>
+  <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
-  <td>${user.primaryEmail}</td>
+  <td><a href="javascript:email(${user.id})">${user.primaryEmail}</a></td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/admin/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
@@ -86,6 +112,8 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+<input type="hidden" name="backUrl" value="/department/${dept}/people#admin" />
+</form>
 </c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -100,8 +128,10 @@ $(function(){
 
 <div id="faculty">
 <c:if test="${fn:length(department.faculty) > 0}">
+<form id="facultyForm" method="post">
 <table class="viewtable">
 <tr>
+  <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <th class="center"></th>
@@ -109,9 +139,10 @@ $(function(){
 </tr>
 <c:forEach items="${department.faculty}" var="user">
 <tr>
+  <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
-  <td>${user.primaryEmail}</td>
+  <td><a href="javascript:email(${user.id})">${user.primaryEmail}</a></td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/faculty/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
@@ -119,6 +150,8 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+<input type="hidden" name="backUrl" value="/department/${dept}/people#faculty" />
+</form>
 </c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -133,8 +166,10 @@ $(function(){
 
 <div id="instructor">
 <c:if test="${fn:length(department.instructors) > 0}">
+<form id="instructorForm" method="post">
 <table class="viewtable">
 <tr>
+  <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <th class="center"></th>
@@ -142,9 +177,10 @@ $(function(){
 </tr>
 <c:forEach items="${department.instructors}" var="user">
 <tr>
+  <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
-  <td>${user.primaryEmail}</td>
+  <td><a href="javascript:email(${user.id})">${user.primaryEmail}</a></td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/instructor/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
@@ -152,6 +188,8 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+<input type="hidden" name="backUrl" value="/department/${dept}/people#instructor" />
+</form>
 </c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -166,8 +204,10 @@ $(function(){
 
 <div id="reviewer">
 <c:if test="${fn:length(department.reviewers) > 0}">
+<form id="reviewerForm" method="post">
 <table class="viewtable">
 <tr>
+  <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <th class="center"></th>
@@ -175,9 +215,10 @@ $(function(){
 </tr>
 <c:forEach items="${department.reviewers}" var="user">
 <tr>
+  <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
   <td>${user.cin}</td>
   <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
-  <td>${user.primaryEmail}</td>
+  <td><a href="javascript:email(${user.id})">${user.primaryEmail}</a></td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="personnel/reviewer/remove?userId=${user.id}"><img
     title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
@@ -185,6 +226,8 @@ $(function(){
 </tr>
 </c:forEach>
 </table>
+<input type="hidden" name="backUrl" value="/department/${dept}/people#reviewer" />
+</form>
 </c:if>
 
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">

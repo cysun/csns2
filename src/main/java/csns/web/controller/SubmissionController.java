@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -207,11 +208,14 @@ public class SubmissionController {
     }
 
     @RequestMapping("/submission/remove")
-    public String remove( @RequestParam Long fileId )
+    public @ResponseBody
+    String remove( @RequestParam Long fileId )
     {
+        User user = SecurityUtils.getUser();
         File file = fileDao.getFile( fileId );
         Submission submission = file.getSubmission();
-        if( !submission.isPastDue() )
+        if( !submission.isPastDue()
+            || submission.getAssignment().getSection().isInstructor( user ) )
         {
             file.setSubmission( null );
             fileDao.saveFile( file );
@@ -219,9 +223,9 @@ public class SubmissionController {
             submissionDao.saveSubmission( submission );
         }
 
-        logger.info( SecurityUtils.getUser().getUsername() + " removed file "
-            + file.getId() + " from submission " + submission.getId() );
-        return "redirect:/submission/view?id=" + submission.getId();
+        logger.info( user.getUsername() + " removed file " + file.getId()
+            + " from submission " + submission.getId() );
+        return "";
     }
 
     @RequestMapping("/submission/list")

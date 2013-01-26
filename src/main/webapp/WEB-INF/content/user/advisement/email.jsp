@@ -9,6 +9,9 @@ $(function(){
           toolbar : "Basic"
         });
     }); 
+    $("#cancel").click(function(){
+        window.location.href = "../view?id=${record.student.id}#ui-tabs-3";
+    });
 });
 </script>
 

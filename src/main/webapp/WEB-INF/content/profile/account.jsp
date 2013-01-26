@@ -26,6 +26,8 @@ $(function() {
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
+  <li><a href="<c:url value='/profile/courses' />">Course Work</a></li>
+  <li><a href="<c:url value='/profile/advisement' />">Advisement</a>
   <li><a href="<c:url value='/profile/forums' />">Forum Subscriptions</a></li>
   <li><a href="<c:url value='/profile/mailinglists' />">Mailing List Subscriptions</a></li>
 </ul>

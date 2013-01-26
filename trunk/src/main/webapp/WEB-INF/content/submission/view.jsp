@@ -1,22 +1,29 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${submission.assignment.section}"/>
 <c:set var="assignment" value="${submission.assignment}"/>
 
 <script>
-function removeFile( fileId )
-{
-    var msg = "Are you sure you want to remove this file?";
-    if( confirm(msg) )
-        window.location.href = "remove?fileId=" + fileId;
-}
 $(function(){
     $("table").tablesorter({
         sortList: [[0,0]]
     });
 });
+function remove( fileId )
+{
+    var msg = "Are you sure you want to remove this file?";
+    if( confirm(msg) )
+        $.ajax({
+            url: "remove?fileId=" + fileId,
+            success: function(){
+                $("#row-" + fileId).remove();
+            },
+            cache: false
+        });
+}
 </script>
 
 <ul id="title">
@@ -68,7 +75,7 @@ File: <input type="file" name="uploadedFile" size="50" />
 </p></form>
 </c:if>
 
-<c:if test="${assignment.availableAfterDueDate || not submission.pastDue}">
+<c:if test="${fn:length(submission.files) > 0 and (assignment.availableAfterDueDate || not submission.pastDue)}">
 <table class="viewtable">
 <thead>
   <tr><th>Name</th><th class="shrink">Size</th><th class="datetime">Date</th>
@@ -77,13 +84,13 @@ File: <input type="file" name="uploadedFile" size="50" />
 </thead>
 <tbody>
   <c:forEach items="${submission.files}" var="file">
-  <tr>
+  <tr id="row-${file.id}">
     <td><a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a></td>
     <td class="shrink"><csns:fileSize value="${file.size}" /></td>
     <td class="datetime"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
     <c:if test="${not submission.pastDue}">
     <td class="action">
-      <a href="javascript:removeFile(${file.id})"><img alt="[Remove File]"
+      <a href="javascript:remove(${file.id})"><img alt="[Remove File]"
          title="Remove File" src="<c:url value='/img/icons/script_delete.png'/>" /></a>
     </td>
     </c:if>

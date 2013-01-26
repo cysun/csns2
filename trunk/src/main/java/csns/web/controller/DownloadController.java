@@ -20,6 +20,8 @@ package csns.web.controller;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -70,9 +72,23 @@ public class DownloadController {
 
     private static Logger logger = LoggerFactory.getLogger( DownloadController.class );
 
+    private Collection<File> removeDuplicates( Collection<File> files )
+    {
+        Map<String, File> fileMap = new HashMap<String, File>();
+        for( File file : files )
+        {
+            File file2 = fileMap.get( file.getName() );
+            if( file2 == null || file.getDate().after( file2.getDate() ) )
+                fileMap.put( file.getName(), file );
+        }
+        return fileMap.values();
+    }
+
     private long addToZip( ZipOutputStream zip, String dir,
         Collection<File> files ) throws IOException
     {
+        files = removeDuplicates( files );
+
         long totalSize = 0;
         for( File file : files )
         {

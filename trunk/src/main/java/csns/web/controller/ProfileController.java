@@ -40,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import csns.model.academics.dao.EnrollmentDao;
+import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
@@ -56,6 +58,12 @@ public class ProfileController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    EnrollmentDao enrollmentDao;
+
+    @Autowired
+    AdvisementRecordDao advisementRecordDao;
 
     @Autowired
     SubscriptionDao subscriptionDao;
@@ -101,6 +109,22 @@ public class ProfileController {
 
         sessionStatus.setComplete();
         return "redirect:" + defaultUrls.userHomeUrl( request );
+    }
+
+    @RequestMapping("/profile/courses")
+    public String courses( ModelMap models )
+    {
+        User user = SecurityUtils.getUser();
+        models.put( "coursesTaken", enrollmentDao.getEnrollments( user ) );
+        return "profile/courses";
+    }
+
+    @RequestMapping("/profile/advisement")
+    public String advisement( ModelMap models )
+    {
+        User user = SecurityUtils.getUser();
+        models.put( "records", advisementRecordDao.getAdvisementRecords( user ) );
+        return "profile/advisement";
     }
 
     @RequestMapping("/profile/forums")

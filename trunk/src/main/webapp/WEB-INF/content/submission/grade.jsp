@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="assignment" value="${submission.assignment}" />
@@ -72,6 +73,7 @@ function toggleFilePublic( fileId )
 <input class="subbutton" type="submit" value="OK" /></p>
 </form>
 
+<c:if test="${fn:length(submission.files) > 0}">
 <table class="viewtable">
 <thead><tr><th>Name</th><th class="shrink">Size</th><th>Date</th></tr></thead>
 <tbody>
@@ -84,6 +86,7 @@ function toggleFilePublic( fileId )
   </c:forEach>
 </tbody>
 </table>
+</c:if>
 
 <h4><a id="gradeLink" href="javascript:void(0)">Grade</a></h4>
 <div id="grade" class="editable_input">${submission.grade}</div>

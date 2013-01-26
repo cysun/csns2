@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${submission.assignment.section}"/>
@@ -11,6 +12,18 @@ $(function(){
         sortList: [[0,0]]
     });
 });
+function remove( fileId )
+{
+    var msg = "Are you sure you want to remove this file?";
+    if( confirm(msg) )
+        $.ajax({
+            url: "remove?fileId=" + fileId,
+            success: function(){
+                $("#row-" + fileId).remove();
+            },
+            cache: false
+        });
+}
 </script>
 
 <ul id="title">
@@ -27,15 +40,21 @@ File: <input type="file" name="uploadedFile" size="50" />
 <input type="hidden" name="additional" value="true" />
 </p></form>
 
+<c:if test="${fn:length(submission.files) > 0}">
 <table class="viewtable">
-<thead><tr><th>Name</th><th class="shrink">Size</th><th class="datetime">Date</th></tr></thead>
+<thead><tr><th>Name</th><th class="shrink">Size</th><th class="datetime">Date</th><th></th></tr></thead>
 <tbody>
   <c:forEach items="${submission.files}" var="file">
-  <tr>
+  <tr id="row-${file.id}">
     <td><a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a></td>
     <td class="shrink"><csns:fileSize value="${file.size}" /></td>
     <td class="datetime"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+    <td class="action">
+      <a href="javascript:remove(${file.id})"><img alt="[Remove File]"
+         title="Remove File" src="<c:url value='/img/icons/script_delete.png'/>" /></a>
+    </td>
   </tr>
   </c:forEach>
 </tbody>
 </table>
+</c:if>

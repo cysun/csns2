@@ -180,6 +180,10 @@
         <put-attribute name="content" value="/WEB-INF/content/profile/account.jsp" />
     </definition>
 
+    <definition name="profile/courses" template="/WEB-INF/content/profile/courses.jsp" />
+
+    <definition name="profile/advisement" template="/WEB-INF/content/profile/advisement.jsp" />
+
     <definition name="profile/forums" template="/WEB-INF/content/profile/forums.jsp" />
 
     <definition name="profile/mailinglists" template="/WEB-INF/content/profile/mailinglists.jsp" />

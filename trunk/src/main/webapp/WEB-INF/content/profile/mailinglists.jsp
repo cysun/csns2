@@ -21,7 +21,7 @@ function unsubscribe( id )
 <div> <!-- for tab -->
 
 <c:if test="${fn:length(subscriptions) == 0 }">
-<p>You haven't subscribed to any mailing list yet.</p>
+<p>You are not subscribed to any mailing list.</p>
 </c:if>
 
 <c:if test="${fn:length(subscriptions) > 0}">

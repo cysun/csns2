@@ -21,18 +21,27 @@ package csns.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import csns.helper.Email;
 import csns.model.advisement.AdvisementRecord;
 import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.EmailUtils;
 import csns.util.FileIO;
+import csns.web.validator.EmailValidator;
 
 @Controller
+@SessionAttributes("email")
 public class UserAdvisementController {
 
     @Autowired
@@ -40,6 +49,12 @@ public class UserAdvisementController {
 
     @Autowired
     AdvisementRecordDao advisementRecordDao;
+
+    @Autowired
+    EmailValidator emailValidator;
+
+    @Autowired
+    EmailUtils emailUtils;
 
     @Autowired
     FileIO fileIO;
@@ -74,6 +89,41 @@ public class UserAdvisementController {
         record = advisementRecordDao.saveAdvisementRecord( record );
 
         return "redirect:/user/view?id=" + userId + "#ui-tabs-3";
+    }
+
+    @RequestMapping(value = "/user/advisement/email",
+        method = RequestMethod.GET)
+    public String email( @RequestParam Long id, ModelMap models )
+    {
+        AdvisementRecord record = advisementRecordDao.getAdvisementRecord( id );
+
+        Email email = new Email();
+        email.setAuthor( SecurityUtils.getUser() );
+        email.addRecipient( record.getStudent() );
+        email.setSubject( "Advisement Record #" + record.getId() );
+        email.setContent( record.getComment() );
+        email.setAttachments( record.getAttachments() );
+
+        models.put( "record", record );
+        models.put( "email", email );
+        return "user/advisement/email";
+    }
+
+    @RequestMapping(value = "/user/advisement/email",
+        method = RequestMethod.POST)
+    public String email( @ModelAttribute Email email, BindingResult result,
+        SessionStatus sessionStatus, ModelMap models )
+    {
+        emailValidator.validate( email, result );
+        if( result.hasErrors() ) return "user/advisement/email";
+
+        emailUtils.sendHtmlMail( email );
+        sessionStatus.setComplete();
+
+        models.put( "backUrl", "/user/view?id="
+            + email.getRecipients().get( 0 ).getId() + "#ui-tabs-3" );
+        models.put( "message", "status.email.sent" );
+        return "status";
     }
 
 }

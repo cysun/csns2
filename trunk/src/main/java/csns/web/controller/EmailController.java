@@ -18,12 +18,7 @@
  */
 package csns.web.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -56,15 +51,7 @@ public class EmailController {
     EmailUtils emailUtils;
 
     @Autowired
-    MailSender mailSender;
-
-    @Autowired
     EmailValidator emailValidator;
-
-    @Value("#{applicationProperties.email}")
-    private String appEmail;
-
-    private static final Logger logger = LoggerFactory.getLogger( EmailController.class );
 
     @RequestMapping("/email/compose")
     public String compose(
@@ -98,25 +85,8 @@ public class EmailController {
             email.getAttachments().addAll(
                 fileIO.save( uploadedFiles, user, true ) );
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject( email.getSubject() );
-        message.setText( emailUtils.getText( email ) );
-        message.setFrom( user.getPrimaryEmail() );
-        message.setCc( user.getPrimaryEmail() );
-        String addresses[] = emailUtils.getAddresses( email.getRecipients(),
-            email.isUseSecondaryEmail() ).toArray( new String[0] );
-        if( addresses.length > 1 )
-        {
-            message.setTo( appEmail );
-            message.setBcc( addresses );
-        }
-        else
-            message.setTo( addresses );
-
-        mailSender.send( message );
+        emailUtils.sendTextMail( email );
         sessionStatus.setComplete();
-        logger.info( user.getUsername() + " sent email to "
-            + addresses.toString() );
 
         models.put( "backUrl", backUrl );
         models.put( "message", "status.email.sent" );

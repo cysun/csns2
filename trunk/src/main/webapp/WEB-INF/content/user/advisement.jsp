@@ -37,9 +37,13 @@ function help( name )
   <th align="left"> ${record.advisor.name}
     <fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd HH:mm:ss" />
   </th>
+  <th align="right">
+    <a id="email" href="advisement/email?id=${record.id}"><img title="Email Advisement Record"
+    alt="[Email Advisement Record]" src="<c:url value='/img/icons/email_edit.png' />" /></a>
+  </th>
 </tr>
 <tr>
- <td>${record.comment}
+ <td colspan="2">${record.comment}
     <c:if test="${fn:length(record.attachments) > 0}">
     <div class="general-attachments">
     <ul>

@@ -38,6 +38,11 @@ public class Email extends AbstractMessage {
         useSecondaryEmail = false;
     }
 
+    public void addRecipient( User user )
+    {
+        recipients.add( user );
+    }
+
     public List<User> getRecipients()
     {
         return recipients;

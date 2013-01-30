@@ -109,6 +109,8 @@ drop table question_sheets;
 
 drop table subscriptions;
 
+drop trigger resources_ts_trigger on resources;
+drop function resources_ts_trigger_function();
 drop table resources;
 drop table files;
 

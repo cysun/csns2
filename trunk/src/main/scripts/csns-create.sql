@@ -80,6 +80,30 @@ create table resources (
     url     varchar(2000)
 );
 
+alter table resources add column tsv tsvector;
+
+create function resources_ts_trigger_function() returns trigger as $$
+declare
+    l_filename  varchar;
+begin
+	if new.type = 1 then
+        new.tsv := setweight(to_tsvector(new.text), 'D');
+    elsif new.type = 2 then
+        select name into l_filename from files where id = new.file_id;
+        new.tsv := setweight(to_tsvector(l_filename), 'D');
+    else
+        new.tsv := setweight(to_tsvector(new.url), 'D');
+    end if;
+    return new;
+end
+$$ language plpgsql;
+
+create trigger resources_ts_trigger
+    before insert or update on resources
+    for each row execute procedure resources_ts_trigger_function();
+
+create index resources_ts_index on resources using gin(tsv);
+
 -------------------
 -- subscriptions --
 -------------------
@@ -353,7 +377,6 @@ create function assignments_ts_trigger_function() returns trigger as $$
 declare
     l_quarter       varchar;
     l_course_code   varchar;
-    l_resource      resources;
 begin
     if new.section_id is not null then
         select quarter(quarter) into l_quarter from sections
@@ -364,12 +387,6 @@ begin
     new.tsv := setweight(to_tsvector(l_quarter), 'A') ||
                setweight(to_tsvector(l_course_code), 'A') ||
                setweight(to_tsvector(new.name), 'A');
-    if new.resource_id is not null then
-        select * into l_resource from resources where id = new.resource_id;
-        if l_resource.type = 1 then
-            new.tsv := new.tsv || setweight(to_tsvector(l_resource.text), 'D');
-        end if;
-    end if;
     return new;
 end
 $$ language plpgsql;

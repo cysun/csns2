@@ -19,9 +19,7 @@
 package csns.web.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -317,16 +315,10 @@ public class OnlineAssignmentController {
         Section section = sectionDao.getSection( sectionId );
         models.put( "section", section );
 
-        List<OnlineAssignment> assignments = new ArrayList<OnlineAssignment>();
-        for( Assignment assignment : section.getAssignments() )
-            if( assignment.isOnline() )
-                assignments.add( (OnlineAssignment) assignment );
-        models.put( "assignments", assignments );
-
         if( StringUtils.hasText( term ) )
             models.put(
                 "results",
-                assignmentDao.searchOnlineAssignments( term,
+                assignmentDao.searchAssignments( term, "ONLINE",
                     SecurityUtils.getUser(), 20 ) );
 
         return "assignment/online/search";

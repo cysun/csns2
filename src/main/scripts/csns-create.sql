@@ -353,6 +353,7 @@ create function assignments_ts_trigger_function() returns trigger as $$
 declare
     l_quarter       varchar;
     l_course_code   varchar;
+    l_resource      resources;
 begin
     if new.section_id is not null then
         select quarter(quarter) into l_quarter from sections
@@ -363,6 +364,12 @@ begin
     new.tsv := setweight(to_tsvector(l_quarter), 'A') ||
                setweight(to_tsvector(l_course_code), 'A') ||
                setweight(to_tsvector(new.name), 'A');
+    if new.resource_id is not null then
+        select * into l_resource from resources where id = new.resource_id;
+        if l_resource.type = 1 then
+            new.tsv := new.tsv || setweight(to_tsvector(l_resource.text), 'D');
+        end if;
+    end if;
     return new;
 end
 $$ language plpgsql;

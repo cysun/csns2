@@ -25,7 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -44,7 +44,7 @@ public class Resource implements Serializable {
 
     private String text;
 
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "file_id")
     private File file;
 
@@ -52,6 +52,19 @@ public class Resource implements Serializable {
 
     public Resource()
     {
+    }
+
+    public Resource clone()
+    {
+        Resource resource = new Resource();
+
+        resource.name = name;
+        resource.type = type;
+        resource.text = text;
+        resource.file = file;
+        resource.url = url;
+
+        return resource;
     }
 
     public Long getId()

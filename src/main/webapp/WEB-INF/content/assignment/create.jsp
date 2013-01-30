@@ -51,6 +51,13 @@ function help( name )
     <option value="ONLINE">Online</option>
   </select>
 </li>
+<li class="align_right">
+  <form action="search" method="get">
+    <input name="term" type="text" size="40" />
+    <input name="sectionId" type="hidden" value="${param.sectionId}" />
+    <input name="search" type="submit" value="Search" class="subbutton" />
+  </form>
+</li>
 </ul>
 
 <form:form modelAttribute="assignment" enctype="multipart/form-data">

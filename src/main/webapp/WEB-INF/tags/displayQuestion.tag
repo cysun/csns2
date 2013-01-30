@@ -11,14 +11,14 @@
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="radio" 
         <c:if test="${csns:isSelectionCorrect(question,choiceStatus.index)}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'CHOICE' and not question.singleSelection }">
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="checkbox"
         <c:if test="${csns:isSelectionCorrect(question,choiceStatus.index)}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'RATING'}">

@@ -13,9 +13,9 @@ function clone( id )
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>Online Assignments</li>
-<li class="align_right"><a href="create?sectionId=${section.id}"><img alt="[Create Online Assignment]"
-  title="Create Online Assignment" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
+<li>Search Online Assignments</li>
+<li class="align_right"><a href="create?sectionId=${section.id}"><img alt="[Create Assignment]"
+  title="Create Assignment" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
 </ul>
 
 <form method="get">

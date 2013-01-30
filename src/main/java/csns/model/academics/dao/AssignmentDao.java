@@ -29,12 +29,12 @@ public interface AssignmentDao {
 
     Assignment getAssignment( Long id );
 
+    List<Assignment> searchAssignments( String term, String type,
+        User instructor, int maxResults );
+
     List<OnlineAssignment> getOnlineAssignments( Section section );
 
     List<OnlineAssignment> getOnlineAssignments( User instructor );
-
-    List<OnlineAssignment> searchOnlineAssignments( String term,
-        User instructor, int maxResults );
 
     Assignment saveAssignment( Assignment assignment );
 

@@ -39,13 +39,13 @@ select * from sections where deleted = 'f' and plainto_tsquery(:term) @@ tsv
 ]]>
     </sql-query>
 
-    <sql-query name="online.assignment.search">
-        <return class="csns.model.academics.OnlineAssignment" />
+    <sql-query name="assignment.search">
+        <return class="csns.model.academics.Assignment" />
 <![CDATA[
 select a.* from assignments a, sections s, section_instructors i
-    where a.assignment_type = 'ONLINE' and plainto_tsquery(:term) @@ a.tsv
+    where a.assignment_type = :type and plainto_tsquery(:term) @@ a.tsv
     and a.section_id = s.id and s.id = i.section_id
-    and i.instructor_id = :instructorId
+    and i.instructor_id = :instructorId and a.deleted = 'f'
     order by ts_rank(a.tsv, plainto_tsquery(:term), 16|32) desc
 ]]>
     </sql-query>

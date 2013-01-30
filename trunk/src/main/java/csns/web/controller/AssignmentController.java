@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Assignment;
+import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
@@ -137,6 +139,18 @@ public class AssignmentController {
             + assignment.getSection().getId();
     }
 
+    @RequestMapping("/assignment/clone")
+    public String clone( @RequestParam Long sectionId,
+        @RequestParam Long assignmentId )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        Assignment oldAssignment = assignmentDao.getAssignment( assignmentId );
+        Assignment newAssignment = oldAssignment.clone();
+        newAssignment.setSection( section );
+        newAssignment = assignmentDao.saveAssignment( newAssignment );
+        return "redirect:/assignment/edit?id=" + newAssignment.getId();
+    }
+
     @RequestMapping(value = "/assignment/edit", method = RequestMethod.GET)
     public String edit( @RequestParam Long id, ModelMap models )
     {
@@ -205,6 +219,22 @@ public class AssignmentController {
             dateFormat.format( assignment.getPublishDate().getTime() ) );
 
         return null;
+    }
+
+    @RequestMapping("/assignment/search")
+    public String search( @RequestParam Long sectionId,
+        @RequestParam(required = false) String term, ModelMap models )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "section", section );
+
+        if( StringUtils.hasText( term ) )
+            models.put(
+                "results",
+                assignmentDao.searchAssignments( term, "REGULAR",
+                    SecurityUtils.getUser(), 20 ) );
+
+        return "assignment/search";
     }
 
 }

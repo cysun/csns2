@@ -127,6 +127,8 @@ public class Assignment implements Serializable {
         assignment.fileExtensions = fileExtensions;
         assignment.availableAfterDueDate = availableAfterDueDate;
 
+        if( description != null ) assignment.description = description.clone();
+
         return assignment;
     }
 

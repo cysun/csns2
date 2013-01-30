@@ -50,15 +50,16 @@ public class OnlineAssignment extends Assignment {
     @Override
     public OnlineAssignment clone()
     {
-        OnlineAssignment newAssignment = new OnlineAssignment();
+        OnlineAssignment assignment = new OnlineAssignment();
 
-        newAssignment.name = name;
-        newAssignment.alias = alias;
-        newAssignment.totalPoints = totalPoints;
-        newAssignment.availableAfterDueDate = availableAfterDueDate;
-        newAssignment.questionSheet = questionSheet.clone();
+        assignment.name = name;
+        assignment.alias = alias;
+        assignment.totalPoints = totalPoints;
+        assignment.dueDate = null;
+        assignment.availableAfterDueDate = availableAfterDueDate;
+        assignment.questionSheet = questionSheet.clone();
 
-        return newAssignment;
+        return assignment;
     }
 
     @Override

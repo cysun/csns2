@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,6 +49,20 @@ public class AssignmentDaoImpl implements AssignmentDao {
     }
 
     @Override
+    public List<Assignment> searchAssignments( String term, String type,
+        User instructor, int maxResults )
+    {
+        TypedQuery<Assignment> query = entityManager.createNamedQuery(
+            "assignment.search", Assignment.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+
+        return query.setParameter( "term", term )
+            .setParameter( "type", type )
+            .setParameter( "instructorId", instructor.getId() )
+            .getResultList();
+    }
+
+    @Override
     public List<OnlineAssignment> getOnlineAssignments( Section section )
     {
         String query = "from OnlineAssignment where section = :section "
@@ -67,18 +82,6 @@ public class AssignmentDaoImpl implements AssignmentDao {
 
         return entityManager.createQuery( query, OnlineAssignment.class )
             .setParameter( "instructor", instructor )
-            .getResultList();
-    }
-
-    @Override
-    public List<OnlineAssignment> searchOnlineAssignments( String term,
-        User instructor, int maxResults )
-    {
-        return entityManager.createNamedQuery( "online.assignment.search",
-            OnlineAssignment.class )
-            .setParameter( "term", term )
-            .setParameter( "instructorId", instructor.getId() )
-            .setMaxResults( maxResults )
             .getResultList();
     }
 

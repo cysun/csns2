@@ -30,14 +30,14 @@ $(function(){
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="radio" 
         <c:if test="${choiceStatus.index == param.selection}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'CHOICE' and not question.singleSelection }">
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="checkbox"
         <c:if test="${choiceStatus.index == param.selection}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'RATING'}">
@@ -52,7 +52,7 @@ $(function(){
 </c:if>
 
 <c:if test="${fn:length(answerSheets) > 0}">
-<table class="viewtable halfwidth">
+<table class="viewtable autowidth">
 <thead>
   <tr><th>Name</th><th>Timestamp</th></tr>
 </thead>
@@ -61,7 +61,7 @@ $(function(){
   <tr>
     <td><a href="grade?answerSheetId=${answerSheet.id}">${answerSheet.author.lastName},
       ${answerSheet.author.firstName}</a></td>
-    <td class="datetime">
+    <td>
       <fmt:formatDate value="${answerSheet.date}" pattern="MM/dd/yyyy hh:mm:ss a" />
     </td>
   </tr>

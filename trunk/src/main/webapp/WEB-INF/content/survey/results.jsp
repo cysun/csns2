@@ -44,7 +44,7 @@ $(function(){
     <ul>
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <li>
-        <csns:truncate value="${choice}" length="40" />
+        <c:out value="${choice}" escapeXml="true" />
         <a href="response/list?surveyId=${survey.id}&amp;questionId=${question.id}&amp;selection=${choiceStatus.index}">${question.choiceSelections[choiceStatus.index]}</a>
       </li>
     </c:forEach>

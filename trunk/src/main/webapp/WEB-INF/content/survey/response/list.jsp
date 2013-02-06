@@ -3,14 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:if test="${survey.type != 'NAMED'}">
-<script>
-$(function(){
-    $(".viewtable").addClass("halfwidth");
-});
-</script>
-</c:if>
-
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="../results?id=${survey.id}"><csns:truncate
@@ -28,14 +20,14 @@ $(function(){
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="radio" 
         <c:if test="${choiceStatus.index == param.selection}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'CHOICE' and not question.singleSelection }">
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
       <input type="checkbox"
         <c:if test="${choiceStatus.index == param.selection}">checked="checked"</c:if>
-      /> ${choice} <br />
+      /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${question.type == 'RATING'}">
@@ -51,7 +43,7 @@ $(function(){
 
 
 <c:if test="${fn:length(answerSheets) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
   <tr>
 <c:if test="${survey.type == 'NAMED'}">
     <th>CIN</th><th>Name</th>
@@ -65,7 +57,7 @@ $(function(){
     <td>${answerSheet.author.name}</td>
 </c:if>
     <td><a href="view?answerSheetId=${answerSheet.id}">${answerSheet.id}</a></td>
-    <td class="datetime">
+    <td>
       <fmt:formatDate value="${answerSheet.date}" pattern="yyyy-MM-dd hh:mm:ss a" />
     </td>
   </tr>

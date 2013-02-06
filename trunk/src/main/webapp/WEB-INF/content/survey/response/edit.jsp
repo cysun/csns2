@@ -33,13 +33,13 @@ ${answerSheet.questionSheet.sections[sectionIndex].description}
   <c:when test="${answer.question.type == 'CHOICE' and answer.question.singleSelection }">
     <c:forEach items="${answer.question.choices}" var="choice" varStatus="choiceStatus">
       <form:radiobutton path="answerSheet.sections[${sectionIndex}].answers[${answerStatus.index}].selections"
-                        value="${choiceStatus.index}" /> ${choice} <br />
+        value="${choiceStatus.index}" /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${answer.question.type == 'CHOICE' and not answer.question.singleSelection }">
     <c:forEach items="${answer.question.choices}" var="choice" varStatus="choiceStatus">
       <form:checkbox path="answerSheet.sections[${sectionIndex}].answers[${answerStatus.index}].selections"
-                        value="${choiceStatus.index}" /> ${choice} <br />
+        value="${choiceStatus.index}" /> <c:out value="${choice}" escapeXml="true" /> <br />
     </c:forEach>
   </c:when>
   <c:when test="${answer.question.type == 'RATING'}">

@@ -84,6 +84,7 @@ function toggleFilePublic( fileId )
 <h4><a id="commentsLink" href="javascript:void(0)">Comments</a></h4>
 <pre id="comments"><c:out value="${submission.comments}" escapeXml="true" /></pre>
 
+<c:if test="${not empty answerSheet and (submission.saved or submission.finished)}">
 <div class="qa_content">
 ${questionSheet.description}
 
@@ -110,3 +111,4 @@ ${questionSheet.sections[sectionIndex].description}
 </c:if>
 </p>
 </div>
+</c:if>

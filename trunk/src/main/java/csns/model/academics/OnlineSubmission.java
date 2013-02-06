@@ -61,8 +61,7 @@ public class OnlineSubmission extends Submission {
     {
         super( student, assignment );
 
-        if( assignment.isPublished() )
-            answerSheet = new AnswerSheet( assignment.getQuestionSheet() );
+        if( assignment.isPublished() ) createAnswerSheet();
     }
 
     @Override
@@ -71,19 +70,18 @@ public class OnlineSubmission extends Submission {
         return true;
     }
 
-    public void creatAnswerSheet()
+    public void createAnswerSheet()
     {
         answerSheet = new AnswerSheet(
             ((OnlineAssignment) assignment).getQuestionSheet() );
+        answerSheet.setAuthor( student );
     }
 
     public void grade()
     {
         if( !assignment.isPastDue() ) return;
 
-        if( answerSheet == null )
-            answerSheet = new AnswerSheet(
-                ((OnlineAssignment) assignment).getQuestionSheet() );
+        if( answerSheet == null ) createAnswerSheet();
 
         int total = 0;
         StringBuffer sb = new StringBuffer();

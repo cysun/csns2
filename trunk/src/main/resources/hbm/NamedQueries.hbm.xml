@@ -47,6 +47,7 @@ select a.* from assignments a
     inner join section_instructors i on s.id = i.section_id
     left join resources r on a.resource_id = r.id
     where a.assignment_type = :type and a.deleted = 'f'
+    and (:type <> 'REGULAR' or a.resource_id is not null)
     and i.instructor_id = :instructorId
     and (plainto_tsquery(:term) @@ a.tsv or plainto_tsquery(:term) @@ r.tsv)
     order by ts_rank(a.tsv || r.tsv, plainto_tsquery(:term), 16|32) desc

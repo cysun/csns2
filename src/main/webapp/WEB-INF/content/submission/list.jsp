@@ -21,13 +21,13 @@ $(function(){
   <li class="align_right"><a href="<c:url value='/download?assignmentId=${assignment.id}' />"><img
     title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a></li>
 </c:if>
-<c:if test="${assignment.online and assignment.published}">
-  <li class="align_right"><a href="online/summary?assignmentId=${assignment.id}"><img
-    title="Submission Summary" alt="[Submission Summary]" src="<c:url value='/img/icons/table_multiple.png' />" /></a></li>
-</c:if>
 <c:if test="${assignment.online and assignment.pastDue}">
   <li class="align_right"><a href="online/autograde?assignmentId=${assignment.id}"><img
     title="Auto Grade" alt="[Auto Grade]" src="<c:url value='/img/icons/table_multiple_check.png' />" /></a></li>
+</c:if>
+<c:if test="${assignment.online and assignment.published}">
+  <li class="align_right"><a href="online/summary?assignmentId=${assignment.id}"><img
+    title="Submission Summary" alt="[Submission Summary]" src="<c:url value='/img/icons/table_multiple.png' />" /></a></li>
 </c:if>
 </ul>
 

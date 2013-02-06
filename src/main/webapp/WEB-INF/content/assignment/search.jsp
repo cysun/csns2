@@ -30,15 +30,20 @@ function clone( id )
 
 <c:if test="${fn:length(results) > 0}">
 <table class="viewtable">
-  <tr><th>Quarter</th><th>Code</th><th>Assignment</th><th></th></tr>
+  <tr><th>Quarter</th><th>Section</th><th>Assignment</th><th></th></tr>
   <c:forEach items="${results}" var="assignment">
   <tr>
     <td>${assignment.section.quarter}</td>
-    <td>${assignment.section.course.code}</td>
+    <td>
+      ${assignment.section.course.code}
+      <c:if test="${assignment.section.number != 1}">(${assignment.section.number})</c:if>
+    </td>
     <td>${assignment.name}</td>
     <td class="action">
-      <a href="view?id=${assignment.id}"><img alt="[View Assignment]"
-         title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
+      <c:if test="${assignment.description != null}">
+        <a href="view?id=${assignment.id}"><img alt="[View Assignment]"
+           title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
+      </c:if>
       <a href="javascript:clone(${assignment.id})"><img alt="[Clone Assignment]" 
          title="Clone Assignment" src="<c:url value='/img/icons/script_code.png'/>" /></a>
     </td>

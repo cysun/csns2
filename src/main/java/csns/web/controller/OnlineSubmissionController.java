@@ -123,7 +123,7 @@ public class OnlineSubmissionController {
         // published, the submission would not have an answer sheet field.
         if( submission.getAnswerSheet() == null )
         {
-            submission.creatAnswerSheet();
+            submission.createAnswerSheet();
             submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
         }
 
@@ -143,7 +143,6 @@ public class OnlineSubmissionController {
             submission.setSaved( true );
         if( request.getParameter( "finish" ) != null )
             submission.setFinished( true );
-        submission.getAnswerSheet().setAuthor( SecurityUtils.getUser() );
         submission.getAnswerSheet().setDate( new Date() );
         submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
 
@@ -229,8 +228,12 @@ public class OnlineSubmissionController {
     {
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
         List<AnswerSheet> answerSheets = new ArrayList<AnswerSheet>();
-        for( Submission submission : assignment.getSubmissions() )
-            answerSheets.add( ((OnlineSubmission) submission).getAnswerSheet() );
+        for( Submission s : assignment.getSubmissions() )
+        {
+            OnlineSubmission submission = (OnlineSubmission) s;
+            if( submission.isSaved() || submission.isFinished() )
+                answerSheets.add( submission.getAnswerSheet() );
+        }
 
         models.put( "assignment", assignment );
         models.put( "answerSheets", answerSheets );

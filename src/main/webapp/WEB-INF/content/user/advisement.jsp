@@ -34,16 +34,22 @@ function help( name )
 <table class="general2">
 <c:forEach items="${advisementRecords}" var="record">
 <tr>
-  <th align="left"> ${record.advisor.name}
-    <fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd HH:mm:ss" />
+  <th align="left">
+    <span style="margin-right: 1em;"> ${record.advisor.name}</span>
+    <fmt:formatDate value="${record.date}" pattern="yyyy-MM-dd HH:mm" />
   </th>
   <th align="right">
+    <c:if test="${self.id == record.advisor.id}">
+      <a href="advisement/edit?id=${record.id}"><img title="Edit Advisement Record"
+         alt="[Edit Advisement Record]" src="<c:url value='/img/icons/page_edit.png' />"
+         style="margin-right: 1em;"/></a>
+    </c:if>
     <a id="email" href="advisement/email?id=${record.id}"><img title="Email Advisement Record"
     alt="[Email Advisement Record]" src="<c:url value='/img/icons/email_edit.png' />" /></a>
   </th>
 </tr>
 <tr>
- <td colspan="2">${record.comment}
+  <td colspan="2" <c:if test="${record.forAdvisorsOnly}">class="yellow"</c:if>>${record.comment}
     <c:if test="${fn:length(record.attachments) > 0}">
     <div class="general-attachments">
     <ul>
@@ -53,7 +59,7 @@ function help( name )
     </ul>
     </div>
     </c:if>
-</td>
+  </td>
 </tr>
 </c:forEach>
 </table>

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import csns.helper.Email;
 import csns.model.advisement.AdvisementRecord;
 import csns.model.advisement.dao.AdvisementRecordDao;
+import csns.model.core.File;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -41,7 +43,7 @@ import csns.util.FileIO;
 import csns.web.validator.EmailValidator;
 
 @Controller
-@SessionAttributes("email")
+@SessionAttributes({ "email", "record" })
 public class UserAdvisementController {
 
     @Autowired
@@ -64,6 +66,7 @@ public class UserAdvisementController {
     {
         User user = userDao.getUser( userId );
         models.put( "user", user );
+        models.put( "self", SecurityUtils.getUser() );
         models.put( "advisementRecords",
             advisementRecordDao.getAdvisementRecords( user ) );
         return "user/advisement";
@@ -89,6 +92,46 @@ public class UserAdvisementController {
         record = advisementRecordDao.saveAdvisementRecord( record );
 
         return "redirect:/user/view?id=" + userId + "#ui-tabs-3";
+    }
+
+    @RequestMapping(value = "/user/advisement/edit", method = RequestMethod.GET)
+    public String edit( @RequestParam Long id, ModelMap models )
+    {
+        models.put( "record", advisementRecordDao.getAdvisementRecord( id ) );
+        return "user/advisement/edit";
+    }
+
+    @RequestMapping(value = "/user/advisement/edit",
+        method = RequestMethod.POST)
+    public String edit(
+        @ModelAttribute("record") AdvisementRecord record,
+        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+        SessionStatus sessionStatus )
+    {
+        User student = record.getStudent();
+        if( uploadedFiles != null )
+            record.getAttachments().addAll(
+                fileIO.save( uploadedFiles, student, false ) );
+
+        record = advisementRecordDao.saveAdvisementRecord( record );
+
+        sessionStatus.setComplete();
+        return "redirect:/user/view?id=" + student.getId() + "#ui-tabs-3";
+    }
+
+    @RequestMapping("/user/advisement/deleteAttachment")
+    public @ResponseBody
+    String deleteAttachment( @ModelAttribute("record") AdvisementRecord record,
+        @RequestParam Long fileId )
+    {
+        for( File attachment : record.getAttachments() )
+            if( attachment.getId().equals( fileId ) )
+            {
+                record.getAttachments().remove( attachment );
+                break;
+            }
+
+        return "";
     }
 
     @RequestMapping(value = "/user/advisement/email",

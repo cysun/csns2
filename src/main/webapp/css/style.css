@@ -939,6 +939,9 @@ table {
 .tt {
     font-family: monospace;
 }
+.yellow {
+    background-color: #ffffa0;
+}
 .general-attachments {
     border: 1px solid #dddddd;
     background-color:#ffffff;

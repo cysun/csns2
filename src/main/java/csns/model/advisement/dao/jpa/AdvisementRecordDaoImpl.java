@@ -23,6 +23,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,7 @@ public class AdvisementRecordDaoImpl implements AdvisementRecordDao {
 
     @Override
     @Transactional
+    @PreAuthorize("principal.id == #advisementRecord.advisor.id")
     public AdvisementRecord saveAdvisementRecord(
         AdvisementRecord advisementRecord )
     {

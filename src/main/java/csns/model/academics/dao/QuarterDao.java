@@ -20,15 +20,25 @@ package csns.model.academics.dao;
 
 import java.util.List;
 
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.core.User;
 
 public interface QuarterDao {
 
-    /** Returns the quarters in which the instructor taught any class. */
+    /**
+     * Returns the quarters in which the instructor taught any class.
+     */
     List<Quarter> getQuartersByInstructor( User instructor );
 
-    /** Returns the quarters in which the student took any class. */
+    /**
+     * Returns the quarters in which the student took any class.
+     */
     List<Quarter> getQuartersByStudent( User student );
+
+    /**
+     * Returns the quarters in which there were any sections for the department.
+     */
+    List<Quarter> getSectionQuarters( Department department );
 
 }

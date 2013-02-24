@@ -20,7 +20,6 @@ package csns.web.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,6 +53,7 @@ import csns.model.academics.Section;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.GradeDao;
+import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
@@ -76,6 +76,9 @@ public class DepartmentSectionController {
 
     @Autowired
     SectionDao sectionDao;
+
+    @Autowired
+    QuarterDao quarterDao;
 
     @Autowired
     DepartmentDao departmentDao;
@@ -102,16 +105,14 @@ public class DepartmentSectionController {
         @RequestParam(required = false) Quarter quarter, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
+        List<Quarter> quarters = quarterDao.getSectionQuarters( department );
+
         Quarter currentQuarter = new Quarter();
         if( quarter == null ) quarter = currentQuarter;
-
-        List<Quarter> quarters = new ArrayList<Quarter>();
-        quarters.add( currentQuarter.next() );
-        for( int i = 0; i < 12; ++i )
-        {
-            quarters.add( currentQuarter );
-            currentQuarter = currentQuarter.previous();
-        }
+        if( !quarters.contains( currentQuarter ) )
+            quarters.add( 0, currentQuarter );
+        Quarter nextQuarter = currentQuarter.next();
+        if( !quarters.contains( nextQuarter ) ) quarters.add( 0, nextQuarter );
 
         models.put( "department", department );
         models.put( "quarter", quarter );

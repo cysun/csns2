@@ -24,15 +24,28 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.WebApplicationContext;
 
 import csns.model.academics.Department;
+import csns.model.academics.Project;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
+import csns.model.core.User;
+import csns.web.editor.UserPropertyEditor;
+import csns.web.validator.ProjectValidator;
 
 @Controller
+@SessionAttributes("project")
 public class ProjectController {
 
     @Autowired
@@ -40,6 +53,19 @@ public class ProjectController {
 
     @Autowired
     DepartmentDao departmentDao;
+
+    @Autowired
+    ProjectValidator projectValidator;
+
+    @Autowired
+    WebApplicationContext context;
+
+    @InitBinder
+    public void initBinder( WebDataBinder binder )
+    {
+        binder.registerCustomEditor( User.class,
+            (UserPropertyEditor) context.getBean( "userPropertyEditor" ) );
+    }
 
     @RequestMapping("/department/{dept}/projects")
     public String projects( @PathVariable String dept,
@@ -59,6 +85,42 @@ public class ProjectController {
         models.put( "years", years );
         models.put( "projects", projectDao.getProjects( department, year ) );
         return "department/projects";
+    }
+
+    @RequestMapping("/department/{dept}/project/view")
+    public String view( @PathVariable String dept, @RequestParam Long id,
+        ModelMap models )
+    {
+        models.put( "department", departmentDao.getDepartment( dept ) );
+        models.put( "project", projectDao.getProject( id ) );
+        return "project/view";
+    }
+
+    @RequestMapping(value = "/department/{dept}/project/add",
+        method = RequestMethod.GET)
+    public String add( @PathVariable String dept,
+        @RequestParam(required = false) Integer year, ModelMap models )
+    {
+        Project project = new Project();
+        project.setDepartment( departmentDao.getDepartment( dept ) );
+        if( year != null ) project.setYear( year );
+        models.put( "project", project );
+        return "project/add";
+    }
+
+    @RequestMapping(value = "/department/{dept}/project/add",
+        method = RequestMethod.POST)
+    public String add( @ModelAttribute Project project,
+        @PathVariable String dept, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        projectValidator.validate( project, bindingResult );
+        if( bindingResult.hasErrors() ) return "project/add";
+
+        projectDao.saveProject( project );
+        sessionStatus.setComplete();
+        return "redirect:/department/" + dept + "/projects?year="
+            + project.getYear();
     }
 
 }

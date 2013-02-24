@@ -24,7 +24,8 @@ $(function(){
         placeholder: "&nbsp;",
         width: 80,
         event: "dblclick",
-        submit: "Save"
+        submit: "Save",
+        onblur: "submit"
     });
     $("#gradeLink").click(function(){
        $("#grade").trigger("dblclick"); 
@@ -36,7 +37,8 @@ $(function(){
         type: "textarea",
         rows: 10,
         event: "dblclick",
-        submit: "Save"
+        submit: "Save",
+        onblur: "submit"
     });
     $("#commentsLink").click(function(){
         $("#comments").trigger("dblclick"); 

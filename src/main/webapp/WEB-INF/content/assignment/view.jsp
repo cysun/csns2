@@ -6,6 +6,7 @@
 <script>
 $(function(){
     document.title = "${section.course.code} ${assignment.alias}";
+    $("input[type='text'],textarea").css("background-color", "#f0f0f0");
 });
 </script>
 

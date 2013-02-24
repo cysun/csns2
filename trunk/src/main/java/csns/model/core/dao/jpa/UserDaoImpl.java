@@ -111,6 +111,7 @@ public class UserDaoImpl implements UserDao {
         String query = "from User where cin = :term or lower(username) = :term "
             + "or lower(firstName) = :term or lower(lastName) = :term "
             + "or lower(firstName || ' ' || lastName) = :term "
+            + "or primaryEmail = :term "
             + "order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
@@ -127,6 +128,7 @@ public class UserDaoImpl implements UserDao {
             + "or lower(firstName) like :term || '%' "
             + "or lower(lastName) like :term || '%' "
             + "or lower(firstName || ' ' || lastName) like :term || '%' "
+            + "or primaryEmail like :term || '%' "
             + "order by firstName asc";
 
         return entityManager.createQuery( query, User.class )

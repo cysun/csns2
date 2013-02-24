@@ -299,9 +299,7 @@
 
     create table project_advisors (
         project_id int8 not null,
-        advisor_id int8 not null,
-        advisor_order int4 not null,
-        primary key (project_id, advisor_order)
+        advisor_id int8 not null
     );
 
     create table project_resources (
@@ -358,13 +356,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)

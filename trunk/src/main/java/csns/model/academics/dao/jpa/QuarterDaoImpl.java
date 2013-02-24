@@ -25,6 +25,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
+import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.core.User;
@@ -58,6 +59,19 @@ public class QuarterDaoImpl implements QuarterDao {
 
         return entityManager.createQuery( query, Quarter.class )
             .setParameter( "student", student )
+            .getResultList();
+    }
+
+    @Override
+    public List<Quarter> getSectionQuarters( Department department )
+    {
+        String query = "select distinct s.quarter from Section s, "
+            + "Department d join d.undergraduateCourses c1 join d.graduateCourses c2 "
+            + "where d = :department and (s.course = c1 or s.course = c2) "
+            + "order by s.quarter desc";
+
+        return entityManager.createQuery( query, Quarter.class )
+            .setParameter( "department", department )
             .getResultList();
     }
 

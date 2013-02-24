@@ -700,6 +700,20 @@
         <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/search.jsp" />
     </definition>
 
+    <!-- ======= -->
+    <!-- Project -->
+    <!-- ======= -->
+
+    <definition name="project/view" extends="layout.basic">
+        <put-attribute name="title" value="View Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/view.jsp" />
+    </definition>
+
+    <definition name="project/add" extends="layout.alljs">
+        <put-attribute name="title" value="Add Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/add.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

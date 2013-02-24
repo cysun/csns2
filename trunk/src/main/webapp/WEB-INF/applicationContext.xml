@@ -88,6 +88,7 @@
         <security:intercept-url pattern="/department/*/people" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/section" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/section/import" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/project/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/survey/current" access="permitAll" />
         <security:intercept-url pattern="/department/*/survey/response/edit" access="permitAll" />
         <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />

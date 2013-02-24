@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
 import csns.model.academics.Project;
@@ -65,6 +66,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    @Transactional
     public Project saveProject( Project project )
     {
         return entityManager.merge( project );

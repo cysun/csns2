@@ -55,18 +55,18 @@ public class Project implements Serializable {
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "project_advisors",
-        joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "advisor_id"))
-    @OrderColumn(name = "advisor_order")
-    private List<User> advisors;
-
-    @ManyToMany
     @JoinTable(name = "project_students",
         joinColumns = @JoinColumn(name = "project_id"),
         inverseJoinColumns = @JoinColumn(name = "student_id"))
-    @OrderBy("firstName asc")
+    @OrderBy("lastName asc")
     private List<User> students;
+
+    @ManyToMany
+    @JoinTable(name = "project_advisors",
+        joinColumns = @JoinColumn(name = "project_id"),
+        inverseJoinColumns = @JoinColumn(name = "advisor_id"))
+    @OrderBy("lastName asc")
+    private List<User> advisors;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "project_resources",
@@ -128,16 +128,6 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public List<User> getAdvisors()
-    {
-        return advisors;
-    }
-
-    public void setAdvisors( List<User> advisors )
-    {
-        this.advisors = advisors;
-    }
-
     public List<User> getStudents()
     {
         return students;
@@ -146,6 +136,16 @@ public class Project implements Serializable {
     public void setStudents( List<User> students )
     {
         this.students = students;
+    }
+
+    public List<User> getAdvisors()
+    {
+        return advisors;
+    }
+
+    public void setAdvisors( List<User> advisors )
+    {
+        this.advisors = advisors;
     }
 
     public List<Resource> getResources()

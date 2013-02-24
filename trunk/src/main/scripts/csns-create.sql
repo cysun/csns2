@@ -1038,8 +1038,7 @@ create table projects (
 create table project_advisors (
     project_id      bigint not null references projects(id),
     advisor_id      bigint not null references users(id),
-    advisor_order   bigint not null,
-  primary key (project_id, advisor_order)
+  primary key (project_id, advisor_id)
 );
 
 create table project_students (

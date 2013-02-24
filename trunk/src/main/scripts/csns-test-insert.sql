@@ -166,6 +166,6 @@ insert into wiki_revisions (id, subject, content, author_id, page_id) values
 
 insert into projects (id, name, department_id, year) values
     (1001300, 'Modernize Curriculum Review Workflow', 1000100, 2013);
-insert into project_advisors (project_id, advisor_id, advisor_order) values (1001300, 1000001, 0);
+insert into project_advisors (project_id, advisor_id) values (1001300, 1000001);
 insert into project_students (project_id, student_id) values (1001300, 1000002);
 insert into project_students (project_id, student_id) values (1001300, 1000003);

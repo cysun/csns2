@@ -714,6 +714,11 @@
         <put-attribute name="content" value="/WEB-INF/content/project/add.jsp" />
     </definition>
 
+    <definition name="project/edit" extends="layout.alljs">
+        <put-attribute name="title" value="Edit Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/edit.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

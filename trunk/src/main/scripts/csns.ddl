@@ -318,8 +318,8 @@
         id int8 not null,
         deleted boolean not null,
         description varchar(255),
-        name varchar(255) not null,
         published boolean not null,
+        title varchar(255) not null,
         year int4 not null,
         department_id int8,
         primary key (id)
@@ -359,10 +359,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)

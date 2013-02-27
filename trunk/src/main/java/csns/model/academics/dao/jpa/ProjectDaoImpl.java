@@ -46,7 +46,7 @@ public class ProjectDaoImpl implements ProjectDao {
     public List<Project> getProjects( Department department, int year )
     {
         String query = "from Project where department = :department "
-            + "and year = :year and deleted = false order by name asc";
+            + "and year = :year and deleted = false order by title asc";
 
         return entityManager.createQuery( query, Project.class )
             .setParameter( "department", department )

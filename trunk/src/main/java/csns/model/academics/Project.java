@@ -50,7 +50,7 @@ public class Project implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     private String description;
 
@@ -108,14 +108,14 @@ public class Project implements Serializable {
         this.id = id;
     }
 
-    public String getName()
+    public String getTitle()
     {
-        return name;
+        return title;
     }
 
-    public void setName( String name )
+    public void setTitle( String title )
     {
-        this.name = name;
+        this.title = title;
     }
 
     public String getDescription()

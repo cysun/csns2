@@ -962,6 +962,31 @@ tr th.shrink, tr td.shrink {
     padding-right: 1em;
     white-space: nowrap;
 }
+
+/** Projects **/
+
+.project-title {
+    color: #164FA6;
+    font: 20px Impact, Charcoal, sans-serif;;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.project-members {
+    color: #164FA6;
+    font: 16px 'Trebuchet MS', Arial;
+    font-weight: bold;
+    text-align: center;
+    margin: 5px 0;
+}
+
+.project-advisors {
+    color: #164FA6;
+    font: 16px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 5px 0;
+}
+
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

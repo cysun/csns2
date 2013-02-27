@@ -19,7 +19,7 @@ $(function(){
     });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {
-          toolbar : "Basic"
+          toolbar : "Full"
         });
     });
 });
@@ -34,10 +34,10 @@ $(function(){
 <form:form modelAttribute="project">
 <table class="general">
   <tr>
-    <th class="shrink">Name</th>
+    <th class="shrink">Title</th>
     <td>
-      <form:input path="name" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
-      <div class="error"><form:errors path="name" /></div>
+      <form:input id="prj_title" path="title" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
+      <div class="error"><form:errors path="title" /></div>
     </td>
   </tr>
 

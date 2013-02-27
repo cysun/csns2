@@ -3,23 +3,23 @@
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
 <li><a class="bc" href="<c:url value='/department/${dept}/projects' />">${department.name}</a></li>
-<li>Project</li>
-<li class="align_right"><a href="project/edit?id=${project.id}"><img alt="[Edit Project]"
+<li>${project.title}</li>
+<li class="align_right"><a href="edit?id=${project.id}"><img alt="[Edit Project]"
   title="Edit Project" src="<c:url value='/img/icons/brick_edit.png' />" /></a></li>
 </ul>
 
-<h3>${project.name}</h3>
+<div class="project-title">${project.title}</div>
 
-<h4>
+<div class="project-members">
   <c:forEach items="${project.students}" var="student" varStatus="status">
     ${student.name}<c:if test="${not status.last}">, </c:if>
   </c:forEach>
-</h4>
+</div>
 
-<h4> Advisor(s): 
+<div class="project-advisors"> Advisor(s): 
   <c:forEach items="${project.advisors}" var="advisor" varStatus="status">
     ${advisor.name}<c:if test="${not status.last}">, </c:if>
   </c:forEach>
-</h4>
+</div>
 
 ${project.description}

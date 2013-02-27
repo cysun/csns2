@@ -1027,7 +1027,7 @@ create table course_waivers (
 
 create table projects (
     id              bigint primary key,
-    name            varchar(255) not null,
+    title           varchar(255) not null,
     description     varchar(8000),
     department_id   bigint references departments(id),
     year            integer not null,

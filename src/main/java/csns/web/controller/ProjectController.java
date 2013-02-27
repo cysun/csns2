@@ -117,10 +117,33 @@ public class ProjectController {
         projectValidator.validate( project, bindingResult );
         if( bindingResult.hasErrors() ) return "project/add";
 
-        projectDao.saveProject( project );
+        project = projectDao.saveProject( project );
         sessionStatus.setComplete();
-        return "redirect:/department/" + dept + "/projects?year="
-            + project.getYear();
+        return "redirect:/department/" + dept + "/project/view?id="
+            + project.getId();
+    }
+
+    @RequestMapping(value = "/department/{dept}/project/edit",
+        method = RequestMethod.GET)
+    public String edit( @RequestParam Long id, ModelMap models )
+    {
+        models.put( "project", projectDao.getProject( id ) );
+        return "project/edit";
+    }
+
+    @RequestMapping(value = "/department/{dept}/project/edit",
+        method = RequestMethod.POST)
+    public String edit( @ModelAttribute Project project,
+        @PathVariable String dept, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        projectValidator.validate( project, bindingResult );
+        if( bindingResult.hasErrors() ) return "project/edit";
+
+        project = projectDao.saveProject( project );
+        sessionStatus.setComplete();
+        return "redirect:/department/" + dept + "/project/view?id="
+            + project.getId();
     }
 
 }

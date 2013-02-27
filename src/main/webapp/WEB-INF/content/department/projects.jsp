@@ -36,7 +36,7 @@ $(function(){
 </tr>
 <c:forEach items="${projects}" var="project">
 <tr <c:if test="${not project.published}">style="color: gray;"</c:if>>
-  <td><a href="project/view?id=${project.id}">${project.name}</a></td>
+  <td><a href="project/view?id=${project.id}">${project.title}</a></td>
   <td style="width: 250px;">
     <c:forEach items="${project.students}" var="student" varStatus="status">
       ${student.name}<c:if test="${not status.last}">, </c:if>

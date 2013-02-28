@@ -967,7 +967,7 @@ tr th.shrink, tr td.shrink {
 
 .project-title {
     color: #164FA6;
-    font: 20px Impact, Charcoal, sans-serif;;
+    font: 20px Impact, Charcoal, sans-serif;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -987,6 +987,15 @@ tr th.shrink, tr td.shrink {
     margin: 5px 0;
 }
 
+.project-resource-title {
+    color: #164FA6;
+    font-size: 16px;
+    font-weight: bold;
+    background:#eeeeee url(../img/style/general_bg.gif) repeat-x bottom center;
+    width: 350px;
+    padding: 5px;
+    margin: 20px 0px;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

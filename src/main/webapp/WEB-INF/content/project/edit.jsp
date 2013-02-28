@@ -50,7 +50,7 @@ function deleteadvisors( memberId )
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
 <li><a class="bc" href="../projects">${project.department.name}</a></li>
-<li><a class="bc" href="../project/view?id=${project.id}"><csns:truncate value="${project.title}" length="40" /></a></li>
+<li><a class="bc" href="../project/view?id=${project.id}"><csns:truncate value="${project.title}" length="50" /></a></li>
 <li>Edit</li>
 </ul>
 

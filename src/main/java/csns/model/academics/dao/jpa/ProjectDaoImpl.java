@@ -23,6 +23,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +58,8 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public List<Integer> getProjectYears( Department department )
     {
-        String query = "select year from Project where department = :department "
-            + "order by year desc";
+        String query = "select distinct year from Project "
+            + "where department = :department order by year desc";
 
         return entityManager.createQuery( query, Integer.class )
             .setParameter( "department", department )
@@ -67,6 +68,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     @Transactional
+    @PreAuthorize("authenticated and (principal.faculty or #project.id != null and #project.isMember(principal))")
     public Project saveProject( Project project )
     {
         return entityManager.merge( project );

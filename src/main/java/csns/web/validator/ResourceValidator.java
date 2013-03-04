@@ -21,7 +21,9 @@ package csns.web.validator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
@@ -38,8 +40,10 @@ public class ResourceValidator implements Validator {
     @Override
     public void validate( Object target, Errors errors )
     {
-        Resource resource = (Resource) target;
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
+            "error.field.required" );
 
+        Resource resource = (Resource) target;
         if( resource.getType() != ResourceType.NONE )
         {
             switch( resource.getType() )
@@ -58,6 +62,17 @@ public class ResourceValidator implements Validator {
                     // file upload is not validated.
             }
         }
+    }
+
+    public void validate( Resource resource, MultipartFile uploadedFile,
+        Errors errors )
+    {
+        validate( resource, errors );
+
+        if( resource.getType() == ResourceType.FILE
+            && resource.getFile() == null
+            && (uploadedFile == null || uploadedFile.isEmpty()) )
+            errors.rejectValue( "file", "error.field.required" );
     }
 
 }

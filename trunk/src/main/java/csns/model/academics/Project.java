@@ -21,6 +21,7 @@ package csns.model.academics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -96,6 +97,65 @@ public class Project implements Serializable {
         year = Calendar.getInstance().get( Calendar.YEAR );
         published = false;
         deleted = false;
+    }
+
+    public boolean isMember( User user )
+    {
+        return isStudent( user ) || isAdvisor( user );
+    }
+
+    public boolean isStudent( User user )
+    {
+        if( user == null ) return false;
+
+        for( User student : students )
+            if( student.getId().equals( user.getId() ) ) return true;
+
+        return false;
+    }
+
+    public boolean isAdvisor( User user )
+    {
+        if( user == null ) return false;
+
+        for( User advisor : advisors )
+            if( advisor.getId().equals( user.getId() ) ) return true;
+
+        return false;
+    }
+
+    public Resource getResource( Long resourceId )
+    {
+        for( Resource resource : resources )
+            if( resource.getId().equals( resourceId ) ) return resource;
+
+        return null;
+    }
+
+    public Resource removeResource( Long resourceId )
+    {
+        Iterator<Resource> iterator = resources.iterator();
+        while( iterator.hasNext() )
+        {
+            Resource resource = iterator.next();
+            if( resource.getId().equals( resourceId ) )
+            {
+                iterator.remove();
+                return resource;
+            }
+        }
+
+        return null;
+    }
+
+    public void replaceResource( Resource resource )
+    {
+        for( int i = 0; i < resources.size(); ++i )
+            if( resources.get( i ).getId().equals( resource.getId() ) )
+            {
+                resources.set( i, resource );
+                return;
+            }
     }
 
     public Long getId()

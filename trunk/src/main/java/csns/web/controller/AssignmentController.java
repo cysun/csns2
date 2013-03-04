@@ -111,7 +111,7 @@ public class AssignmentController {
     {
         Assignment assignment = new Assignment();
         assignment.setSection( sectionDao.getSection( sectionId ) );
-        assignment.setDescription( new Resource() );
+        assignment.setDescription( new Resource( "Assignment Description" ) );
         models.put( "assignment", assignment );
         models.put( "resourceTypes", ResourceType.values() );
         return "assignment/create";

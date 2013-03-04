@@ -704,7 +704,7 @@
     <!-- Project -->
     <!-- ======= -->
 
-    <definition name="project/view" extends="layout.basic">
+    <definition name="project/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Project" />
         <put-attribute name="content" value="/WEB-INF/content/project/view.jsp" />
     </definition>
@@ -717,6 +717,21 @@
     <definition name="project/edit" extends="layout.alljs">
         <put-attribute name="title" value="Edit Project" />
         <put-attribute name="content" value="/WEB-INF/content/project/edit.jsp" />
+    </definition>
+
+    <definition name="project/resource/view" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/view.jsp" />
+    </definition>
+
+    <definition name="project/resource/add" extends="layout.editor">
+        <put-attribute name="title" value="Add Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/add.jsp" />
+    </definition>
+
+    <definition name="project/resource/edit" extends="layout.editor">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/edit.jsp" />
     </definition>
 
     <!-- ======== -->

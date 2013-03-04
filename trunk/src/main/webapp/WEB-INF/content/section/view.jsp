@@ -24,8 +24,8 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/search' />">Sections</a></li>
-<c:if test="${not empty department}">
-<li><a class="bc" href="<c:url value='/department/${dept}/sections?quarter=${section.quarter.code}' />">${department.name}</a></li>
+<c:if test="${not empty dept}">
+  <li><a class="bc" href="<c:url value='/department/${dept}/sections?quarter=${section.quarter.code}' />">${fn:toUpperCase(dept)}</a></li>
 </c:if>
 <li>${section.course.code}, ${section.quarter}</li>
 <li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Students"

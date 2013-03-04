@@ -76,6 +76,7 @@ function help( name )
       <form:select path="description.type">
         <form:options items="${resourceTypes}" />
       </form:select>
+    </td>
   </tr>
 
   <tr id="resTEXT" class="res">

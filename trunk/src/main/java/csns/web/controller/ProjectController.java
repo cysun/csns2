@@ -21,6 +21,8 @@ package csns.web.controller;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,6 +43,7 @@ import csns.model.academics.Project;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
 import csns.model.core.User;
+import csns.security.SecurityUtils;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.ProjectValidator;
 
@@ -59,6 +62,8 @@ public class ProjectController {
 
     @Autowired
     WebApplicationContext context;
+
+    private static final Logger logger = LoggerFactory.getLogger( ProjectController.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -84,6 +89,7 @@ public class ProjectController {
         models.put( "year", year );
         models.put( "years", years );
         models.put( "projects", projectDao.getProjects( department, year ) );
+        models.put( "user", SecurityUtils.getUser() );
         return "department/projects";
     }
 
@@ -93,6 +99,7 @@ public class ProjectController {
     {
         models.put( "department", departmentDao.getDepartment( dept ) );
         models.put( "project", projectDao.getProject( id ) );
+        models.put( "user", SecurityUtils.getUser() );
         return "project/view";
     }
 
@@ -119,6 +126,9 @@ public class ProjectController {
 
         project = projectDao.saveProject( project );
         sessionStatus.setComplete();
+        logger.info( SecurityUtils.getUser().getUsername() + " added project "
+            + project.getId() );
+
         return "redirect:/department/" + dept + "/project/view?id="
             + project.getId();
     }
@@ -128,6 +138,7 @@ public class ProjectController {
     public String edit( @RequestParam Long id, ModelMap models )
     {
         models.put( "project", projectDao.getProject( id ) );
+        models.put( "user", SecurityUtils.getUser() );
         return "project/edit";
     }
 
@@ -142,8 +153,35 @@ public class ProjectController {
 
         project = projectDao.saveProject( project );
         sessionStatus.setComplete();
+        logger.info( SecurityUtils.getUser().getUsername() + " edited project "
+            + project.getId() );
+
         return "redirect:/department/" + dept + "/project/view?id="
             + project.getId();
+    }
+
+    @RequestMapping("/department/{dept}/project/publish")
+    public String publish( @PathVariable String dept, @RequestParam Long id )
+    {
+        Project project = projectDao.getProject( id );
+        project.setPublished( true );
+        project = projectDao.saveProject( project );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " published project " + project.getId() );
+
+        return "redirect:/department/" + dept + "/project/view?id=" + id;
+    }
+
+    @RequestMapping("/department/{dept}/project/delete")
+    public String delete( @PathVariable String dept, @RequestParam Long id )
+    {
+        Project project = projectDao.getProject( id );
+        project.setDeleted( true );
+        project = projectDao.saveProject( project );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted project " + project.getId() );
+
+        return "redirect:/department/" + dept + "/projects";
     }
 
 }

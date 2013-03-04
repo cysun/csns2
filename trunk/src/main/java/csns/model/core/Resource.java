@@ -54,6 +54,11 @@ public class Resource implements Serializable {
     {
     }
 
+    public Resource( String name )
+    {
+        this.name = name;
+    }
+
     public Resource clone()
     {
         Resource resource = new Resource();

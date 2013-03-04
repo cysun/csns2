@@ -35,6 +35,7 @@ $(function(){
   <th>Project</th><th>Students</th><th>Advisors</th>
 </tr>
 <c:forEach items="${projects}" var="project">
+<c:if test="${project.published or user.isFaculty(dept) or project.isMember(user)}">
 <tr <c:if test="${not project.published}">style="color: gray;"</c:if>>
   <td><a href="project/view?id=${project.id}">${project.title}</a></td>
   <td style="width: 250px;">
@@ -48,6 +49,7 @@ $(function(){
     </c:forEach>
   </td>
 </tr>
+</c:if>
 </c:forEach>
 </table>
 </c:if>

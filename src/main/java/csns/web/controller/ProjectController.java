@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -70,6 +71,17 @@ public class ProjectController {
     {
         binder.registerCustomEditor( User.class,
             (UserPropertyEditor) context.getBean( "userPropertyEditor" ) );
+    }
+
+    @RequestMapping(value = "/project/search")
+    public String search( @RequestParam(required = false) String term,
+        ModelMap models )
+    {
+        List<Project> projects = null;
+        if( StringUtils.hasText( term ) )
+            projects = projectDao.searchProjects( term, 30 );
+        models.addAttribute( "projects", projects );
+        return "project/search";
     }
 
     @RequestMapping("/department/{dept}/projects")

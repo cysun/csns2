@@ -1035,6 +1035,22 @@ create table projects (
     deleted         boolean not null default 'f'
 );
 
+alter table projects add column tsv tsvector;
+
+create function projects_ts_trigger_function() returns trigger as $$
+begin
+    new.tsv := setweight(to_tsvector(new.title), 'A') ||
+               setweight(to_tsvector(coalesce(new.description, '')), 'D');
+    return new;
+end
+$$ language plpgsql;
+
+create trigger projects_ts_trigger
+    before insert or update on projects
+    for each row execute procedure projects_ts_trigger_function();
+
+create index projects_ts_index on projects using gin(tsv);
+
 create table project_advisors (
     project_id      bigint not null references projects(id),
     advisor_id      bigint not null references users(id),

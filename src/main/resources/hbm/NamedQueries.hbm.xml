@@ -54,6 +54,15 @@ select a.* from assignments a
 ]]>
     </sql-query>
 
+    <sql-query name="project.search">
+        <return class="csns.model.academics.Project" />
+<![CDATA[
+select * from projects where published = 't' and deleted = 'f' and
+    plainto_tsquery(:term) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+]]>
+    </sql-query>
+
     <sql-query name="subscribed.system.forums">
         <return class="csns.model.forum.Forum" />
 <![CDATA[

@@ -704,6 +704,11 @@
     <!-- Project -->
     <!-- ======= -->
 
+    <definition name="project/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Projects" />
+        <put-attribute name="content" value="/WEB-INF/content/project/search.jsp" />
+    </definition>
+
     <definition name="project/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Project" />
         <put-attribute name="content" value="/WEB-INF/content/project/view.jsp" />

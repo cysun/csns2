@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -64,6 +65,15 @@ public class ProjectDaoImpl implements ProjectDao {
         return entityManager.createQuery( query, Integer.class )
             .setParameter( "department", department )
             .getResultList();
+    }
+
+    @Override
+    public List<Project> searchProjects( String term, int maxResults )
+    {
+        TypedQuery<Project> query = entityManager.createNamedQuery(
+            "project.search", Project.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

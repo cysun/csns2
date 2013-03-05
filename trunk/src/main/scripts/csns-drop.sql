@@ -11,6 +11,8 @@ drop function quarter(date);
 drop table project_resources;
 drop table project_students;
 drop table project_advisors;
+drop trigger projects_ts_trigger on projects;
+drop function projects_ts_trigger_function();
 drop table projects;
 
 drop table course_waivers;

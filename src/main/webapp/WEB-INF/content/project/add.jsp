@@ -19,7 +19,7 @@ $(function(){
     });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {
-          toolbar : "Full"
+          toolbar : "Default"
         });
     });
 });
@@ -27,7 +27,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
-<li><a class="bc" href="../projects">${project.department.name}</a></li>
+<li><a class="bc" href="../projects?year=${project.year}">${project.department.name}</a></li>
 <li>Add Project</li>
 </ul>
 

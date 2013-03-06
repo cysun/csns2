@@ -28,7 +28,7 @@ function deleteResource()
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
-<li><a class="bc" href="../../projects">${fn:toUpperCase(dept)}</a></li>
+<li><a class="bc" href="../../projects?year=${project.year}">${fn:toUpperCase(dept)}</a></li>
 <li><a class="bc" href="../view?id=${project.id}"><csns:truncate value="${project.title}" length="60" /></a></li>
 <li>Edit Resource</li>
 <li class="align_right"><a href="javascript:deleteResource()"><img alt="[Delete Resource]"

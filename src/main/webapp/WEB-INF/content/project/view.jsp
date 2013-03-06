@@ -27,7 +27,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
-<li><a class="bc" href="<c:url value='/department/${dept}/projects' />">${fn:toUpperCase(dept)}</a></li>
+<li><a class="bc" href="../projects?year=${project.year}">${fn:toUpperCase(dept)}</a></li>
 <li><csns:truncate value="${project.title}" length="80" /></li>
 <c:if test="${project.isMember(user) or user.isFaculty(dept)}">
 <li class="align_right"><a href="edit?id=${project.id}"><img alt="[Edit Project]"

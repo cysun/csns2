@@ -30,7 +30,7 @@ $(function(){
     });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {
-          toolbar : "Full"
+          toolbar : "Default"
         });
     });
 });
@@ -56,8 +56,8 @@ function deleteProject()
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
-<li><a class="bc" href="../projects">${fn:toUpperCase(dept)}</a></li>
-<li><a class="bc" href="../project/view?id=${project.id}"><csns:truncate value="${project.title}" length="70" /></a></li>
+<li><a class="bc" href="../projects?year=${project.year}">${fn:toUpperCase(dept)}</a></li>
+<li><a class="bc" href="view?id=${project.id}"><csns:truncate value="${project.title}" length="70" /></a></li>
 <li>Edit</li>
 <c:if test="${project.isAdvisor(user) or user.isFaculty(dept)}">
 <li class="align_right"><a href="javascript:deleteProject()"><img alt="[Delete Project]"

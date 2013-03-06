@@ -4,7 +4,7 @@
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/project/search' />">Projects</a></li>
-<li><a class="bc" href="<c:url value='/department/${dept}/projects' />">${fn:toUpperCase(dept)}</a></li>
+<li><a class="bc" href="<c:url value='/department/${dept}/projects?year=${project.year}' />">${fn:toUpperCase(dept)}</a></li>
 <li><a class="bc" href="<c:url value='/department/${dept}/project/view?id=${project.id}' />"><csns:truncate
   value="${project.title}" length="20" /></a></li>
 <li><csns:truncate value="${resource.name}" length="50" /></li>

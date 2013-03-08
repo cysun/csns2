@@ -155,6 +155,8 @@ public class AssignmentController {
     public String edit( @RequestParam Long id, ModelMap models )
     {
         Assignment assignment = assignmentDao.getAssignment( id );
+        if( assignment.getDescription() == null )
+            assignment.setDescription( new Resource( "Assignment Description" ) );
         models.put( "assignment", assignment );
         return assignment.isOnline() ? "assignment/online/edit"
             : "assignment/edit";

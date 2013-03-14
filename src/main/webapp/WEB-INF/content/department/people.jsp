@@ -49,10 +49,10 @@ $(function(){
     );
     $("#email").click(function(){
         var form = "#" + $(".ui-tabs-panel:not(.ui-tabs-hide)").attr("id") + "Form";
-        if( $(form).find(":checkbox[name='userId']:checked").length == 0 )
-            alert( "Please select the user(s) to contact." );
+        if( $(form).find(":checkbox[name='userId']:checked").length  > 0 )
+            $(form).attr("action", "<c:url value='/email/compose' />").submit();
         else
-             $(form).attr("action", "<c:url value='/email/compose' />").submit();            
+            window.location.href = "<c:url value='/email/compose?backUrl=/department/${dept}/people' />";
     });
 });
 function email( userId )
@@ -66,7 +66,7 @@ function email( userId )
 <ul id="title">
 <li><a class="bc" href="<c:url value='/user/search' />">Users</a></li>
 <li>${department.name}</li>
-<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email User(s)"
+<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Users"
     alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add"
     alt="[Add]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>

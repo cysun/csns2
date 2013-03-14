@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="backUrl" value="${param.backUrl}" />
 <c:if test="${empty backUrl}">
@@ -8,11 +9,40 @@
 
 <script>
 $(function(){
+    $(".add").autocomplete({
+        source: "<c:url value='/autocomplete/user' />",
+        select: function(event, ui) {
+            if( ui.item )
+            {
+                $("<span>").attr({
+                    id: $(this).attr("id") + "-" + ui.item.id
+                }).append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "userId",
+                        value: ui.item.id
+                    })
+                ).append(
+                    $("<a>").attr({
+                        href: "javascript:delete" + $(this).attr("id") + "(" + ui.item.id + ")"
+                    }).text(ui.item.value)
+                ).append(", ").insertBefore($(this));
+                event.preventDefault();
+                $(this).val("");
+            }
+        }
+    });
     $("#cancel").click(function(event){
        event.preventDefault();
        window.location.href = "<c:url value='${backUrl}' />";
     });
 });
+function deleterecipient( recipientId )
+{
+    var msg = "Are you sure you want to remove this recipient?";
+    if( confirm(msg) )
+      $("#recipient-"+recipientId).remove();
+}
 function addAttachment()
 {
     $("#attachments").append("<br /><input name='file' class='leftinput' style='width: 100%;' type='file' size='75' />");
@@ -31,11 +61,14 @@ function addAttachment()
   </tr>
   <tr>
     <th>To</th>
-    <td>
+    <td style="line-height: 200%;">
       <c:forEach items="${email.recipients}" var="recipient" varStatus="status">
-      ${recipient.name}<c:if test="${not status.last}">, </c:if>
-      <input name="userId" type="hidden" value="${recipient.id}" />
+        <span id="recipient-${recipient.id}">
+          <csns:verify user="${recipient}">${recipient.name}</csns:verify>,
+          <input name="userId" type="hidden" value="${recipient.id}" />
+        </span>
       </c:forEach>
+      <input id="recipient" type="text" class="forminput add" name="r" style="width: 150px;" />
       <div class="error"><form:errors path="recipients" /></div>
     </td>
   </tr>

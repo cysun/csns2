@@ -27,10 +27,10 @@ $(function(){
 
 <ul id="title">
 <li>Users</li>
+<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Users"
+    alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a href="add"><img title="Add User" alt="[Add User]"
     src="<c:url value='/img/icons/user_add.png' />" /></a></li>
-<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email User(s)"
-    alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 </ul>
 
 <form action="search" method="get">

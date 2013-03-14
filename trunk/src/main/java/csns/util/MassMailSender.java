@@ -28,6 +28,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import csns.model.core.AbstractMessage;
 import csns.model.core.Subscribable;
@@ -74,7 +75,8 @@ public class MassMailSender {
                 {
                     logger.warn( e.getMessage() );
                 }
-                logger.debug( "sent email to " + bccAddresses.toString() );
+                logger.debug( "sent email to "
+                    + StringUtils.collectionToCommaDelimitedString( bccAddresses ) );
                 bccAddresses.clear();
             }
         }

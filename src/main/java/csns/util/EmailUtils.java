@@ -154,7 +154,7 @@ public class EmailUtils {
         mailSender.send( message );
 
         logger.info( email.getAuthor().getUsername() + " sent email to "
-            + addresses.toString() );
+            + StringUtils.arrayToCommaDelimitedString( addresses ) );
 
         return true;
     }
@@ -184,7 +184,7 @@ public class EmailUtils {
             mailSender.send( message );
 
             logger.info( email.getAuthor().getUsername() + " sent email to "
-                + addresses.toString() );
+                + StringUtils.arrayToCommaDelimitedString( addresses ) );
 
             return true;
         }

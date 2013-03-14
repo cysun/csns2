@@ -65,11 +65,12 @@ public class EmailUtils {
         List<String> addresses = new ArrayList<String>();
         for( User user : users )
         {
+            String email = user.getPrimaryEmail();
             if( useSecondaryEmail
                 && StringUtils.hasText( user.getSecondaryEmail() ) )
-                addresses.add( user.getSecondaryEmail() );
-            else
-                addresses.add( user.getPrimaryEmail() );
+                email = user.getSecondaryEmail();
+
+            if( !email.endsWith( "@localhost" ) ) addresses.add( email );
         }
         return addresses;
     }

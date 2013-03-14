@@ -7,14 +7,23 @@ $(function(){
         source: "<c:url value='/autocomplete/user' />",
         select: function(event, ui) {
             if( ui.item )
-            	$("<input>").attr({
-            	    type: "hidden",
-            	    name: $(this).attr("id"),
-            	    value: ui.item.id
-            	}).appendTo("form");
-            event.preventDefault();
-            $(this).before(ui.item.value + ", ");
-            $(this).val("");
+            {
+                $("<span>").attr({
+                    id: $(this).attr("id") + "-" + ui.item.id
+                }).append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: $(this).attr("id"),
+                        value: ui.item.id
+                    })
+                ).append(
+                    $("<a>").attr({
+                        href: "javascript:delete" + $(this).attr("id") + "(" + ui.item.id + ")"
+                    }).text(ui.item.value)
+                ).append(", ").insertBefore($(this));
+                event.preventDefault();
+                $(this).val("");
+            }
         }
     });
     $("textarea").each(function(){
@@ -23,6 +32,12 @@ $(function(){
         });
     });
 });
+function deletestudents( memberId )
+{
+    var msg = "Are you sure you want to remove this student?";
+    if( confirm(msg) )
+      $("#students-"+memberId).remove();
+}
 </script>
 
 <ul id="title">

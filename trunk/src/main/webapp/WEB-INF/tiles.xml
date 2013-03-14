@@ -749,7 +749,7 @@
     <!-- Email -->
     <!-- ===== -->
 
-    <definition name="email/compose" extends="layout.basic">
+    <definition name="email/compose" extends="layout.jqueryui">
         <put-attribute name="title" value="Compose Email" />
         <put-attribute name="content" value="/WEB-INF/content/email/compose.jsp" />
     </definition>

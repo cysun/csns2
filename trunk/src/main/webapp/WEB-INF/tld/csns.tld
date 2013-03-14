@@ -96,6 +96,11 @@
         <path>/WEB-INF/tags/fileBreadcrumbs.tag</path>
     </tag-file>
 
+    <tag-file>
+        <name>verify</name>
+        <path>/WEB-INF/tags/verify.tag</path>
+    </tag-file>
+
     <function>
         <name>isSelectionCorrect</name>
         <function-class>csns.web.tag.Functions</function-class>

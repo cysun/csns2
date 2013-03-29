@@ -41,11 +41,13 @@ $(function(){
 <li class="align_right"><a href="roster/export?id=${section.id}"><img title="Export to Excel"
     alt="[Export to Excel]" src="<c:url value='/img/icons/export_excel.png' />" /></a></li>
 <li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Students"
-    alt="[Email Student(s)]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
+    alt="[Email Students]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a id="drop" href="javascript:void(0)"><img title="Drop Students"
-    alt="[Drop Student(s)]" src="<c:url value='/img/icons/user_delete.png' />" /></a></li>
+    alt="[Drop Students]" src="<c:url value='/img/icons/user_delete.png' />" /></a></li>
 <li class="align_right"><a href="roster/import?sectionId=${section.id}"><img title="Add Students"
-    alt="[Add Student(s)]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
+    alt="[Add Students]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
+<li class="align_right"><a href="email?sectionId=${section.id}"><img title="Send Grades"
+    alt="[Send Grades]" src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 </ul>
 
 <p>Total Students: ${fn:length(gradeSheet.studentGrades)}</p>

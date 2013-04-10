@@ -528,7 +528,7 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/response/view.jsp" />
     </definition>
 
-    <definition name="survey/response/list" extends="layout.basic">
+    <definition name="survey/response/list" extends="layout.jqueryui">
         <put-attribute name="title" value="List of Survey Responses" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
     </definition>

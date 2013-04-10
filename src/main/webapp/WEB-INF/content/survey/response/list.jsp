@@ -3,6 +3,12 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
+<script>
+$(function(){
+    $("table").tablesorter();
+});
+</script>
+
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="../results?id=${survey.id}"><csns:truncate
@@ -44,12 +50,15 @@
 
 <c:if test="${fn:length(answerSheets) > 0}">
 <table class="viewtable autowidth">
+<thead>
   <tr>
 <c:if test="${survey.type == 'NAMED'}">
     <th>CIN</th><th>Name</th>
 </c:if>
     <th>Response ID</th><th>Timestamp</th>
   </tr>
+</thead>
+<tbody>
 <c:forEach items="${answerSheets}" var="answerSheet">
   <tr>
 <c:if test="${survey.type == 'NAMED'}">
@@ -62,5 +71,6 @@
     </td>
   </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>

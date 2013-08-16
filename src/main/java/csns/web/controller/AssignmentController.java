@@ -23,7 +23,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -32,52 +31,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
-import csns.model.core.Resource;
-import csns.model.core.ResourceType;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
-import csns.web.editor.CalendarPropertyEditor;
-import csns.web.validator.AssignmentValidator;
 
 @Controller
-@SessionAttributes("assignment")
 public class AssignmentController {
 
     @Autowired
-    SectionDao sectionDao;
+    SectionDao                  sectionDao;
 
     @Autowired
-    AssignmentDao assignmentDao;
+    AssignmentDao               assignmentDao;
 
     @Autowired
-    AssignmentValidator assignmentValidator;
+    FileIO                      fileIO;
 
-    @Autowired
-    FileIO fileIO;
-
-    private static final Logger logger = LoggerFactory.getLogger( AssignmentController.class );
-
-    @InitBinder
-    public void initBinder( WebDataBinder binder )
-    {
-        binder.registerCustomEditor( Calendar.class,
-            new CalendarPropertyEditor() );
-    }
+    private static final Logger logger = LoggerFactory
+                                           .getLogger( AssignmentController.class );
 
     @RequestMapping("/assignment/view")
     public String view( @RequestParam Long id, ModelMap models,
@@ -106,39 +83,6 @@ public class AssignmentController {
         }
     }
 
-    @RequestMapping(value = "/assignment/create", method = RequestMethod.GET)
-    public String create( @RequestParam Long sectionId, ModelMap models )
-    {
-        Assignment assignment = new Assignment();
-        assignment.setSection( sectionDao.getSection( sectionId ) );
-        assignment.setDescription( new Resource( "Assignment Description" ) );
-        models.put( "assignment", assignment );
-        models.put( "resourceTypes", ResourceType.values() );
-        return "assignment/create";
-    }
-
-    @RequestMapping(value = "/assignment/create", method = RequestMethod.POST)
-    public String create(
-        @ModelAttribute Assignment assignment,
-        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        assignmentValidator.validate( assignment, uploadedFile, result );
-        if( result.hasErrors() ) return "assignment/create";
-
-        Resource description = assignment.getDescription();
-        if( description.getType() == ResourceType.NONE )
-            assignment.setDescription( null );
-        else if( description.getType() == ResourceType.FILE )
-            description.setFile( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), false ) );
-
-        assignment = assignmentDao.saveAssignment( assignment );
-        sessionStatus.setComplete();
-        return "redirect:/section/taught#section-"
-            + assignment.getSection().getId();
-    }
-
     @RequestMapping("/assignment/clone")
     public String clone( @RequestParam Long sectionId,
         @RequestParam Long assignmentId )
@@ -148,49 +92,12 @@ public class AssignmentController {
         Assignment newAssignment = oldAssignment.clone();
         newAssignment.setSection( section );
         newAssignment = assignmentDao.saveAssignment( newAssignment );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " cloned assignment " + newAssignment.getId() + " from "
+            + oldAssignment.getId() );
+
         return "redirect:/assignment/edit?id=" + newAssignment.getId();
-    }
-
-    @RequestMapping(value = "/assignment/edit", method = RequestMethod.GET)
-    public String edit( @RequestParam Long id, ModelMap models )
-    {
-        Assignment assignment = assignmentDao.getAssignment( id );
-        if( assignment.getDescription() == null )
-            assignment.setDescription( new Resource( "Assignment Description" ) );
-        models.put( "assignment", assignment );
-        return assignment.isOnline() ? "assignment/online/edit"
-            : "assignment/edit";
-    }
-
-    @RequestMapping(value = "/assignment/edit", method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute Assignment assignment,
-        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
-        HttpServletRequest request, BindingResult result,
-        SessionStatus sessionStatus )
-    {
-        assignmentValidator.validate( assignment, uploadedFile, result );
-        if( result.hasErrors() )
-            return assignment.isOnline() ? "assignment/online/edit"
-                : "assignment/edit";
-
-        if( !assignment.isOnline() )
-        {
-            Resource description = assignment.getDescription();
-            if( description.getType() == ResourceType.NONE )
-                assignment.setDescription( null );
-            else if( description.getType() == ResourceType.FILE
-                && uploadedFile != null && !uploadedFile.isEmpty() )
-                description.setFile( fileIO.save( uploadedFile,
-                    SecurityUtils.getUser(), false ) );
-        }
-
-        assignment = assignmentDao.saveAssignment( assignment );
-        sessionStatus.setComplete();
-        return assignment.isOnline() && request.getParameter( "next" ) != null
-            ? "redirect:/assignment/online/editQuestionSheet?assignmentId="
-                + assignment.getId() : "redirect:/section/taught#section-"
-                + assignment.getSection().getId();
     }
 
     @RequestMapping("/assignment/delete")
@@ -198,7 +105,10 @@ public class AssignmentController {
     {
         Assignment assignment = assignmentDao.getAssignment( id );
         assignment.setDeleted( true );
-        assignmentDao.saveAssignment( assignment );
+        assignment = assignmentDao.saveAssignment( assignment );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted assignment " + assignment.getId() );
 
         return "redirect:/section/taught#section-"
             + assignment.getSection().getId();
@@ -213,6 +123,9 @@ public class AssignmentController {
         {
             assignment.setPublishDate( Calendar.getInstance() );
             assignment = assignmentDao.saveAssignment( assignment );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " published assignment " + assignment.getId() );
         }
 
         DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm a" );
@@ -231,10 +144,15 @@ public class AssignmentController {
         models.put( "section", section );
 
         if( StringUtils.hasText( term ) )
+        {
             models.put(
                 "results",
                 assignmentDao.searchAssignments( term, "REGULAR",
                     SecurityUtils.getUser(), 20 ) );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " searched assignments with [" + term + "]" );
+        }
 
         return "assignment/search";
     }

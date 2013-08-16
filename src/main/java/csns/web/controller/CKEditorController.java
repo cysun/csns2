@@ -18,6 +18,8 @@
  */
 package csns.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,10 +37,13 @@ import csns.util.FileIO;
 public class CKEditorController {
 
     @Autowired
-    FileDao fileDao;
+    FileDao                     fileDao;
 
     @Autowired
-    FileIO fileIO;
+    FileIO                      fileIO;
+
+    private static final Logger logger = LoggerFactory
+                                           .getLogger( CKEditorController.class );
 
     @RequestMapping("/ckeditor/upload")
     public String upload( @RequestParam("upload") MultipartFile uploadedFile,
@@ -47,6 +52,9 @@ public class CKEditorController {
         User user = SecurityUtils.getUser();
         File parent = fileDao.getCKEditorFolder( user );
         File file = fileIO.save( uploadedFile, user, parent, true );
+
+        logger.info( user.getUsername() + " uploaded (via CKEditor) file "
+            + file.getId() );
 
         models.put( "file", file );
         return "ckeditor/upload";

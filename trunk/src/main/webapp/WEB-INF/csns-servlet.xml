@@ -55,6 +55,10 @@
         <property name="defaultErrorView" value="exception/default" />
     </bean>
 
+    <!-- See http://duckranger.com/2012/11/add-conversation-support-to-spring-mvc/ -->
+    <bean id="conversationalSessionAttributeStore" class="csns.web.support.ConversationalSessionAttributeStore" />
+    <bean name="requestDataValueProcessor" class="csns.web.support.ConversationIdRequestProcessor" />
+
     <security:global-method-security pre-post-annotations="enabled" />
 
     <context:component-scan base-package="csns" use-default-filters="false">

@@ -26,7 +26,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
@@ -39,7 +38,6 @@ import csns.model.mailinglist.dao.MessageDao;
 import csns.security.SecurityUtils;
 
 @Controller
-@SessionAttributes("message")
 public class MailinglistController {
 
     @Autowired

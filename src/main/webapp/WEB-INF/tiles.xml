@@ -26,7 +26,7 @@
             <add-attribute value="${jquery.plugins}/jquery.jeditable.mini.js" />
             <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
-            <add-attribute value="${jquery.plugins}/jquery.tablesorter.js" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
         </put-list-attribute>
     </definition>
@@ -40,7 +40,7 @@
             <add-attribute value="${jquery.plugins}/jquery.jeditable.mini.js" />
             <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
-            <add-attribute value="${jquery.plugins}/jquery.tablesorter.js" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
         </put-list-attribute>
     </definition>

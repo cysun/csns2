@@ -7,14 +7,10 @@
 <script>
 $(function(){
     $("#publishDate").datetimepicker({
-        inline: true,
-        showSecond: true,
-        timeFormat: 'hh:mm:ss'
+        timeFormat: 'HH:mm:ss'
     });
     $('#dueDate').datetimepicker({
-        inline: true,
-        showSecond: true,
-        timeFormat: 'hh:mm:ss'
+        timeFormat: 'HH:mm:ss'
     });
     $(".res").hide();
     if($("#description\\.type").val() != "None")

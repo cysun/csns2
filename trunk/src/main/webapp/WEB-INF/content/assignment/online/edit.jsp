@@ -7,14 +7,10 @@
 <script>
 $(function(){
     $("#publishDate").datetimepicker({
-        inline: true,
-        showSecond: true,
-        timeFormat: 'hh:mm:ss'
+        timeFormat: 'HH:mm:ss'
     });
     $('#dueDate').datetimepicker({
-        inline: true,
-        showSecond: true,
-        timeFormat: 'hh:mm:ss'
+        timeFormat: 'HH:mm:ss'
     });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {

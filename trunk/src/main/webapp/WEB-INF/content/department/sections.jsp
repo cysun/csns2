@@ -32,12 +32,15 @@ $(function(){
 
 <c:if test="${fn:length(sections) > 0}">
 <table class="viewtable">
+<thead>
 <tr>
   <th>Code</th><th>Name</th><th>Instructor</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
     <th></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${sections}" var="section">
 <tr>
   <td>
@@ -56,5 +59,6 @@ $(function(){
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>

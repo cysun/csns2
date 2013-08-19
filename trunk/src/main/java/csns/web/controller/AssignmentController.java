@@ -61,6 +61,8 @@ public class AssignmentController {
         HttpServletResponse response )
     {
         Assignment assignment = assignmentDao.getAssignment( id );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " viewed assignment " + assignment.getId() );
 
         switch( assignment.getDescription().getType() )
         {

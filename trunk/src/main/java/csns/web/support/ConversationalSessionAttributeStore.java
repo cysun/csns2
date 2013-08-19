@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -38,15 +39,13 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * 
  * @author Nimo Naamani
  * http://duckranger.com
- * 
- * cysun: use @Autowired instead of @Inject.
  */
 
 public class ConversationalSessionAttributeStore implements SessionAttributeStore, InitializingBean {
 
     @Autowired
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
-    private Logger logger = Logger.getLogger(ConversationalSessionAttributeStore.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ConversationalSessionAttributeStore.class);
 
     private int keepAliveConversations = 10;
 
@@ -64,7 +63,7 @@ public class ConversationalSessionAttributeStore implements SessionAttributeStor
 	    cId = UUID.randomUUID().toString();
 	}
 	request.setAttribute(CID_FIELD, cId, WebRequest.SCOPE_REQUEST);
-	logger.debug("storeAttribute - storing bean reference for (" + attributeName + ").");
+	logger.debug("storeAttribute - storing bean reference for (" + attributeName + ") for conversation (" + cId + ").");
 	store(request, attributeName, attributeValue, cId);
     }
 

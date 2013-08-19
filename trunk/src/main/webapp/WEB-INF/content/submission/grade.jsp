@@ -9,9 +9,7 @@
 <script>
 $(function(){
     $("#dueDate").datetimepicker({
-        inline: true,
-        showSecond: true,
-        timeFormat: "hh:mm:ss"
+        timeFormat: "HH:mm:ss"
     });
     $("#dueDateLink").click(function(){
         $("#dueDateForm").toggle();

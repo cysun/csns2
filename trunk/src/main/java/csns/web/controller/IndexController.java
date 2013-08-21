@@ -36,10 +36,10 @@ import csns.model.news.dao.NewsDao;
 public class IndexController {
 
     @Autowired
-    NewsDao newsDao;
+    private NewsDao newsDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index( ModelMap models )

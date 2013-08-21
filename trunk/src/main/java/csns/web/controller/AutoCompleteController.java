@@ -43,13 +43,13 @@ import csns.model.forum.dao.ForumDao;
 public class AutoCompleteController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    CourseDao courseDao;
+    private CourseDao courseDao;
 
     @Autowired
-    ForumDao forumDao;
+    private ForumDao forumDao;
 
     @RequestMapping(value = "/autocomplete/user")
     public String users( @RequestParam String term, HttpServletResponse response )

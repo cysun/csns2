@@ -39,10 +39,10 @@ import csns.security.SecurityUtils;
 public class NewsController {
 
     @Autowired
-    NewsDao newsDao;
+    private NewsDao newsDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     private static final Logger logger = LoggerFactory.getLogger( NewsController.class );
 

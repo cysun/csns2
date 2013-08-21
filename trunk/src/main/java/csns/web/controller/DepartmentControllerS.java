@@ -57,25 +57,24 @@ import csns.web.validator.DepartmentValidator;
 public class DepartmentControllerS {
 
     @Autowired
-    UserDao                     userDao;
+    private UserDao userDao;
 
     @Autowired
-    DepartmentDao               departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    RevisionDao                 revisionDao;
+    private RevisionDao revisionDao;
 
     @Autowired
-    DepartmentValidator         departmentValidator;
+    private DepartmentValidator departmentValidator;
 
     @Autowired
-    VelocityEngine              velocityEngine;
+    private VelocityEngine velocityEngine;
 
     @Autowired
-    WebApplicationContext       context;
+    private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( DepartmentControllerS.class );
+    private static final Logger logger = LoggerFactory.getLogger( DepartmentControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )

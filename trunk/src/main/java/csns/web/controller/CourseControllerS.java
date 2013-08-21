@@ -51,25 +51,24 @@ import csns.web.validator.CourseValidator;
 public class CourseControllerS {
 
     @Autowired
-    CourseDao                   courseDao;
+    private CourseDao courseDao;
 
     @Autowired
-    ForumDao                    forumDao;
+    private ForumDao forumDao;
 
     @Autowired
-    DepartmentDao               departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    CourseValidator             courseValidator;
+    private CourseValidator courseValidator;
 
     @Autowired
-    FileIO                      fileIO;
+    private FileIO fileIO;
 
     @Autowired
-    WebApplicationContext       context;
+    private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( CourseControllerS.class );
+    private static final Logger logger = LoggerFactory.getLogger( CourseControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )

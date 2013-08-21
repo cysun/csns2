@@ -18,32 +18,23 @@
  */
 package csns.web.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import csns.model.academics.dao.DepartmentDao;
-import csns.security.SecurityUtils;
 
 @Controller
 public class DepartmentController {
 
     @Autowired
-    DepartmentDao               departmentDao;
-
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( DepartmentController.class );
+    private DepartmentDao departmentDao;
 
     @RequestMapping(value = "/admin/department/list")
     public String list( ModelMap models )
     {
         models.put( "departments", departmentDao.getDepartments() );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " listed all departments" );
-
         return "department/list";
     }
 

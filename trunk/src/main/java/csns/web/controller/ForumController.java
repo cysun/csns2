@@ -45,19 +45,19 @@ import csns.security.SecurityUtils;
 public class ForumController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    ForumDao forumDao;
+    private ForumDao forumDao;
 
     @Autowired
-    TopicDao topicDao;
+    private TopicDao topicDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     @RequestMapping(value = "/department/{dept}/forum/list")
     public String list( @PathVariable String dept,

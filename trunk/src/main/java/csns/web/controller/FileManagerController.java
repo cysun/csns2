@@ -40,10 +40,10 @@ import csns.util.FileIO;
 public class FileManagerController {
 
     @Autowired
-    FileDao fileDao;
+    private FileDao fileDao;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     private static final Logger logger = LoggerFactory.getLogger( FileManagerController.class );
 

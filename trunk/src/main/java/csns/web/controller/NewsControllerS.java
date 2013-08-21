@@ -62,28 +62,28 @@ import csns.web.validator.NewsValidator;
 public class NewsControllerS {
 
     @Autowired
-    NewsDao newsDao;
+    private NewsDao newsDao;
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    PostDao postDao;
+    private PostDao postDao;
 
     @Autowired
-    ForumDao forumDao;
+    private ForumDao forumDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     @Autowired
-    NewsValidator newsValidator;
+    private NewsValidator newsValidator;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     private static final Logger logger = LoggerFactory.getLogger( NewsControllerS.class );
 

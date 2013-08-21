@@ -62,28 +62,27 @@ import csns.web.editor.UserPropertyEditor;
 public class DepartmentSectionControllerS {
 
     @Autowired
-    UserDao                     userDao;
+    private UserDao userDao;
 
     @Autowired
-    GradeDao                    gradeDao;
+    private GradeDao gradeDao;
 
     @Autowired
-    EnrollmentDao               enrollmentDao;
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
-    SectionDao                  sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    DepartmentDao               departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    PasswordEncoder             passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    WebApplicationContext       context;
+    private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( DepartmentSectionControllerS.class );
+    private static final Logger logger = LoggerFactory.getLogger( DepartmentSectionControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -101,8 +100,7 @@ public class DepartmentSectionControllerS {
     public String importSection( @PathVariable String dept,
         @RequestParam Quarter quarter, ModelMap models )
     {
-        GradesImporter importer = (GradesImporter) context
-            .getBean( "gradesImporter" );
+        GradesImporter importer = (GradesImporter) context.getBean( "gradesImporter" );
         importer.setDepartment( departmentDao.getDepartment( dept ) );
         importer.setSection( new Section() );
         importer.getSection().setQuarter( quarter );
@@ -131,9 +129,8 @@ public class DepartmentSectionControllerS {
                     section.getCourse() );
                 for( Section s : sections )
                     importer.getSectionNumbers().add( s.getNumber() );
-                section
-                    .setNumber( importer.getSectionNumbers().size() == 0 ? -1
-                        : importer.getSectionNumbers().get( 0 ) );
+                section.setNumber( importer.getSectionNumbers().size() == 0
+                    ? -1 : importer.getSectionNumbers().get( 0 ) );
             }
 
             if( targetPage == 2 )
@@ -155,8 +152,7 @@ public class DepartmentSectionControllerS {
                         }
                         else
                         {
-                            Enrollment enrollment = section
-                                .getEnrollment( user );
+                            Enrollment enrollment = section.getEnrollment( user );
                             if( enrollment == null )
                                 student.setNewEnrollment( true );
                             else if( enrollment.getGrade() != null )
@@ -175,8 +171,8 @@ public class DepartmentSectionControllerS {
         Course course = importer.getSection().getCourse();
         int number = importer.getSection().getNumber();
         Section section = number > 0 ? sectionDao.getSection( quarter, course,
-            number ) : sectionDao.addSection( quarter, course, importer
-            .getSection().getInstructors().get( 0 ) );
+            number ) : sectionDao.addSection( quarter, course,
+            importer.getSection().getInstructors().get( 0 ) );
 
         for( ImportedUser importedStudent : importer.getImportedStudents() )
         {
@@ -201,10 +197,10 @@ public class DepartmentSectionControllerS {
                 enrollment = new Enrollment( section, student );
             if( importedStudent.getGrade() != null
                 && (enrollment.getGrade() == null || !enrollment.getGrade()
-                    .getSymbol().equalsIgnoreCase( importedStudent.getGrade() )) )
+                    .getSymbol()
+                    .equalsIgnoreCase( importedStudent.getGrade() )) )
             {
-                enrollment.setGrade( gradeDao.getGrade( importedStudent
-                    .getGrade() ) );
+                enrollment.setGrade( gradeDao.getGrade( importedStudent.getGrade() ) );
                 enrollmentDao.saveEnrollment( enrollment );
             }
         }

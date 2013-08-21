@@ -45,24 +45,21 @@ import csns.util.FileIO;
 public class AssignmentController {
 
     @Autowired
-    SectionDao                  sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    AssignmentDao               assignmentDao;
+    private AssignmentDao assignmentDao;
 
     @Autowired
-    FileIO                      fileIO;
+    private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( AssignmentController.class );
+    private static final Logger logger = LoggerFactory.getLogger( AssignmentController.class );
 
     @RequestMapping("/assignment/view")
     public String view( @RequestParam Long id, ModelMap models,
         HttpServletResponse response )
     {
         Assignment assignment = assignmentDao.getAssignment( id );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " viewed assignment " + assignment.getId() );
 
         switch( assignment.getDescription().getType() )
         {
@@ -146,15 +143,10 @@ public class AssignmentController {
         models.put( "section", section );
 
         if( StringUtils.hasText( term ) )
-        {
             models.put(
                 "results",
                 assignmentDao.searchAssignments( term, "REGULAR",
                     SecurityUtils.getUser(), 20 ) );
-
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " searched assignments with [" + term + "]" );
-        }
 
         return "assignment/search";
     }

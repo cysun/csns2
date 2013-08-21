@@ -10,7 +10,7 @@ function unsubscribe( id )
             url: "<c:url value='/subscription/mailinglist/unsubscribe' />",
             data: { "id": id, "ajax": true },
             success: function(){
-                var current_index = $("#tabs").tabs("option", "selected");
+                var current_index = $("#tabs").tabs("option", "active");
                 $("#tabs").tabs("load", current_index);
             },
             cache: false

@@ -19,87 +19,45 @@
 package csns.web.controller;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.OnlineAssignment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
-import csns.model.qa.ChoiceQuestion;
 import csns.model.qa.Question;
 import csns.model.qa.QuestionSection;
-import csns.model.qa.RatingQuestion;
-import csns.model.qa.TextQuestion;
 import csns.security.SecurityUtils;
-import csns.web.editor.CalendarPropertyEditor;
-import csns.web.validator.AssignmentValidator;
-import csns.web.validator.QuestionValidator;
 
 @Controller
-@SessionAttributes({ "assignment", "question", "questionSection" })
 public class OnlineAssignmentController {
 
     @Autowired
-    SectionDao sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    AssignmentDao assignmentDao;
+    private AssignmentDao assignmentDao;
 
-    @Autowired
-    QuestionValidator questionValidator;
+    private static final Logger logger = LoggerFactory.getLogger( OnlineAssignmentController.class );
 
-    @Autowired
-    AssignmentValidator assignmentValidator;
-
-    @InitBinder
-    public void initBinder( WebDataBinder binder )
+    @RequestMapping("/assignment/online/view")
+    public String view( @RequestParam Long id,
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
-        binder.registerCustomEditor( Calendar.class,
-            new CalendarPropertyEditor() );
-    }
-
-    @RequestMapping(value = "/assignment/online/create",
-        method = RequestMethod.GET)
-    public String create( @RequestParam Long sectionId, ModelMap models )
-    {
-        OnlineAssignment assignment = new OnlineAssignment();
-        assignment.setSection( sectionDao.getSection( sectionId ) );
-        models.put( "assignment", assignment );
-        return "assignment/online/create";
-    }
-
-    // Remember that the default @ModelAttribute name is inferred from
-    // the parameter type, not the parameter name.
-    @RequestMapping(value = "/assignment/online/create",
-        method = RequestMethod.POST)
-    public String create(
-        @ModelAttribute("assignment") OnlineAssignment assignment,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        assignmentValidator.validate( assignment, result );
-        if( result.hasErrors() ) return "assignment/online/create";
-
-        assignment = (OnlineAssignment) assignmentDao.saveAssignment( assignment );
-        sessionStatus.setComplete();
-        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
-            + assignment.getId();
+        models.put( "assignment", assignmentDao.getAssignment( id ) );
+        models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
+        return "assignment/online/view";
     }
 
     @RequestMapping("/assignment/online/clone")
@@ -111,16 +69,12 @@ public class OnlineAssignmentController {
         Assignment newAssignment = oldAssignment.clone();
         newAssignment.setSection( section );
         newAssignment = assignmentDao.saveAssignment( newAssignment );
-        return "redirect:/assignment/edit?id=" + newAssignment.getId();
-    }
 
-    @RequestMapping("/assignment/online/view")
-    public String view( @RequestParam Long id,
-        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
-    {
-        models.put( "assignment", assignmentDao.getAssignment( id ) );
-        models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
-        return "assignment/online/view";
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " cloned online assignment " + newAssignment.getId() + " from "
+            + oldAssignment.getId() );
+
+        return "redirect:/assignment/edit?id=" + newAssignment.getId();
     }
 
     @RequestMapping("/assignment/online/editQuestionSheet")
@@ -132,37 +86,6 @@ public class OnlineAssignmentController {
         return "assignment/online/editQuestionSheet";
     }
 
-    @RequestMapping(value = "/assignment/online/editQuestionSection",
-        method = RequestMethod.GET)
-    public String editQuestionSection( @RequestParam Long assignmentId,
-        @RequestParam int sectionIndex, ModelMap models )
-    {
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        models.put( "assignment", assignment );
-        models.put( "questionSection", assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex ) );
-        return "assignment/online/editQuestionSection";
-    }
-
-    @RequestMapping(value = "/assignment/online/editQuestionSection",
-        method = RequestMethod.POST)
-    public String editQuestionSection(
-        @ModelAttribute QuestionSection questionSection,
-        @RequestParam Long assignmentId, @RequestParam int sectionIndex,
-        SessionStatus sessionStatus )
-    {
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        assignment.getQuestionSheet()
-            .getSections()
-            .set( sectionIndex, questionSection );
-        assignmentDao.saveAssignment( assignment );
-
-        sessionStatus.setComplete();
-        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
-            + assignmentId + "&sectionIndex=" + sectionIndex;
-    }
-
     @RequestMapping("/assignment/online/deleteSection")
     public String deleteSection( @RequestParam Long assignmentId,
         @RequestParam int sectionIndex )
@@ -172,96 +95,14 @@ public class OnlineAssignmentController {
         {
             assignment.getQuestionSheet().getSections().remove( sectionIndex );
             assignmentDao.saveAssignment( assignment );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " deleted section " + sectionIndex
+                + " from online assignment " + assignmentId );
         }
 
         return "redirect:/assignment/online/editQuestionSheet?assignmentId="
             + assignmentId;
-    }
-
-    @RequestMapping(value = "/assignment/online/addQuestion",
-        method = RequestMethod.GET)
-    public String addQuestion( @RequestParam Long assignmentId,
-        @RequestParam String questionType, ModelMap models )
-    {
-        models.put( "assignment", assignmentDao.getAssignment( assignmentId ) );
-
-        Question question;
-        switch( questionType )
-        {
-            case "CHOICE":
-                question = new ChoiceQuestion();
-                break;
-            case "RATING":
-                question = new RatingQuestion();
-                break;
-            default:
-                question = new TextQuestion();
-        }
-        models.put( "question", question );
-
-        return "assignment/online/addQuestion";
-    }
-
-    @RequestMapping(value = "/assignment/online/addQuestion",
-        method = RequestMethod.POST)
-    public String addQuestion( @ModelAttribute("question") Question question,
-        @RequestParam Long assignmentId, @RequestParam int sectionIndex,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        questionValidator.validate( question, result );
-        if( result.hasErrors() ) return "assignment/online/addQuestion";
-
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        if( !assignment.isPublished() )
-        {
-            assignment.getQuestionSheet()
-                .getSections()
-                .get( sectionIndex )
-                .getQuestions()
-                .add( question );
-            assignmentDao.saveAssignment( assignment );
-        }
-
-        sessionStatus.setComplete();
-        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
-            + assignmentId + "&sectionIndex=" + sectionIndex;
-    }
-
-    @RequestMapping(value = "/assignment/online/editQuestion",
-        method = RequestMethod.GET)
-    public String editQuestion( @RequestParam Long assignmentId,
-        @RequestParam int sectionIndex, @RequestParam Long questionId,
-        ModelMap models )
-    {
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        Question question = assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex )
-            .getQuestion( questionId );
-        models.put( "assignment", assignment );
-        models.put( "question", question );
-        return "assignment/online/editQuestion";
-    }
-
-    @RequestMapping(value = "/assignment/online/editQuestion",
-        method = RequestMethod.POST)
-    public String editQuestion( @ModelAttribute("question") Question question,
-        @RequestParam Long assignmentId, @RequestParam int sectionIndex,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        questionValidator.validate( question, result );
-        if( result.hasErrors() ) return "assignment/online/editQuestion";
-
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        assignment.getQuestionSheet()
-            .getSections()
-            .get( sectionIndex )
-            .replaceQuestion( question );
-        assignmentDao.saveAssignment( assignment );
-
-        sessionStatus.setComplete();
-        return "redirect:/assignment/online/editQuestionSheet?assignmentId="
-            + assignmentId + "&sectionIndex=" + sectionIndex;
     }
 
     @RequestMapping("/assignment/online/deleteQuestion")
@@ -276,6 +117,10 @@ public class OnlineAssignmentController {
                 .get( sectionIndex )
                 .removeQuestion( questionId );
             assignmentDao.saveAssignment( assignment );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " deleted question " + questionId
+                + " from online assignment " + assignmentId );
         }
 
         return "redirect:/assignment/online/editQuestionSheet?assignmentId="
@@ -301,6 +146,10 @@ public class OnlineAssignmentController {
                 assignmentDao.saveAssignment( assignment );
             }
         }
+
+        logger.info( SecurityUtils.getUser().getUsername() + " moved question "
+            + questionId + " to index " + newIndex + " in online assignment "
+            + assignmentId );
 
         response.setContentType( "text/plain" );
         response.getWriter().print( "" );

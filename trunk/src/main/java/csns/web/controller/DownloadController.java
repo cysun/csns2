@@ -53,22 +53,22 @@ import csns.util.FileIO;
 public class DownloadController {
 
     @Autowired
-    FileDao fileDao;
+    private FileDao fileDao;
 
     @Autowired
-    SectionDao sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    AssignmentDao assignmentDao;
+    private AssignmentDao assignmentDao;
 
     @Autowired
-    SubmissionDao submissionDao;
+    private SubmissionDao submissionDao;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @Resource(name = "contentTypes")
-    Properties contentTypes;
+    private Properties contentTypes;
 
     private static Logger logger = LoggerFactory.getLogger( DownloadController.class );
 

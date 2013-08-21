@@ -23,8 +23,8 @@
         <put-list-attribute name="jsUrls">
             <add-attribute value="${ckeditor.url}" />
             <add-attribute value="${jqueryui.url}" />
-            <add-attribute value="${jquery.plugins}/jquery.jeditable.mini.js" />
-            <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery-jeditable.js" />
+            <add-attribute value="${jquery.plugins}/jquery.maskedinput.min.js" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
@@ -37,8 +37,8 @@
         </put-list-attribute>
         <put-list-attribute name="jsUrls">
             <add-attribute value="${jqueryui.url}" />
-            <add-attribute value="${jquery.plugins}/jquery.jeditable.mini.js" />
-            <add-attribute value="${jquery.plugins}/jquery.maskedinput-1.3.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery.jeditable.js" />
+            <add-attribute value="${jquery.plugins}/jquery.maskedinput.min.js" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />

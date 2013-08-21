@@ -32,10 +32,10 @@ import csns.model.mailinglist.dao.MessageDao;
 public class MailinglistMessageController {
 
     @Autowired
-    MessageDao messageDao;
+    private MessageDao messageDao;
 
     @Autowired
-    MailinglistDao mailinglistDao;
+    private MailinglistDao mailinglistDao;
 
     @RequestMapping("/department/{dept}/mailinglist/message/view")
     public String view( @RequestParam Long id, ModelMap models )

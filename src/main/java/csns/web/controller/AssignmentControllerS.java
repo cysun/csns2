@@ -53,19 +53,18 @@ import csns.web.validator.AssignmentValidator;
 public class AssignmentControllerS {
 
     @Autowired
-    SectionDao                  sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    AssignmentDao               assignmentDao;
+    private AssignmentDao assignmentDao;
 
     @Autowired
-    AssignmentValidator         assignmentValidator;
+    private AssignmentValidator assignmentValidator;
 
     @Autowired
-    FileIO                      fileIO;
+    private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( AssignmentControllerS.class );
+    private static final Logger logger = LoggerFactory.getLogger( AssignmentControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -116,8 +115,7 @@ public class AssignmentControllerS {
     {
         Assignment assignment = assignmentDao.getAssignment( id );
         if( assignment.getDescription() == null )
-            assignment
-                .setDescription( new Resource( "Assignment Description" ) );
+            assignment.setDescription( new Resource( "Assignment Description" ) );
         models.put( "assignment", assignment );
         return assignment.isOnline() ? "assignment/online/edit"
             : "assignment/edit";

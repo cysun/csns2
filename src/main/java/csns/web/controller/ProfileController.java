@@ -18,98 +18,34 @@
  */
 package csns.web.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
-import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.mailinglist.Mailinglist;
 import csns.security.SecurityUtils;
-import csns.util.DefaultUrls;
-import csns.web.validator.EditUserValidator;
 
 @Controller
-@SessionAttributes("user")
 public class ProfileController {
 
     @Autowired
-    UserDao userDao;
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
-    EnrollmentDao enrollmentDao;
+    private AdvisementRecordDao advisementRecordDao;
 
     @Autowired
-    AdvisementRecordDao advisementRecordDao;
-
-    @Autowired
-    SubscriptionDao subscriptionDao;
-
-    @Autowired
-    EditUserValidator editUserValidator;
-
-    @Autowired
-    DefaultUrls defaultUrls;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @InitBinder
-    public void initBinder( WebDataBinder binder )
-    {
-        binder.registerCustomEditor( Date.class, new CustomDateEditor(
-            new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String profile( ModelMap models )
-    {
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        models.put( "user", user );
-        return "profile/account";
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public String profile( @ModelAttribute("user") User cmd,
-        HttpServletRequest request, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        editUserValidator.validate( cmd, bindingResult );
-        if( bindingResult.hasErrors() ) return "profile/account";
-
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        user.copySelfEditableFieldsFrom( cmd );
-        String password = cmd.getPassword1();
-        if( StringUtils.hasText( password ) )
-            user.setPassword( passwordEncoder.encodePassword( password, null ) );
-        user = userDao.saveUser( user );
-
-        sessionStatus.setComplete();
-        return "redirect:" + defaultUrls.userHomeUrl( request );
-    }
+    private SubscriptionDao subscriptionDao;
 
     @RequestMapping("/profile/courses")
     public String courses( ModelMap models )
@@ -151,7 +87,6 @@ public class ProfileController {
         models.put( "departmentForums", departmentForums );
         models.put( "courseForums", courseForums );
         models.put( "otherForums", otherForums );
-
         return "profile/forums";
     }
 

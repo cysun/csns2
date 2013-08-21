@@ -19,20 +19,15 @@
 package csns.web.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.OnlineAssignment;
@@ -50,20 +45,21 @@ import csns.model.qa.dao.QuestionDao;
 import csns.security.SecurityUtils;
 
 @Controller
-@SessionAttributes("submission")
 public class OnlineSubmissionController {
 
     @Autowired
-    AssignmentDao assignmentDao;
+    private AssignmentDao assignmentDao;
 
     @Autowired
-    SubmissionDao submissionDao;
+    private SubmissionDao submissionDao;
 
     @Autowired
-    QuestionDao questionDao;
+    private QuestionDao questionDao;
 
     @Autowired
-    AnswerSheetDao answerSheetDao;
+    private AnswerSheetDao answerSheetDao;
+
+    private static final Logger logger = LoggerFactory.getLogger( OnlineSubmissionController.class );
 
     @RequestMapping("/submission/online/view")
     public String view( @RequestParam Long assignmentId,
@@ -92,77 +88,6 @@ public class OnlineSubmissionController {
         return "submission/online/view";
     }
 
-    @RequestMapping(value = "/submission/online/edit",
-        method = RequestMethod.GET)
-    public String edit( @RequestParam Long assignmentId, ModelMap models )
-    {
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
-        if( !assignment.isPublished() )
-        {
-            models.put( "message", "error.assignment.unpublished" );
-            return "error";
-        }
-
-        User student = SecurityUtils.getUser();
-        OnlineSubmission submission = (OnlineSubmission) submissionDao.getSubmission(
-            student, assignment );
-        if( submission != null && submission.isPastDue() || submission == null
-            && assignment.isPastDue() )
-        {
-            models.put( "message", "error.assignment.pastdue" );
-            return "error";
-        }
-
-        if( submission == null )
-        {
-            submission = new OnlineSubmission( student, assignment );
-            submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
-        }
-
-        // If a submission object is created before the assignment is
-        // published, the submission would not have an answer sheet field.
-        if( submission.getAnswerSheet() == null )
-        {
-            submission.createAnswerSheet();
-            submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
-        }
-
-        models.put( "submission", submission );
-        models.put( "sectionIndex", 0 );
-        return "submission/online/edit";
-    }
-
-    @RequestMapping(value = "/submission/online/edit",
-        method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute("submission") OnlineSubmission submission,
-        @RequestParam int sectionIndex, HttpServletRequest request,
-        ModelMap models, SessionStatus sessionStatus )
-    {
-        if( request.getParameter( "save" ) != null )
-            submission.setSaved( true );
-        if( request.getParameter( "finish" ) != null )
-            submission.setFinished( true );
-        submission.getAnswerSheet().setDate( new Date() );
-        submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
-
-        if( request.getParameter( "finish" ) != null )
-        {
-            sessionStatus.setComplete();
-            models.put( "message", "status.assignment.completed" );
-            models.put( "backUrl", "/section/taken#section-"
-                + submission.getAssignment().getSection().getId() );
-            return "status";
-        }
-
-        if( request.getParameter( "prev" ) != null ) --sectionIndex;
-        if( request.getParameter( "next" ) != null ) ++sectionIndex;
-
-        models.put( "submission", submission );
-        models.put( "sectionIndex", sectionIndex );
-        return "submission/online/edit";
-    }
-
     @RequestMapping("/submission/online/grade")
     public String grade1( @RequestParam Long id,
         @RequestParam(required = false) Integer sectionIndex, ModelMap models )
@@ -188,6 +113,10 @@ public class OnlineSubmissionController {
         OnlineSubmission submission = (OnlineSubmission) submissionDao.getSubmission( id );
         submission.grade();
         submissionDao.saveSubmission( submission );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " autograded online submission " + id );
+
         return "redirect:grade?id=" + id;
     }
 
@@ -201,6 +130,10 @@ public class OnlineSubmissionController {
             ((OnlineSubmission) submission).grade();
             submissionDao.saveSubmission( submission );
         }
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " autograded online assignment " + assignmentId );
+
         return "redirect:/submission/list?assignmentId=" + assignmentId;
     }
 
@@ -220,6 +153,10 @@ public class OnlineSubmissionController {
         models.put( "assignment", assignment );
         models.put( "submissions", submissions );
         models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " viewed submission summary of online assignment " + assignmentId );
+
         return "submission/online/summary";
     }
 

@@ -58,28 +58,28 @@ import csns.web.validator.MessageValidator;
 public class ForumTopicControllerS {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    ForumDao forumDao;
+    private ForumDao forumDao;
 
     @Autowired
-    TopicDao topicDao;
+    private TopicDao topicDao;
 
     @Autowired
-    PostDao postDao;
+    private PostDao postDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     @Autowired
-    MessageValidator messageValidator;
+    private MessageValidator messageValidator;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @Autowired
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     private Logger logger = LoggerFactory.getLogger( ForumTopicControllerS.class );
 

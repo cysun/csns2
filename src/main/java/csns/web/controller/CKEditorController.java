@@ -37,13 +37,12 @@ import csns.util.FileIO;
 public class CKEditorController {
 
     @Autowired
-    FileDao                     fileDao;
+    private FileDao fileDao;
 
     @Autowired
-    FileIO                      fileIO;
+    private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( CKEditorController.class );
+    private static final Logger logger = LoggerFactory.getLogger( CKEditorController.class );
 
     @RequestMapping("/ckeditor/upload")
     public String upload( @RequestParam("upload") MultipartFile uploadedFile,

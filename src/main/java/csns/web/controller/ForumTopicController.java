@@ -43,19 +43,19 @@ import csns.security.SecurityUtils;
 public class ForumTopicController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    ForumDao forumDao;
+    private ForumDao forumDao;
 
     @Autowired
-    TopicDao topicDao;
+    private TopicDao topicDao;
 
     @Autowired
-    PostDao postDao;
+    private PostDao postDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     private static final Logger logger = LoggerFactory.getLogger( ForumTopicController.class );
 

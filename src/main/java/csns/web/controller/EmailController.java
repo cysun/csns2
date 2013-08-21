@@ -42,16 +42,16 @@ import csns.web.validator.EmailValidator;
 public class EmailController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @Autowired
-    EmailUtils emailUtils;
+    private EmailUtils emailUtils;
 
     @Autowired
-    EmailValidator emailValidator;
+    private EmailValidator emailValidator;
 
     @RequestMapping("/email/compose")
     public String compose(

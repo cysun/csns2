@@ -41,13 +41,13 @@ import csns.model.core.dao.UserDao;
 public class DepartmentInfoController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    CourseDao courseDao;
+    private CourseDao courseDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     private final static Logger logger = LoggerFactory.getLogger( DepartmentInfoController.class );
 

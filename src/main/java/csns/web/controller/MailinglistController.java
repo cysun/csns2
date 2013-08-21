@@ -41,16 +41,16 @@ import csns.security.SecurityUtils;
 public class MailinglistController {
 
     @Autowired
-    MessageDao messageDao;
+    private MessageDao messageDao;
 
     @Autowired
-    MailinglistDao mailinglistDao;
+    private MailinglistDao mailinglistDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     @RequestMapping("/department/{dept}/mailinglist/list")
     public String list( @PathVariable String dept, ModelMap models )

@@ -4,8 +4,9 @@
 <script type="text/javascript">
 $(function() {
     $("#tabs").tabs({
-        cache: false,
-        ajaxOptions: { cache: false }
+        beforeLoad: function(event, ui){
+            ui.ajaxSettings.cache = false;	
+        }
     });
     $("#birthday").datepicker({
         inline: true,

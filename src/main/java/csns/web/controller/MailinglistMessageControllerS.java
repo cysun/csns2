@@ -47,19 +47,19 @@ import csns.web.validator.MessageValidator;
 public class MailinglistMessageControllerS {
 
     @Autowired
-    MessageDao messageDao;
+    private MessageDao messageDao;
 
     @Autowired
-    MailinglistDao mailinglistDao;
+    private MailinglistDao mailinglistDao;
 
     @Autowired
-    MessageValidator messageValidator;
+    private MessageValidator messageValidator;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @Autowired
-    MassMailSender massMailSender;
+    private MassMailSender massMailSender;
 
     @RequestMapping(value = "/department/{dept}/mailinglist/message/compose",
         method = RequestMethod.GET)

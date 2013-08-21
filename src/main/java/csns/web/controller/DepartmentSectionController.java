@@ -25,8 +25,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,7 +46,6 @@ import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
-import csns.security.SecurityUtils;
 import csns.web.editor.CoursePropertyEditor;
 import csns.web.editor.QuarterPropertyEditor;
 
@@ -57,19 +54,16 @@ import csns.web.editor.QuarterPropertyEditor;
 public class DepartmentSectionController {
 
     @Autowired
-    SectionDao                  sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    QuarterDao                  quarterDao;
+    private QuarterDao quarterDao;
 
     @Autowired
-    DepartmentDao               departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    WebApplicationContext       context;
-
-    private static final Logger logger = LoggerFactory
-                                           .getLogger( DepartmentSectionController.class );
+    private WebApplicationContext context;
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -98,11 +92,6 @@ public class DepartmentSectionController {
         models.put( "quarter", quarter );
         models.put( "quarters", quarters );
         models.put( "sections", sectionDao.getSections( department, quarter ) );
-
-        logger.info( SecurityUtils.getUser().getUsername() + " listed "
-            + department.getAbbreviation() + " sections in "
-            + quarter.getShortString() );
-
         return "department/sections";
     }
 
@@ -113,10 +102,6 @@ public class DepartmentSectionController {
         Section section = sectionDao.getSection( id );
         models.put( "department", departmentDao.getDepartment( dept ) );
         models.put( "gradeSheet", new GradeSheet( section ) );
-
-        logger.info( SecurityUtils.getUser().getUsername() + " viewed "
-            + " section " + section.getId() );
-
         return "section/view";
     }
 

@@ -52,7 +52,7 @@ function unsubscribe()
   title="Subscribe to This Mailing List" src="<c:url value='/img/icons/star_add.png' />" /></a></li>
 <li id="unsubscribe" class="align_right"><a href="javascript:unsubscribe()"><img alt="[Unsubscribe from List]"
   title="Unsubscribe from This Mailing List" src="<c:url value='/img/icons/star_delete.png' />" /></a></li>
-<li class="align_right"><a href="<c:url value='/profile#ui-tabs-2' />"><img alt="[Mailing List Subscriptions]"
+<li class="align_right"><a href="<c:url value='/profile#ui-tabs-4' />"><img alt="[Mailing List Subscriptions]"
   title="Mailing List Subscriptions" src="<c:url value='/img/icons/star.png' />" /></a></li>
 </security:authorize>
 </ul>

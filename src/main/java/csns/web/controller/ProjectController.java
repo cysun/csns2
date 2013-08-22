@@ -27,62 +27,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.WebApplicationContext;
 
 import csns.model.academics.Department;
 import csns.model.academics.Project;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
-import csns.model.core.User;
 import csns.security.SecurityUtils;
-import csns.web.editor.UserPropertyEditor;
-import csns.web.validator.ProjectValidator;
 
 @Controller
-@SessionAttributes("project")
 public class ProjectController {
 
     @Autowired
-    ProjectDao projectDao;
+    private ProjectDao projectDao;
 
     @Autowired
-    DepartmentDao departmentDao;
-
-    @Autowired
-    ProjectValidator projectValidator;
-
-    @Autowired
-    WebApplicationContext context;
+    private DepartmentDao departmentDao;
 
     private static final Logger logger = LoggerFactory.getLogger( ProjectController.class );
-
-    @InitBinder
-    public void initBinder( WebDataBinder binder )
-    {
-        binder.registerCustomEditor( User.class,
-            (UserPropertyEditor) context.getBean( "userPropertyEditor" ) );
-    }
-
-    @RequestMapping(value = "/project/search")
-    public String search( @RequestParam(required = false) String term,
-        ModelMap models )
-    {
-        List<Project> projects = null;
-        if( StringUtils.hasText( term ) )
-            projects = projectDao.searchProjects( term, 30 );
-        models.addAttribute( "projects", projects );
-        return "project/search";
-    }
 
     @RequestMapping("/department/{dept}/projects")
     public String projects( @PathVariable String dept,
@@ -115,69 +79,13 @@ public class ProjectController {
         return "project/view";
     }
 
-    @RequestMapping(value = "/department/{dept}/project/add",
-        method = RequestMethod.GET)
-    public String add( @PathVariable String dept,
-        @RequestParam(required = false) Integer year, ModelMap models )
-    {
-        Project project = new Project();
-        project.setDepartment( departmentDao.getDepartment( dept ) );
-        if( year != null ) project.setYear( year );
-        models.put( "project", project );
-        return "project/add";
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/add",
-        method = RequestMethod.POST)
-    public String add( @ModelAttribute Project project,
-        @PathVariable String dept, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        projectValidator.validate( project, bindingResult );
-        if( bindingResult.hasErrors() ) return "project/add";
-
-        project = projectDao.saveProject( project );
-        sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername() + " added project "
-            + project.getId() );
-
-        return "redirect:/department/" + dept + "/project/view?id="
-            + project.getId();
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/edit",
-        method = RequestMethod.GET)
-    public String edit( @RequestParam Long id, ModelMap models )
-    {
-        models.put( "project", projectDao.getProject( id ) );
-        models.put( "user", SecurityUtils.getUser() );
-        return "project/edit";
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/edit",
-        method = RequestMethod.POST)
-    public String edit( @ModelAttribute Project project,
-        @PathVariable String dept, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        projectValidator.validate( project, bindingResult );
-        if( bindingResult.hasErrors() ) return "project/edit";
-
-        project = projectDao.saveProject( project );
-        sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername() + " edited project "
-            + project.getId() );
-
-        return "redirect:/department/" + dept + "/project/view?id="
-            + project.getId();
-    }
-
     @RequestMapping("/department/{dept}/project/publish")
     public String publish( @PathVariable String dept, @RequestParam Long id )
     {
         Project project = projectDao.getProject( id );
         project.setPublished( true );
         project = projectDao.saveProject( project );
+
         logger.info( SecurityUtils.getUser().getUsername()
             + " published project " + project.getId() );
 
@@ -190,10 +98,22 @@ public class ProjectController {
         Project project = projectDao.getProject( id );
         project.setDeleted( true );
         project = projectDao.saveProject( project );
+
         logger.info( SecurityUtils.getUser().getUsername()
             + " deleted project " + project.getId() );
 
         return "redirect:/department/" + dept + "/projects";
+    }
+
+    @RequestMapping(value = "/project/search")
+    public String search( @RequestParam(required = false) String term,
+        ModelMap models )
+    {
+        List<Project> projects = null;
+        if( StringUtils.hasText( term ) )
+            projects = projectDao.searchProjects( term, 30 );
+        models.addAttribute( "projects", projects );
+        return "project/search";
     }
 
 }

@@ -81,8 +81,9 @@ public class SubscriptionController {
 
         User user = SecurityUtils.getUser();
         subscriptionDao.subscribe( subscribable, user );
+
         logger.info( user.getUsername() + " subscribed to "
-            + subscribable.getType() + " " + subscribable.getName() + "." );
+            + subscribable.getType() + " " + subscribable.getName() );
 
         return subscribable;
     }
@@ -111,8 +112,9 @@ public class SubscriptionController {
 
         User user = SecurityUtils.getUser();
         subscriptionDao.unsubscribe( subscribable, user );
+
         logger.info( user.getUsername() + " unsubscribed from "
-            + subscribable.getType() + " " + subscribable.getName() + "." );
+            + subscribable.getType() + " " + subscribable.getName() );
 
         return subscribable;
     }

@@ -25,41 +25,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Project;
-import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
 import csns.model.core.Resource;
-import csns.model.core.ResourceType;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
-import csns.web.validator.ResourceValidator;
 
 @Controller
-@SessionAttributes("resource")
 public class ProjectResourceController {
 
     @Autowired
-    ProjectDao projectDao;
+    private ProjectDao projectDao;
 
     @Autowired
-    DepartmentDao departmentDao;
-
-    @Autowired
-    ResourceValidator resourceValidator;
-
-    @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     private static final Logger logger = LoggerFactory.getLogger( ProjectResourceController.class );
 
@@ -93,84 +77,6 @@ public class ProjectResourceController {
         }
     }
 
-    @RequestMapping(value = "/department/{dept}/project/resource/add",
-        method = RequestMethod.GET)
-    public String add( @RequestParam Long projectId, ModelMap models )
-    {
-        models.put( "project", projectDao.getProject( projectId ) );
-        models.put( "resource", new Resource() );
-        return "project/resource/add";
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/resource/add",
-        method = RequestMethod.POST)
-    public String add( @ModelAttribute Resource resource,
-        @PathVariable String dept, @RequestParam Long projectId,
-        @RequestParam(required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        resourceValidator.validate( resource, uploadedFile, result );
-        if( result.hasErrors() ) return "project/resource/add";
-
-        if( resource.getType() == ResourceType.FILE )
-            resource.setFile( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), false ) );
-
-        Project project = projectDao.getProject( projectId );
-        if( resource.getType() != ResourceType.NONE )
-        {
-            project.getResources().add( resource );
-            project = projectDao.saveProject( project );
-        }
-
-        sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " added a resource to " + project.getId() );
-
-        return "redirect:/department/" + dept + "/project/view?id="
-            + project.getId();
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/resource/edit",
-        method = RequestMethod.GET)
-    public String edit( @RequestParam Long projectId,
-        @RequestParam Long resourceId, ModelMap models )
-    {
-        Project project = projectDao.getProject( projectId );
-        models.put( "project", project );
-        models.put( "resource", project.getResource( resourceId ) );
-        models.put( "user", SecurityUtils.getUser() );
-        return "project/resource/edit";
-    }
-
-    @RequestMapping(value = "/department/{dept}/project/resource/edit",
-        method = RequestMethod.POST)
-    public String edit( @ModelAttribute Resource resource,
-        @PathVariable String dept, @RequestParam Long projectId,
-        @RequestParam(required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
-    {
-        resourceValidator.validate( resource, uploadedFile, result );
-        if( result.hasErrors() ) return "project/resource/edit";
-
-        if( resource.getType() == ResourceType.FILE && uploadedFile != null
-            && !uploadedFile.isEmpty() )
-            resource.setFile( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), false ) );
-
-        // resourceDao.saveResource( resource );
-        Project project = projectDao.getProject( projectId );
-        project.replaceResource( resource );
-        projectDao.saveProject( project );
-
-        sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " edited resource " + resource.getId() + " of project "
-            + project.getId() );
-
-        return "redirect:/department/" + dept + "/project/view?id=" + projectId;
-    }
-
     @RequestMapping("/department/{dept}/project/resource/reorder")
     public @ResponseBody
     String reorder( @RequestParam Long projectId,
@@ -182,9 +88,10 @@ public class ProjectResourceController {
         {
             project.getResources().add( newIndex, resource );
             projectDao.saveProject( project );
+
             logger.info( SecurityUtils.getUser().getUsername()
                 + " reordered resource " + resourceId + " of project "
-                + projectId );
+                + projectId + " to index " + newIndex );
         }
 
         return "";
@@ -197,6 +104,7 @@ public class ProjectResourceController {
         Project project = projectDao.getProject( projectId );
         project.removeResource( resourceId );
         projectDao.saveProject( project );
+
         logger.info( SecurityUtils.getUser().getUsername()
             + " deleted resource " + resourceId + " of project " + projectId );
 

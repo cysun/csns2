@@ -19,13 +19,11 @@
 package csns.web.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -33,6 +31,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -42,14 +42,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.WebUtils;
 
 import csns.helper.GradeSheet;
-import csns.importer.ImportedUser;
-import csns.importer.RosterImporter;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Section;
 import csns.model.academics.dao.EnrollmentDao;
@@ -57,31 +51,30 @@ import csns.model.academics.dao.GradeDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.security.SecurityUtils;
 
 @Controller
-@SessionAttributes("rosterImporter")
 public class SectionRosterController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    GradeDao gradeDao;
+    private GradeDao gradeDao;
 
     @Autowired
-    SectionDao sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    EnrollmentDao enrollmentDao;
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    WebApplicationContext context;
+    private PasswordEncoder passwordEncoder;
 
     @Resource(name = "contentTypes")
-    Properties contentTypes;
+    private Properties contentTypes;
+
+    private static final Logger logger = LoggerFactory.getLogger( SectionRosterController.class );
 
     @RequestMapping("/section/roster")
     public String roster( @RequestParam Long id, ModelMap models )
@@ -92,73 +85,20 @@ public class SectionRosterController {
         return "section/roster";
     }
 
-    @RequestMapping(value = "/section/roster/import",
-        method = RequestMethod.GET)
-    public String importRoster( @RequestParam Long sectionId, ModelMap models )
+    @RequestMapping(value = "/section/roster/add", params = "userId")
+    public String add( @RequestParam Long sectionId, @RequestParam Long userId )
     {
-        RosterImporter rosterImporter = (RosterImporter) context.getBean( "rosterImporter" );
-        rosterImporter.setSection( sectionDao.getSection( sectionId ) );
-        models.put( "rosterImporter", rosterImporter );
-        return "section/roster/import0";
-    }
-
-    @RequestMapping(value = "/section/roster/import",
-        method = RequestMethod.POST)
-    public String importRoster( @ModelAttribute RosterImporter rosterImporter,
-        @RequestParam("_page") int currentPage, HttpServletRequest request,
-        SessionStatus sessionStatus, ModelMap models )
-    {
-        Map<Integer, String> views = new HashMap<Integer, String>();
-        views.put( 0, "section/roster/import0" );
-        views.put( 1, "section/roster/import1" );
-        views.put( 2, "section/roster/import2" );
-
-        if( request.getParameter( "_finish" ) == null )
+        Section section = sectionDao.getSection( sectionId );
+        User student = userDao.getUser( userId );
+        Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
+        if( enrollment == null )
         {
-            int targetPage = WebUtils.getTargetPage( request, "_target",
-                currentPage );
-            return views.get( targetPage );
+            enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " added student " + userId + " to section " + sectionId );
         }
 
-        Section section = sectionDao.getSection( rosterImporter.getSection()
-            .getId() );
-        for( ImportedUser importedStudent : rosterImporter.getImportedStudents() )
-        {
-            String cin = importedStudent.getCin();
-            User student = userDao.getUserByCin( cin );
-            if( student == null )
-            {
-                student = new User();
-                student.setCin( cin );
-                student.setLastName( importedStudent.getLastName() );
-                student.setFirstName( importedStudent.getFirstName() );
-                student.setMiddleName( importedStudent.getMiddleName() );
-                student.setUsername( cin );
-                String password = passwordEncoder.encodePassword( cin, null );
-                student.setPassword( password );
-                student.setPrimaryEmail( cin + "@localhost" );
-                student.setTemporary( true );
-                student = userDao.saveUser( student );
-                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-                importedStudent.setNewAccount( true );
-                importedStudent.setNewEnrollment( true );
-            }
-            else if( !section.isEnrolled( student ) )
-            {
-                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-                importedStudent.setNewAccount( false );
-                importedStudent.setNewEnrollment( true );
-            }
-            else
-            {
-                importedStudent.setNewAccount( false );
-                importedStudent.setNewEnrollment( false );
-            }
-        }
-
-        models.put( "rosterImporter", rosterImporter );
-        sessionStatus.setComplete();
-        return views.get( 2 );
+        return "redirect:/section/roster?id=" + sectionId;
     }
 
     @RequestMapping(value = "/section/roster/add", method = RequestMethod.GET)
@@ -168,21 +108,8 @@ public class SectionRosterController {
         return "section/roster/add";
     }
 
-    @RequestMapping(value = "/section/roster/add", params = "userId")
-    public String add( @RequestParam Long sectionId, @RequestParam Long userId )
-    {
-        Section section = sectionDao.getSection( sectionId );
-        User student = userDao.getUser( userId );
-        Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
-        if( enrollment == null )
-            enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-
-        return "redirect:/section/roster?id=" + sectionId;
-    }
-
     @RequestMapping(value = "/section/roster/add", method = RequestMethod.POST)
-    public String add( @ModelAttribute User user, @RequestParam Long sectionId,
-        SessionStatus sessionStatus )
+    public String add( @ModelAttribute User user, @RequestParam Long sectionId )
     {
         String cin = user.getCin();
         User student = userDao.getUserByCin( cin );
@@ -200,9 +127,13 @@ public class SectionRosterController {
         Section section = sectionDao.getSection( sectionId );
         Enrollment enrollment = enrollmentDao.getEnrollment( section, student );
         if( enrollment == null )
+        {
             enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " added student " + student.getId() + " to section "
+                + sectionId );
+        }
 
-        sessionStatus.setComplete();
         return "redirect:/section/roster?id=" + sectionId;
     }
 
@@ -217,6 +148,9 @@ public class SectionRosterController {
             Enrollment enrollment = enrollmentDao.getEnrollment( section,
                 student );
             enrollmentDao.deleteEnrollment( enrollment );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " removed student " + student.getId() + " from section "
+                + sectionId );
         }
 
         return "redirect:/section/roster?id=" + sectionId;
@@ -269,6 +203,9 @@ public class SectionRosterController {
         }
 
         wb.write( response.getOutputStream() );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " exported the roster of section " + id );
 
         return null;
     }

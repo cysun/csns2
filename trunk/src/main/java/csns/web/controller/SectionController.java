@@ -47,7 +47,6 @@ import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
-import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.QuarterDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
@@ -61,25 +60,22 @@ import csns.web.editor.QuarterPropertyEditor;
 public class SectionController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    CourseDao courseDao;
+    private CourseDao courseDao;
 
     @Autowired
-    QuarterDao quarterDao;
+    private QuarterDao quarterDao;
 
     @Autowired
-    SectionDao sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private ForumDao forumDao;
 
     @Autowired
-    ForumDao forumDao;
-
-    @Autowired
-    WebApplicationContext context;
+    private WebApplicationContext context;
 
     private static final Logger logger = LoggerFactory.getLogger( SectionController.class );
 
@@ -111,11 +107,13 @@ public class SectionController {
                 sections = sectionDao.getSectionsByInstructor( user, quarter );
                 view = "section/taught";
                 break;
+
             case "taken":
                 quarters = quarterDao.getQuartersByStudent( user );
                 sections = sectionDao.getSectionsByStudent( user, quarter );
                 view = "section/taken";
                 break;
+
             default:
                 logger.warn( "Invalid section type: " + type );
         }
@@ -129,7 +127,6 @@ public class SectionController {
         models.put( "quarter", quarter );
         models.put( "quarters", quarters );
         models.put( "sections", sections );
-
         return view;
     }
 
@@ -173,8 +170,7 @@ public class SectionController {
             forumDao.saveForum( forum );
         }
 
-        logger.info( user.getUsername() + " added section " + course.getCode()
-            + "-" + section.getNumber() );
+        logger.info( user.getUsername() + " added section " + section.getId() );
 
         return "redirect:/section/taught";
     }
@@ -198,6 +194,10 @@ public class SectionController {
                 section.setDeleted( true );
                 section.getInstructors().remove( instructor );
                 sectionDao.saveSection( section );
+
+                logger.info( user.getUsername() + " deleted section "
+                    + section.getId() );
+
                 break;
             }
 
@@ -241,6 +241,9 @@ public class SectionController {
         {
             section.getInstructors().add( instructor );
             sectionDao.saveSection( section );
+
+            logger.info( "Instructor " + instructorId + " added to section "
+                + id );
         }
 
         return "redirect:/section/edit?id=" + id;
@@ -256,6 +259,9 @@ public class SectionController {
         {
             section.getInstructors().remove( instructor );
             sectionDao.saveSection( section );
+
+            logger.info( "Instructor " + instructorId
+                + " removed from section " + id );
         }
 
         return "redirect:/section/edit?id=" + id;

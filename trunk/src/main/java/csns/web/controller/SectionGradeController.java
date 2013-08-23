@@ -54,22 +54,22 @@ import csns.security.SecurityUtils;
 public class SectionGradeController {
 
     @Autowired
-    GradeDao gradeDao;
+    private GradeDao gradeDao;
 
     @Autowired
-    SectionDao sectionDao;
+    private SectionDao sectionDao;
 
     @Autowired
-    EnrollmentDao enrollmentDao;
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
-    SubmissionDao submissionDao;
+    private SubmissionDao submissionDao;
 
     @Autowired
-    MailSender mailSender;
+    private MailSender mailSender;
 
     @Autowired
-    VelocityEngine velocityEngine;
+    private VelocityEngine velocityEngine;
 
     private static final Logger logger = LoggerFactory.getLogger( SectionGradeController.class );
 

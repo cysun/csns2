@@ -67,22 +67,22 @@ import csns.web.editor.CalendarPropertyEditor;
 public class SubmissionController {
 
     @Autowired
-    FileDao fileDao;
+    private FileDao fileDao;
 
     @Autowired
-    AssignmentDao assignmentDao;
+    private AssignmentDao assignmentDao;
 
     @Autowired
-    SubmissionDao submissionDao;
+    private SubmissionDao submissionDao;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @Autowired
-    MailSender mailSender;
+    private MailSender mailSender;
 
     @Autowired
-    VelocityEngine velocityEngine;
+    private VelocityEngine velocityEngine;
 
     private static final Logger logger = LoggerFactory.getLogger( SubmissionController.class );
 
@@ -202,6 +202,8 @@ public class SubmissionController {
 
             submission.incrementFileCount();
             submissionDao.saveSubmission( submission );
+
+            logger.info( user.getUsername() + " uploaded file " + file.getId() );
         }
 
         return "redirect:" + view;
@@ -225,6 +227,7 @@ public class SubmissionController {
 
         logger.info( user.getUsername() + " removed file " + file.getId()
             + " from submission " + submission.getId() );
+
         return "";
     }
 

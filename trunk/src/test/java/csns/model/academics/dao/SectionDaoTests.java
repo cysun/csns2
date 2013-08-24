@@ -101,6 +101,7 @@ public class SectionDaoTests extends
         Assignment assignment = new Assignment();
         assignment.setName( "Homework 3" );
         assignment.setAlias( "HW3" );
+        assignment.setSection( section );
         section.getAssignments().add( assignment );
         sectionDao.saveSection( section );
 

@@ -18,8 +18,6 @@
  */
 package csns.web.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -40,67 +37,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
-import csns.security.SecurityUtils;
 import csns.util.DefaultUrls;
-import csns.web.validator.AddUserValidator;
-import csns.web.validator.EditUserValidator;
-import csns.web.validator.RegistrationValidator;
 
 @Controller
-@SessionAttributes("user")
 public class UserController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    DefaultUrls defaultUrls;
+    private DefaultUrls defaultUrls;
 
     @Autowired
-    AddUserValidator addUserValidator;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    EditUserValidator editUserValidator;
+    private JavaMailSender mailSender;
 
     @Autowired
-    RegistrationValidator registrationValidator;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    JavaMailSender mailSender;
-
-    @Autowired
-    VelocityEngine velocityEngine;
+    private VelocityEngine velocityEngine;
 
     @Value("#{applicationProperties.email}")
-    String appEmail;
+    private String appEmail;
 
     private final static Logger logger = LoggerFactory.getLogger( UserController.class );
-
-    /*
-     * The default Spring date property editor does not accept null or empty
-     * string so we have to explicitly register one that does.
-     */
-    @InitBinder
-    public void initBinder( WebDataBinder binder )
-    {
-        binder.registerCustomEditor( Date.class, new CustomDateEditor(
-            new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
-    }
 
     @RequestMapping(value = "/user/search")
     public String search( @RequestParam(required = false) String term,
@@ -117,83 +83,6 @@ public class UserController {
     {
         models.put( "user", userDao.getUser( id ) );
         return "user/view";
-    }
-
-    @RequestMapping(value = "/user/add", method = RequestMethod.GET)
-    public String add( ModelMap models )
-    {
-        models.put( "user", new User() );
-        return "user/add";
-    }
-
-    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
-    public String add( @ModelAttribute User user, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        addUserValidator.validate( user, bindingResult );
-        if( bindingResult.hasErrors() ) return "user/add";
-
-        user.setUsername( user.getCin() );
-        user.setPassword( passwordEncoder.encodePassword( user.getCin(), null ) );
-        if( !StringUtils.hasText( user.getPrimaryEmail() ) )
-            user.setPrimaryEmail( user.getCin() + "@localhost" );
-        user.setTemporary( true );
-        user = userDao.saveUser( user );
-
-        sessionStatus.setComplete();
-        return "redirect:/user/view?id=" + user.getId();
-    }
-
-    @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
-    public String edit( @RequestParam Long id, ModelMap models )
-    {
-        models.put( "user", userDao.getUser( id ) );
-        return "user/edit";
-    }
-
-    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
-    public String edit( @ModelAttribute User user, BindingResult bindingResult,
-        SessionStatus sessionStatus )
-    {
-        editUserValidator.validate( user, bindingResult );
-        if( bindingResult.hasErrors() ) return "user/edit";
-
-        String password = user.getPassword1();
-        if( StringUtils.hasText( password ) )
-            user.setPassword( passwordEncoder.encodePassword( password, null ) );
-        user = userDao.saveUser( user );
-
-        sessionStatus.setComplete();
-        return "redirect:/user/view?id=" + user.getId();
-    }
-
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String register( ModelMap models )
-    {
-        User user = SecurityUtils.getUser().clone();
-        user.setUsername( null );
-        user.setPrimaryEmail( null );
-        models.put( "user", user );
-        return "register";
-    }
-
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register( @ModelAttribute("user") User cmd,
-        BindingResult bindingResult, SessionStatus sessionStatus )
-    {
-        registrationValidator.validate( cmd, bindingResult );
-        if( bindingResult.hasErrors() ) return "register";
-
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        user.copySelfEditableFieldsFrom( cmd );
-        user.setUsername( cmd.getUsername() );
-        user.setPassword( passwordEncoder.encodePassword( cmd.getPassword1(),
-            null ) );
-        user.setTemporary( false );
-        userDao.saveUser( user );
-
-        sessionStatus.setComplete();
-        return "redirect:/j_spring_security_logout";
     }
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
@@ -234,6 +123,7 @@ public class UserController {
         String newPassword = "" + (int) (Math.random() * 100000000);
         user.setPassword( passwordEncoder.encodePassword( newPassword, null ) );
         userDao.saveUser( user );
+
         logger.info( "Reset password for " + user.getUsername() );
 
         Map<String, String> vModels = new HashMap<String, String>();

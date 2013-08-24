@@ -26,7 +26,7 @@ function deleteAttachment( fileId )
     if( confirm(msg) )
         $.ajax({
             url: "deleteAttachment",
-            data: { "fileId": fileId },
+            data: { "fileId": fileId, "_cid": "${_cid}" },
             success: function(){
                 $("#attachment-"+fileId).remove();
             },

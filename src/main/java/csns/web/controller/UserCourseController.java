@@ -44,25 +44,25 @@ import csns.util.FileIO;
 public class UserCourseController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    CourseDao courseDao;
+    private CourseDao courseDao;
 
     @Autowired
-    EnrollmentDao enrollmentDao;
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
-    CourseSubstitutionDao courseSubstitutionDao;
+    private CourseSubstitutionDao courseSubstitutionDao;
 
     @Autowired
-    CourseTransferDao courseTransferDao;
+    private CourseTransferDao courseTransferDao;
 
     @Autowired
-    CourseWaiverDao courseWaiverDao;
+    private CourseWaiverDao courseWaiverDao;
 
     @Autowired
-    FileIO fileIO;
+    private FileIO fileIO;
 
     @RequestMapping("/user/courses")
     public String courses( @RequestParam Long userId, ModelMap models )
@@ -116,8 +116,8 @@ public class UserCourseController {
 
         AdvisementRecord record = new AdvisementRecord( student,
             SecurityUtils.getUser() );
-        record.setComment( "<p>Transfer credits for " + course.getCode() + ".</p>"
-            + comment );
+        record.setComment( "<p>Transfer credits for " + course.getCode()
+            + ".</p>" + comment );
         if( uploadedFiles != null )
             record.getAttachments().addAll(
                 fileIO.save( uploadedFiles, student, false ) );

@@ -47,16 +47,16 @@ import csns.security.SecurityUtils;
 public class UserStandingController {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    DepartmentDao departmentDao;
+    private DepartmentDao departmentDao;
 
     @Autowired
-    StandingDao standingDao;
+    private StandingDao standingDao;
 
     @Autowired
-    AcademicStandingDao academicStandingDao;
+    private AcademicStandingDao academicStandingDao;
 
     private static final Logger logger = LoggerFactory.getLogger( UserStandingController.class );
 
@@ -106,11 +106,8 @@ public class UserStandingController {
         Quarter quarter = new Quarter( (year - 1900) * 10 + quarterSuffix );
 
         if( academicStanding == null )
-            academicStanding = new AcademicStanding(
-                student,
-                department,
-                standing,
-                quarter );
+            academicStanding = new AcademicStanding( student, department,
+                standing, quarter );
         else
             academicStanding.setQuarter( quarter );
         academicStanding = academicStandingDao.saveAcademicStanding( academicStanding );
@@ -137,6 +134,7 @@ public class UserStandingController {
 
         logger.info( SecurityUtils.getUser().getUsername()
             + " deleted academic standing " + academicStanding );
+
         academicStandingDao.deleteAcademicStanding( academicStanding );
 
         if( student.getCurrentStanding( department ) == null )

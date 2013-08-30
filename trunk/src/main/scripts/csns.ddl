@@ -13,8 +13,7 @@
         department_id int8,
         standing_id int8,
         student_id int8,
-        primary key (id),
-        unique (student_id, department_id, standing_id)
+        primary key (id)
     );
 
     create table advisement_record_attachments (
@@ -59,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        text varchar(255),
         rating int4,
+        text varchar(255),
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -81,7 +80,7 @@
         total_points varchar(255),
         resource_id int8,
         section_id int8 not null,
-        question_sheet_id int8 unique,
+        question_sheet_id int8,
         primary key (id)
     );
 
@@ -114,7 +113,7 @@
 
     create table courses (
         id int8 not null,
-        code varchar(255) not null unique,
+        code varchar(255) not null,
         max_units int4 not null,
         min_units int4 not null,
         name varchar(255) not null,
@@ -129,8 +128,7 @@
         student_id int8 not null,
         academic_standing_id int8 not null,
         department_id int8 not null,
-        primary key (student_id, department_id),
-        unique (academic_standing_id)
+        primary key (student_id, department_id)
     );
 
     create table department_additional_graduate_courses (
@@ -163,6 +161,12 @@
         user_id int8 not null
     );
 
+    create table department_options (
+        department_id int8 not null,
+        option varchar(255) not null,
+        primary key (department_id, option)
+    );
+
     create table department_reviewers (
         department_id int8 not null,
         user_id int8 not null
@@ -175,8 +179,8 @@
 
     create table departments (
         id int8 not null,
-        abbreviation varchar(255) not null unique,
-        name varchar(255) not null unique,
+        abbreviation varchar(255) not null,
+        name varchar(255) not null,
         welcome_message varchar(255),
         primary key (id)
     );
@@ -188,8 +192,7 @@
         grade_id int8,
         section_id int8 not null,
         student_id int8 not null,
-        primary key (id),
-        unique (section_id, student_id)
+        primary key (id)
     );
 
     create table files (
@@ -252,16 +255,16 @@
         name varchar(255) not null,
         num_of_posts int4 not null,
         num_of_topics int4 not null,
-        course_id int8 unique,
+        course_id int8,
         department_id int8,
-        last_post_id int8 unique,
+        last_post_id int8,
         primary key (id)
     );
 
     create table grades (
         id int8 not null,
         description varchar(255),
-        symbol varchar(255) not null unique,
+        symbol varchar(255) not null,
         value float8,
         primary key (id)
     );
@@ -356,13 +359,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -391,8 +394,7 @@
         number int4 not null,
         quarter int4 not null,
         course_id int8 not null,
-        primary key (id),
-        unique (quarter, course_id, number)
+        primary key (id)
     );
 
     create table standing_mailinglists (
@@ -404,7 +406,7 @@
         id int8 not null,
         description varchar(255),
         name varchar(255),
-        symbol varchar(255) not null unique,
+        symbol varchar(255) not null,
         primary key (id)
     );
 
@@ -420,9 +422,8 @@
         saved boolean not null,
         assignment_id int8 not null,
         student_id int8 not null,
-        answer_sheet_id int8 unique,
-        primary key (id),
-        unique (student_id, assignment_id)
+        answer_sheet_id int8,
+        primary key (id)
     );
 
     create table subscriptions (
@@ -439,7 +440,7 @@
 
     create table survey_responses (
         id int8 not null,
-        answer_sheet_id int8 not null unique,
+        answer_sheet_id int8 not null,
         survey_id int8 not null,
         primary key (id)
     );
@@ -454,7 +455,7 @@
         type int4 not null,
         author_id int8 not null,
         department_id int8,
-        question_sheet_id int8 not null unique,
+        question_sheet_id int8 not null,
         primary key (id)
     );
 
@@ -468,7 +469,7 @@
         id int8 not null,
         birthday date,
         cell_phone varchar(255),
-        cin varchar(255) not null unique,
+        cin varchar(255) not null,
         city varchar(255),
         disk_quota int4 not null,
         enabled boolean not null,
@@ -479,12 +480,12 @@
         middle_name varchar(255),
         num_of_forum_posts int4 not null,
         password varchar(255) not null,
-        primary_email varchar(255) not null unique,
+        primary_email varchar(255) not null,
         secondary_email varchar(255),
         state varchar(255),
         street varchar(255),
         temporary boolean not null,
-        username varchar(255) not null unique,
+        username varchar(255) not null,
         work_phone varchar(255),
         zip varchar(255),
         primary key (id)
@@ -499,7 +500,7 @@
         id int8 not null,
         locked boolean not null,
         password varchar(255),
-        path varchar(255) not null unique,
+        path varchar(255) not null,
         views int4 not null,
         owner_id int8 not null,
         primary key (id)
@@ -522,537 +523,602 @@
     );
 
     alter table academic_standings 
-        add constraint FKC635A86FF7F6787A 
+        add constraint UK_7hsf5t3wd3nfdl4ckq4tgtjx unique (student_id, department_id, standing_id);
+
+    alter table assignments 
+        add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
+
+    alter table courses 
+        add constraint UK_61og8rbqdd2y28rx2et5fdnxd unique (code);
+
+    alter table current_standings 
+        add constraint UK_4a9ef8cucw6u69q55ovpnoxck unique (academic_standing_id);
+
+    alter table departments 
+        add constraint UK_q6v6nnrch3oi9l7t9on9ik3l8 unique (abbreviation);
+
+    alter table departments 
+        add constraint UK_j6cwks7xecs5jov19ro8ge3qk unique (name);
+
+    alter table enrollments 
+        add constraint UK_j1fpm330vse7gvfghxpg2n5tp unique (section_id, student_id);
+
+    alter table forums 
+        add constraint UK_hq8kwpokg7x9sbmsr89lx4y6v unique (course_id);
+
+    alter table forums 
+        add constraint UK_cnb8dm13flqpo2v206p3jj5qd unique (last_post_id);
+
+    alter table grades 
+        add constraint UK_2ljyc433n941undoa4gnv7ony unique (symbol);
+
+    alter table sections 
+        add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
+
+    alter table standings 
+        add constraint UK_frgiry5vvnksrumybvsdws5l9 unique (symbol);
+
+    alter table submissions 
+        add constraint UK_eiqoen8c565i0gq79ritryilw unique (student_id, assignment_id);
+
+    alter table submissions 
+        add constraint UK_hgewyd3vq7gvuflex6b20l7mx unique (answer_sheet_id);
+
+    alter table survey_responses 
+        add constraint UK_5yuaiow1kfy6r5p1ri01ls6mt unique (answer_sheet_id);
+
+    alter table surveys 
+        add constraint UK_a0d19kmc1nmh63eku46mqkmx9 unique (question_sheet_id);
+
+    alter table users 
+        add constraint UK_ka6m8ghsr7vna1ti6lftwww8o unique (cin);
+
+    alter table users 
+        add constraint UK_rf5m47pvq2fh48mh8wrbsrbns unique (primary_email);
+
+    alter table users 
+        add constraint UK_r43af9ap4edm43mmtq01oddj6 unique (username);
+
+    alter table wiki_pages 
+        add constraint UK_dktfi88v5q4k48ngvq8fkpmsf unique (path);
+
+    alter table academic_standings 
+        add constraint FK_gdwxyd7l658e60ftb5efiblw3 
         foreign key (department_id) 
         references departments;
 
     alter table academic_standings 
-        add constraint FKC635A86F288D1E3A 
+        add constraint FK_b4efy1mapbnrhsficy5pd1jvs 
         foreign key (standing_id) 
         references standings;
 
     alter table academic_standings 
-        add constraint FKC635A86FAEFD183B 
+        add constraint FK_2mqngflh0tlfytmuh631ndfro 
         foreign key (student_id) 
         references users;
 
     alter table advisement_record_attachments 
-        add constraint FKC40A95BB9895B0B 
+        add constraint FK_pdhlg3do8r03448s8nppx50p4 
         foreign key (file_id) 
         references files;
 
     alter table advisement_record_attachments 
-        add constraint FKC40A95B9D06760A 
+        add constraint FK_dsqilmt9xqt87fqrva6u88jms 
         foreign key (record_id) 
         references advisement_records;
 
     alter table advisement_records 
-        add constraint FK5AB4FF49AEFD183B 
-        foreign key (student_id) 
-        references users;
-
-    alter table advisement_records 
-        add constraint FK5AB4FF49C5DD9096 
+        add constraint FK_spfviubr6oegk0fne17kknp66 
         foreign key (advisor_id) 
         references users;
 
+    alter table advisement_records 
+        add constraint FK_lwpf8vq3ix2cw87k8snmbpbvj 
+        foreign key (student_id) 
+        references users;
+
     alter table answer_sections 
-        add constraint FK96B4258F9AA31C1D 
+        add constraint FK_bp132bx914jv028eioexs8osp 
         foreign key (answer_sheet_id) 
         references answer_sheets;
 
     alter table answer_selections 
-        add constraint FK3DB533885DC9F17B 
+        add constraint FK_64jvw0qh9qoxps0oruq5c7ij1 
         foreign key (answer_id) 
         references answers;
 
     alter table answer_sheets 
-        add constraint FK4BB67A95447A76EB 
+        add constraint FK_mvn9boi1pfpkxwi4er0n7gbob 
         foreign key (author_id) 
         references users;
 
     alter table answer_sheets 
-        add constraint FK4BB67A95810289CD 
+        add constraint FK_2a1atrd6dlc5w004spfdbw52l 
         foreign key (question_sheet_id) 
         references question_sheets;
 
     alter table answers 
-        add constraint FKCD7DB87592AF0204 
-        foreign key (attachment_id) 
-        references files;
+        add constraint FK_a8hukb7yjph7wnrlnn8x0fcja 
+        foreign key (question_id) 
+        references questions;
 
     alter table answers 
-        add constraint FKCD7DB875F424C19D 
+        add constraint FK_d5u4r233tg8mpi1enp2gugx9s 
         foreign key (answer_section_id) 
         references answer_sections;
 
     alter table answers 
-        add constraint FKCD7DB8752E9C937A 
-        foreign key (question_id) 
-        references questions;
+        add constraint FK_i8agbaeksrmm44c8l31gqdtnp 
+        foreign key (attachment_id) 
+        references files;
 
     alter table assignments 
-        add constraint FK68455346DA3A2B9A 
-        foreign key (section_id) 
-        references sections;
-
-    alter table assignments 
-        add constraint FK68455346C92D294B 
+        add constraint FK_3npt5rig34lv4oy0gystus2ed 
         foreign key (resource_id) 
         references resources;
 
     alter table assignments 
-        add constraint FK68455346810289CD 
+        add constraint FK_cyk799lr6903k9wpf33rwrxwi 
+        foreign key (section_id) 
+        references sections;
+
+    alter table assignments 
+        add constraint FK_7ed6gywfn7fll8aklgvqwxnlr 
         foreign key (question_sheet_id) 
         references question_sheets;
 
     alter table authorities 
-        add constraint FK2B0F1321E3C184AB 
+        add constraint FK_s21btj9mlob1djhm3amivbe5e 
         foreign key (user_id) 
         references users;
 
     alter table course_substitutions 
-        add constraint FK12AF43F2DF387E75 
-        foreign key (substitute_course_id) 
-        references courses;
+        add constraint FK_4xv8mf3jidbdi508wufg15vv3 
+        foreign key (advisement_record_id) 
+        references advisement_records;
 
     alter table course_substitutions 
-        add constraint FK12AF43F25E5E8AEC 
+        add constraint FK_h4t8oqw9cnw62m8gnrk4t6qaj 
         foreign key (original_course_id) 
         references courses;
 
     alter table course_substitutions 
-        add constraint FK12AF43F2E3403151 
+        add constraint FK_dj74ijbdy0o9lky297prr87co 
+        foreign key (substitute_course_id) 
+        references courses;
+
+    alter table course_transfers 
+        add constraint FK_qcduonuwdcffp1xdg5u4t8om 
         foreign key (advisement_record_id) 
         references advisement_records;
 
     alter table course_transfers 
-        add constraint FKBB48FAC490C57DA 
-        foreign key (course_id) 
-        references courses;
-
-    alter table course_transfers 
-        add constraint FKBB48FAC4E3403151 
-        foreign key (advisement_record_id) 
-        references advisement_records;
-
-    alter table course_waivers 
-        add constraint FKA0B4AC6B90C57DA 
+        add constraint FK_h623do91lmlhqhdh13k5eu4kl 
         foreign key (course_id) 
         references courses;
 
     alter table course_waivers 
-        add constraint FKA0B4AC6BE3403151 
+        add constraint FK_965lr47ip8vhailtkrukhvdbe 
         foreign key (advisement_record_id) 
         references advisement_records;
 
-    alter table courses 
-        add constraint FK391923B8F7F6787A 
-        foreign key (department_id) 
-        references departments;
+    alter table course_waivers 
+        add constraint FK_cgb85a94p4eut3bofv5n3x1sw 
+        foreign key (course_id) 
+        references courses;
 
     alter table courses 
-        add constraint FK391923B8AFCBF26 
+        add constraint FK_rpniainf0bnl5d9b1s5e03p1c 
         foreign key (coordinator_id) 
         references users;
 
     alter table courses 
-        add constraint FK391923B85EEDFE02 
+        add constraint FK_i4cr87kpfjdhpko2ahmpcdv51 
+        foreign key (department_id) 
+        references departments;
+
+    alter table courses 
+        add constraint FK_9nrwscagtmas6q6txrmoa444d 
         foreign key (syllabus_id) 
         references files;
 
     alter table current_standings 
-        add constraint FKE2274261F7F6787A 
-        foreign key (department_id) 
-        references departments;
-
-    alter table current_standings 
-        add constraint FKE2274261C68B1129 
+        add constraint FK_4a9ef8cucw6u69q55ovpnoxck 
         foreign key (academic_standing_id) 
         references academic_standings;
 
     alter table current_standings 
-        add constraint FKE2274261AEFD183B 
+        add constraint FK_m35n4fufdi570uo8m7f4jahg3 
+        foreign key (department_id) 
+        references departments;
+
+    alter table current_standings 
+        add constraint FK_maww42e8vw3bnjxvtyc40ykf3 
         foreign key (student_id) 
         references users;
 
     alter table department_additional_graduate_courses 
-        add constraint FKE15B3A6FF7F6787A 
-        foreign key (department_id) 
-        references departments;
+        add constraint FK_l4glpwic362dn06uep6v0jmi1 
+        foreign key (course_id) 
+        references courses;
 
     alter table department_additional_graduate_courses 
-        add constraint FKE15B3A6F90C57DA 
-        foreign key (course_id) 
-        references courses;
-
-    alter table department_additional_undergraduate_courses 
-        add constraint FKDCE084D1F7F6787A 
+        add constraint FK_qsobw9rio8lird5y527w5jred 
         foreign key (department_id) 
         references departments;
 
     alter table department_additional_undergraduate_courses 
-        add constraint FKDCE084D190C57DA 
+        add constraint FK_eirvjog89lg0pmdlshyys2by4 
         foreign key (course_id) 
         references courses;
 
-    alter table department_administrators 
-        add constraint FKB0C173D3F7F6787A 
+    alter table department_additional_undergraduate_courses 
+        add constraint FK_663rvu3umig3mgqe9pw7ay30d 
         foreign key (department_id) 
         references departments;
 
     alter table department_administrators 
-        add constraint FKB0C173D3E3C184AB 
+        add constraint FK_ltl2qejs6cjhrosfti55gn4gk 
+        foreign key (user_id) 
+        references users;
+
+    alter table department_administrators 
+        add constraint FK_rkx6fhm4yxlcbkdhgwgs4vh0d 
+        foreign key (department_id) 
+        references departments;
+
+    alter table department_faculty 
+        add constraint FK_eki8cc049b0jx59uy1tqjwg4p 
         foreign key (user_id) 
         references users;
 
     alter table department_faculty 
-        add constraint FK77021277F7F6787A 
-        foreign key (department_id) 
-        references departments;
-
-    alter table department_faculty 
-        add constraint FK77021277E3C184AB 
-        foreign key (user_id) 
-        references users;
-
-    alter table department_graduate_courses 
-        add constraint FKF9899A11F7F6787A 
+        add constraint FK_bt7mbo0ikl88c9761dxxog4q1 
         foreign key (department_id) 
         references departments;
 
     alter table department_graduate_courses 
-        add constraint FKF9899A1190C57DA 
+        add constraint FK_vfhirhe0keow4l5p5c2rmx03 
         foreign key (course_id) 
         references courses;
 
-    alter table department_instructors 
-        add constraint FK6B1F3A09F7F6787A 
+    alter table department_graduate_courses 
+        add constraint FK_odj2pvq31jbcs9wv92wiflbgt 
         foreign key (department_id) 
         references departments;
 
     alter table department_instructors 
-        add constraint FK6B1F3A09E3C184AB 
+        add constraint FK_7d0xi3mi9cpamommq7uevak1r 
+        foreign key (user_id) 
+        references users;
+
+    alter table department_instructors 
+        add constraint FK_b5p67vw37665g60lavrnnxoig 
+        foreign key (department_id) 
+        references departments;
+
+    alter table department_options 
+        add constraint FK_lrqtbs9px96ynf5hk5p7jvljc 
+        foreign key (department_id) 
+        references departments;
+
+    alter table department_reviewers 
+        add constraint FK_3nhl201t5dxfwwvavo17ngajt 
         foreign key (user_id) 
         references users;
 
     alter table department_reviewers 
-        add constraint FK29BBF261F7F6787A 
-        foreign key (department_id) 
-        references departments;
-
-    alter table department_reviewers 
-        add constraint FK29BBF261E3C184AB 
-        foreign key (user_id) 
-        references users;
-
-    alter table department_undergraduate_courses 
-        add constraint FKE2469A6FF7F6787A 
+        add constraint FK_1q9bvp0tfl98ittof6c7g21y3 
         foreign key (department_id) 
         references departments;
 
     alter table department_undergraduate_courses 
-        add constraint FKE2469A6F90C57DA 
+        add constraint FK_17jsitihwbuwks72k25j7hyq7 
         foreign key (course_id) 
         references courses;
+
+    alter table department_undergraduate_courses 
+        add constraint FK_johybgn2xmnofelshl21rs34t 
+        foreign key (department_id) 
+        references departments;
 
     alter table enrollments 
-        add constraint FKD680FDEFC0F82E5A 
+        add constraint FK_gkiw9pcj7x5fbrevfc144ecnw 
         foreign key (grade_id) 
         references grades;
 
     alter table enrollments 
-        add constraint FKD680FDEFAEFD183B 
-        foreign key (student_id) 
-        references users;
-
-    alter table enrollments 
-        add constraint FKD680FDEFDA3A2B9A 
+        add constraint FK_j3itp303earfuf3d1akees0xr 
         foreign key (section_id) 
         references sections;
 
+    alter table enrollments 
+        add constraint FK_qo458bnq40h7b9920ikhlfn0o 
+        foreign key (student_id) 
+        references users;
+
     alter table files 
-        add constraint FK5CEBA7767E6511D 
+        add constraint FK_5ok1awgnfwcf01537ylbycyq1 
+        foreign key (owner_id) 
+        references users;
+
+    alter table files 
+        add constraint FK_aretmtw1sqqw1pfkqdew9f7y7 
         foreign key (parent_id) 
         references files;
 
     alter table files 
-        add constraint FK5CEBA774FA834C3 
-        foreign key (owner_id) 
-        references users;
-
-    alter table files 
-        add constraint FK5CEBA77B350BE3A 
+        add constraint FK_r3ilikiw4pt9owf91wedbh472 
         foreign key (submission_id) 
         references submissions;
 
     alter table forum_moderators 
-        add constraint FK7C3AF5ECE3C184AB 
+        add constraint FK_nqdympblfjedsdgvbbkkvirgs 
         foreign key (user_id) 
         references users;
 
     alter table forum_moderators 
-        add constraint FK7C3AF5ECFE5A182F 
+        add constraint FK_o0oj0hi884lhla3dy4lg0ktg7 
         foreign key (forum_id) 
         references forums;
 
     alter table forum_post_attachments 
-        add constraint FKB4866DEFB9895B0B 
+        add constraint FK_k39tpv1k9cv0npjqeu4d9b1lq 
         foreign key (file_id) 
         references files;
 
     alter table forum_post_attachments 
-        add constraint FKB4866DEF2186D105 
+        add constraint FK_lj3a0cs8xvqiitwupsqg4tp8q 
         foreign key (post_id) 
         references forum_posts;
 
     alter table forum_posts 
-        add constraint FKEDDC4F35447A76EB 
+        add constraint FK_k19s1k9dbmfvli8milvls4py0 
         foreign key (author_id) 
         references users;
 
     alter table forum_posts 
-        add constraint FKEDDC4F35A958756F 
-        foreign key (topic_id) 
-        references forum_topics;
-
-    alter table forum_posts 
-        add constraint FKEDDC4F357D9A8AC9 
+        add constraint FK_njr1la3q9de1ydgdicgrica6s 
         foreign key (edited_by) 
         references users;
 
-    alter table forum_topics 
-        add constraint FKD47F7202FE5A182F 
-        foreign key (forum_id) 
-        references forums;
+    alter table forum_posts 
+        add constraint FK_ddw9kw8owb7o3vnnsilye286w 
+        foreign key (topic_id) 
+        references forum_topics;
 
     alter table forum_topics 
-        add constraint FKD47F720217FF9A76 
+        add constraint FK_ll68mar7cp0k7edic8nqjoy9f 
         foreign key (first_post_id) 
         references forum_posts;
 
     alter table forum_topics 
-        add constraint FKD47F720243B0145C 
+        add constraint FK_n26u7275hxneotd0dcj3siesd 
+        foreign key (forum_id) 
+        references forums;
+
+    alter table forum_topics 
+        add constraint FK_fhotqdk3icwdtfuf497y1jgj1 
         foreign key (last_post_id) 
         references forum_posts;
 
     alter table forums 
-        add constraint FKB4601772F7F6787A 
-        foreign key (department_id) 
-        references departments;
-
-    alter table forums 
-        add constraint FKB460177290C57DA 
+        add constraint FK_hq8kwpokg7x9sbmsr89lx4y6v 
         foreign key (course_id) 
         references courses;
 
     alter table forums 
-        add constraint FKB460177243B0145C 
+        add constraint FK_fik5pbj65bh1x1rhdw010i4yl 
+        foreign key (department_id) 
+        references departments;
+
+    alter table forums 
+        add constraint FK_cnb8dm13flqpo2v206p3jj5qd 
         foreign key (last_post_id) 
         references forum_posts;
 
     alter table mailinglist_message_attachments 
-        add constraint FK6BDFCC22B9895B0B 
+        add constraint FK_526nr5va9rgd3lrc30psvxpao 
         foreign key (file_id) 
         references files;
 
     alter table mailinglist_message_attachments 
-        add constraint FK6BDFCC22348C3C77 
+        add constraint FK_4pjsd9ta54umbvdr4uiwam2hf 
         foreign key (message_id) 
         references mailinglist_messages;
 
     alter table mailinglist_messages 
-        add constraint FK7B4FD2E2BA7D82B7 
-        foreign key (mailinglist_id) 
-        references mailinglists;
-
-    alter table mailinglist_messages 
-        add constraint FK7B4FD2E2447A76EB 
+        add constraint FK_fubpkq16gtk4x038d2epoolv0 
         foreign key (author_id) 
         references users;
 
+    alter table mailinglist_messages 
+        add constraint FK_luvrjraoa9kj6jo0fu6i82a7d 
+        foreign key (mailinglist_id) 
+        references mailinglists;
+
     alter table mailinglists 
-        add constraint FK7C78C7AAF7F6787A 
+        add constraint FK_ht8ig93y9g103erqx1j0m2bpv 
         foreign key (department_id) 
         references departments;
 
     alter table news 
-        add constraint FK338AD3F7F6787A 
+        add constraint FK_5vey85hx7pjb3xkss6luve707 
         foreign key (department_id) 
         references departments;
 
     alter table news 
-        add constraint FK338AD3A958756F 
+        add constraint FK_nc0r2fhq6ur10q2rl7u98pltu 
         foreign key (topic_id) 
         references forum_topics;
 
     alter table project_advisors 
-        add constraint FK8EBFEB19C30E4F1A 
-        foreign key (project_id) 
-        references projects;
-
-    alter table project_advisors 
-        add constraint FK8EBFEB19C5DD9096 
+        add constraint FK_n0ig0bjo0vq6lv5r5kgvyiwsg 
         foreign key (advisor_id) 
         references users;
 
-    alter table project_resources 
-        add constraint FKF551B87FC30E4F1A 
+    alter table project_advisors 
+        add constraint FK_hp6rohtsc7nlsh6t5wxhyrpur 
         foreign key (project_id) 
         references projects;
 
     alter table project_resources 
-        add constraint FKF551B87FC92D294B 
+        add constraint FK_n46lhiwx8a63b1986ktpqbny 
         foreign key (resource_id) 
         references resources;
 
-    alter table project_students 
-        add constraint FK28F717FEC30E4F1A 
+    alter table project_resources 
+        add constraint FK_9rntv4exxpu29v0uqyb3tljgr 
         foreign key (project_id) 
         references projects;
 
     alter table project_students 
-        add constraint FK28F717FEAEFD183B 
+        add constraint FK_ccwn8kyftaetasdut23vdrhm 
         foreign key (student_id) 
         references users;
 
+    alter table project_students 
+        add constraint FK_iqqlnv6t57rfws37o7t4b39f2 
+        foreign key (project_id) 
+        references projects;
+
     alter table projects 
-        add constraint FKC479187AF7F6787A 
+        add constraint FK_tbu64x3h2rnwlju3cjsrji41k 
         foreign key (department_id) 
         references departments;
 
     alter table question_choices 
-        add constraint FKCCF0F399376C843B 
+        add constraint FK_c8dvin7vnie1dpmintbvd9qlv 
         foreign key (question_id) 
         references questions;
 
     alter table question_correct_selections 
-        add constraint FKC4E1AC55376C843B 
+        add constraint FK_eh4055m11na1d63kid5e41g7d 
         foreign key (question_id) 
         references questions;
 
     alter table question_sections 
-        add constraint FK9CB15667810289CD 
+        add constraint FK_h8rhrmj2vsmob8yetgksocb5d 
         foreign key (question_sheet_id) 
         references question_sheets;
 
     alter table questions 
-        add constraint FK95C5414DC05F834D 
+        add constraint FK_ff20ixg4nnw7wtwlxxfd0oa79 
         foreign key (question_section_id) 
         references question_sections;
 
     alter table resources 
-        add constraint FK89CCBE25B9895B0B 
+        add constraint FK_tlofym1k7a9cqjjfhk5je1xy1 
         foreign key (file_id) 
         references files;
 
     alter table section_instructors 
-        add constraint FK8C3CB11C644C5699 
+        add constraint FK_bdnw2i9gn4dyut8n2m2o8is14 
         foreign key (instructor_id) 
         references users;
 
     alter table section_instructors 
-        add constraint FK8C3CB11CDA3A2B9A 
+        add constraint FK_6sy04nv0t0w18o9ar1shf4299 
         foreign key (section_id) 
         references sections;
 
     alter table sections 
-        add constraint FK38805E2E90C57DA 
+        add constraint FK_j52kea1adexdgmvwldq0uluko 
         foreign key (course_id) 
         references courses;
 
     alter table standing_mailinglists 
-        add constraint FK851450BD288D1E3A 
+        add constraint FK_futm4ar6w96g0yxx6ml4v48tp 
         foreign key (standing_id) 
         references standings;
 
     alter table submissions 
-        add constraint FK2912EA73583829A 
+        add constraint FK_tmp9uq9lu4lneyua21wexw0pt 
         foreign key (assignment_id) 
         references assignments;
 
     alter table submissions 
-        add constraint FK2912EA7AEFD183B 
+        add constraint FK_6l5xeon1g3op6nlntrr6d03ba 
         foreign key (student_id) 
         references users;
 
     alter table submissions 
-        add constraint FK2912EA79AA31C1D 
+        add constraint FK_hgewyd3vq7gvuflex6b20l7mx 
         foreign key (answer_sheet_id) 
         references answer_sheets;
 
     alter table subscriptions 
-        add constraint FK7674CAF64A4802EE 
+        add constraint FK_qhna8fdv16ljlwghm6vebsxdr 
         foreign key (subscriber_id) 
         references users;
 
     alter table survey_responses 
-        add constraint FK86922DAD5B66DD70 
-        foreign key (survey_id) 
-        references surveys;
-
-    alter table survey_responses 
-        add constraint FK86922DAD9AA31C1D 
+        add constraint FK_5yuaiow1kfy6r5p1ri01ls6mt 
         foreign key (answer_sheet_id) 
         references answer_sheets;
 
+    alter table survey_responses 
+        add constraint FK_rp3ncfv50xjtn41ur0lcuwhf3 
+        foreign key (survey_id) 
+        references surveys;
+
     alter table surveys 
-        add constraint FK91914459F7F6787A 
+        add constraint FK_pjyh94nbrlb6vfov5ubu9srrs 
+        foreign key (author_id) 
+        references users;
+
+    alter table surveys 
+        add constraint FK_fwfsqutlamulla3it2uwyvvcd 
         foreign key (department_id) 
         references departments;
 
     alter table surveys 
-        add constraint FK91914459447A76EB 
-        foreign key (author_id) 
-        references users;
-
-    alter table surveys 
-        add constraint FK91914459810289CD 
+        add constraint FK_a0d19kmc1nmh63eku46mqkmx9 
         foreign key (question_sheet_id) 
         references question_sheets;
 
     alter table surveys_taken 
-        add constraint FK95459D61E3C184AB 
-        foreign key (user_id) 
-        references users;
-
-    alter table surveys_taken 
-        add constraint FK95459D615B66DD70 
+        add constraint FK_3j8vewipv34plcrivu17d7sox 
         foreign key (survey_id) 
         references surveys;
 
+    alter table surveys_taken 
+        add constraint FK_bu5cyb5by7ge6h0m8pergtx83 
+        foreign key (user_id) 
+        references users;
+
     alter table wiki_discussions 
-        add constraint FKE66DD33CA958756F 
+        add constraint FK_6yk6dpleuknebuqmajkjupxec 
         foreign key (topic_id) 
         references forum_topics;
 
     alter table wiki_discussions 
-        add constraint FKE66DD33C773840BA 
+        add constraint FK_q3il29hs5gs3s7bl30yxmiaul 
         foreign key (page_id) 
         references wiki_pages;
 
     alter table wiki_pages 
-        add constraint FK24357E754FA834C3 
+        add constraint FK_t12rjajyw53wee2qno2iraicu 
         foreign key (owner_id) 
         references users;
 
     alter table wiki_revision_attachments 
-        add constraint FKF0800A7BB9895B0B 
+        add constraint FK_dljtw6ugmm1n0ff0mwsams3 
         foreign key (file_id) 
         references files;
 
     alter table wiki_revision_attachments 
-        add constraint FKF0800A7BD5F8FD3A 
+        add constraint FK_dwb8jvhu4b9btssbawsnd2npc 
         foreign key (revision_id) 
         references wiki_revisions;
 
     alter table wiki_revisions 
-        add constraint FKE0471229447A76EB 
+        add constraint FK_rth6cql0ncfo7rguoyrcpstbp 
         foreign key (author_id) 
         references users;
 
     alter table wiki_revisions 
-        add constraint FKE0471229773840BA 
+        add constraint FK_a4xr0nwecmy9xy4nquvb2bitk 
         foreign key (page_id) 
         references wiki_pages;
 

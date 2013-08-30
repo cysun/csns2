@@ -21,9 +21,12 @@ package csns.model.academics;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -146,6 +149,12 @@ public class Department implements Serializable {
         CascadeType.MERGE })
     @OrderBy("id asc")
     private List<Mailinglist> mailinglists;
+
+    @ElementCollection
+    @CollectionTable(name = "department_options",
+        joinColumns = @JoinColumn(name = "department_id"))
+    @Column(name = "option", nullable = false)
+    private Set<String> options;
 
     public Department()
     {
@@ -303,6 +312,16 @@ public class Department implements Serializable {
     public void setMailinglists( List<Mailinglist> mailinglists )
     {
         this.mailinglists = mailinglists;
+    }
+
+    public Set<String> getOptions()
+    {
+        return options;
+    }
+
+    public void setOptions( Set<String> options )
+    {
+        this.options = options;
     }
 
 }

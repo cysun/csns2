@@ -173,4 +173,13 @@ public class DepartmentInfoController {
         return "redirect:/department/" + dept + "/courses#" + level;
     }
 
+    @RequestMapping("/department/{dept}/option/{option}")
+    public String option( @PathVariable String dept,
+        @PathVariable String option, ModelMap models )
+    {
+        Department department = departmentDao.getDepartment( dept );
+        models.put( "result", department.getOptions().contains( option ) );
+        return "jsonView";
+    }
+
 }

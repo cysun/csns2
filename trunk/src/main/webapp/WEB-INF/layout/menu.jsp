@@ -1,6 +1,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+<script>
+$(function(){
+	$("#mft-menu-item").hide();
+    $("#assessment-menu").hover(function(){
+    	if( $("#mft-menu-item").is(":hidden") )
+    	{
+            $.ajax({
+                url: "<c:url value='/department/${dept}/option/MFT' />",
+                dataType: "json",
+                success: function(data){
+                    if( data.result ) $("#mft-menu-item").show();
+                }
+            });
+    	}
+    });
+});
+</script>
+
 <div id="csns_menu">
 <div id="menu">
 <ul class="menu">
@@ -39,6 +57,17 @@
            src="<c:url value='/img/icons/bricks.png' />" />Projects</a></li>
   </ul></div>
 </li>
+
+<c:if test="${dept == 'cs'}">
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
+<li><a id="assessment-menu" href="#">Assessment</a>
+  <div><ul>
+    <li id="mft-menu-item"><a href="<c:url value='/department/${dept}/mft' />"><img alt=""
+           src="<c:url value='/img/icons/mft.png' />" />MFT</a></li>
+  </ul></div>
+</li>
+</security:authorize>
+</c:if>
 
 <li><a href="#">Resources</a>
   <div><ul>

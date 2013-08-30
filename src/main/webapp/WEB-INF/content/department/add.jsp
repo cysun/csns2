@@ -49,6 +49,13 @@ $(function(){
     </td>
   </tr>
 
+  <tr>
+    <th>Assessment Tools</th>
+    <td>
+      MFT <form:checkbox path="options" value="MFT"/>
+    </td>
+  </tr>
+
   <tr><th></th><td><input class="subbutton" type="submit" value="Add" /></td></tr>
 </table>
 </form:form>

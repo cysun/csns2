@@ -467,6 +467,12 @@ create table department_additional_graduate_courses (
     course_id       bigint not null references courses(id)
 );
 
+create table department_options (
+    department_id   bigint not null references departments(id),
+    option          varchar(255) not null,
+  primary key (department_id, option)
+);
+
 alter table courses add constraint courses_department_fk
     foreign key (department_id) references departments(id);
 

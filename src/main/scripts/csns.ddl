@@ -58,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -292,6 +292,57 @@
         primary key (id)
     );
 
+    create table mft_assessment_indicators (
+        id int8 not null,
+        ai1 int4 not null,
+        ai2 int4 not null,
+        ai3 int4 not null,
+        date timestamp not null,
+        deleted boolean not null,
+        department_id int8,
+        primary key (id)
+    );
+
+    create table mft_distribution_entries (
+        distribution_id int8 not null,
+        percentile int4 not null,
+        value int4 not null
+    );
+
+    create table mft_distribution_types (
+        id int8 not null,
+        alias varchar(255) not null,
+        max int4 not null,
+        min int4 not null,
+        name varchar(255) not null,
+        value_label varchar(255),
+        primary key (id)
+    );
+
+    create table mft_distributions (
+        id int8 not null,
+        deleted boolean not null,
+        from_date timestamp,
+        mean float8,
+        median float8,
+        num_of_samples int4,
+        stdev float8,
+        to_date timestamp,
+        year int4 not null,
+        department_id int8,
+        type_id int8,
+        primary key (id)
+    );
+
+    create table mft_scores (
+        id int8 not null,
+        date timestamp not null,
+        score int4 not null,
+        department_id int8,
+        user_id int8,
+        primary key (id)
+    );
+
     create table news (
         id int8 not null,
         expire_date timestamp,
@@ -361,11 +412,11 @@
         point_value int4 not null,
         max_rating int4,
         min_rating int4,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -551,6 +602,12 @@
 
     alter table grades 
         add constraint UK_2ljyc433n941undoa4gnv7ony unique (symbol);
+
+    alter table mft_distribution_types 
+        add constraint UK_93ptdb5nes5i49vagwne1fwfb unique (alias);
+
+    alter table mft_distribution_types 
+        add constraint UK_68t7p53mnslfqoqvyumslrtgj unique (name);
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
@@ -941,6 +998,36 @@
         add constraint FK_ht8ig93y9g103erqx1j0m2bpv 
         foreign key (department_id) 
         references departments;
+
+    alter table mft_assessment_indicators 
+        add constraint FK_3vhg3j7xp0u60crdionl5shns 
+        foreign key (department_id) 
+        references departments;
+
+    alter table mft_distribution_entries 
+        add constraint FK_2p1l3s24er8uqyk797uxj6ivm 
+        foreign key (distribution_id) 
+        references mft_distributions;
+
+    alter table mft_distributions 
+        add constraint FK_cdujg25dtht5pne89w5mn4w0a 
+        foreign key (department_id) 
+        references departments;
+
+    alter table mft_distributions 
+        add constraint FK_spad6dusuiyup6bj450nw54hm 
+        foreign key (type_id) 
+        references mft_distribution_types;
+
+    alter table mft_scores 
+        add constraint FK_6pqva08sn8i7nrwhdqycml800 
+        foreign key (department_id) 
+        references departments;
+
+    alter table mft_scores 
+        add constraint FK_oqbfom3u0qmb8fl3t2778fgex 
+        foreign key (user_id) 
+        references users;
 
     alter table news 
         add constraint FK_5vey85hx7pjb3xkss6luve707 

@@ -1076,6 +1076,57 @@ create table project_resources (
   primary key (project_id, resource_order)
 );
 
+---------
+-- mft --
+---------
+
+create table mft_scores (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    user_id         bigint references users(id),
+    score           integer not null,
+    date            date not null
+);
+
+create table mft_assessment_indicators (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    ai1             integer not null,
+    ai2             integer not null,
+    ai3             integer not null,
+    date            date not null,
+    deleted         boolean not null default 'f'
+);
+
+create table mft_distribution_types (
+    id          bigint primary key,
+    name        varchar(255) not null unique,
+    alias       varchar(255) not null unique,
+    min         integer not null,
+    max         integer not null,
+    value_label varchar(255)
+);
+
+create table mft_distributions (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    type_id         bigint references mft_distribution_types(id),
+    year            integer not null,
+    from_date       date,
+    to_date         date,
+    num_of_samples  integer,
+    mean            double precision,
+    median          double precision,
+    stdev           double precision,
+    deleted         boolean not null default 'f'
+);
+
+create table mft_distribution_entries (
+    distribution_id bigint not null references mft_distributions(id),
+    percentile      integer not null,
+    value           integer not null
+);
+
 ------------------------------
 -- functions and procedures --
 ------------------------------

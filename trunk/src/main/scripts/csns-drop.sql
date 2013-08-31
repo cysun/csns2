@@ -8,6 +8,12 @@ drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
+drop table mft_distribution_entries;
+drop table mft_distributions;
+drop table mft_distribution_types;
+drop table mft_assessment_indicators;
+drop table mft_scores;
+
 drop table project_resources;
 drop table project_students;
 drop table project_advisors;
@@ -70,6 +76,7 @@ drop function surveys_ts_trigger_function();
 drop table surveys;
 
 alter table courses drop constraint courses_department_fk;
+drop table department_options;
 drop table department_additional_graduate_courses;
 drop table department_graduate_courses;
 drop table department_additional_undergraduate_courses;

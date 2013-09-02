@@ -62,8 +62,8 @@ $(function(){
 <security:authorize access="authenticated and principal.isFaculty('${dept}')">
 <li><a id="assessment-menu" href="#">Assessment</a>
   <div><ul>
-    <li id="mft-menu-item"><a href="<c:url value='/department/${dept}/mft' />"><img alt=""
-           src="<c:url value='/img/icons/mft.png' />" />MFT</a></li>
+    <li id="mft-menu-item"><a href="<c:url value='/department/${dept}/mft/score' />"><img
+        alt="" src="<c:url value='/img/icons/mft.png' />" />MFT</a></li>
   </ul></div>
 </li>
 </security:authorize>

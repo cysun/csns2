@@ -739,6 +739,15 @@
         <put-attribute name="content" value="/WEB-INF/content/project/resource/edit.jsp" />
     </definition>
 
+    <!-- === -->
+    <!-- MFT -->
+    <!-- === -->
+
+    <definition name="mft/score" extends="layout.basic">
+        <put-attribute name="title" value="MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

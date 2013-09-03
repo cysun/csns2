@@ -22,9 +22,14 @@ import java.util.Date;
 import java.util.List;
 
 import csns.model.academics.Department;
+import csns.model.assessment.MFTScore;
 
 public interface MFTScoreDao {
 
     List<Date> getDates( Department department );
+
+    List<MFTScore> getScores( Department department, Date date );
+
+    List<MFTScore> getScores( Department department, int year );
 
 }

@@ -743,7 +743,7 @@
     <!-- MFT -->
     <!-- === -->
 
-    <definition name="mft/score" extends="layout.basic">
+    <definition name="mft/score" extends="layout.jqueryui">
         <put-attribute name="title" value="MFT Scores" />
         <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
     </definition>

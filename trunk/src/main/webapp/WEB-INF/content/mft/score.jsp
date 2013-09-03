@@ -42,7 +42,7 @@ $(function(){
   <tr>
     <td>${score.user.cin}</td>
     <td>${score.user.lastName}, ${score.user.firstName}</td>
-    <td>${score.score}</td>
+    <td>${score.value}</td>
     <td>${score.percentile}</td>
   </tr>
   </c:forEach>

@@ -30,12 +30,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Department;
 import csns.model.core.User;
 
 @Entity
-@Table(name = "mft_scores")
+@Table(name = "mft_scores",
+    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
+        "user_id", "date" }))
 public class MFTScore implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,17 +48,17 @@ public class MFTScore implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    private int score;
 
     @Column(nullable = false)
     private Date date;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    private int value;
 
     @Transient
     private Integer percentile;
@@ -84,6 +87,16 @@ public class MFTScore implements Serializable {
         this.department = department;
     }
 
+    public void setDate( Date date )
+    {
+        this.date = date;
+    }
+
+    public Integer getPercentile()
+    {
+        return percentile;
+    }
+
     public User getUser()
     {
         return user;
@@ -94,29 +107,19 @@ public class MFTScore implements Serializable {
         this.user = user;
     }
 
-    public int getScore()
+    public int getValue()
     {
-        return score;
+        return value;
     }
 
-    public void setScore( int score )
+    public void setValue( int value )
     {
-        this.score = score;
+        this.value = value;
     }
 
     public Date getDate()
     {
         return date;
-    }
-
-    public void setDate( Date date )
-    {
-        this.date = date;
-    }
-
-    public Integer getPercentile()
-    {
-        return percentile;
     }
 
     public void setPercentile( Integer percentile )

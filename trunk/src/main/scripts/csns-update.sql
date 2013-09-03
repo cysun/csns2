@@ -7,12 +7,13 @@ create table department_options (
 create table mft_scores (
     id              bigint primary key,
     department_id   bigint references departments(id),
+    date            date not null,
     user_id         bigint references users(id),
-    score           integer not null,
-    date            date not null
+    value           integer not null,
+  unique (department_id, user_id, date)
 );
 
-insert into mft_scores select nextval('hibernate_sequence'), 200, id, mft_score, mft_date
+insert into mft_scores select nextval('hibernate_sequence'), 200, mft_date, id, mft_score 
     from users where mft_score is not null;
 
 alter table users drop column mft_score;

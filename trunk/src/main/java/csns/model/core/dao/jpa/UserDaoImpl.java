@@ -105,14 +105,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public List<User> getUsers( String lastName, String firstName )
+    {
+        String query = "from User where lower(concat(lastName,firstName)) = :name";
+
+        return entityManager.createQuery( query, User.class )
+            .setParameter( "name", (lastName + firstName).toLowerCase() )
+            .getResultList();
+    }
+
+    @Override
     public List<User> searchUsers( String term )
     {
         term = term.toLowerCase();
         String query = "from User where cin = :term or lower(username) = :term "
             + "or lower(firstName) = :term or lower(lastName) = :term "
             + "or lower(firstName || ' ' || lastName) = :term "
-            + "or primaryEmail = :term "
-            + "order by firstName asc";
+            + "or primaryEmail = :term order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )
@@ -128,8 +137,7 @@ public class UserDaoImpl implements UserDao {
             + "or lower(firstName) like :term || '%' "
             + "or lower(lastName) like :term || '%' "
             + "or lower(firstName || ' ' || lastName) like :term || '%' "
-            + "or primaryEmail like :term || '%' "
-            + "order by firstName asc";
+            + "or primaryEmail like :term || '%' order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )

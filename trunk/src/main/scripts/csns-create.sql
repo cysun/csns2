@@ -1082,10 +1082,11 @@ create table project_resources (
 
 create table mft_scores (
     id              bigint primary key,
-    department_id   bigint references departments(id),
-    user_id         bigint references users(id),
-    score           integer not null,
-    date            date not null
+    department_id   bigint not null references departments(id),
+    date            date not null,
+    user_id         bigint not null references users(id),
+    value           integer not null,
+  unique (department_id, date, user_id)
 );
 
 create table mft_assessment_indicators (

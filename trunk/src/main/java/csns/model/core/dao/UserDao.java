@@ -34,6 +34,8 @@ public interface UserDao {
 
     List<User> getUsers( Long ids[] );
 
+    List<User> getUsers( String lastName, String firstName );
+
     List<User> searchUsers( String term );
 
     List<User> searchUsersByPrefix( String term, int maxResults );

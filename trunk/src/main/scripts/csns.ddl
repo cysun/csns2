@@ -58,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        text varchar(255),
         rating int4,
+        text varchar(255),
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -337,9 +337,9 @@
     create table mft_scores (
         id int8 not null,
         date timestamp not null,
-        score int4 not null,
-        department_id int8,
-        user_id int8,
+        value int4 not null,
+        department_id int8 not null,
+        user_id int8 not null,
         primary key (id)
     );
 
@@ -410,13 +410,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -608,6 +608,9 @@
 
     alter table mft_distribution_types 
         add constraint UK_68t7p53mnslfqoqvyumslrtgj unique (name);
+
+    alter table mft_scores 
+        add constraint UK_cxmltfnit7bi608roobfafund unique (department_id, user_id, date);
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);

@@ -23,6 +23,7 @@ import java.util.List;
 
 import csns.model.academics.Department;
 import csns.model.assessment.MFTScore;
+import csns.model.core.User;
 
 public interface MFTScoreDao {
 
@@ -31,5 +32,7 @@ public interface MFTScoreDao {
     List<MFTScore> getScores( Department department, Date date );
 
     List<MFTScore> getScores( Department department, int year );
+
+    MFTScore getScore( Department department, Date date, User user );
 
 }

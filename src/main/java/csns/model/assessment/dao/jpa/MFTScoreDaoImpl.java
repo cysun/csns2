@@ -29,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import csns.model.academics.Department;
 import csns.model.assessment.MFTScore;
 import csns.model.assessment.dao.MFTScoreDao;
+import csns.model.core.User;
 
 @Repository
 public class MFTScoreDaoImpl implements MFTScoreDao {
@@ -65,6 +66,22 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
         return entityManager.createQuery( query, MFTScore.class )
             .setParameter( "year", year )
             .getResultList();
+    }
+
+    @Override
+    public MFTScore getScore( Department department, Date date, User user )
+    {
+        String query = "from MFTScore where department = :department "
+            + "and date = :date and user = :user";
+
+        List<MFTScore> scores = entityManager.createQuery( query,
+            MFTScore.class )
+            .setParameter( "department", department )
+            .setParameter( "date", date )
+            .setParameter( "user", user )
+            .getResultList();
+
+        return scores.size() == 0 ? null : scores.get( 0 );
     }
 
 }

@@ -37,6 +37,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.assessment.MFTScore;
 import csns.model.assessment.dao.MFTScoreDao;
 
 @Controller
@@ -63,9 +64,14 @@ public class MFTScoreController {
     {
         Department department = departmentDao.getDepartment( dept );
         List<Date> dates = mftScoreDao.getDates( department );
+        if( dates.size() == 0 ) return "mft/score";
+
+        if( date == null ) date = dates.get( 0 );
+        List<MFTScore> scores = mftScoreDao.getScores( department, date );
 
         models.put( "dates", dates );
         models.put( "selectedDate", date );
+        models.put( "scores", scores );
         return "mft/score";
     }
 

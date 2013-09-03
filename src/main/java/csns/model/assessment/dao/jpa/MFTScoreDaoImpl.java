@@ -27,6 +27,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import csns.model.academics.Department;
+import csns.model.assessment.MFTScore;
 import csns.model.assessment.dao.MFTScoreDao;
 
 @Repository
@@ -43,6 +44,26 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
 
         return entityManager.createQuery( query, Date.class )
             .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
+    public List<MFTScore> getScores( Department department, Date date )
+    {
+        String query = "from MFTScore where date = :date";
+
+        return entityManager.createQuery( query, MFTScore.class )
+            .setParameter( "date", date )
+            .getResultList();
+    }
+
+    @Override
+    public List<MFTScore> getScores( Department department, int year )
+    {
+        String query = "from MFTScore where year(date) = :year";
+
+        return entityManager.createQuery( query, MFTScore.class )
+            .setParameter( "year", year )
             .getResultList();
     }
 

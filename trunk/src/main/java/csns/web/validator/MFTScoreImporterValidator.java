@@ -16,25 +16,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.assessment.dao;
+package csns.web.validator;
 
-import java.util.Date;
-import java.util.List;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import csns.model.academics.Department;
-import csns.model.assessment.MFTScore;
-import csns.model.core.User;
+import csns.importer.MFTScoreImporter;
 
-public interface MFTScoreDao {
+@Component
+public class MFTScoreImporterValidator implements Validator {
 
-    List<Date> getDates( Department department );
+    @Override
+    public boolean supports( Class<?> clazz )
+    {
+        return MFTScoreImporter.class.isAssignableFrom( clazz );
+    }
 
-    List<MFTScore> getScores( Department department, Date date );
-
-    List<MFTScore> getScores( Department department, int year );
-
-    MFTScore getScore( Department department, Date date, User user );
-
-    MFTScore saveScore( MFTScore score );
+    @Override
+    public void validate( Object target, Errors errors )
+    {
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "date",
+            "error.field.required" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "text",
+            "error.field.required" );
+    }
 
 }

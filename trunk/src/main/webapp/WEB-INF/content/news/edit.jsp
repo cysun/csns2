@@ -5,7 +5,7 @@
 
 <script>
 $(function(){
-    $('#expireDate').datepicker({
+    $("#expireDate").datepicker({
         inline: true
     });
     $("textarea").each(function(){

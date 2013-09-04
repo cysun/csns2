@@ -18,6 +18,7 @@
  */
 package csns.importer.parser;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
@@ -27,22 +28,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import csns.importer.MFTReportImporter;
+import csns.importer.MFTScoreImporter;
+import csns.model.academics.Department;
 import csns.model.assessment.MFTScore;
+import csns.model.assessment.dao.MFTScoreDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Component
-public class MFTReportParser {
+public class MFTScoreParser {
 
     @Autowired
     private UserDao userDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( MFTReportParser.class );
+    @Autowired
+    private MFTScoreDao mftScoreDao;
 
-    public void parse( String text, MFTReportImporter importer )
+    private static final Logger logger = LoggerFactory.getLogger( MFTScoreParser.class );
+
+    public void parse( MFTScoreImporter importer )
     {
-        Scanner scanner = new Scanner( text );
+        Department department = importer.getDepartment();
+        Date date = importer.getDate();
+
+        Scanner scanner = new Scanner( importer.getText() );
         scanner.useDelimiter( "\\s+|\\r\\n|\\r|\\n" );
         while( scanner.hasNext() )
         {
@@ -50,6 +59,7 @@ public class MFTReportParser {
             String lastName = scanner.next();
             while( !lastName.endsWith( "," ) )
                 lastName += " " + scanner.next();
+            lastName = lastName.substring( 0, lastName.length() - 1 );
 
             // first name
             String firstName = scanner.next();
@@ -58,7 +68,10 @@ public class MFTReportParser {
             Stack<String> stack = new Stack<String>();
             String s = scanner.next();
             while( !isScore( s ) )
+            {
                 stack.push( s );
+                s = scanner.next();
+            }
             int value = Integer.parseInt( s );
 
             // authorization code
@@ -67,11 +80,6 @@ public class MFTReportParser {
             // cin
             String cin = null;
             if( !stack.empty() && isCin( stack.peek() ) ) cin = stack.pop();
-
-            // middle name
-            String middleName = stack.isEmpty() ? null : stack.pop();
-            while( !stack.empty() )
-                middleName = stack.pop() + " " + middleName;
 
             // user
             User user = null;
@@ -85,10 +93,19 @@ public class MFTReportParser {
 
             if( user != null )
             {
-                MFTScore score = new MFTScore();
-                score.setDepartment( importer.getDepartment() );
-                score.setDate( importer.getDate() );
-                score.setUser( user );
+                MFTScore score = mftScoreDao.getScore( department, date, user );
+                if( score == null )
+                {
+                    score = new MFTScore();
+                    score.setDepartment( department );
+                    score.setDate( date );
+                    score.setUser( user );
+                }
+                else
+                {
+                    logger.info( user.getId() + ": " + score.getValue()
+                        + " => " + value );
+                }
                 score.setValue( value );
                 importer.getScores().add( score );
             }
@@ -97,13 +114,11 @@ public class MFTReportParser {
                 User failedUser = new User();
                 failedUser.setLastName( lastName );
                 failedUser.setFirstName( firstName );
-                failedUser.setMiddleName( middleName );
                 failedUser.setCin( cin );
                 importer.getFailedUsers().add( failedUser );
             }
 
-            logger.debug( lastName + "," + firstName + "," + middleName + ","
-                + cin + "," + value );
+            logger.debug( lastName + "," + firstName + "," + cin + "," + value );
         }
 
         scanner.close();

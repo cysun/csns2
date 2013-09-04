@@ -12,7 +12,7 @@ $(function(){
 
 <ul id="title">
 <li>MFT</li>
-<li class="align_right"><a href="score/import"><img alt="[Import Scores]"
+<li class="align_right"><a href="import"><img alt="[Import Scores]"
   title="Import Scores" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </ul>
 

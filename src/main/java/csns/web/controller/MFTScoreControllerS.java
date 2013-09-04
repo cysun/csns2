@@ -18,14 +18,18 @@
  */
 package csns.web.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +37,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 
-import csns.importer.MFTReportImporter;
-import csns.importer.parser.MFTReportParser;
+import csns.importer.MFTScoreImporter;
+import csns.importer.parser.MFTScoreParser;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.assessment.MFTScore;
 import csns.model.assessment.dao.MFTScoreDao;
+import csns.web.validator.MFTScoreImporterValidator;
 
 @Controller
 @SessionAttributes("importer")
@@ -51,40 +58,59 @@ public class MFTScoreControllerS {
     private DepartmentDao departmentDao;
 
     @Autowired
-    private MFTReportParser mftReportParser;
+    private MFTScoreParser mftScoreParser;
+
+    @Autowired
+    private MFTScoreImporterValidator importerValidator;
+
+    @InitBinder
+    public void initBinder( WebDataBinder binder, WebRequest request )
+    {
+        binder.registerCustomEditor( Date.class, new CustomDateEditor(
+            new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
+    }
 
     @RequestMapping(value = "/department/{dept}/mft/import",
         method = RequestMethod.GET)
-    public String importScoreReport( @PathVariable String dept, ModelMap models )
+    public String importScoreReport( ModelMap models )
     {
-        MFTReportImporter importer = new MFTReportImporter();
-        importer.setDepartment( departmentDao.getDepartment( dept ) );
-        models.put( "importer", importer );
+        models.put( "importer", new MFTScoreImporter() );
         return "mft/import0";
     }
 
     @RequestMapping(value = "/department/{dept}/mft/import",
         method = RequestMethod.POST)
     public String importScoreReport(
-        @ModelAttribute("importer") MFTReportImporter importer,
+        @ModelAttribute("importer") MFTScoreImporter importer,
         @PathVariable String dept, @RequestParam("_page") int currentPage,
-        HttpServletRequest request, SessionStatus sessionStatus, ModelMap models )
+        HttpServletRequest request, BindingResult result,
+        SessionStatus sessionStatus, ModelMap models )
     {
-        Map<Integer, String> views = new HashMap<Integer, String>();
-        views.put( 0, "mft/import0" );
-        views.put( 1, "mft/import1" );
-        
         int targetPage = WebUtils.getTargetPage( request, "_target",
             currentPage );
-        if( targetPage == 1 && currentPage < targetPage ) {}
-        
-        if( request.getParameter( "_finish" ) == null )
+
+        if( targetPage == 0 )
         {
-            return views.get( targetPage );
+            importer.clear();
+            return "mft/import0";
         }
 
-        
-        return null;
+        if( targetPage == 1 )
+        {
+            importerValidator.validate( importer, result );
+            if( result.hasErrors() ) return "mft/import0";
+
+            importer.setDepartment( departmentDao.getDepartment( dept ) );
+            mftScoreParser.parse( importer );
+            return "mft/import1";
+        }
+
+        for( MFTScore score : importer.getScores() )
+            mftScoreDao.saveScore( score );
+
+        sessionStatus.setComplete();
+        String date = (new SimpleDateFormat( "yyyy-MM-dd" )).format( importer.getDate() );
+        return "redirect:/department/" + dept + "/mft/score?date=" + date;
     }
 
 }

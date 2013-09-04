@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
 import csns.model.assessment.MFTScore;
@@ -82,6 +83,13 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
             .getResultList();
 
         return scores.size() == 0 ? null : scores.get( 0 );
+    }
+
+    @Override
+    @Transactional
+    public MFTScore saveScore( MFTScore score )
+    {
+        return entityManager.merge( score );
     }
 
 }

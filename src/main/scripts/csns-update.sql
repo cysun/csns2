@@ -15,7 +15,9 @@ create table mft_scores (
 
 insert into mft_scores select nextval('hibernate_sequence'), 200, mft_date, id, mft_score 
     from users where mft_score is not null;
-
+update mft_scores set date = '2007-12-05' where date = '2007-12-16';
+update mft_scores set date = '2009-05-28' where date = '2009-06-01';
+update mft_scores set date = '2011-06-06' where date = '2011-06-01';
 alter table users drop column mft_score;
 alter table users drop column mft_date;
 

@@ -26,20 +26,28 @@ import csns.model.academics.Department;
 import csns.model.assessment.MFTScore;
 import csns.model.core.User;
 
-public class MFTReportImporter {
+public class MFTScoreImporter {
 
     private Department department;
 
     private Date date;
 
+    private String text;
+
     private List<MFTScore> scores;
 
     private List<User> failedUsers;
 
-    public MFTReportImporter()
+    public MFTScoreImporter()
     {
         scores = new ArrayList<MFTScore>();
         failedUsers = new ArrayList<User>();
+    }
+
+    public void clear()
+    {
+        scores.clear();
+        failedUsers.clear();
     }
 
     public Department getDepartment()
@@ -60,6 +68,16 @@ public class MFTReportImporter {
     public void setDate( Date date )
     {
         this.date = date;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public void setText( String text )
+    {
+        this.text = text;
     }
 
     public List<MFTScore> getScores()

@@ -748,6 +748,16 @@
         <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
     </definition>
 
+    <definition name="mft/import0" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/import0.jsp" />
+    </definition>
+
+    <definition name="mft/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/import1.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

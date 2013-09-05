@@ -1101,26 +1101,29 @@ create table mft_indicators (
 );
 
 create table mft_distribution_types (
-    id          bigint primary key,
-    name        varchar(255) not null unique,
-    alias       varchar(255) not null unique,
-    min         integer not null,
-    max         integer not null,
-    value_label varchar(255)
+    id              bigint primary key,
+    department_id   bigint not null references departments(id),
+    name            varchar(255) not null,
+    alias           varchar(255) not null,
+    min             integer not null,
+    max             integer not null,
+    value_label     varchar(255),
+  unique (department_id, alias)
 );
 
 create table mft_distributions (
     id              bigint primary key,
-    department_id   bigint references departments(id),
-    type_id         bigint references mft_distribution_types(id),
+    department_id   bigint not null references departments(id),
     year            integer not null,
+    type_id         bigint not null references mft_distribution_types(id),
     from_date       date,
     to_date         date,
     num_of_samples  integer,
     mean            double precision,
     median          double precision,
     stdev           double precision,
-    deleted         boolean not null default 'f'
+    deleted         boolean not null default 'f',
+  unique (department_id, year, type_id)
 );
 
 create table mft_distribution_entries (

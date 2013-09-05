@@ -33,11 +33,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Department;
 
 @Entity
-@Table(name = "mft_distributions")
+@Table(name = "mft_distributions",
+    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
+        "year", "type_id" }))
 public class MFTDistribution implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,14 +50,14 @@ public class MFTDistribution implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private MFTDistributionType type;
-
     private int year;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private MFTDistributionType type;
 
     @Column(name = "from_date")
     private Date fromDate;
@@ -105,16 +108,6 @@ public class MFTDistribution implements Serializable {
         this.department = department;
     }
 
-    public MFTDistributionType getType()
-    {
-        return type;
-    }
-
-    public void setType( MFTDistributionType type )
-    {
-        this.type = type;
-    }
-
     public int getYear()
     {
         return year;
@@ -123,6 +116,16 @@ public class MFTDistribution implements Serializable {
     public void setYear( int year )
     {
         this.year = year;
+    }
+
+    public MFTDistributionType getType()
+    {
+        return type;
+    }
+
+    public void setType( MFTDistributionType type )
+    {
+        this.type = type;
     }
 
     public Date getFromDate()

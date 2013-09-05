@@ -24,10 +24,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import csns.model.academics.Department;
 
 @Entity
-@Table(name = "mft_distribution_types")
+@Table(name = "mft_distribution_types",
+    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
+        "alias" }))
 public class MFTDistributionType implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,10 +43,14 @@ public class MFTDistributionType implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String alias;
 
     private int min, max;
@@ -61,6 +72,16 @@ public class MFTDistributionType implements Serializable {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public Department getDepartment()
+    {
+        return department;
+    }
+
+    public void setDepartment( Department department )
+    {
+        this.department = department;
     }
 
     public String getName()

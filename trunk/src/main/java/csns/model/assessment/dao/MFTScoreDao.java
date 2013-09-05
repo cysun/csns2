@@ -29,11 +29,11 @@ public interface MFTScoreDao {
 
     List<Date> getDates( Department department );
 
+    MFTScore getScore( Department department, Date date, User user );
+
     List<MFTScore> getScores( Department department, Date date );
 
     List<MFTScore> getScores( Department department, int year );
-
-    MFTScore getScore( Department department, Date date, User user );
 
     MFTScore saveScore( MFTScore score );
 

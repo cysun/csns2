@@ -1089,14 +1089,15 @@ create table mft_scores (
   unique (department_id, date, user_id)
 );
 
-create table mft_assessment_indicators (
+create table mft_indicators (
     id              bigint primary key,
-    department_id   bigint references departments(id),
+    department_id   bigint not null references departments(id),
     ai1             integer not null,
     ai2             integer not null,
     ai3             integer not null,
     date            date not null,
-    deleted         boolean not null default 'f'
+    deleted         boolean not null default 'f',
+  unique (department_id, date)
 );
 
 create table mft_distribution_types (

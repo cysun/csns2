@@ -29,12 +29,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Department;
 
 @Entity
-@Table(name = "mft_assessment_indicators")
-public class MFTAssessmentIndicator implements Serializable {
+@Table(name = "mft_indicators",
+    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
+        "date" }))
+public class MFTIndicator implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,20 +46,21 @@ public class MFTAssessmentIndicator implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-
-    private int ai1, ai2, ai3;
 
     @Column(nullable = false)
     private Date date;
+
+    @Column(nullable = false)
+    private Integer ai1, ai2, ai3;
 
     private boolean deleted;
 
     @Transient
     private Integer ai1Percentile, ai2Percentile, ai3Percentile;
 
-    public MFTAssessmentIndicator()
+    public MFTIndicator()
     {
         deleted = false;
     }
@@ -81,36 +85,6 @@ public class MFTAssessmentIndicator implements Serializable {
         this.department = department;
     }
 
-    public int getAi1()
-    {
-        return ai1;
-    }
-
-    public void setAi1( int ai1 )
-    {
-        this.ai1 = ai1;
-    }
-
-    public int getAi2()
-    {
-        return ai2;
-    }
-
-    public void setAi2( int ai2 )
-    {
-        this.ai2 = ai2;
-    }
-
-    public int getAi3()
-    {
-        return ai3;
-    }
-
-    public void setAi3( int ai3 )
-    {
-        this.ai3 = ai3;
-    }
-
     public Date getDate()
     {
         return date;
@@ -119,6 +93,36 @@ public class MFTAssessmentIndicator implements Serializable {
     public void setDate( Date date )
     {
         this.date = date;
+    }
+
+    public Integer getAi1()
+    {
+        return ai1;
+    }
+
+    public void setAi1( Integer ai1 )
+    {
+        this.ai1 = ai1;
+    }
+
+    public Integer getAi2()
+    {
+        return ai2;
+    }
+
+    public void setAi2( Integer ai2 )
+    {
+        this.ai2 = ai2;
+    }
+
+    public Integer getAi3()
+    {
+        return ai3;
+    }
+
+    public void setAi3( Integer ai3 )
+    {
+        this.ai3 = ai3;
     }
 
     public boolean isDeleted()

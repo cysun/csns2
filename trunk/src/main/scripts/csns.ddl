@@ -292,17 +292,6 @@
         primary key (id)
     );
 
-    create table mft_assessment_indicators (
-        id int8 not null,
-        ai1 int4 not null,
-        ai2 int4 not null,
-        ai3 int4 not null,
-        date timestamp not null,
-        deleted boolean not null,
-        department_id int8,
-        primary key (id)
-    );
-
     create table mft_distribution_entries (
         distribution_id int8 not null,
         percentile int4 not null,
@@ -331,6 +320,17 @@
         year int4 not null,
         department_id int8,
         type_id int8,
+        primary key (id)
+    );
+
+    create table mft_indicators (
+        id int8 not null,
+        ai1 int4 not null,
+        ai2 int4 not null,
+        ai3 int4 not null,
+        date timestamp not null,
+        deleted boolean not null,
+        department_id int8,
         primary key (id)
     );
 
@@ -608,6 +608,9 @@
 
     alter table mft_distribution_types 
         add constraint UK_68t7p53mnslfqoqvyumslrtgj unique (name);
+
+    alter table mft_indicators 
+        add constraint UK_s4t9k14a550c0f27x1cfwgq46 unique (department_id, date);
 
     alter table mft_scores 
         add constraint UK_cxmltfnit7bi608roobfafund unique (department_id, user_id, date);
@@ -1002,11 +1005,6 @@
         foreign key (department_id) 
         references departments;
 
-    alter table mft_assessment_indicators 
-        add constraint FK_3vhg3j7xp0u60crdionl5shns 
-        foreign key (department_id) 
-        references departments;
-
     alter table mft_distribution_entries 
         add constraint FK_2p1l3s24er8uqyk797uxj6ivm 
         foreign key (distribution_id) 
@@ -1021,6 +1019,11 @@
         add constraint FK_spad6dusuiyup6bj450nw54hm 
         foreign key (type_id) 
         references mft_distribution_types;
+
+    alter table mft_indicators 
+        add constraint FK_nmqrjrlfkwchxodqvxd8xth0o 
+        foreign key (department_id) 
+        references departments;
 
     alter table mft_scores 
         add constraint FK_6pqva08sn8i7nrwhdqycml800 

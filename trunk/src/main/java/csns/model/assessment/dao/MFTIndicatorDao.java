@@ -18,16 +18,20 @@
  */
 package csns.model.assessment.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import csns.model.academics.Department;
-import csns.model.assessment.MFTAssessmentIndicator;
+import csns.model.assessment.MFTIndicator;
 
-public interface MFTAssessmentIndicatorDao {
+public interface MFTIndicatorDao {
 
-    List<MFTAssessmentIndicator> getAssessmentIndicators( Department department );
+    MFTIndicator getIndicator( Long id );
 
-    MFTAssessmentIndicator saveAssessmentIndicator(
-        MFTAssessmentIndicator assessmentIndicator );
+    MFTIndicator getIndicator( Department department, Date date );
+
+    List<MFTIndicator> getIndicators( Department department );
+
+    MFTIndicator saveIndicator( MFTIndicator indicator );
 
 }

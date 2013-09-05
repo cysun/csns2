@@ -5,20 +5,29 @@
 
 <script>
 $(function(){
+    $('#date').datepicker({
+        inline: true,
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-10:+00"
+    });
 	$(".op").hide();
+	$("#edit").click(function(){
+		$(".op").toggle();
+	});
 });
 function deleteIndicator( id )
 {
     var msg = "Are you sure you want to delete this set of indicators?";
     if( confirm(msg) )
-        alert("deleted");
+        window.location.href = "ai/delete?id=" + id;
 }
 </script>
 
 <ul id="title">
 <li><a class="bc" href="overview">MFT</a></li>
 <li>Assessment Indicators</li>
-<li class="align_right"><a href="javascript:void(0)"><img alt="[Edit]"
+<li class="align_right"><a id="edit" href="javascript:void(0)"><img alt="[Edit]"
   title="Edit" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
 </ul>
 
@@ -34,15 +43,16 @@ score of the students for that indicator. This score is measured in the percenta
 of the questions that are answered correctly. The second number is the national
 percentile the institution is in based on the mean score of the students.</p>
 
-<form:form modelAttribute="indicator">
+<form:form modelAttribute="indicator" action="ai/update">
 <table class="viewtable autowidth">
-  <tr><th>Date</th><th>AI-1</th><th>AI-2</th><th>AI-3</th><th></th></tr>
-  <tr>
-    <td><form:input path="date" cssClass="forminput" cssStyle="width: 90px;" placeholder="MM/DD/YYYY" /></td>
-    <td><form:input path="ai1" cssClass="smallerinput" /></td>
-    <td><form:input path="ai2" cssClass="smallerinput" /></td>
-    <td><form:input path="ai3" cssClass="smallerinput" /></td>
-    <td><input type="submit" name="Add" value="Add" class="subbutton" /></td>
+  <tr><th>Date</th><th>AI-1</th><th>AI-2</th><th>AI-3</th><th class="op"></th></tr>
+  <tr class="op">
+    <td><form:input path="date" cssClass="forminput" cssStyle="width: 94px;"
+                    placeholder="MM/DD/YYYY" required="true" /></td>
+    <td><form:input path="ai1" cssClass="smallerinput" required="true" /></td>
+    <td><form:input path="ai2" cssClass="smallerinput" required="true" /></td>
+    <td><form:input path="ai3" cssClass="smallerinput" required="true" /></td>
+    <td><input type="submit" name="add" value="Add or Update" class="subbutton" /></td>
   </tr>
   <c:forEach items="${indicators}" var="indicator">
   <tr>
@@ -50,8 +60,8 @@ percentile the institution is in based on the mean score of the students.</p>
     <td>${indicator.ai1} (${indicator.ai1Percentile})</td>
     <td>${indicator.ai2} (${indicator.ai2Percentile})</td>
     <td>${indicator.ai3} (${indicator.ai3Percentile})</td>
-    <td><a href="javascript:deleteAI(${indicator.id})"><img title="Delete" alt="[Delete]"
-      src="<c:url value='/img/icons/delete.png' />" /></a></td>
+    <td class="op"><a href="javascript:deleteIndicator(${indicator.id})"><img title="Delete"
+      alt="[Delete]" src="<c:url value='/img/icons/delete.png' />" /></a></td>
   </tr>
   </c:forEach>
 </table>

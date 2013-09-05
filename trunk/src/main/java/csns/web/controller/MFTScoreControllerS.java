@@ -23,6 +23,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -45,6 +47,7 @@ import csns.importer.parser.MFTScoreParser;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.assessment.MFTScore;
 import csns.model.assessment.dao.MFTScoreDao;
+import csns.security.SecurityUtils;
 import csns.web.validator.MFTScoreImporterValidator;
 
 @Controller
@@ -62,6 +65,8 @@ public class MFTScoreControllerS {
 
     @Autowired
     private MFTScoreImporterValidator importerValidator;
+
+    private static final Logger logger = LoggerFactory.getLogger( MFTScoreController.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder, WebRequest request )
@@ -108,8 +113,12 @@ public class MFTScoreControllerS {
         for( MFTScore score : importer.getScores() )
             mftScoreDao.saveScore( score );
 
-        sessionStatus.setComplete();
         String date = (new SimpleDateFormat( "yyyy-MM-dd" )).format( importer.getDate() );
+        logger.info( SecurityUtils.getUser().getUsername() + " imported "
+            + importer.getScores().size() + " mft scores for [" + dept + ","
+            + date + "]." );
+
+        sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/mft/score?date=" + date;
     }
 

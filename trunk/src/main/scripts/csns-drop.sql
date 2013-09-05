@@ -11,7 +11,7 @@ drop function quarter(date);
 drop table mft_distribution_entries;
 drop table mft_distributions;
 drop table mft_distribution_types;
-drop table mft_assessment_indicators;
+drop table mft_indicators;
 drop table mft_scores;
 
 drop table project_resources;

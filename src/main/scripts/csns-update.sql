@@ -29,6 +29,11 @@ alter table mft_assessment_indicators alter column ai1 set not null;
 alter table mft_assessment_indicators alter column ai2 set not null;
 alter table mft_assessment_indicators alter column ai3 set not null;
 
+alter table mft_assessment_indicators rename to mft_indicators;
+alter table mft_indicators alter column department_id set not null;
+alter table mft_indicators drop constraint mft_assessment_summaries_date_key;
+alter table mft_indicators add constraint mft_indicators_department_date_key unique (department_id, date);
+
 alter table mft_distribution_types alter column id type bigint;
 alter table mft_distribution_types add constraint mft_distribution_types_name_key unique (name);
 

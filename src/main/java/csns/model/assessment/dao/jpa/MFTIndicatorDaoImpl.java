@@ -18,6 +18,7 @@
  */
 package csns.model.assessment.dao.jpa;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -27,33 +28,51 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
-import csns.model.assessment.MFTAssessmentIndicator;
-import csns.model.assessment.dao.MFTAssessmentIndicatorDao;
+import csns.model.assessment.MFTIndicator;
+import csns.model.assessment.dao.MFTIndicatorDao;
 
 @Repository
-public class MFTAssessmentIndicatorDaoImpl implements MFTAssessmentIndicatorDao {
+public class MFTIndicatorDaoImpl implements MFTIndicatorDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<MFTAssessmentIndicator> getAssessmentIndicators(
-        Department department )
+    public MFTIndicator getIndicator( Long id )
     {
-        String query = "from MFTAssessmentIndicator where department = :department "
+        return entityManager.find( MFTIndicator.class, id );
+    }
+
+    @Override
+    public MFTIndicator getIndicator( Department department, Date date )
+    {
+        String query = "from MFTIndicator where department = :department "
+            + "and date = :date";
+
+        List<MFTIndicator> indicators = entityManager.createQuery( query,
+            MFTIndicator.class )
+            .setParameter( "department", department )
+            .setParameter( "date", date )
+            .getResultList();
+        return indicators.size() == 0 ? null : indicators.get( 0 );
+    }
+
+    @Override
+    public List<MFTIndicator> getIndicators( Department department )
+    {
+        String query = "from MFTIndicator where department = :department "
             + "and deleted = false order by date desc";
 
-        return entityManager.createQuery( query, MFTAssessmentIndicator.class )
+        return entityManager.createQuery( query, MFTIndicator.class )
             .setParameter( "department", department )
             .getResultList();
     }
 
     @Override
     @Transactional
-    public MFTAssessmentIndicator saveAssessmentIndicator(
-        MFTAssessmentIndicator assessmentIndicator )
+    public MFTIndicator saveIndicator( MFTIndicator indicator )
     {
-        return entityManager.merge( assessmentIndicator );
+        return entityManager.merge( indicator );
     }
 
 }

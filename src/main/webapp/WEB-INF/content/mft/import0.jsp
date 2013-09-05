@@ -32,7 +32,7 @@ function help( name )
 <tr>
   <th><csns:help name="date">Date</csns:help></th>
   <td>
-    <form:input path="date" cssClass="forminput" placeholder="MM/DD/YYYY" />
+    <form:input path="date" cssClass="forminput" cssStyle="width: 94px;" placeholder="MM/DD/YYYY" />
     <div class="error"><form:errors path="date" /></div>
   </td>
 </tr>

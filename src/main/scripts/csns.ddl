@@ -58,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -305,6 +305,7 @@
         min int4 not null,
         name varchar(255) not null,
         value_label varchar(255),
+        department_id int8 not null,
         primary key (id)
     );
 
@@ -318,8 +319,8 @@
         stdev float8,
         to_date timestamp,
         year int4 not null,
-        department_id int8,
-        type_id int8,
+        department_id int8 not null,
+        type_id int8 not null,
         primary key (id)
     );
 
@@ -330,7 +331,7 @@
         ai3 int4 not null,
         date timestamp not null,
         deleted boolean not null,
-        department_id int8,
+        department_id int8 not null,
         primary key (id)
     );
 
@@ -410,13 +411,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -604,10 +605,10 @@
         add constraint UK_2ljyc433n941undoa4gnv7ony unique (symbol);
 
     alter table mft_distribution_types 
-        add constraint UK_93ptdb5nes5i49vagwne1fwfb unique (alias);
+        add constraint UK_bkgmth8ayk24wvyx04uyxcfhh unique (department_id, alias);
 
-    alter table mft_distribution_types 
-        add constraint UK_68t7p53mnslfqoqvyumslrtgj unique (name);
+    alter table mft_distributions 
+        add constraint UK_4mb3dkclwcgaprpox34dv4ftv unique (department_id, year, type_id);
 
     alter table mft_indicators 
         add constraint UK_s4t9k14a550c0f27x1cfwgq46 unique (department_id, date);
@@ -1009,6 +1010,11 @@
         add constraint FK_2p1l3s24er8uqyk797uxj6ivm 
         foreign key (distribution_id) 
         references mft_distributions;
+
+    alter table mft_distribution_types 
+        add constraint FK_cv2w5gaq2bawhkt4wdqeks02l 
+        foreign key (department_id) 
+        references departments;
 
     alter table mft_distributions 
         add constraint FK_cdujg25dtht5pne89w5mn4w0a 

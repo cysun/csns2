@@ -58,6 +58,12 @@ public class MFTScoreController {
             new SimpleDateFormat( "yyyy-MM-dd" ), true ) );
     }
 
+    @RequestMapping("/department/{dept}/mft/overview")
+    public String overview()
+    {
+        return "mft/overview";
+    }
+
     @RequestMapping("/department/{dept}/mft/score")
     public String score( @PathVariable String dept,
         @RequestParam(required = false) Date date, ModelMap models )

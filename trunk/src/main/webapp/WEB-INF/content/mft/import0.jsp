@@ -22,7 +22,8 @@ function help( name )
 </script>
 
 <ul id="title">
-<li><a class="bc" href="score">MFT</a></li>
+<li><a class="bc" href="overview">MFT</a></li>
+<li><a class="bc" href="score">Scores</a></li>
 <li>Import</li>
 </ul>
 
@@ -36,8 +37,8 @@ function help( name )
   </td>
 </tr>
 </table>
-<p><form:textarea path="text" rows="20" cols="80" cssStyle="width: 100%; border: 1px solid;" />
-<div class="error"><form:errors path="text" /></div></p>
+<form:textarea path="text" rows="20" cols="80" cssStyle="width: 100%; border: 1px solid;" />
+<div class="error"><form:errors path="text" /></div>
 <p>
   <input type="hidden" name="_page" value="0" />
   <input type="submit" name="_target1" value="Next" class="subbutton" />

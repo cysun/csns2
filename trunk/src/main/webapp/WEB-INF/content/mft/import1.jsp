@@ -4,7 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <ul id="title">
-<li><a class="bc" href="score">MFT</a></li>
+<li><a class="bc" href="overview">MFT</a></li>
+<li><a class="bc" href="score">Scores</a></li>
 <li>Import</li>
 </ul>
 

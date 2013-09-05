@@ -743,6 +743,11 @@
     <!-- MFT -->
     <!-- === -->
 
+    <definition name="mft/overview" extends="layout.basic">
+        <put-attribute name="title" value="MFT" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/overview.jsp" />
+    </definition>
+
     <definition name="mft/score" extends="layout.jqueryui">
         <put-attribute name="title" value="MFT Scores" />
         <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
@@ -756,6 +761,11 @@
     <definition name="mft/import1" extends="layout.basic">
         <put-attribute name="title" value="Import MFT Scores" />
         <put-attribute name="content" value="/WEB-INF/content/mft/import1.jsp" />
+    </definition>
+
+    <definition name="mft/ai" extends="layout.jqueryui">
+        <put-attribute name="title" value="MFT Assessment Indicators" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/ai.jsp" />
     </definition>
 
     <!-- ======== -->

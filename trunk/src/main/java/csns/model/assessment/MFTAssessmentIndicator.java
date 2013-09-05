@@ -34,7 +34,7 @@ import csns.model.academics.Department;
 
 @Entity
 @Table(name = "mft_assessment_indicators")
-public class MFTAssessmentIndicators implements Serializable {
+public class MFTAssessmentIndicator implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class MFTAssessmentIndicators implements Serializable {
     @Transient
     private Integer ai1Percentile, ai2Percentile, ai3Percentile;
 
-    public MFTAssessmentIndicators()
+    public MFTAssessmentIndicator()
     {
         deleted = false;
     }

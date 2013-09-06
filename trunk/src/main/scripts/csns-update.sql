@@ -1,3 +1,5 @@
+set client_min_messages=WARNING;
+
 create table department_options (
     department_id   bigint not null references departments(id),
     option          varchar(255) not null,

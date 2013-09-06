@@ -54,7 +54,7 @@ public class MFTDistributionController {
             department, year );
 
         models.put( "years", years );
-        models.put( "year", year );
+        models.put( "selectedYear", year );
         models.put( "distributions", distributions );
         return "mft/distribution";
     }

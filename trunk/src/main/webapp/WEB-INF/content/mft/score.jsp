@@ -13,8 +13,8 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="overview">MFT</a></li>
 <li>Scores</li>
-<li class="align_right"><a href="import"><img alt="[Import]"
-  title="Import" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
+<li class="align_right"><a href="import"><img alt="[Import Scores]"
+  title="Import Scores" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </ul>
 
 <c:if test="${empty dates}">

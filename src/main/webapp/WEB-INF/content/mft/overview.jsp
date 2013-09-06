@@ -57,4 +57,6 @@ effectiveness to programs at similar institutions nationwide.</p>
 </blockquote>
 
 <p style="margin: 1em 50px;">MFT reports are available at
-<a href="http://admin.mft-ets.org/">http://admin.mft-ets.org/</a>.</p>
+<a href="http://admin.mft-ets.org/">http://admin.mft-ets.org/</a>, and the
+annual comparative data guides can be downloaded from
+<a href="<c:url value='/file/view?id=4509691' />">here</a>.</p>

@@ -32,15 +32,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import csns.model.academics.Department;
-
 @Entity
 @Table(name = "mft_distributions",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "department_id",
-        "year", "type_id" }))
+    uniqueConstraints = @UniqueConstraint(columnNames = { "year", "type_id" }))
 public class MFTDistribution implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,10 +46,6 @@ public class MFTDistribution implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
 
     private int year;
 
@@ -77,6 +71,7 @@ public class MFTDistribution implements Serializable {
     @ElementCollection
     @CollectionTable(name = "mft_distribution_entries",
         joinColumns = @JoinColumn(name = "distribution_id"))
+    @OrderBy("value desc")
     private List<MFTDistributionEntry> entries;
 
     private boolean deleted;
@@ -96,16 +91,6 @@ public class MFTDistribution implements Serializable {
     public void setId( Long id )
     {
         this.id = id;
-    }
-
-    public Department getDepartment()
-    {
-        return department;
-    }
-
-    public void setDepartment( Department department )
-    {
-        this.department = department;
     }
 
     public int getYear()

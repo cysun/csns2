@@ -29,7 +29,7 @@
   <tr><th>Name</th><th>Time Period</th><th>Sample Size</th></tr>
   <c:forEach items="${distributions}" var="distribution">
   <tr>
-    <td>${distribution.type.name}</td>
+    <td><a href="distribution/view?id=${distribution.id}">${distribution.type.name}</a></td>
     <td>
       <fmt:formatDate value="${distribution.fromDate}" pattern="MM/yyyy" /> -
       <fmt:formatDate value="${distribution.toDate}" pattern="MM/yyyy" />

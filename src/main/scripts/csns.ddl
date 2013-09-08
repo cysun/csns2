@@ -319,7 +319,6 @@
         stdev float8,
         to_date timestamp,
         year int4 not null,
-        department_id int8 not null,
         type_id int8 not null,
         primary key (id)
     );
@@ -414,10 +413,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -608,7 +607,7 @@
         add constraint UK_bkgmth8ayk24wvyx04uyxcfhh unique (department_id, alias);
 
     alter table mft_distributions 
-        add constraint UK_4mb3dkclwcgaprpox34dv4ftv unique (department_id, year, type_id);
+        add constraint UK_jugi4cmmvdf3ygjfwhrp4o8cn unique (year, type_id);
 
     alter table mft_indicators 
         add constraint UK_s4t9k14a550c0f27x1cfwgq46 unique (department_id, date);
@@ -1013,11 +1012,6 @@
 
     alter table mft_distribution_types 
         add constraint FK_cv2w5gaq2bawhkt4wdqeks02l 
-        foreign key (department_id) 
-        references departments;
-
-    alter table mft_distributions 
-        add constraint FK_cdujg25dtht5pne89w5mn4w0a 
         foreign key (department_id) 
         references departments;
 

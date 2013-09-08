@@ -45,16 +45,12 @@ alter table mft_distribution_types add constraint mft_distribution_types_departm
 
 alter table mft_distributions alter column id type bigint;
 alter table mft_distributions alter column type_id type bigint;
-alter table mft_distributions add column department_id bigint references departments(id);
-update mft_distributions set department_id = 200;
 alter table mft_distributions add column year integer;
 update mft_distributions set year = extract(year from to_date);
 alter table mft_distributions alter column year set not null;
 
-alter table mft_distributions alter column department_id set not null;
 alter table mft_distributions alter column type_id set not null;
-alter table mft_distributions add constraint mft_distributions_department_year_type_key
-    unique (department_id, year, type_id);
+alter table mft_distributions add constraint mft_distributions_year_type_key unique (year, type_id);
 
 alter table mft_distributions drop column p5;
 alter table mft_distributions drop column p10;

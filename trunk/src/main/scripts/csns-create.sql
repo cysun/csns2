@@ -1113,7 +1113,6 @@ create table mft_distribution_types (
 
 create table mft_distributions (
     id              bigint primary key,
-    department_id   bigint not null references departments(id),
     year            integer not null,
     type_id         bigint not null references mft_distribution_types(id),
     from_date       date,
@@ -1123,7 +1122,7 @@ create table mft_distributions (
     median          double precision,
     stdev           double precision,
     deleted         boolean not null default 'f',
-  unique (department_id, year, type_id)
+  unique (year, type_id)
 );
 
 create table mft_distribution_entries (

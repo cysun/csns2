@@ -773,6 +773,21 @@
         <put-attribute name="content" value="/WEB-INF/content/mft/distribution.jsp" />
     </definition>
 
+    <definition name="mft/distribution/view" extends="layout.basic">
+        <put-attribute name="title" value="MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/view.jsp" />
+    </definition>
+
+    <definition name="mft/distribution/add" extends="layout.basic">
+        <put-attribute name="title" value="Add MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/add.jsp" />
+    </definition>
+
+    <definition name="mft/distribution/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/edit.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

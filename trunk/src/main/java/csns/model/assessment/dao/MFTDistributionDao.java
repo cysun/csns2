@@ -22,6 +22,7 @@ import java.util.List;
 
 import csns.model.academics.Department;
 import csns.model.assessment.MFTDistribution;
+import csns.model.assessment.MFTDistributionType;
 
 public interface MFTDistributionDao {
 
@@ -29,7 +30,9 @@ public interface MFTDistributionDao {
 
     MFTDistribution getDistribution( Long id );
 
-    List<MFTDistribution> getDistributions( Department department, Integer year );
+    MFTDistribution getDistribution( Integer year, MFTDistributionType type );
+
+    List<MFTDistribution> getDistributions( Integer year, Department department );
 
     MFTDistribution saveDistribution( MFTDistribution distribution );
 

@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
 import csns.model.assessment.MFTDistribution;
+import csns.model.assessment.MFTDistributionType;
 import csns.model.assessment.dao.MFTDistributionDao;
 
 @Repository
@@ -40,7 +41,8 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
     public List<Integer> getYears( Department department )
     {
         String query = "select distinct year from MFTDistribution "
-            + "where department = :department order by year desc";
+            + "where type.department = :department and deleted = false "
+            + "order by year desc";
 
         return entityManager.createQuery( query, Integer.class )
             .setParameter( "department", department )
@@ -54,11 +56,26 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
     }
 
     @Override
-    public List<MFTDistribution> getDistributions( Department department,
-        Integer year )
+    public MFTDistribution getDistribution( Integer year,
+        MFTDistributionType type )
     {
-        String query = "from MFTDistribution where department = :department "
-            + "and year = :year order by type.id asc";
+        String query = "from MFTDistribution where year = :year and type = :type";
+
+        List<MFTDistribution> distributions = entityManager.createQuery( query,
+            MFTDistribution.class )
+            .setParameter( "year", year )
+            .setParameter( "type", type )
+            .getResultList();
+        return distributions.size() == 0 ? null : distributions.get( 0 );
+    }
+
+    @Override
+    public List<MFTDistribution> getDistributions( Integer year,
+        Department department )
+    {
+        String query = "from MFTDistribution where year = :year "
+            + "and type.department = :department and deleted = false "
+            + "order by type.id asc";
 
         return entityManager.createQuery( query, MFTDistribution.class )
             .setParameter( "department", department )

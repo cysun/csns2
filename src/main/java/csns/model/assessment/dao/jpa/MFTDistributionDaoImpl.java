@@ -18,6 +18,8 @@
  */
 package csns.model.assessment.dao.jpa;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -67,6 +69,23 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
             .setParameter( "type", type )
             .getResultList();
         return distributions.size() == 0 ? null : distributions.get( 0 );
+    }
+
+    @Override
+    public MFTDistribution getDistribution( Date date, MFTDistributionType type )
+    {
+        List<Integer> years = getYears( type.getDepartment() );
+        if( years.size() == 0 ) return null;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime( date );
+        int targetYear = calendar.get( Calendar.YEAR );
+        int distYear = years.get( 0 );
+        for( Integer year : years )
+            if( Math.abs( year - targetYear ) < Math.abs( distYear - targetYear ) )
+                distYear = year;
+
+        return getDistribution( distYear, type );
     }
 
     @Override

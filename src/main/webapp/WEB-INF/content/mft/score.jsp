@@ -4,9 +4,7 @@
 
 <script>
 $(function(){
-    $("table").tablesorter({
-    	sortList: [[2,1]]
-    });
+    $("table").tablesorter();
 });
 </script>
 
@@ -36,15 +34,16 @@ $(function(){
 
 <table class="viewtable autowidth">
 <thead>
-  <tr><th>CIN</th><th>Name</th><th>Score</th><th>Percentile</th></tr>
+  <tr><th></th><th>CIN</th><th>Name</th><th>Score</th><th>Percentile</th></tr>
 </thead>
 <tbody>
-  <c:forEach items="${scores}" var="score">
+  <c:forEach items="${scores}" var="score" varStatus="status">
   <tr>
+    <td class="right">${status.index+1}</td>
     <td>${score.user.cin}</td>
     <td>${score.user.lastName}, ${score.user.firstName}</td>
     <td>${score.value}</td>
-    <td>${score.percentile}</td>
+    <td class="center">${score.percentile}</td>
   </tr>
   </c:forEach>
 </tbody>

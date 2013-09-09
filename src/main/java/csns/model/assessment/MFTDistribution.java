@@ -83,6 +83,14 @@ public class MFTDistribution implements Serializable {
         deleted = false;
     }
 
+    public Integer getPercentile( double value )
+    {
+        for( MFTDistributionEntry entry : entries )
+            if( value >= entry.getValue() ) return entry.getPercentile();
+
+        return null;
+    }
+
     public Long getId()
     {
         return id;

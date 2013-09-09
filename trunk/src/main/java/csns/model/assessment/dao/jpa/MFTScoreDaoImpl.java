@@ -67,7 +67,7 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
     @Override
     public List<MFTScore> getScores( Department department, Date date )
     {
-        String query = "from MFTScore where date = :date";
+        String query = "from MFTScore where date = :date order by value desc";
 
         return entityManager.createQuery( query, MFTScore.class )
             .setParameter( "date", date )

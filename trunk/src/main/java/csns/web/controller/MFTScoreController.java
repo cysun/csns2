@@ -35,7 +35,11 @@ import org.springframework.web.context.request.WebRequest;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.assessment.MFTDistribution;
+import csns.model.assessment.MFTDistributionType;
 import csns.model.assessment.MFTScore;
+import csns.model.assessment.dao.MFTDistributionDao;
+import csns.model.assessment.dao.MFTDistributionTypeDao;
 import csns.model.assessment.dao.MFTScoreDao;
 
 @Controller
@@ -43,6 +47,12 @@ public class MFTScoreController {
 
     @Autowired
     private MFTScoreDao mftScoreDao;
+
+    @Autowired
+    private MFTDistributionDao mftDistributionDao;
+
+    @Autowired
+    private MFTDistributionTypeDao mftDistributionTypeDao;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -70,11 +80,27 @@ public class MFTScoreController {
 
         if( date == null ) date = dates.get( 0 );
         List<MFTScore> scores = mftScoreDao.getScores( department, date );
+        getPercentile( department, date, scores );
 
         models.put( "dates", dates );
         models.put( "selectedDate", date );
         models.put( "scores", scores );
         return "mft/score";
+    }
+
+    private void getPercentile( Department department, Date date,
+        List<MFTScore> scores )
+    {
+        MFTDistributionType distType = mftDistributionTypeDao.getDistributionType(
+            department, "Student" );
+        if( distType == null ) return;
+
+        MFTDistribution distribution = mftDistributionDao.getDistribution(
+            date, distType );
+        if( distribution == null ) return;
+
+        for( MFTScore score : scores )
+            score.setPercentile( distribution.getPercentile( (double) score.getValue() ) );
     }
 
 }

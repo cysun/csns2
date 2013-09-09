@@ -18,6 +18,7 @@
  */
 package csns.model.assessment.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import csns.model.academics.Department;
@@ -31,6 +32,8 @@ public interface MFTDistributionDao {
     MFTDistribution getDistribution( Long id );
 
     MFTDistribution getDistribution( Integer year, MFTDistributionType type );
+
+    MFTDistribution getDistribution( Date date, MFTDistributionType type );
 
     List<MFTDistribution> getDistributions( Integer year, Department department );
 

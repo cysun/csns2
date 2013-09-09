@@ -20,6 +20,7 @@ package csns.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,11 @@ import org.springframework.web.context.request.WebRequest;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.assessment.MFTDistribution;
+import csns.model.assessment.MFTDistributionType;
 import csns.model.assessment.MFTIndicator;
+import csns.model.assessment.dao.MFTDistributionDao;
+import csns.model.assessment.dao.MFTDistributionTypeDao;
 import csns.model.assessment.dao.MFTIndicatorDao;
 import csns.security.SecurityUtils;
 
@@ -49,6 +54,12 @@ public class MFTIndicatorController {
 
     @Autowired
     private MFTIndicatorDao mftIndicatorDao;
+
+    @Autowired
+    private MFTDistributionDao mftDistributionDao;
+
+    @Autowired
+    private MFTDistributionTypeDao mftDistributionTypeDao;
 
     private static final Logger logger = LoggerFactory.getLogger( MFTIndicatorController.class );
 
@@ -63,9 +74,48 @@ public class MFTIndicatorController {
     public String ai( @PathVariable String dept, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
+
+        List<MFTIndicator> indicators = mftIndicatorDao.getIndicators( department );
+        for( MFTIndicator indicator : indicators )
+            getPercentile( department, indicator );
+
         models.put( "indicator", new MFTIndicator() );
-        models.put( "indicators", mftIndicatorDao.getIndicators( department ) );
+        models.put( "indicators", indicators );
         return "mft/ai";
+    }
+
+    private void getPercentile( Department department, MFTIndicator indicator )
+    {
+        String typeAliases[] = { "AI1", "AI2", "AI3" };
+
+        for( String typeAlias : typeAliases )
+        {
+            MFTDistributionType distType = mftDistributionTypeDao.getDistributionType(
+                department, typeAlias );
+            if( distType == null ) continue;
+
+            MFTDistribution distribution = mftDistributionDao.getDistribution(
+                indicator.getDate(), distType );
+            if( distribution == null ) return;
+
+            switch( typeAlias )
+            {
+                case "AI1":
+                    indicator.setAi1Percentile( distribution.getPercentile( indicator.getAi1()
+                        .doubleValue() ) );
+                    break;
+
+                case "AI2":
+                    indicator.setAi2Percentile( distribution.getPercentile( indicator.getAi2()
+                        .doubleValue() ) );
+                    break;
+
+                case "AI3":
+                    indicator.setAi3Percentile( distribution.getPercentile( indicator.getAi3()
+                        .doubleValue() ) );
+                    break;
+            }
+        }
     }
 
     @RequestMapping("/department/{dept}/mft/ai/update")

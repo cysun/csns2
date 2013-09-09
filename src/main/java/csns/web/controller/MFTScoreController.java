@@ -97,7 +97,7 @@ public class MFTScoreController {
 
         MFTDistribution distribution = mftDistributionDao.getDistribution(
             date, distType );
-        if( distribution == null ) return;
+        if( distribution == null || distribution.isDeleted() ) return;
 
         for( MFTScore score : scores )
             score.setPercentile( distribution.getPercentile( (double) score.getValue() ) );

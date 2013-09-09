@@ -96,7 +96,7 @@ public class MFTIndicatorController {
 
             MFTDistribution distribution = mftDistributionDao.getDistribution(
                 indicator.getDate(), distType );
-            if( distribution == null ) return;
+            if( distribution == null || distribution.isDeleted() ) return;
 
             switch( typeAlias )
             {

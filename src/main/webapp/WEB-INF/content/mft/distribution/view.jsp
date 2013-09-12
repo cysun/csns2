@@ -12,8 +12,8 @@ function deleteDistribution( id )
 
 <ul id="title">
 <li><a class="bc" href="../overview">MFT</a></li>
-<li><a class="bc" href="../distribution">National Distributions</a></li>
-<li>${distribution.year} ${distribution.type.name}</li>
+<li><a class="bc" href="../distribution?year=${distribution.year}">National Distributions</a></li>
+<li>${distribution.type.name}</li>
 <li class="align_right"><a href="edit?id=${distribution.id}"><img alt="[Edit Distribution]"
   title="Edit Distribution" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
 <li class="align_right"><a href="javascript:deleteDistribution(${distribution.id})"><img alt="[Delete Distribution]"
@@ -21,8 +21,9 @@ function deleteDistribution( id )
 </ul>
 
 <table class="viewtable autowidth">
-  <tr><th>Time Period</th><th>Sample Size</th><th>Mean</th><th>Median</th><th>StdDev</th></tr>
+  <tr><th>Year</th><th>Time Period</th><th>Sample Size</th><th>Mean</th><th>Median</th><th>StdDev</th></tr>
   <tr>
+    <td>${distribution.year}</td>
     <td>
       <fmt:formatDate value="${distribution.fromDate}" pattern="MM/yyyy" /> -
       <fmt:formatDate value="${distribution.toDate}" pattern="MM/yyyy" />

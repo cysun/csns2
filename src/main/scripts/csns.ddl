@@ -330,6 +330,7 @@
         ai3 int4 not null,
         date timestamp not null,
         deleted boolean not null,
+        num_of_students int4 not null,
         department_id int8 not null,
         primary key (id)
     );

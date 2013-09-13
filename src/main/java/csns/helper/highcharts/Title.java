@@ -16,27 +16,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.assessment.dao;
+package csns.helper.highcharts;
 
-import java.util.Date;
-import java.util.List;
+public class Title {
 
-import csns.model.academics.Department;
-import csns.model.assessment.MFTIndicator;
+    String text;
 
-public interface MFTIndicatorDao {
+    public Title()
+    {
+    }
 
-    List<Integer> getYears( Department department );
+    public Title( String text )
+    {
+        this.text = text;
+    }
 
-    MFTIndicator getIndicator( Long id );
+    public String getText()
+    {
+        return text;
+    }
 
-    MFTIndicator getIndicator( Department department, Date date );
-
-    List<MFTIndicator> getIndicators( Department department );
-
-    List<MFTIndicator> getIndicators( Department department, Integer beginYear,
-        Integer endYear );
-
-    MFTIndicator saveIndicator( MFTIndicator indicator );
+    public void setText( String text )
+    {
+        this.text = text;
+    }
 
 }

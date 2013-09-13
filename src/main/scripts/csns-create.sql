@@ -1096,6 +1096,7 @@ create table mft_indicators (
     ai2             integer not null,
     ai3             integer not null,
     date            date not null,
+    num_of_students integer not null,
     deleted         boolean not null default 'f',
   unique (department_id, date)
 );

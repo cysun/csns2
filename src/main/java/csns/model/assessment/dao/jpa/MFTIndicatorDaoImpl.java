@@ -38,6 +38,18 @@ public class MFTIndicatorDaoImpl implements MFTIndicatorDao {
     private EntityManager entityManager;
 
     @Override
+    public List<Integer> getYears( Department department )
+    {
+        String query = "select distinct year(date) from MFTIndicator "
+            + "where department = :department and deleted = false "
+            + "order by year(date) asc";
+
+        return entityManager.createQuery( query, Integer.class )
+            .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
     public MFTIndicator getIndicator( Long id )
     {
         return entityManager.find( MFTIndicator.class, id );
@@ -65,6 +77,21 @@ public class MFTIndicatorDaoImpl implements MFTIndicatorDao {
 
         return entityManager.createQuery( query, MFTIndicator.class )
             .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
+    public List<MFTIndicator> getIndicators( Department department,
+        Integer beginYear, Integer endYear )
+    {
+        String query = "from MFTIndicator where department = :department "
+            + "and year(date) >= :beginYear and year(date) <= :endYear "
+            + "and deleted = false order by date asc";
+
+        return entityManager.createQuery( query, MFTIndicator.class )
+            .setParameter( "department", department )
+            .setParameter( "beginYear", beginYear )
+            .setParameter( "endYear", endYear )
             .getResultList();
     }
 

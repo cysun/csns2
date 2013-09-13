@@ -19,7 +19,9 @@
 package csns.web.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -36,6 +38,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
+import csns.helper.highcharts.Chart;
+import csns.helper.highcharts.Series;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.assessment.MFTDistribution;
@@ -45,6 +49,7 @@ import csns.model.assessment.dao.MFTDistributionDao;
 import csns.model.assessment.dao.MFTDistributionTypeDao;
 import csns.model.assessment.dao.MFTIndicatorDao;
 import csns.security.SecurityUtils;
+import csns.util.DateUtils;
 
 @Controller
 public class MFTIndicatorController {
@@ -81,41 +86,19 @@ public class MFTIndicatorController {
 
         models.put( "indicator", new MFTIndicator() );
         models.put( "indicators", indicators );
-        return "mft/ai";
-    }
 
-    private void getPercentile( Department department, MFTIndicator indicator )
-    {
-        String typeAliases[] = { "AI1", "AI2", "AI3" };
-
-        for( String typeAlias : typeAliases )
+        List<Integer> years = mftIndicatorDao.getYears( department );
+        if( years.size() > 0 )
         {
-            MFTDistributionType distType = mftDistributionTypeDao.getDistributionType(
-                department, typeAlias );
-            if( distType == null ) continue;
-
-            MFTDistribution distribution = mftDistributionDao.getDistribution(
-                indicator.getDate(), distType );
-            if( distribution == null || distribution.isDeleted() ) return;
-
-            switch( typeAlias )
-            {
-                case "AI1":
-                    indicator.setAi1Percentile( distribution.getPercentile( indicator.getAi1()
-                        .doubleValue() ) );
-                    break;
-
-                case "AI2":
-                    indicator.setAi2Percentile( distribution.getPercentile( indicator.getAi2()
-                        .doubleValue() ) );
-                    break;
-
-                case "AI3":
-                    indicator.setAi3Percentile( distribution.getPercentile( indicator.getAi3()
-                        .doubleValue() ) );
-                    break;
-            }
+            Integer beginYear = years.size() < 6 ? years.get( 0 )
+                : years.get( years.size() - 6 );
+            Integer endYear = years.get( years.size() - 1 );
+            models.put( "beginYear", beginYear );
+            models.put( "endYear", endYear );
+            models.put( "years", years );
         }
+
+        return "mft/ai";
     }
 
     @RequestMapping("/department/{dept}/mft/ai/update")
@@ -157,6 +140,101 @@ public class MFTIndicatorController {
             + " deleted mft indicator " + indicator.getId() );
 
         return "redirect:/department/" + dept + "/mft/ai";
+    }
+
+    @RequestMapping("/department/{dept}/mft/ai/chart")
+    public String chart( @PathVariable String dept,
+        @RequestParam Integer beginYear, @RequestParam Integer endYear,
+        ModelMap models )
+    {
+        Department department = departmentDao.getDepartment( dept );
+        List<MFTIndicator> indicators = mftIndicatorDao.getIndicators(
+            department, beginYear, endYear );
+
+        Iterator<MFTIndicator> iterator = indicators.iterator();
+        MFTIndicator currentInd = iterator.next();
+        while( iterator.hasNext() )
+        {
+            MFTIndicator nextInd = iterator.next();
+            if( DateUtils.getYear( currentInd.getDate() ) == DateUtils.getYear( nextInd.getDate() ) )
+            {
+                currentInd.merge( nextInd );
+                iterator.remove();
+            }
+            else
+                currentInd = nextInd;
+        }
+
+        Chart chart = new Chart( "MFT Assessment Indicators (" + beginYear
+            + "-" + endYear + ")", "Year", "National Percentile" );
+        chart.getxAxis().setCategories( beginYear, endYear );
+        chart.getyAxis().setMax( 100 );
+        for( MFTIndicator indicator : indicators )
+            getPercentile( department, indicator );
+        chart.getSeries().add( getSeries( "AI-1", indicators ) );
+        chart.getSeries().add( getSeries( "AI-2", indicators ) );
+        chart.getSeries().add( getSeries( "AI-3", indicators ) );
+
+        models.put( "chart", chart );
+        return "jsonView";
+    }
+
+    private void getPercentile( Department department, MFTIndicator indicator )
+    {
+        String typeAliases[] = { "AI1", "AI2", "AI3" };
+
+        for( String typeAlias : typeAliases )
+        {
+            MFTDistributionType distType = mftDistributionTypeDao.getDistributionType(
+                department, typeAlias );
+            if( distType == null ) continue;
+
+            MFTDistribution distribution = mftDistributionDao.getDistribution(
+                indicator.getDate(), distType );
+            if( distribution == null || distribution.isDeleted() ) return;
+
+            switch( typeAlias )
+            {
+                case "AI1":
+                    indicator.setAi1Percentile( distribution.getPercentile( indicator.getAi1()
+                        .doubleValue() ) );
+                    break;
+
+                case "AI2":
+                    indicator.setAi2Percentile( distribution.getPercentile( indicator.getAi2()
+                        .doubleValue() ) );
+                    break;
+
+                case "AI3":
+                    indicator.setAi3Percentile( distribution.getPercentile( indicator.getAi3()
+                        .doubleValue() ) );
+                    break;
+            }
+        }
+    }
+
+    private Series getSeries( String typeAlias, List<MFTIndicator> indicators )
+    {
+        List<Integer> data = new ArrayList<Integer>();
+        for( MFTIndicator indicator : indicators )
+        {
+            switch( typeAlias )
+            {
+                case "AI-1":
+                    data.add( indicator.getAi1Percentile() );
+                    break;
+
+                case "AI-2":
+                    data.add( indicator.getAi2Percentile() );
+                    break;
+
+                case "AI-3":
+                    data.add( indicator.getAi3Percentile() );
+                    break;
+            }
+        }
+
+        return new Series( typeAlias, data );
     }
 
 }

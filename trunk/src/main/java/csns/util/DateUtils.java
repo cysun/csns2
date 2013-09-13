@@ -16,27 +16,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.assessment.dao;
+package csns.util;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import csns.model.academics.Department;
-import csns.model.assessment.MFTIndicator;
+public class DateUtils {
 
-public interface MFTIndicatorDao {
-
-    List<Integer> getYears( Department department );
-
-    MFTIndicator getIndicator( Long id );
-
-    MFTIndicator getIndicator( Department department, Date date );
-
-    List<MFTIndicator> getIndicators( Department department );
-
-    List<MFTIndicator> getIndicators( Department department, Integer beginYear,
-        Integer endYear );
-
-    MFTIndicator saveIndicator( MFTIndicator indicator );
+    public static int getYear( Date date )
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime( date );
+        return calendar.get( Calendar.YEAR );
+    }
 
 }

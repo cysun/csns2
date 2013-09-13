@@ -63,6 +63,17 @@
         </put-list-attribute>
     </definition>
 
+    <definition name="layout.chart" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${highcharts}/highcharts.js" />
+            <add-attribute value="${highcharts}/exporting.js" />
+        </put-list-attribute>
+    </definition>
+
     <!-- ======= -->
     <!-- General -->
     <!-- ======= -->
@@ -763,7 +774,7 @@
         <put-attribute name="content" value="/WEB-INF/content/mft/import1.jsp" />
     </definition>
 
-    <definition name="mft/ai" extends="layout.jqueryui">
+    <definition name="mft/ai" extends="layout.chart">
         <put-attribute name="title" value="MFT Assessment Indicators" />
         <put-attribute name="content" value="/WEB-INF/content/mft/ai.jsp" />
     </definition>

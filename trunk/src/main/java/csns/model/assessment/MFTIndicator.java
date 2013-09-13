@@ -55,6 +55,9 @@ public class MFTIndicator implements Serializable {
     @Column(nullable = false)
     private Integer ai1, ai2, ai3;
 
+    @Column(name = "num_of_students", nullable = false)
+    private Integer numOfStudents;
+
     private boolean deleted;
 
     @Transient
@@ -63,6 +66,20 @@ public class MFTIndicator implements Serializable {
     public MFTIndicator()
     {
         deleted = false;
+    }
+
+    public MFTIndicator merge( MFTIndicator other )
+    {
+        ai1 = (ai1 * numOfStudents + other.ai1 * other.numOfStudents)
+            / (numOfStudents + other.numOfStudents);
+        ai2 = (ai2 * numOfStudents + other.ai2 * other.numOfStudents)
+            / (numOfStudents + other.numOfStudents);
+        ai3 = (ai3 * numOfStudents + other.ai3 * other.numOfStudents)
+            / (numOfStudents + other.numOfStudents);
+
+        numOfStudents += other.numOfStudents;
+
+        return this;
     }
 
     public Long getId()
@@ -123,6 +140,16 @@ public class MFTIndicator implements Serializable {
     public void setAi3( Integer ai3 )
     {
         this.ai3 = ai3;
+    }
+
+    public Integer getNumOfStudents()
+    {
+        return numOfStudents;
+    }
+
+    public void setNumOfStudents( Integer numOfStudents )
+    {
+        this.numOfStudents = numOfStudents;
     }
 
     public boolean isDeleted()

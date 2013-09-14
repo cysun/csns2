@@ -69,4 +69,14 @@ public class Series {
         this.data = data;
     }
 
+    public Boolean getShowInLegend()
+    {
+        return showInLegend;
+    }
+
+    public void setShowInLegend( Boolean showInLegend )
+    {
+        this.showInLegend = showInLegend;
+    }
+
 }

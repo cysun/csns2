@@ -1190,3 +1190,30 @@ begin
     return l_quarter || ' ' || l_year;
 end;
 $$ language plpgsql;
+
+--
+-- Median Aggregation Function for PostgreSQL 8.4+
+--
+-- Written by Scott Bailey 'Artacus'
+-- http://wiki.postgresql.org/wiki/Aggregate_Median
+--
+CREATE OR REPLACE FUNCTION _final_median(numeric[])
+   RETURNS numeric AS
+$$
+   SELECT AVG(val)
+   FROM (
+     SELECT val
+     FROM unnest($1) val
+     ORDER BY 1
+     LIMIT  2 - MOD(array_upper($1, 1), 2)
+     OFFSET CEIL(array_upper($1, 1) / 2.0) - 1
+   ) sub;
+$$
+LANGUAGE 'sql' IMMUTABLE;
+ 
+CREATE AGGREGATE median(numeric) (
+  SFUNC=array_append,
+  STYPE=numeric[],
+  FINALFUNC=_final_median,
+  INITCOND='{}'
+);

@@ -4,6 +4,9 @@ set client_min_messages=WARNING;
 
 drop sequence hibernate_sequence;
 
+drop aggregate median( numeric );
+drop function _final_median( numeric[] );
+
 drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);

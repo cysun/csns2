@@ -148,4 +148,19 @@ select id, date, author_id, mailinglist_id,
 ]]>
     </sql-query>
 
+    <sql-query name="mft.median.scores">
+        <return class="csns.model.assessment.MFTScore" />
+<![CDATA[
+select min(id) as id, min(department_id) as department_id,
+        min(user_id) as user_id, median(value) as value,
+        to_date(to_char(extract(year from date), '9999'), 'YYYY') as date
+    from mft_scores
+    where department_id = :departmentId
+    and extract(year from date) >= :beginYear
+    and extract(year from date) <= :endYear
+    group by extract(year from date)
+    order by extract(year from date) asc
+]]>
+    </sql-query>
+
 </hibernate-mapping>

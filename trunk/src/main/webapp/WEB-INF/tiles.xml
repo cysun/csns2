@@ -69,6 +69,7 @@
         </put-list-attribute>
         <put-list-attribute name="jsUrls">
             <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${highcharts}/highcharts.js" />
             <add-attribute value="${highcharts}/exporting.js" />
         </put-list-attribute>
@@ -759,7 +760,7 @@
         <put-attribute name="content" value="/WEB-INF/content/mft/overview.jsp" />
     </definition>
 
-    <definition name="mft/score" extends="layout.jqueryui">
+    <definition name="mft/score" extends="layout.chart">
         <put-attribute name="title" value="MFT Scores" />
         <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
     </definition>

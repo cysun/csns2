@@ -50,6 +50,17 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
     }
 
     @Override
+    public List<Integer> getYears( Department department )
+    {
+        String query = "select distinct year(date) from MFTScore "
+            + "where department = :department order by year(date) asc";
+
+        return entityManager.createQuery( query, Integer.class )
+            .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
     public MFTScore getScore( Department department, Date date, User user )
     {
         String query = "from MFTScore where department = :department "
@@ -75,12 +86,24 @@ public class MFTScoreDaoImpl implements MFTScoreDao {
     }
 
     @Override
-    public List<MFTScore> getScores( Department department, int year )
+    public List<MFTScore> getScores( Department department, Integer year )
     {
         String query = "from MFTScore where year(date) = :year";
 
         return entityManager.createQuery( query, MFTScore.class )
             .setParameter( "year", year )
+            .getResultList();
+    }
+
+    @Override
+    public List<MFTScore> getMedianScores( Department department,
+        Integer beginYear, Integer endYear )
+    {
+        return entityManager.createNamedQuery( "mft.median.scores",
+            MFTScore.class )
+            .setParameter( "departmentId", department.getId() )
+            .setParameter( "beginYear", beginYear )
+            .setParameter( "endYear", endYear )
             .getResultList();
     }
 

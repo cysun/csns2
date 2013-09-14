@@ -4,7 +4,23 @@
 
 <script>
 $(function(){
+	$("#tabs").tabs();
     $("table").tablesorter();
+    $("#plot").click(function(event){
+        event.preventDefault();
+        $.ajax({
+            url: "score/chart",
+            data: {
+                beginYear: $("select[name='beginYear'] option:selected").val(),
+                endYear: $("select[name='endYear'] option:selected").val()
+            },
+            success: function(data){ $("#chartContainer").highcharts(data.chart); }
+        });
+    });
+<c:if test="${not empty years}">
+    $("select[name='beginYear']").val("${beginYear}");
+    $("select[name='endYear']").val("${endYear}");
+</c:if>
 });
 </script>
 
@@ -15,6 +31,13 @@ $(function(){
   title="Import Scores" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </ul>
 
+<div id="tabs">
+<ul>
+  <li><a href="#tab-data">Data</a></li>
+  <li><a href="#tab-chart">Chart</a></li>
+</ul>
+
+<div id="tab-data">
 <c:if test="${empty dates}">
 <p>No MFT scores yet.</p>
 </c:if>
@@ -49,3 +72,26 @@ $(function(){
 </tbody>
 </table>
 </c:if>
+</div> <!--  end of tab-data -->
+
+<div id="tab-chart">
+<c:if test="${not empty dates}">
+<div style="padding: 10px; margin-bottom: 35px;" class="ui-widget-content ui-corner-all">
+From:
+  <select name="beginYear">
+    <c:forEach items="${years}" var="year">
+      <option value="${year}">${year}</option>
+    </c:forEach>    
+  </select>
+<span style="margin-left: 10px;">To:</span>
+  <select name="endYear">
+    <c:forEach items="${years}" var="year" varStatus="status">
+      <option value="${year}">${year}</option>
+    </c:forEach>    
+  </select>
+<span style="margin-left: 10px;"><button id="plot" class="subbutton">Plot</button></span>
+</div>
+<div id="chartContainer" style="width:100%; height:400px;"></div>
+</c:if>
+</div> <!--  end of tab-chart -->
+</div> <!--  end of tabs -->

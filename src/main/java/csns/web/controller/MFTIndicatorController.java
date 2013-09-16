@@ -144,8 +144,8 @@ public class MFTIndicatorController {
 
     @RequestMapping("/department/{dept}/mft/ai/chart")
     public String chart( @PathVariable String dept,
-        @RequestParam Integer beginYear, @RequestParam Integer endYear,
-        ModelMap models )
+        @RequestParam String chartType, @RequestParam Integer beginYear,
+        @RequestParam Integer endYear, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
         List<MFTIndicator> indicators = mftIndicatorDao.getIndicators(
@@ -166,14 +166,18 @@ public class MFTIndicatorController {
         }
 
         Chart chart = new Chart( "MFT Assessment Indicators (" + beginYear
-            + "-" + endYear + ")", "Year", "National Percentile" );
+            + "-" + endYear + ")", "Year", chartType.equalsIgnoreCase( "score" )
+            ? "Mean Score" : "National Percentile" );
         chart.getxAxis().setCategories( beginYear, endYear );
         chart.getyAxis().setMax( 100 );
-        for( MFTIndicator indicator : indicators )
-            getPercentile( department, indicator );
-        chart.getSeries().add( getSeries( "AI-1", indicators ) );
-        chart.getSeries().add( getSeries( "AI-2", indicators ) );
-        chart.getSeries().add( getSeries( "AI-3", indicators ) );
+
+        if( chartType.equalsIgnoreCase( "percentile" ) )
+            for( MFTIndicator indicator : indicators )
+                getPercentile( department, indicator );
+
+        chart.getSeries().add( getSeries( chartType, "AI-1", indicators ) );
+        chart.getSeries().add( getSeries( chartType, "AI-2", indicators ) );
+        chart.getSeries().add( getSeries( chartType, "AI-3", indicators ) );
 
         models.put( "chart", chart );
         return "jsonView";
@@ -181,19 +185,19 @@ public class MFTIndicatorController {
 
     private void getPercentile( Department department, MFTIndicator indicator )
     {
-        String typeAliases[] = { "AI1", "AI2", "AI3" };
+        String indicatorAliases[] = { "AI1", "AI2", "AI3" };
 
-        for( String typeAlias : typeAliases )
+        for( String indicatorAlias : indicatorAliases )
         {
             MFTDistributionType distType = mftDistributionTypeDao.getDistributionType(
-                department, typeAlias );
+                department, indicatorAlias );
             if( distType == null ) continue;
 
             MFTDistribution distribution = mftDistributionDao.getDistribution(
                 indicator.getDate(), distType );
             if( distribution == null || distribution.isDeleted() ) return;
 
-            switch( typeAlias )
+            switch( indicatorAlias )
             {
                 case "AI1":
                     indicator.setAi1Percentile( distribution.getPercentile( indicator.getAi1()
@@ -213,28 +217,32 @@ public class MFTIndicatorController {
         }
     }
 
-    private Series getSeries( String typeAlias, List<MFTIndicator> indicators )
+    private Series getSeries( String chartType, String indicatorAlias,
+        List<MFTIndicator> indicators )
     {
         List<Integer> data = new ArrayList<Integer>();
         for( MFTIndicator indicator : indicators )
         {
-            switch( typeAlias )
+            switch( indicatorAlias )
             {
                 case "AI-1":
-                    data.add( indicator.getAi1Percentile() );
+                    data.add( chartType.equalsIgnoreCase( "score" )
+                        ? indicator.getAi1() : indicator.getAi1Percentile() );
                     break;
 
                 case "AI-2":
-                    data.add( indicator.getAi2Percentile() );
+                    data.add( chartType.equalsIgnoreCase( "score" )
+                        ? indicator.getAi2() : indicator.getAi2Percentile() );
                     break;
 
                 case "AI-3":
-                    data.add( indicator.getAi3Percentile() );
+                    data.add( chartType.equalsIgnoreCase( "score" )
+                        ? indicator.getAi3() : indicator.getAi3Percentile() );
                     break;
             }
         }
 
-        return new Series( typeAlias, data );
+        return new Series( indicatorAlias, data );
     }
 
 }

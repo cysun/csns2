@@ -49,6 +49,11 @@ public class Axis {
             categories.add( Integer.valueOf( i ).toString() );
     }
 
+    public void setTitleText( String titleText )
+    {
+        title = new Title( titleText );
+    }
+
     public Title getTitle()
     {
         return title;

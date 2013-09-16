@@ -23,6 +23,7 @@ $(function(){
         $.ajax({
             url: "ai/chart",
             data: {
+            	chartType: $("select[name='chartType'] option:selected").val(),
                 beginYear: $("select[name='beginYear'] option:selected").val(),
                 endYear: $("select[name='endYear'] option:selected").val()
             },
@@ -98,7 +99,11 @@ percentile the institution is in based on the mean score of the students.</p>
 <div id="tab-chart">
 <c:if test="${not empty years}">
 <div style="padding: 10px; margin-bottom: 35px;" class="ui-widget-content ui-corner-all">
-From:
+  <select name="chartType">
+    <option value="score">Mean Score</option>
+    <option value="percentile">Mean Score Percentile</option>
+  </select>
+<span style="margin-left: 10px;">From:</span>
   <select name="beginYear">
     <c:forEach items="${years}" var="year">
       <option value="${year}">${year}</option>

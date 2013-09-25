@@ -90,6 +90,9 @@ public class AssignmentDaoImpl implements AssignmentDao {
     @PreAuthorize("#assignment.section.isInstructor(principal)")
     public Assignment saveAssignment( Assignment assignment )
     {
+        if( assignment.isOnline() )
+            ((OnlineAssignment) assignment).calcTotalPoints();
+
         return entityManager.merge( assignment );
     }
 

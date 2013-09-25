@@ -68,6 +68,11 @@ public class OnlineAssignment extends Assignment {
         return true;
     }
 
+    public void calcTotalPoints()
+    {
+        totalPoints = "" + questionSheet.getTotalPoints();
+    }
+
     public QuestionSheet getQuestionSheet()
     {
         return questionSheet;

@@ -55,7 +55,7 @@ $(function(){
 <tbody>
   <c:forEach items="${submissions}" var="submission">
   <tr>
-    <td>${submission.assignment.name}</td>
+    <td><a href="<c:url value='/submission/grade?id=${submission.id}' />">${submission.assignment.name}</a></td>
     <td class="center">${submission.grade}</td>
     <td class="center">${submission.assignment.totalPoints}</td>
   </tr>

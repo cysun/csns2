@@ -39,14 +39,10 @@ $(function(){
            });
        });
     });
-    $(".selectAll").toggle(
-            function(){ 
-                $(this).parents("form").find(":checkbox[name='userId']").attr("checked",true);
-            },
-            function(){
-                $(this).parents("form").find(":checkbox[name='userId']").attr("checked",false);
-            }
-    );
+    $(".selectAll").click(function(){
+        var checked = $(this).is(":checked");
+        $(this).parents("form").find(":checkbox[name='userId']").prop("checked",checked);
+    });
     $("#email").click(function(){
         var form = "#" + $(".ui-tabs-panel:not(.ui-tabs-hide)").attr("id") + "Form";
         if( $(form).find(":checkbox[name='userId']:checked").length  > 0 )

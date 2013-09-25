@@ -12,10 +12,10 @@ $(function(){
                 window.location.href = "view?id=" + ui.item.id;
         }
     });
-    $("#selectAll").toggle(
-        function(){ $(":checkbox[name='userId']").attr("checked",true); },
-        function(){ $(":checkbox[name='userId']").attr("checked",false); }
-    );
+    $("#selectAll").click(function(){
+        var checked = $("#selectAll").is(":checked");
+        $(":checkbox[name='userId']").prop("checked",checked);
+    });
     $("#email").click(function(){
         if( $(":checkbox[name='userId']:checked").length == 0 )
             alert( "Please select the user(s) to contact." );

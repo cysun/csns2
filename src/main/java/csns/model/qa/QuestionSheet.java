@@ -94,6 +94,15 @@ public class QuestionSheet implements Serializable {
         }
     }
 
+    public int getTotalPoints()
+    {
+        int totalPoints = 0;
+        for( QuestionSection section : sections )
+            totalPoints += section.getTotalPoints();
+
+        return totalPoints;
+    }
+
     public Long getId()
     {
         return id;

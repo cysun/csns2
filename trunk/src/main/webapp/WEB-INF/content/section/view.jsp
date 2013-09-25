@@ -7,12 +7,13 @@
 <script>
 $(function(){
    $("table").tablesorter({
-      sortList: [[1,0]]
+       headers: { 0: {sorter: false} },
+       sortList: [[1,0]]
    });
-   $("#selectAll").toggle(
-       function(){ $(":checkbox[name='userId']").attr("checked",true); },
-       function(){ $(":checkbox[name='userId']").attr("checked",false); }
-   );
+   $("#selectAll").click(function(){
+       var checked = $("#selectAll").is(":checked");
+       $(":checkbox[name='userId']").prop("checked",checked);
+   });
    $("#email").click(function(){
        if( $(":checkbox[name='userId']:checked").length == 0 )
            alert( "Please select the student(s) to contact." );

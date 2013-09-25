@@ -437,7 +437,7 @@
     </definition>
 
     <definition name="submission/add" extends="layout.jqueryui">
-        <put-attribute name="title" value="Upload Additional Files" />
+        <put-attribute name="title" value="Submission Files" />
         <put-attribute name="content" value="/WEB-INF/content/submission/add.jsp" />
     </definition>
 

@@ -37,6 +37,9 @@ $(function(){
            });
        });
     });
+    $(".viewtable").tablesorter({
+        headers: { 3: {sorter: false} }
+    });
 });
 function publish( id )
 {
@@ -68,9 +71,12 @@ function publish( id )
   <tr> 
     <td colspan="2">
       <table class="viewtable">
+        <thead>
         <tr>
           <th>Assignment</th><th class="datetime">Publish Date</th><th class="datetime">Due Date</th><th class="action"></th>
         </tr>
+        </thead>
+        <tbody>
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
@@ -90,6 +96,7 @@ function publish( id )
           </td>
         </tr>
         </c:forEach>
+        </tbody>
       </table>
     </td>
   </tr>

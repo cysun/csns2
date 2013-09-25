@@ -91,6 +91,15 @@ public class QuestionSection implements Serializable {
             }
     }
 
+    public int getTotalPoints()
+    {
+        int totalPoints = 0;
+        for( Question question : questions )
+            totalPoints += question.getPointValue();
+
+        return totalPoints;
+    }
+
     public Long getId()
     {
         return id;

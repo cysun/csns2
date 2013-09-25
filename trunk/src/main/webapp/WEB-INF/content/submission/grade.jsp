@@ -49,7 +49,8 @@ $(function(){
 });
 function toggleFilePublic( fileId )
 {
-    $("#file-" + fileId).load("<c:url value='/file/toggleFilePublic.html?fileId=' />" + fileId);
+    $.ajaxSetup({ cache: false });
+    $("#file-" + fileId).load("<c:url value='/file/toggle?id=' />" + fileId);
 }
 </script>
 
@@ -62,7 +63,7 @@ function toggleFilePublic( fileId )
 <li class="align_right"><a href="<c:url value='/download?submissionId=${submission.id}' />"><img
   title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='add?id=${submission.id}' />"><img
-  title="Upload Additional Files" alt="[Upload Additional Files]" src="<c:url value='/img/icons/upload.png' />" /></a></li>
+  title="Add/Remove Files" alt="[Add/Remove Files]" src="<c:url value='/img/icons/upload.png' />" /></a></li>
 </ul>
 
 <p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate submission="${submission}" /></p>
@@ -78,8 +79,17 @@ function toggleFilePublic( fileId )
 <thead><tr><th>Name</th><th class="shrink">Size</th><th>Date</th></tr></thead>
 <tbody>
   <c:forEach items="${submission.files}" var="file">
+    <c:choose>
+      <c:when test="${file.isPublic()}"><c:set var="img" value="open_book.png" /></c:when>
+      <c:otherwise><c:set var="img" value="closed_book.png" /></c:otherwise>
+    </c:choose>
   <tr>
-    <td><a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a></td>
+    <td>
+      <span style="margin-right: 0.5em;"><a id="file-${file.id}"
+            href="javascript:toggleFilePublic(${file.id})"><img border="0" alt="[*]" title="Toggle Public/Private"
+            src="<c:url value='/img/icons/${img}' />" /></a></span>
+      <a href="<c:url value='/download?fileId=${file.id}' />">${file.name}</a>
+    </td>
     <td class="shrink"><csns:fileSize value="${file.size}" /></td>
     <td class="datetime"><fmt:formatDate value="${file.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
   </tr>

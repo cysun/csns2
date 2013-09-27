@@ -179,6 +179,7 @@ public class OnlineAssignmentControllerS {
                 .get( sectionIndex )
                 .getQuestions()
                 .add( question );
+            assignment.calcTotalPoints();
             assignmentDao.saveAssignment( assignment );
 
             logger.info( SecurityUtils.getUser().getUsername()
@@ -220,6 +221,7 @@ public class OnlineAssignmentControllerS {
             .getSections()
             .get( sectionIndex )
             .replaceQuestion( question );
+        assignment.calcTotalPoints();
         assignmentDao.saveAssignment( assignment );
 
         logger.info( SecurityUtils.getUser().getUsername()

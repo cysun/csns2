@@ -68,6 +68,8 @@ public class OnlineAssignmentController {
         Assignment oldAssignment = assignmentDao.getAssignment( assignmentId );
         Assignment newAssignment = oldAssignment.clone();
         newAssignment.setSection( section );
+        // some old assignments do not have the correct total points
+        ((OnlineAssignment) newAssignment).calcTotalPoints();
         newAssignment = assignmentDao.saveAssignment( newAssignment );
 
         logger.info( SecurityUtils.getUser().getUsername()
@@ -94,6 +96,7 @@ public class OnlineAssignmentController {
         if( !assignment.isPublished() )
         {
             assignment.getQuestionSheet().getSections().remove( sectionIndex );
+            assignment.calcTotalPoints();
             assignmentDao.saveAssignment( assignment );
 
             logger.info( SecurityUtils.getUser().getUsername()
@@ -116,6 +119,7 @@ public class OnlineAssignmentController {
                 .getSections()
                 .get( sectionIndex )
                 .removeQuestion( questionId );
+            assignment.calcTotalPoints();
             assignmentDao.saveAssignment( assignment );
 
             logger.info( SecurityUtils.getUser().getUsername()

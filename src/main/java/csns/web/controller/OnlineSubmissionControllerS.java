@@ -71,6 +71,7 @@ public class OnlineSubmissionControllerS {
             && assignment.isPastDue() )
         {
             models.put( "message", "error.assignment.pastdue" );
+            models.put( "backUrl", "/section/taken" );
             return "error";
         }
 
@@ -100,6 +101,13 @@ public class OnlineSubmissionControllerS {
         @RequestParam int sectionIndex, HttpServletRequest request,
         ModelMap models, SessionStatus sessionStatus )
     {
+        if( submission.isPastDue() )
+        {
+            models.put( "message", "error.assignment.pastdue" );
+            models.put( "backUrl", "/section/taken" );
+            return "error";
+        }
+
         if( request.getParameter( "save" ) != null )
             submission.setSaved( true );
         if( request.getParameter( "finish" ) != null )

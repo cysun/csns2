@@ -31,7 +31,8 @@ create table users (
     enabled             boolean not null default 't',
     temporary           boolean not null default 'f',
     num_of_forum_posts  integer not null default 0,
-    disk_quota          integer not null default 200
+    disk_quota          integer not null default 200,
+    access_key          varchar(255) unique
 );
 
 create table authorities (

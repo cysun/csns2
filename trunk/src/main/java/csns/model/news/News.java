@@ -31,6 +31,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import csns.model.academics.Department;
 import csns.model.forum.Post;
 import csns.model.forum.Topic;
@@ -45,10 +47,12 @@ public class News implements Serializable {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @JsonIgnore
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
@@ -71,6 +75,18 @@ public class News implements Serializable {
         Post post = new Post();
         post.setTopic( topic );
         topic.addPost( post );
+    }
+
+    // for web service
+    public String getAuthor()
+    {
+        return topic.getAuthor().getName();
+    }
+
+    // for web service
+    public String getContent()
+    {
+        return topic.getFirstPost().getContent();
     }
 
     public Long getId()

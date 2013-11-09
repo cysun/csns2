@@ -95,8 +95,10 @@ public class RosterParserImpl implements RosterParser {
             {
                 String token = scanner.next();
                 name += token + " ";
-                if( token.matches( ".+,.+" ) )
+                if( token.matches( ".+,.*" ) )
                 {
+                    if( token.endsWith( "," ) && scanner.hasNext() )
+                        name += scanner.next();
                     nameFound = true;
                     break;
                 }

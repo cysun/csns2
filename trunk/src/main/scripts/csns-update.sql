@@ -1,1 +1,1 @@
-insert into forums (id, name, department_id) values (30008, 'ACM Student Chapter', 200);
+alter table users add column access_key varchar(255) unique;

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script type="text/javascript">
 $(function() {
@@ -22,6 +22,8 @@ $(function() {
 
 <ul id="title">
 <li>${user.name}'s Profile</li>
+<li class="align_right"><a href="<c:url value='/profile/edit' />"><img title="Edit" alt="[Edit]"
+    src="<c:url value='/img/icons/user_edit.png' />" /></a></li>
 </ul>
 
 <div id="tabs">
@@ -33,8 +35,7 @@ $(function() {
   <li><a href="<c:url value='/profile/mailinglists' />">Mailing List Subscriptions</a></li>
 </ul>
 <div id="account">
-<form:form modelAttribute="user">
-<table class="general">
+<table class="general autowidth">
   <tr>
     <th>Name</th>
     <td>${user.firstName} ${user.middleName} ${user.lastName}</td>
@@ -44,96 +45,52 @@ $(function() {
     <td>${user.cin}</td>
   </tr>
   <tr>
-    <th>Username *</th>
+    <th>Username</th>
     <td>${user.username}</td>
   </tr>
   <tr>
-    <th>Password</th>
-    <td>
-      <form:password path="password1" cssClass="forminput" />
-      <div class="error"><form:errors path="password1" /></div>
-    </td>
-  </tr>
-  <tr>
-    <th>Confirm password:</th>
-    <td>
-      <form:password path="password2" cssClass="forminput" />
-      <div class="error"><form:errors path="password2" /></div>
-    </td>
-  </tr>
-  <tr>
-    <th>Primary Email *</th>
-    <td>
-      <form:input path="primaryEmail" cssClass="forminput" />
-      <div class="error"><form:errors path="primaryEmail" /></div>
-    </td>
+    <th>Primary Email</th>
+    <td>${user.primaryEmail}</td>
   </tr>
   <tr>
     <th>Secondary Email</th>
-    <td>
-      <form:input path="secondaryEmail" cssClass="forminput" />
-      <div class="error"><form:errors path="secondaryEmail" /></div>
-    </td>
-  </tr>
-  <tr>
-    <th>Street</th>
-    <td><form:input path="street" cssClass="forminput" /></td>
-  </tr>
-  <tr>
-    <th>City</th>
-    <td><form:input path="city" cssClass="forminput" /></td>
-  </tr>
-  <tr>
-    <th>State</th>
-    <td><form:input path="state" cssClass="forminput" /></td>
-  </tr>
-  <tr>
-    <th>Zip</th>
-    <td>
-      <form:input path="zip" maxlength="5" cssClass="forminput" />
-    </td>
+    <td>${user.secondaryEmail}</td>
   </tr>
   <tr>
     <th>Cell Phone</th>
-    <td>
-      <form:input path="cellPhone" cssClass="forminput" placeholder="(###) ###-####" />
-    </td>
+    <td>${user.cellPhone}</td>
   </tr>
   <tr>
     <th>Home Phone</th>
-    <td>
-      <form:input path="homePhone" cssClass="forminput" placeholder="(###) ###-####" />
-    </td>
+    <td>${user.homePhone}</td>
   </tr>
   <tr>
     <th>Work Phone</th>
-    <td>
-      <form:input path="workPhone" cssClass="forminput" placeholder="(###) ###-####" />
-    </td>
+    <td>${user.workPhone}</td>
   </tr>
   <tr>
-    <th>Gender:</th>
+    <th>Address</th>
+    <td>${user.address}</td>
+  </tr>
+  <tr>
+    <th>Gender</th>
     <td>
-      <form:select path="gender">
-        <form:option value="" />
-        <form:option value="M">Male</form:option>
-        <form:option value="F">Female</form:option>
-      </form:select>
+      <c:if test="${user.gender == 'M'}">Male</c:if>
+      <c:if test="${user.gender == 'F'}">Female</c:if>
     </td>
   </tr>
   <tr>
     <th>Birthday</th>
-    <td>
-      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
-    </td>
+    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${user.birthday}" /></td>
   </tr>
   <tr>
-    <th></th>
-    <td>
-      <input type="submit" style="width: auto;" class="subbutton" value="Save" />
-    </td>
+    <th>Disk Quota (MB)</th>
+    <td>${user.diskQuota}</td>
+  </tr>
+  <tr>
+    <th>Web Service Access Key</th>
+    <td>${user.accessKey}</td>
   </tr>
 </table>
-</form:form>
 </div> <!-- account -->
 </div> <!-- tabs -->

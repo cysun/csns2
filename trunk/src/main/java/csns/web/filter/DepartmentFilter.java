@@ -26,12 +26,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
 @Component
 public class DepartmentFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger( DepartmentFilter.class );
 
     @Override
     protected void doFilterInternal( HttpServletRequest request,
@@ -46,8 +50,11 @@ public class DepartmentFilter extends OncePerRequestFilter {
         {
             int beginIndex = "/department/".length();
             int endIndex = path.indexOf( "/", beginIndex );
+            if( endIndex < 0 ) endIndex = path.length();
             String dept = path.substring( beginIndex, endIndex );
             request.setAttribute( "dept", dept );
+
+            logger.debug( path + " -> " + dept );
 
             if( cookie == null )
             {

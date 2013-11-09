@@ -57,9 +57,6 @@ public class ProfileControllerS {
     private EditUserValidator editUserValidator;
 
     @Autowired
-    private DefaultUrls defaultUrls;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LoggerFactory.getLogger( ProfileControllerS.class );
@@ -71,21 +68,21 @@ public class ProfileControllerS {
             new SimpleDateFormat( "MM/dd/yyyy" ), true ) );
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String profile( ModelMap models )
+    @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
+    public String edit( ModelMap models )
     {
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         models.put( "user", user );
-        return "profile/account";
+        return "profile/edit";
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public String profile( @ModelAttribute("user") User cmd,
+    @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
+    public String edit( @ModelAttribute("user") User cmd,
         HttpServletRequest request, BindingResult bindingResult,
         SessionStatus sessionStatus )
     {
         editUserValidator.validate( cmd, bindingResult );
-        if( bindingResult.hasErrors() ) return "profile/account";
+        if( bindingResult.hasErrors() ) return "profile/edit";
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
         user.copySelfEditableFieldsFrom( cmd );
@@ -95,7 +92,7 @@ public class ProfileControllerS {
         user = userDao.saveUser( user );
 
         sessionStatus.setComplete();
-        return "redirect:" + defaultUrls.userHomeUrl( request );
+        return "redirect:/profile";
     }
 
 }

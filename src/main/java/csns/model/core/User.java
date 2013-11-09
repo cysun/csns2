@@ -50,6 +50,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import csns.model.academics.AcademicStanding;
 import csns.model.academics.Department;
 import csns.model.survey.Survey;
@@ -63,19 +66,23 @@ public class User implements Serializable, Cloneable, Comparable<User>,
 
     private static final Logger logger = LoggerFactory.getLogger( User.class );
 
+    @JsonIgnore
     @Id
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String cin;
 
     @Column(nullable = false, unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
+    @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "authorities",
         joinColumns = @JoinColumn(name = "user_id"))
@@ -88,37 +95,50 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @JsonIgnore
     @Column(name = "middle_name")
     private String middleName;
 
+    @JsonIgnore
     private String gender;
 
+    @JsonIgnore
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
+    @JsonIgnore
     private String street;
 
+    @JsonIgnore
     private String city;
 
+    @JsonIgnore
     private String state;
 
+    @JsonIgnore
     private String zip;
 
+    @JsonIgnore
     @Column(name = "primary_email", nullable = false, unique = true)
     private String primaryEmail;
 
+    @JsonIgnore
     @Column(name = "secondary_email")
     private String secondaryEmail;
 
+    @JsonIgnore
     @Column(name = "cell_phone")
     private String cellPhone;
 
+    @JsonIgnore
     @Column(name = "home_phone")
     private String homePhone;
 
+    @JsonIgnore
     @Column(name = "work_phone")
     private String workPhone;
 
+    @JsonIgnore
     @Column(nullable = false)
     private boolean enabled;
 
@@ -129,15 +149,19 @@ public class User implements Serializable, Cloneable, Comparable<User>,
      * the account information - including selecting a username and a password
      * and so on, and after that the account is no longer temporary.
      */
+    @JsonIgnore
     @Column(nullable = false)
     private boolean temporary;
 
+    @JsonIgnore
     @Transient
     String password1;
 
+    @JsonIgnore
     @Transient
     String password2;
 
+    @JsonIgnore
     @OneToMany
     @JoinTable(name = "current_standings",
         joinColumns = @JoinColumn(name = "student_id"),
@@ -145,17 +169,23 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @MapKeyJoinColumn(name = "department_id")
     private Map<Department, AcademicStanding> currentStandings;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "surveys_taken",
         joinColumns = { @JoinColumn(name = "user_id", nullable = false) },
         inverseJoinColumns = { @JoinColumn(name = "survey_id", nullable = false) })
     private Set<Survey> surveysTaken;
 
+    @JsonIgnore
     @Column(name = "num_of_forum_posts", nullable = false)
     private int numOfForumPosts;
 
+    @JsonIgnore
     @Column(name = "disk_quota", nullable = false)
     private int diskQuota;
+
+    @Column(name = "access_key", unique = true)
+    private String accessKey;
 
     public User()
     {
@@ -215,11 +245,13 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return user != null && user.getId().equals( id );
     }
 
+    @JsonIgnore
     public boolean isSysadmin()
     {
         return roles.contains( "ROLE_ADMIN" );
     }
 
+    @JsonIgnore
     public boolean isAdmin()
     {
         for( String role : roles )
@@ -233,6 +265,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return roles.contains( "DEPT_ROLE_ADMIN_" + dept );
     }
 
+    @JsonIgnore
     public boolean isFaculty()
     {
         for( String role : roles )
@@ -247,6 +280,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
             && roles.contains( "DEPT_ROLE_FACULTY_" + dept ) || isAdmin( dept );
     }
 
+    @JsonIgnore
     public boolean isInstructor()
     {
         for( String role : roles )
@@ -262,6 +296,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
             || isFaculty( dept );
     }
 
+    @JsonIgnore
     public boolean isReviewer()
     {
         for( String role : roles )
@@ -288,11 +323,13 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return departments;
     }
 
+    @JsonIgnore
     public String getName()
     {
         return firstName + " " + lastName;
     }
 
+    @JsonIgnore
     public String getAddress()
     {
         StringBuffer address = new StringBuffer();
@@ -321,6 +358,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return address.toString();
     }
 
+    @JsonIgnore
     public String getEmail()
     {
         return primaryEmail != null ? primaryEmail : secondaryEmail;
@@ -331,6 +369,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return currentStandings.get( department );
     }
 
+    @JsonIgnore
     @Override
     public Collection<GrantedAuthority> getAuthorities()
     {
@@ -340,18 +379,21 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return authorities;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired()
     {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked()
     {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired()
     {
@@ -638,6 +680,16 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setDiskQuota( int diskQuota )
     {
         this.diskQuota = diskQuota;
+    }
+
+    public String getAccessKey()
+    {
+        return accessKey;
+    }
+
+    public void setAccessKey( String accessKey )
+    {
+        this.accessKey = accessKey;
     }
 
 }

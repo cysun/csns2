@@ -213,6 +213,11 @@ public class Quarter implements Serializable, Comparable<Quarter> {
         return s + (year < 10 ? "0" + year : year);
     }
 
+    public int getYear()
+    {
+        return code / 10 + 1900;
+    }
+
     public String getQuarterName()
     {
         String s;

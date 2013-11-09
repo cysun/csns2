@@ -48,7 +48,7 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping(value = "/department/{dept}/")
+    @RequestMapping({ "/department/{dept}/", "/department/{dept}" })
     public String index( @PathVariable String dept, ModelMap models,
         HttpServletResponse response )
     {

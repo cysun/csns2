@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${enrollment.section}" />
@@ -45,7 +46,12 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="taught#section-${section.id}">${section.course.code} - ${section.number}</a></li>
 <li><a class="bc" href="roster?id=${section.id}">Students</a></li>
+<security:authorize access="principal.faculty">
+<li><a href="<c:url value='/user/view?id=${enrollment.student.id}' />">${enrollment.student.name}</a></li>
+</security:authorize>
+<security:authorize access="not principal.faculty">
 <li>${enrollment.student.name}</li>
+</security:authorize>
 <li class="align_right"><a href="email?enrollmentId=${enrollment.id}"><img title="Email Grade" alt="[Email Grade]"
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 </ul>

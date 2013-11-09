@@ -25,18 +25,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
+import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.mailinglist.Mailinglist;
 import csns.security.SecurityUtils;
 
 @Controller
 public class ProfileController {
+
+    @Autowired
+    private UserDao userDao;
 
     @Autowired
     private EnrollmentDao enrollmentDao;
@@ -46,6 +51,14 @@ public class ProfileController {
 
     @Autowired
     private SubscriptionDao subscriptionDao;
+
+    @RequestMapping("/profile")
+    public String profile( ModelMap models )
+    {
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        models.put( "user", user );
+        return "profile/account";
+    }
 
     @RequestMapping("/profile/courses")
     public String courses( ModelMap models )

@@ -20,6 +20,7 @@ $(function(){
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#workPhone").mask("(999) 999-9999");
+    $(".forminput").css("width", "450px");
 });
 </script>
 
@@ -32,13 +33,10 @@ $(function(){
 <div id="tabs">
 <ul>
   <li><a href="#account">Account</a></li>
-  <li><a href="standings?userId=${user.id}">Standings</a></li>
-  <li><a href="coursework">Course Work</a></li>
-  <li><a href="advisement">Advisement</a></li>
 </ul>
 <div id="account">
 <form:form modelAttribute="user">
-<table class="general">
+<table class="general autowidth">
   <tr>
     <th>First Name *</th>
     <td>
@@ -161,6 +159,10 @@ $(function(){
   <tr>
     <th>Temporary Account</th>
     <td><form:checkbox path="temporary" cssStyle="width: auto;" /></td>
+  </tr>
+  <tr>
+    <th>Disk Quota (MB)</th>
+    <td><form:input path="diskQuota" cssClass="forminput" />
   </tr>
   <tr>
     <th></th>

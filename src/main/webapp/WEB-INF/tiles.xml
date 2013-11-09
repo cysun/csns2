@@ -197,6 +197,11 @@
         <put-attribute name="content" value="/WEB-INF/content/profile/account.jsp" />
     </definition>
 
+    <definition name="profile/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Profile" />
+        <put-attribute name="content" value="/WEB-INF/content/profile/edit.jsp" />
+    </definition>
+
     <definition name="profile/courses" template="/WEB-INF/content/profile/courses.jsp" />
 
     <definition name="profile/advisement" template="/WEB-INF/content/profile/advisement.jsp" />
@@ -334,7 +339,7 @@
         <put-attribute name="content" value="/WEB-INF/content/section/grade.jsp" />
     </definition>
 
-    <definition name="section/search" extends="layout.basic">
+    <definition name="section/search" extends="layout.jqueryui">
         <put-attribute name="title" value="Search Sections" />
         <put-attribute name="content" value="/WEB-INF/content/section/search.jsp" />
     </definition>

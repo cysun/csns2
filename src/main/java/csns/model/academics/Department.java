@@ -37,6 +37,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import csns.model.core.User;
 import csns.model.forum.Forum;
 import csns.model.mailinglist.Mailinglist;
@@ -62,12 +64,15 @@ public class Department implements Serializable {
      * <code>abbreviation</code> is the abbreviated department name, e.g. cs.
      * For programming convenience, abbreviation is always in lower case.
      */
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String abbreviation;
 
+    @JsonIgnore
     @Column(name = "welcome_message")
     private String welcomeMessage;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_administrators",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -75,6 +80,7 @@ public class Department implements Serializable {
     @OrderBy("firstName asc")
     private List<User> administrators;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_faculty",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -82,6 +88,7 @@ public class Department implements Serializable {
     @OrderBy("firstName asc")
     private List<User> faculty;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_instructors",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -89,6 +96,7 @@ public class Department implements Serializable {
     @OrderBy("firstName asc")
     private List<User> instructors;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_reviewers",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -100,6 +108,7 @@ public class Department implements Serializable {
      * Department courses are courses offered by the department. For example,
      * CS101 is a department course for the CS department.
      */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_undergraduate_courses",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -113,6 +122,7 @@ public class Department implements Serializable {
      * that are related to program assessment, e.g. EE444 and TECH250 for
      * Computer Science.
      */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_additional_undergraduate_courses",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -120,6 +130,7 @@ public class Department implements Serializable {
     @OrderBy("code asc")
     private List<Course> additionalUndergraduateCourses;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_graduate_courses",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -133,6 +144,7 @@ public class Department implements Serializable {
      * that are related to program assessment, e.g. EE444 and TECH250 for
      * Computer Science.
      */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_additional_graduate_courses",
         joinColumns = @JoinColumn(name = "department_id"),
@@ -140,16 +152,19 @@ public class Department implements Serializable {
     @OrderBy("code asc")
     private List<Course> additionalGraduateCourses;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
         CascadeType.MERGE })
     @OrderBy("id asc")
     private List<Forum> forums;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
         CascadeType.MERGE })
     @OrderBy("id asc")
     private List<Mailinglist> mailinglists;
 
+    @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "department_options",
         joinColumns = @JoinColumn(name = "department_id"))

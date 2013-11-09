@@ -55,6 +55,9 @@
     <security:http pattern="/css/**" security="none" />
     <security:http pattern="/js/**" security="none" />
 
+    <!-- web service security uses access key  -->
+    <security:http pattern="/service/**" security="none" />
+
     <security:http use-expressions="true">
         <security:form-login login-page="/login"
             authentication-success-handler-ref="authenticationSuccessHandler"

@@ -113,6 +113,10 @@ function email( address )
       <c:if test="${not user.temporary}">No</c:if>
     </td>
   </tr>
+  <tr>
+    <th>Disk Quota (MB)</th>
+    <td>${user.diskQuota}</td>
+  </tr>
 </table>
 </div> <!-- account -->
 </div> <!-- tabs -->

@@ -411,13 +411,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -519,6 +519,7 @@
 
     create table users (
         id int8 not null,
+        access_key varchar(255),
         birthday date,
         cell_phone varchar(255),
         cin varchar(255) not null,
@@ -633,6 +634,9 @@
 
     alter table surveys 
         add constraint UK_a0d19kmc1nmh63eku46mqkmx9 unique (question_sheet_id);
+
+    alter table users 
+        add constraint UK_ipai46s7a8x10kyobfh05usmu unique (access_key);
 
     alter table users 
         add constraint UK_ka6m8ghsr7vna1ti6lftwww8o unique (cin);

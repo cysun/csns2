@@ -20,6 +20,7 @@ package csns.model.news;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -78,15 +79,27 @@ public class News implements Serializable {
     }
 
     // for web service
-    public String getAuthor()
+    public String getTitle()
     {
-        return topic.getAuthor().getName();
+        return topic.getFirstPost().getSubject();
     }
 
     // for web service
     public String getContent()
     {
         return topic.getFirstPost().getContent();
+    }
+
+    // for web service
+    public String getAuthor()
+    {
+        return topic.getAuthor().getName();
+    }
+
+    // for web service
+    public Date getPublishDate()
+    {
+        return topic.getFirstPost().getDate();
     }
 
     public Long getId()

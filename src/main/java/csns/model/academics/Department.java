@@ -64,7 +64,6 @@ public class Department implements Serializable {
      * <code>abbreviation</code> is the abbreviated department name, e.g. cs.
      * For programming convenience, abbreviation is always in lower case.
      */
-    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String abbreviation;
 

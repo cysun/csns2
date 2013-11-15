@@ -106,7 +106,7 @@ public class Survey implements Serializable {
 
     public boolean isPublished()
     {
-        return isClosed() || publishDate != null
+        return publishDate != null
             && Calendar.getInstance().after( publishDate );
     }
 

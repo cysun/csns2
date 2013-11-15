@@ -83,6 +83,14 @@ public class OnlineSubmissionController {
             submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
         }
 
+        // If a submission object is created before the assignment is
+        // published, the submission would not have an answer sheet field.
+        if( submission.getAnswerSheet() == null )
+        {
+            submission.createAnswerSheet();
+            submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
+        }
+
         models.put( "submission", submission );
         models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
         return "submission/online/view";

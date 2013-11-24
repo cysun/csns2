@@ -86,7 +86,7 @@ public class AcademicStanding implements Serializable,
         int cmp = department.getName().compareTo(
             academicStanding.department.getName() );
         if( cmp == 0 ) cmp = quarter.compareTo( academicStanding.quarter );
-        if( cmp == 0 ) standing.compareTo( academicStanding.standing );
+        if( cmp == 0 ) cmp = standing.compareTo( academicStanding.standing );
 
         return cmp;
     }

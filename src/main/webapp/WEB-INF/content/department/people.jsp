@@ -66,6 +66,10 @@ function email( userId )
     alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add"
     alt="[Add]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<li class="align_right"><a href="user/import"><img alt="[Import Students]"
+  title="Import Students" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <div id="tabs">

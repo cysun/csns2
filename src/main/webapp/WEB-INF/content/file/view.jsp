@@ -6,6 +6,7 @@
 $(function() {
     $("#newFolderForm").hide();
     $("#uploadFileForm").hide();
+    $("table").tablesorter();
 });
 function toggleNewFolderForm()
 {
@@ -52,10 +53,13 @@ function toggleFilePublic( fileId )
 </c:if>
 
 <table class="viewtable">
+<thead>
 <tr>
   <th>Name</th><th>Date</th><th>Size</th><th>Owner</th>
   <c:if test="${folder == null && user != null || user.id == folder.owner.id}"><th></th></c:if>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${files}" var="file">
 <c:choose>
   <c:when test="${file.folder and file.isPublic()}">
@@ -104,4 +108,5 @@ function toggleFilePublic( fileId )
   </c:if>
 </tr>
 </c:forEach>
+</tbody>
 </table>

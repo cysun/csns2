@@ -18,6 +18,8 @@
  */
 package csns.importer;
 
+import csns.model.academics.Quarter;
+
 /**
  * This class holds all the fields that could potentially be imported. Note that
  * not all fields are used by every importer.
@@ -26,15 +28,11 @@ public class ImportedUser {
 
     String cin;
 
-    String firstName;
+    String firstName, lastName, middleName;
 
-    String lastName;
+    String grade, oldGrade;
 
-    String middleName;
-
-    String grade;
-
-    String oldGrade;
+    Quarter quarter;
 
     boolean isNewAccount;
 
@@ -123,6 +121,16 @@ public class ImportedUser {
     public void setOldGrade( String oldGrade )
     {
         this.oldGrade = oldGrade;
+    }
+
+    public Quarter getQuarter()
+    {
+        return quarter;
+    }
+
+    public void setQuarter( Quarter quarter )
+    {
+        this.quarter = quarter;
     }
 
     public boolean isNewAccount()

@@ -66,7 +66,7 @@ public class Standing implements Serializable, Comparable<Standing> {
         if( standing == null )
             throw new IllegalArgumentException( "Cannot compare to NULL." );
 
-        return (int) (id - standing.getId());
+        return id.compareTo( standing.getId() );
     }
 
     @Override

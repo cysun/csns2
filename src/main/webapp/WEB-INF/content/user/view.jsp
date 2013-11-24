@@ -45,6 +45,7 @@ function email( address )
   <li><a href="standings?userId=${user.id}">Standings</a></li>
   <li><a href="courses?userId=${user.id}">Course Work</a></li>
   <li><a href="advisement?userId=${user.id}">Advisement</a></li>
+  <li><a href="subscriptions?userId=${user.id}">Subscriptions</a></li>
 </ul>
 <div id="account">
 <table class="general autowidth">

@@ -27,12 +27,15 @@ function unsubscribe( id )
 <c:if test="${fn:length(subscriptions) > 0}">
 <h3>Department Mailing Lists</h3>
 <table class="viewtable autowidth">
-  <tr><th>Department</th><th>Mailing List</th><th>Description</th><th>Unsubscribe</th></tr>
+  <tr>
+    <th>Department</th><th>Mailing List</th>
+    <th>Auto-Subscribed</th><th>Unsubscribe</th>
+  </tr>
   <c:forEach items="${subscriptions}" var="subscription">
   <tr>
     <td>${subscription.subscribable.department.name}</td>
     <td><span class="tt">${subscription.subscribable.name}</span></td>
-    <td>${subscription.subscribable.description}</td>
+    <td class="center">${subscription.autoSubscribed}</td>
     <td class="center">
       <a href="javascript:unsubscribe(${subscription.subscribable.id})"><img title="Unsubscribe"
          alt="[Unsubscribe]" src="<c:url value='/img/icons/star_delete.png' />" /></a>

@@ -188,6 +188,8 @@
         <put-attribute name="content" value="/WEB-INF/content/user/advisement/email.jsp" />
     </definition>
 
+    <definition name="user/subscriptions" template="/WEB-INF/content/user/subscriptions.jsp" />
+
     <!-- ======= -->
     <!-- Profile -->
     <!-- ======= -->
@@ -286,6 +288,16 @@
     <definition name="department/section/import2" extends="layout.basic">
         <put-attribute name="title" value="Import Section" />
         <put-attribute name="content" value="/WEB-INF/content/department/section/import2.jsp" />
+    </definition>
+
+    <definition name="department/user/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import Students" />
+        <put-attribute name="content" value="/WEB-INF/content/department/user/import0.jsp" />
+    </definition>
+
+    <definition name="department/user/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import Students" />
+        <put-attribute name="content" value="/WEB-INF/content/department/user/import1.jsp" />
     </definition>
 
     <definition name="department/projects" extends="layout.jqueryui">
@@ -666,7 +678,7 @@
     <!-- File Manager -->
     <!-- ============ -->
 
-    <definition name="file/view" extends="layout.basic">
+    <definition name="file/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Files" />
         <put-attribute name="content" value="/WEB-INF/content/file/view.jsp" />
     </definition>

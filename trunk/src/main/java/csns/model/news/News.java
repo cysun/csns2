@@ -21,6 +21,7 @@ package csns.model.news;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,6 +36,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import csns.model.academics.Department;
+import csns.model.core.File;
 import csns.model.forum.Post;
 import csns.model.forum.Topic;
 
@@ -100,6 +102,12 @@ public class News implements Serializable {
     public Date getPublishDate()
     {
         return topic.getFirstPost().getDate();
+    }
+
+    // for web service
+    public List<File> getAttachments()
+    {
+        return topic.getFirstPost().getAttachments();
     }
 
     public Long getId()

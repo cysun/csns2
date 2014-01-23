@@ -67,7 +67,8 @@ public class SubmissionDaoImpl implements SubmissionDao {
     {
         String query = "from Submission submission "
             + "where submission.student = :student "
-            + "and submission.assignment.section = :section";
+            + "and submission.assignment.section = :section "
+            + "and submission.assignment.deleted = false";
 
         return entityManager.createQuery( query, Submission.class )
             .setParameter( "student", student )

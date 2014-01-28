@@ -220,8 +220,8 @@ public class SubmissionController {
             || submission.getAssignment().getSection().isInstructor( user ) )
         {
             file.setSubmission( null );
-            fileDao.saveFile( file );
-            submission.decrementFileCount();
+            if( submission.getFiles().remove( file ) )
+                submission.decrementFileCount();
             submissionDao.saveSubmission( submission );
         }
 

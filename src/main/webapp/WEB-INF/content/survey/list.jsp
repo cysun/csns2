@@ -36,41 +36,11 @@ function clone( id )
 
 <div id="tabs">
 <ul>
-  <li><a href="#unpublished">Unpublished</a></li>
   <li><a href="#open">Open</a></li>
+  <li><a href="#unpublished">Unpublished</a></li>
   <li><a href="closed">Closed Recently</a></li>
   <li><a href="#search">All</a>
 </ul>
-
-<div id="unpublished">
-<c:if test="${fn:length(unpublishedSurveys) == 0}">
-<p>No unpublished surveys.</p>
-</c:if>
-
-<c:if test="${fn:length(unpublishedSurveys) > 0}">
-<table class="viewtable">
-<thead>
-  <tr><th>Name</th><th>Author</th><th>Published</th><th>Closed</th><th></th></tr>
-</thead>
-<tbody>
-  <c:forEach items="${unpublishedSurveys}" var="survey">
-  <tr>
-    <td><a href="view?id=${survey.id}">${survey.name}</a></td>
-    <td class="shrink">${survey.author.username}</td>
-    <td class="date"><csns:publishDate survey="${survey}" /></td>
-    <td class="date"><csns:closeDate survey="${survey}" /></td>
-    <td class="action">
-      <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
-         title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
-      <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"
-         title="Edit Survey" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
-    </td>
-  </tr>
-  </c:forEach>
-</tbody>
-</table>
-</c:if>
-</div>
 
 <div id="open">
 <c:if test="${fn:length(openSurveys) == 0}">
@@ -92,6 +62,36 @@ function clone( id )
     <td class="action">
       <a href="results?id=${survey.id}"><img alt="[Results]" 
          title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a>
+      <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
+         title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
+      <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"
+         title="Edit Survey" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
+    </td>
+  </tr>
+  </c:forEach>
+</tbody>
+</table>
+</c:if>
+</div>
+
+<div id="unpublished">
+<c:if test="${fn:length(unpublishedSurveys) == 0}">
+<p>No unpublished surveys.</p>
+</c:if>
+
+<c:if test="${fn:length(unpublishedSurveys) > 0}">
+<table class="viewtable">
+<thead>
+  <tr><th>Name</th><th>Author</th><th>Published</th><th>Closed</th><th></th></tr>
+</thead>
+<tbody>
+  <c:forEach items="${unpublishedSurveys}" var="survey">
+  <tr>
+    <td><a href="view?id=${survey.id}">${survey.name}</a></td>
+    <td class="shrink">${survey.author.username}</td>
+    <td class="date"><csns:publishDate survey="${survey}" /></td>
+    <td class="date"><csns:closeDate survey="${survey}" /></td>
+    <td class="action">
       <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
          title="Clone Survey" src="<c:url value='/img/icons/script_code.png'/>" /></a>
       <a href="edit?id=${survey.id}"><img alt="[Edit Survey]"

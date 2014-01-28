@@ -73,6 +73,11 @@ public class Submission implements Serializable {
     @Column(name = "grade_mailed", nullable = false)
     protected boolean gradeMailed;
 
+    // I can't quite remember why I added fileCount instead of just using
+    // files.size(). It's probably because files.size() will cause the
+    // lazy-loaded files collection to be initialized, and it'd be very
+    // inefficient for the submission list page (which only needs the file
+    // count) when there are lots of submissions.
     @Column(name = "file_count", nullable = false)
     protected int fileCount;
 

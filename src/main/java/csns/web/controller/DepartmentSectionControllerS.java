@@ -59,6 +59,7 @@ import csns.web.editor.UserPropertyEditor;
 
 @Controller
 @SessionAttributes("importer")
+@SuppressWarnings("deprecation")
 public class DepartmentSectionControllerS {
 
     @Autowired

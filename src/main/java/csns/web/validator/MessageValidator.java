@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,15 +18,21 @@
  */
 package csns.web.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import csns.model.core.AbstractMessage;
+import csns.util.MyAntiSamy;
 
 @Component
 public class MessageValidator implements Validator {
+
+    @Autowired
+    private MyAntiSamy antiSamy;
 
     @Override
     public boolean supports( Class<?> clazz )
@@ -37,10 +43,16 @@ public class MessageValidator implements Validator {
     @Override
     public void validate( Object target, Errors errors )
     {
+        AbstractMessage message = (AbstractMessage) target;
+
         ValidationUtils.rejectIfEmptyOrWhitespace( errors, "subject",
             "error.field.required" );
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "content",
-            "error.field.required" );
+
+        String content = message.getContent();
+        if( !StringUtils.hasText( content ) )
+            errors.rejectValue( "content", "error.field.required" );
+        else if( !antiSamy.validate( message.getContent() ) )
+            errors.rejectValue( "content", "error.html.invalid" );
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,6 +18,7 @@
  */
 package csns.web.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -27,9 +28,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
+import csns.util.MyAntiSamy;
 
 @Component
 public class ResourceValidator implements Validator {
+
+    @Autowired
+    private MyAntiSamy antiSamy;
 
     @Override
     public boolean supports( Class<?> clazz )
@@ -51,6 +56,8 @@ public class ResourceValidator implements Validator {
                 case TEXT:
                     if( !StringUtils.hasText( resource.getText() ) )
                         errors.rejectValue( "text", "error.field.required" );
+                    else if( !antiSamy.validate( resource.getText() ) )
+                        errors.rejectValue( "text", "error.html.invalid" );
                     break;
 
                 case URL:

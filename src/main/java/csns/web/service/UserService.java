@@ -33,6 +33,7 @@ import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
 @Controller
+@SuppressWarnings("deprecation")
 public class UserService {
 
     @Autowired

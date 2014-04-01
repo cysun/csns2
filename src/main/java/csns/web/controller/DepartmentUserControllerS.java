@@ -52,6 +52,7 @@ import csns.web.editor.StandingPropertyEditor;
 
 @Controller
 @SessionAttributes({ "importer", "standings" })
+@SuppressWarnings("deprecation")
 public class DepartmentUserControllerS {
 
     @Autowired

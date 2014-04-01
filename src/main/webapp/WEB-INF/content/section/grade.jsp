@@ -40,6 +40,9 @@ $(function(){
     $("#ok").click(function(){
         window.location.href = "roster?id=${section.id}";
     });
+    $("table").tablesorter({
+    	sortList: [[0,0]]
+    });
 });
 </script>
 

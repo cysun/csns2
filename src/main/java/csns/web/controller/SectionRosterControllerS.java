@@ -50,6 +50,7 @@ import csns.security.SecurityUtils;
 
 @Controller
 @SessionAttributes("rosterImporter")
+@SuppressWarnings("deprecation")
 public class SectionRosterControllerS {
 
     @Autowired

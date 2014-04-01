@@ -48,6 +48,7 @@ import csns.web.validator.RegistrationValidator;
 
 @Controller
 @SessionAttributes("user")
+@SuppressWarnings("deprecation")
 public class UserControllerS {
 
     @Autowired

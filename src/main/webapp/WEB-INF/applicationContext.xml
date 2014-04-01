@@ -121,6 +121,10 @@
 
     <security:global-method-security pre-post-annotations="enabled" />
 
+    <bean id="antiSamy" class="csns.util.MyAntiSamy">
+        <constructor-arg index="0" value="antisamy.xml" />
+    </bean>
+
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.smtp.server}" />
         <property name="username" value="${mail.smtp.username}" />

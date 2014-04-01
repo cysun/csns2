@@ -51,7 +51,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import csns.model.academics.AcademicStanding;
 import csns.model.academics.Department;

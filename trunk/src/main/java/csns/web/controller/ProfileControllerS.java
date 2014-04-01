@@ -23,8 +23,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -43,11 +41,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
-import csns.util.DefaultUrls;
 import csns.web.validator.EditUserValidator;
 
 @Controller
 @SessionAttributes("user")
+@SuppressWarnings("deprecation")
 public class ProfileControllerS {
 
     @Autowired
@@ -58,8 +56,6 @@ public class ProfileControllerS {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private static final Logger logger = LoggerFactory.getLogger( ProfileControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )

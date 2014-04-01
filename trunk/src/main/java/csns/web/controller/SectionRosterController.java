@@ -54,6 +54,7 @@ import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 
 @Controller
+@SuppressWarnings("deprecation")
 public class SectionRosterController {
 
     @Autowired

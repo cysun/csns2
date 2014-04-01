@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,7 +18,9 @@
  */
 package csns.web.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -29,9 +31,14 @@ import csns.model.qa.ChoiceAnswer;
 import csns.model.qa.ChoiceQuestion;
 import csns.model.qa.RatingAnswer;
 import csns.model.qa.RatingQuestion;
+import csns.model.qa.TextAnswer;
+import csns.util.MyAntiSamy;
 
 @Component
 public class AnswerSheetValidator implements Validator {
+
+    @Autowired
+    private MyAntiSamy antiSamy;
 
     @Override
     public boolean supports( Class<?> clazz )
@@ -62,6 +69,9 @@ public class AnswerSheetValidator implements Validator {
 
             if( answer.getQuestion().getType().equals( "RATING" ) )
                 validateRatingAnswer( (RatingAnswer) answer, path, errors );
+
+            if( answer.getQuestion().getType().equals( "TEXT" ) )
+                validateTextAnswer( (TextAnswer) answer, path, errors );
         }
     }
 
@@ -98,6 +108,14 @@ public class AnswerSheetValidator implements Validator {
         }
         else
             errors.rejectValue( path, "error.qa.rating.empty" );
+    }
+
+    public void validateTextAnswer( TextAnswer answer, String path,
+        Errors errors )
+    {
+        String text = answer.getText();
+        if( StringUtils.hasText( text ) && !antiSamy.validate( text ) )
+            errors.rejectValue( path, "error.html.invalid" );
     }
 
 }

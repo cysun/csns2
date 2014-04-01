@@ -46,6 +46,7 @@ import csns.model.core.dao.UserDao;
 import csns.util.DefaultUrls;
 
 @Controller
+@SuppressWarnings("deprecation")
 public class UserController {
 
     @Autowired

@@ -411,13 +411,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -430,6 +430,52 @@
         type int4,
         url varchar(255),
         file_id int8,
+        primary key (id)
+    );
+
+    create table rubric_evaluation_ratings (
+        evaluation_id int8 not null,
+        rating int4,
+        rating_order int4 not null,
+        primary key (evaluation_id, rating_order)
+    );
+
+    create table rubric_evaluations (
+        id int8 not null,
+        date timestamp,
+        rubricable_type varchar(255),
+        rubricable_id int8,
+        type int4,
+        evaluatee_id int8,
+        evaluator_id int8,
+        rubric_id int8,
+        primary key (id)
+    );
+
+    create table rubric_indicator_criteria (
+        indicator_id int8 not null,
+        criterion varchar(255),
+        criterion_order int4 not null,
+        primary key (indicator_id, criterion_order)
+    );
+
+    create table rubric_indicators (
+        id int8 not null,
+        name varchar(255) not null,
+        rubric_id int8,
+        indicator_order int4,
+        primary key (id)
+    );
+
+    create table rubrics (
+        id int8 not null,
+        description varchar(255),
+        public boolean not null,
+        name varchar(255) not null,
+        publish_date timestamp,
+        scale int4 not null,
+        creator_id int8,
+        department_id int8,
         primary key (id)
     );
 
@@ -616,6 +662,9 @@
 
     alter table mft_scores 
         add constraint UK_cxmltfnit7bi608roobfafund unique (department_id, user_id, date);
+
+    alter table rubric_indicators 
+        add constraint UK_4e8rf697tjpgbxj8a2gfseqty unique (rubric_id, indicator_order);
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
@@ -1109,6 +1158,46 @@
         add constraint FK_tlofym1k7a9cqjjfhk5je1xy1 
         foreign key (file_id) 
         references files;
+
+    alter table rubric_evaluation_ratings 
+        add constraint FK_na7lb1h97n1rimokl7d1l0h3t 
+        foreign key (evaluation_id) 
+        references rubric_evaluations;
+
+    alter table rubric_evaluations 
+        add constraint FK_nrckjtodurgh79l1vpd0frqo5 
+        foreign key (evaluatee_id) 
+        references users;
+
+    alter table rubric_evaluations 
+        add constraint FK_hdwl4qnes3hrqcqy79esc6dsk 
+        foreign key (evaluator_id) 
+        references users;
+
+    alter table rubric_evaluations 
+        add constraint FK_8d8l73a4s0xurs7cgqufa04hi 
+        foreign key (rubric_id) 
+        references rubrics;
+
+    alter table rubric_indicator_criteria 
+        add constraint FK_tdmi3a3igfd1cf8jeafu6j71s 
+        foreign key (indicator_id) 
+        references rubric_indicators;
+
+    alter table rubric_indicators 
+        add constraint FK_l3yyluj99ypim90j9b0tt4wt8 
+        foreign key (rubric_id) 
+        references rubrics;
+
+    alter table rubrics 
+        add constraint FK_64k2ai3eb5s5vky5ffj9b27bd 
+        foreign key (creator_id) 
+        references users;
+
+    alter table rubrics 
+        add constraint FK_9hma4j4gpkpjluxyq40rrvb48 
+        foreign key (department_id) 
+        references departments;
 
     alter table section_instructors 
         add constraint FK_bdnw2i9gn4dyut8n2m2o8is14 

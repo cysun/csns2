@@ -18,6 +18,9 @@
  */
 package csns.model.assessment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -52,7 +55,7 @@ public class RubricIndicator {
         joinColumns = @JoinColumn(name = "indicator_id"))
     @Column(name = "criterion")
     @OrderColumn(name = "criterion_order")
-    private String criteria[];
+    private List<String> criteria;
 
     public RubricIndicator()
     {
@@ -61,10 +64,7 @@ public class RubricIndicator {
     public RubricIndicator( Rubric rubric )
     {
         this.rubric = rubric;
-
-        criteria = new String[rubric.getScale()];
-        for( int i = 0; i < criteria.length; ++i )
-            criteria[i] = "";
+        this.criteria = new ArrayList<String>();
     }
 
     public Long getId()
@@ -97,12 +97,12 @@ public class RubricIndicator {
         this.name = name;
     }
 
-    public String[] getCriteria()
+    public List<String> getCriteria()
     {
         return criteria;
     }
 
-    public void setCriteria( String[] criteria )
+    public void setCriteria( List<String> criteria )
     {
         this.criteria = criteria;
     }

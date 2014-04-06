@@ -42,12 +42,14 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
+import csns.model.assessment.Rubric;
+import csns.model.assessment.Rubricable;
 import csns.model.core.User;
 
 @Entity
 @Table(name = "sections", uniqueConstraints = @UniqueConstraint(columnNames = {
     "quarter", "course_id", "number" }))
-public class Section implements Serializable, Comparable<Section> {
+public class Section implements Rubricable, Serializable, Comparable<Section> {
 
     private static final long serialVersionUID = 1L;
 
@@ -82,6 +84,13 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderBy("name asc")
     @Where(clause = "deleted='f'")
     private List<Assignment> assignments;
+
+    @ManyToMany
+    @JoinTable(name = "section_rubrics",
+        joinColumns = @JoinColumn(name = "section_id"),
+        inverseJoinColumns = @JoinColumn(name = "rubric_id"))
+    @OrderBy("name asc")
+    private List<Rubric> rubrics;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -131,6 +140,13 @@ public class Section implements Serializable, Comparable<Section> {
             if( instructor.getId().equals( user.getId() ) ) return true;
 
         return false;
+    }
+
+    // for Rubricable
+    @Override
+    public String getType()
+    {
+        return "Section";
     }
 
     public Long getId()
@@ -201,6 +217,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setAssignments( List<Assignment> assignments )
     {
         this.assignments = assignments;
+    }
+
+    public List<Rubric> getRubrics()
+    {
+        return rubrics;
+    }
+
+    public void setRubrics( List<Rubric> rubrics )
+    {
+        this.rubrics = rubrics;
     }
 
     public boolean isDeleted()

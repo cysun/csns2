@@ -16,16 +16,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.assessment;
+package csns.model.assessment.dao;
 
-/**
- * A Rubricable is something we can attach a rubric to, like a course or an
- * assignment.
- */
-public interface Rubricable {
+import java.util.List;
 
-    Long getId();
+import csns.model.academics.Department;
+import csns.model.assessment.Rubric;
+import csns.model.core.User;
 
-    String getType();
+public interface RubricDao {
+
+    Rubric getRubric( Long id );
+
+    List<Rubric> getDepartmentRubrics( Department department );
+
+    List<Rubric> getPersonalRubrics( User creator );
+
+    Rubric saveRubric( Rubric rubric );
 
 }

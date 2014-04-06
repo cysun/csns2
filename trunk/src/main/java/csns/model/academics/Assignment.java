@@ -34,15 +34,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.springframework.util.StringUtils;
 
 import csns.model.academics.Section;
+import csns.model.assessment.Rubric;
+import csns.model.assessment.Rubricable;
 import csns.model.core.Resource;
 
 @Entity
@@ -50,7 +55,7 @@ import csns.model.core.Resource;
 @Inheritance
 @DiscriminatorColumn(name = "assignment_type")
 @DiscriminatorValue("REGULAR")
-public class Assignment implements Serializable {
+public class Assignment implements Rubricable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +99,13 @@ public class Assignment implements Serializable {
         CascadeType.PERSIST })
     protected List<Submission> submissions;
 
+    @ManyToMany
+    @JoinTable(name = "assignment_rubrics",
+        joinColumns = @JoinColumn(name = "assignment_id"),
+        inverseJoinColumns = @JoinColumn(name = "rubric_id"))
+    @OrderBy("name asc")
+    private List<Rubric> rubrics;
+
     @Column(nullable = false)
     protected boolean deleted;
 
@@ -113,6 +125,13 @@ public class Assignment implements Serializable {
         fileExtensionSet = new HashSet<String>();
         availableAfterDueDate = true;
         deleted = false;
+    }
+
+    // for Rubricable
+    @Override
+    public String getType()
+    {
+        return "Assignment";
     }
 
     public Assignment clone()
@@ -272,16 +291,6 @@ public class Assignment implements Serializable {
         this.availableAfterDueDate = availableAfterDueDate;
     }
 
-    public boolean isDeleted()
-    {
-        return deleted;
-    }
-
-    public void setDeleted( boolean deleted )
-    {
-        this.deleted = deleted;
-    }
-
     public List<Submission> getSubmissions()
     {
         return submissions;
@@ -290,6 +299,26 @@ public class Assignment implements Serializable {
     public void setSubmissions( List<Submission> submissions )
     {
         this.submissions = submissions;
+    }
+
+    public List<Rubric> getRubrics()
+    {
+        return rubrics;
+    }
+
+    public void setRubrics( List<Rubric> rubrics )
+    {
+        this.rubrics = rubrics;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

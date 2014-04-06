@@ -66,6 +66,11 @@
         primary key (id)
     );
 
+    create table assignment_rubrics (
+        assignment_id int8 not null,
+        rubric_id int8 not null
+    );
+
     create table assignments (
         assignment_type varchar(31) not null,
         id int8 not null,
@@ -411,11 +416,11 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
         max_rating int4,
         min_rating int4,
         question_section_id int8,
@@ -443,6 +448,7 @@
     create table rubric_evaluations (
         id int8 not null,
         date timestamp,
+        deleted boolean not null,
         rubricable_type varchar(255),
         rubricable_id int8,
         type int4,
@@ -469,6 +475,7 @@
 
     create table rubrics (
         id int8 not null,
+        deleted boolean not null,
         description varchar(255),
         public boolean not null,
         name varchar(255) not null,
@@ -484,6 +491,11 @@
         instructor_id int8 not null,
         instructor_order int4 not null,
         primary key (section_id, instructor_order)
+    );
+
+    create table section_rubrics (
+        section_id int8 not null,
+        rubric_id int8 not null
     );
 
     create table sections (
@@ -768,6 +780,16 @@
         add constraint FK_i8agbaeksrmm44c8l31gqdtnp 
         foreign key (attachment_id) 
         references files;
+
+    alter table assignment_rubrics 
+        add constraint FK_r1a5evmne4lnshxo3y5hv57mx 
+        foreign key (rubric_id) 
+        references rubrics;
+
+    alter table assignment_rubrics 
+        add constraint FK_nr2gm5y4jwx5a67x4r8b7ydtf 
+        foreign key (assignment_id) 
+        references assignments;
 
     alter table assignments 
         add constraint FK_3npt5rig34lv4oy0gystus2ed 
@@ -1206,6 +1228,16 @@
 
     alter table section_instructors 
         add constraint FK_6sy04nv0t0w18o9ar1shf4299 
+        foreign key (section_id) 
+        references sections;
+
+    alter table section_rubrics 
+        add constraint FK_cggjb5xrruypt8lrpvrfg1d2d 
+        foreign key (rubric_id) 
+        references rubrics;
+
+    alter table section_rubrics 
+        add constraint FK_d2hvda4o54g5219yqv0ijttb 
         foreign key (section_id) 
         references sections;
 

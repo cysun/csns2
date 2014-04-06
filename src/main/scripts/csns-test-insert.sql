@@ -169,3 +169,36 @@ insert into projects (id, title, department_id, year) values
 insert into project_advisors (project_id, advisor_id) values (1001300, 1000001);
 insert into project_students (project_id, student_id) values (1001300, 1000002);
 insert into project_students (project_id, student_id) values (1001300, 1000003);
+
+insert into rubrics (id, name, scale, creator_id) values
+    (1001400, 'Oral Communication', 3, 1000001);
+insert into rubric_indicators (id, name, rubric_id, indicator_order) values
+    (1001410, 'Logical Organization', 1001400, 0);
+insert into rubric_indicators (id, name, rubric_id, indicator_order) values
+    (1001411, 'English Language', 1001400, 1);
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001410, 0, 'Poor');
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001410, 1, 'Satisfactory');
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001410, 2, 'Good');
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001411, 0, 'Poor');
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001411, 1, 'Satisfactory');
+insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+    (1001411, 2, 'Good');
+insert into section_rubrics (section_id, rubric_id) values (1000301, 1001400);
+insert into assignment_rubrics (assignment_id, rubric_id) values (1000502, 1001400);
+insert into rubric_evaluations (id, type, rubric_id, evaluator_id, evaluatee_id, rubricable_id, rubricable_type) values
+    (1001450, 0, 1001400, 1000001, 1000002, 1000301, 'SE');
+insert into rubric_evaluations (id, type, rubric_id, evaluator_id, evaluatee_id, rubricable_id, rubricable_type) values
+    (1001451, 1, 1001400, 1000003, 1000002, 1000502, 'AS');
+insert into rubric_evaluation_ratings (evaluation_id, rating_order, rating) values
+    (1001450, 0, 2);
+insert into rubric_evaluation_ratings (evaluation_id, rating_order, rating) values
+    (1001450, 1, 4);
+insert into rubric_evaluation_ratings (evaluation_id, rating_order, rating) values
+    (1001451, 0, 4);
+insert into rubric_evaluation_ratings (evaluation_id, rating_order, rating) values
+    (1001451, 1, 3);

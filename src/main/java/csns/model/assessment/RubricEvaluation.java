@@ -18,7 +18,9 @@
  */
 package csns.model.assessment;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -37,7 +39,7 @@ import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.MetaValue;
 
 import csns.model.academics.Assignment;
-import csns.model.academics.Course;
+import csns.model.academics.Section;
 import csns.model.core.User;
 
 @Entity
@@ -71,31 +73,40 @@ public class RubricEvaluation {
         joinColumns = @JoinColumn(name = "evaluation_id"))
     @Column(name = "rating")
     @OrderColumn(name = "rating_order")
-    private int ratings[];
+    private List<Integer> ratings;
 
     @Any(metaColumn = @Column(name = "rubricable_type"),
         fetch = FetchType.EAGER)
     @AnyMetaDef(idType = "long", metaType = "string", metaValues = {
-        @MetaValue(value = "CO", targetEntity = Course.class),
+        @MetaValue(value = "SE", targetEntity = Section.class),
         @MetaValue(value = "AS", targetEntity = Assignment.class) })
     @JoinColumn(name = "rubricable_id")
     private Rubricable rubricable;
 
     private Date date;
 
+    private boolean deleted;
+
     public RubricEvaluation()
     {
+        deleted = false;
     }
 
     public RubricEvaluation( Rubric rubric )
     {
         this.rubric = rubric;
-        this.ratings = new int[rubric.getIndicators().size()];
+        this.ratings = new ArrayList<Integer>();
+        this.deleted = false;
     }
 
     public Long getId()
     {
         return id;
+    }
+
+    public void setId( Long id )
+    {
+        this.id = id;
     }
 
     public Type getType()
@@ -138,12 +149,12 @@ public class RubricEvaluation {
         this.evaluatee = evaluatee;
     }
 
-    public int[] getRatings()
+    public List<Integer> getRatings()
     {
         return ratings;
     }
 
-    public void setRatings( int[] ratings )
+    public void setRatings( List<Integer> ratings )
     {
         this.ratings = ratings;
     }
@@ -168,9 +179,14 @@ public class RubricEvaluation {
         this.date = date;
     }
 
-    public void setId( Long id )
+    public boolean isDeleted()
     {
-        this.id = id;
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

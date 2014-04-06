@@ -21,18 +21,22 @@ package csns.model.assessment;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import csns.model.academics.Assignment;
 import csns.model.academics.Department;
+import csns.model.academics.Section;
 import csns.model.core.User;
 
 @Entity
@@ -71,10 +75,21 @@ public class Rubric {
     @Column(name = "public", nullable = false)
     private boolean isPublic;
 
+    // Sections that use this rubric.
+    @ManyToMany(mappedBy = "rubrics")
+    private Set<Section> sections;
+
+    // Assignments that use this rubric.
+    @ManyToMany(mappedBy = "rubrics")
+    private Set<Assignment> assignments;
+
+    private boolean deleted;
+
     public Rubric()
     {
         scale = 5;
         indicators = new ArrayList<RubricIndicator>();
+        deleted = false;
     }
 
     public Long getId()
@@ -165,6 +180,36 @@ public class Rubric {
     public void setPublic( boolean isPublic )
     {
         this.isPublic = isPublic;
+    }
+
+    public Set<Section> getSections()
+    {
+        return sections;
+    }
+
+    public void setSections( Set<Section> sections )
+    {
+        this.sections = sections;
+    }
+
+    public Set<Assignment> getAssignments()
+    {
+        return assignments;
+    }
+
+    public void setAssignments( Set<Assignment> assignments )
+    {
+        this.assignments = assignments;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

@@ -38,12 +38,13 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import csns.model.academics.Department;
+import csns.model.core.Publishable;
 import csns.model.core.User;
 import csns.model.qa.QuestionSheet;
 
 @Entity
 @Table(name = "surveys")
-public class Survey implements Serializable {
+public class Survey implements Publishable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -104,6 +105,8 @@ public class Survey implements Serializable {
         return newSurvey;
     }
 
+    // for Publishable
+    @Override
     public boolean isPublished()
     {
         return publishDate != null
@@ -120,6 +123,8 @@ public class Survey implements Serializable {
         return responses.size();
     }
 
+    // for Publishable
+    @Override
     public Long getId()
     {
         return id;
@@ -160,6 +165,8 @@ public class Survey implements Serializable {
         this.questionSheet = questionSheet;
     }
 
+    // for Publishable
+    @Override
     public Calendar getPublishDate()
     {
         return publishDate;

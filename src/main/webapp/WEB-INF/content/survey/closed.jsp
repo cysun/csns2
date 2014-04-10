@@ -17,7 +17,7 @@
   <tr>
     <td><a href="view?id=${survey.id}">${survey.name}</a></td>
     <td class="shrink">${survey.author.username}</td>
-    <td class="date"><csns:publishDate survey="${survey}" /></td>
+    <td class="date"><csns:publishDate item="${survey}" /></td>
     <td class="date"><csns:closeDate survey="${survey}" /></td>
     <td class="action">
       <a href="results?id=${survey.id}"><img alt="[Results]" 

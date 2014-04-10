@@ -817,6 +817,15 @@
         <put-attribute name="content" value="/WEB-INF/content/mft/distribution/edit.jsp" />
     </definition>
 
+    <!-- ====== -->
+    <!-- Rubric -->
+    <!-- ====== -->
+
+    <definition name="rubric/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubrics" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/list.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

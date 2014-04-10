@@ -80,7 +80,7 @@ function publish( id )
         <c:forEach items="${section.assignments}" var="assignment">
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
-          <td class="datetime"><csns:publishDate assignment="${assignment}" /></td>
+          <td class="datetime"><csns:publishDate item="${assignment}" datePattern="yyyy-MM-dd hh:mm a" /></td>
           <td class="datetime"><csns:dueDate assignment="${assignment}" /></td>
           <td class="action">
             <c:if test="${assignment.online}">

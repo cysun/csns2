@@ -18,8 +18,9 @@
  */
 package csns.model.assessment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -37,11 +38,14 @@ import javax.persistence.Table;
 import csns.model.academics.Assignment;
 import csns.model.academics.Department;
 import csns.model.academics.Section;
+import csns.model.core.Publishable;
 import csns.model.core.User;
 
 @Entity
 @Table(name = "rubrics")
-public class Rubric {
+public class Rubric implements Publishable, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
@@ -70,7 +74,7 @@ public class Rubric {
     private User creator;
 
     @Column(name = "publish_date")
-    private Date publishDate;
+    private Calendar publishDate;
 
     @Column(name = "public", nullable = false)
     private boolean isPublic;
@@ -92,6 +96,16 @@ public class Rubric {
         deleted = false;
     }
 
+    // for Publishable
+    @Override
+    public boolean isPublished()
+    {
+        return publishDate != null
+            && Calendar.getInstance().after( publishDate );
+    }
+
+    // for Publishable
+    @Override
     public Long getId()
     {
         return id;
@@ -162,12 +176,14 @@ public class Rubric {
         this.creator = creator;
     }
 
-    public Date getPublishDate()
+    // for Publishable
+    @Override
+    public Calendar getPublishDate()
     {
         return publishDate;
     }
 
-    public void setPublishDate( Date publishDate )
+    public void setPublishDate( Calendar publishDate )
     {
         this.publishDate = publishDate;
     }

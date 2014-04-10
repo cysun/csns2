@@ -75,6 +75,8 @@ public class RubricEvaluation {
     @OrderColumn(name = "rating_order")
     private List<Integer> ratings;
 
+    private String comments;
+
     @Any(metaColumn = @Column(name = "rubricable_type"),
         fetch = FetchType.EAGER)
     @AnyMetaDef(idType = "long", metaType = "string", metaValues = {
@@ -157,6 +159,16 @@ public class RubricEvaluation {
     public void setRatings( List<Integer> ratings )
     {
         this.ratings = ratings;
+    }
+
+    public String getComments()
+    {
+        return comments;
+    }
+
+    public void setComments( String comments )
+    {
+        this.comments = comments;
     }
 
     public Rubricable getRubricable()

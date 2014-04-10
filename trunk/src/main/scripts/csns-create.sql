@@ -1170,6 +1170,7 @@ create table rubric_evaluations (
     rubric_id       bigint references rubrics(id),
     evaluator_id    bigint references users(id),
     evaluatee_id    bigint references users(id),
+    comments        varchar(80000),
     rubricable_id   bigint,
     rubricable_type varchar(255),
     date            timestamp default current_timestamp,

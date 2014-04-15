@@ -18,12 +18,14 @@ function promote( id )
 <ul id="title">
 <li><a href="list" class="bc">Rubrics</a></li>
 <li>${rubric.name}</li>
-<li class="align_right"><a href="edit?id=${rubric.id}"><img alt="[Edit Rubric]"
-  title="Edit Rubric" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
+<security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">
+  <li class="align_right"><a href="edit?id=${rubric.id}"><img alt="[Edit Rubric]"
+    title="Edit Rubric" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
+</security:authorize>
 <security:authorize access="principal.isAdmin('${dept}')">
 <c:if test="${empty rubric.department}">
-<li class="align_right"><a href="javascript:promote(${rubric.id})"><img alt="[Promote Rubric]"
-  title="Promote Rubric" src="<c:url value='/img/icons/table_up.png' />" /></a></li>
+  <li class="align_right"><a href="javascript:promote(${rubric.id})"><img alt="[Promote Rubric]"
+    title="Promote Rubric" src="<c:url value='/img/icons/table_up.png' />" /></a></li>
 </c:if>
 </security:authorize>
 </ul>
@@ -43,8 +45,10 @@ ${rubric.description}
   <tr id="${indicator.id}">
     <td colspan="${rubric.scale}" class="indicator-name">
       ${indicator.name}
+<security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">
       <span style="float: right;"><a href="editIndicator?rubricId=${rubric.id}&amp;indicatorIndex=${status.index}"><img
         alt="[Edit Indicator]" title="Edit Indicator" src="<c:url value='/img/icons/row_edit.png' />" /></a></span>
+</security:authorize>
     </td>
   </tr>
   <tr>
@@ -57,7 +61,9 @@ ${rubric.description}
 </table>
 
 <c:if test="${not rubric.published}">
+<security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">
 <p>
   <button id="add" type="button" class="subbutton">Add Performance Indicator</button>
 </p>
+</security:authorize>
 </c:if>

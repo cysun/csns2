@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -30,8 +31,12 @@ function deleteRubric( id )
 <li><a href="list" class="bc">Rubrics</a></li>
 <li><a href="view?id=${rubric.id}" class="bc">${rubric.name}</a></li>
 <li>Edit</li>
+<c:if test="${not rubric.published}">
+<security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">
 <li class="align_right"><a href="javascript:deleteRubric(${rubric.id})"><img alt="[Delete Rubric]"
   title="Delete Rubric" src="<c:url value='/img/icons/table_delete.png' />" /></a></li>
+</security:authorize>
+</c:if>
 </ul>
 
 <form:form modelAttribute="rubric">

@@ -18,6 +18,7 @@
  */
 package csns.model.assessment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,24 +29,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "rubric_indicators",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "rubric_id",
-        "indicator_order" }))
-public class RubricIndicator {
+@Table(name = "rubric_indicators")
+public class RubricIndicator implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "rubric_id")
-    private Rubric rubric;
 
     @Column(nullable = false)
     private String name;
@@ -54,17 +49,20 @@ public class RubricIndicator {
     @CollectionTable(name = "rubric_indicator_criteria",
         joinColumns = @JoinColumn(name = "indicator_id"))
     @Column(name = "criterion")
-    @OrderColumn(name = "criterion_order")
+    @OrderColumn(name = "criterion_index")
     private List<String> criteria;
 
     public RubricIndicator()
     {
+        criteria = new ArrayList<String>();
     }
 
-    public RubricIndicator( Rubric rubric )
+    public RubricIndicator clone()
     {
-        this.rubric = rubric;
-        this.criteria = new ArrayList<String>();
+        RubricIndicator newIndicator = new RubricIndicator();
+        newIndicator.name = name;
+        newIndicator.criteria.addAll( criteria );
+        return newIndicator;
     }
 
     public Long getId()
@@ -75,16 +73,6 @@ public class RubricIndicator {
     public void setId( Long id )
     {
         this.id = id;
-    }
-
-    public Rubric getRubric()
-    {
-        return rubric;
-    }
-
-    public void setRubric( Rubric rubric )
-    {
-        this.rubric = rubric;
     }
 
     public String getName()

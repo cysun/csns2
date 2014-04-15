@@ -6,8 +6,13 @@
 $(function(){
     $("#tabs").tabs({
         cache: false
-    }); 
+    });
 });
+function toggle( id )
+{
+    $.ajaxSetup({ cache: false });
+    $("#rubric-" + id).load("toggle?id=" + id);
+}
 function publish( id )
 {
     var msg = "Do you want to publish this rubric now?";
@@ -30,17 +35,15 @@ function clone( id )
 
 <div id="tabs">
 <ul>
+<c:if test="${fn:length(personalRubrics) > 0}">
   <li><a href="#personal">Personal</a></li>
+</c:if>
   <li><a href="#department">Department</a></li>
   <li><a href="#search">All</a>
 </ul>
 
+<c:if test="${fn:length(personalRubrics) > 0}">
 <div id="personal">
-<c:if test="${fn:length(personalRubrics) == 0}">
-<p>No rubrics yet.</p>
-</c:if>
-
-<c:if test="${fn:length(openSurveys) > 0}">
 <table class="viewtable">
 <thead>
   <tr><th>Name</th><th>Published</th><th></th></tr>
@@ -48,20 +51,27 @@ function clone( id )
 <tbody>
   <c:forEach items="${personalRubrics}" var="rubric">
   <tr>
-    <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
+    <td>
+      <c:set var="img" value="closed_book.png" />
+      <c:if test="${rubric.isPublic()}">
+        <c:set var="img" value="open_book.png" />
+      </c:if>
+      <span style="margin-right: 0.5em;"><a id="rubric-${rubric.id}"
+          href="javascript:toggle(${rubric.id})"><img border="0" alt="[*]"
+          title="Toggle Public/Private" src="<c:url value='/img/icons/${img}' />" /></a></span>
+      <a href="view?id=${rubric.id}">${rubric.name}</a>
+    </td>
     <td class="date"><csns:publishDate item="${rubric}" /></td>
     <td class="action">
-      <a href="edit?id=${rubric.id}"><img alt="[Edit Rubric]"
-         title="Edit Rubric" src="<c:url value='/img/icons/table_edit.png'/>" /></a>
-      <a href="javascript:promote(${rubric.id})"><img alt="[Promote Rubric]"
-         title="Promote Rubric" src="<c:url value='/img/icons/table_up.png'/>" /></a>
+      <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
+         title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>
   </tr>
   </c:forEach>
 </tbody>
 </table>
-</c:if>
 </div>
+</c:if>
 
 <div id="department">
 <c:if test="${fn:length(departmentRubrics) == 0}">
@@ -79,8 +89,8 @@ function clone( id )
     <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
     <td class="date"><csns:publishDate item="${rubric}" /></td>
     <td class="action">
-      <a href="edit?id=${rubric.id}"><img alt="[Edit Rubric]"
-         title="Edit Rubric" src="<c:url value='/img/icons/table_edit.png'/>" /></a>
+      <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
+         title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>
   </tr>
   </c:forEach>
@@ -91,7 +101,7 @@ function clone( id )
 
 <div id="search">
 <form action="search" method="post">
-<p><input  name="term" type="text" class="leftinput" style="width: 15em;" value="${surveySearchTerm}"/>
+<p><input  name="term" type="text" class="leftinput" style="width: 15em;" value="${rubricSearchTerm}"/>
 <input name="search" type="submit" value="Search" class="subbutton" /></p>
 </form>
 
@@ -101,15 +111,18 @@ function clone( id )
   <tr><th>Name</th><th>Department</th><th>Author</th><th>Published</th><th></th></tr>
 </thead>
 <tbody>
-  <c:forEach items="${rubricSearchResults}" var="survey">
+  <c:forEach items="${rubricSearchResults}" var="rubric">
   <tr>
     <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
     <td class="shrink">${rubric.department.name}</td>
     <td class="shrink">${rubric.creator.username}</td>
-    <td class="date"><csns:publishDate item="${rubric}" /></td>
+    <td class="shrink">
+      <c:if test="${rubric.published}">Yes</c:if>
+      <c:if test="${not rubric.published}">No</c:if>
+    </td>
     <td class="action">
-      <a href="edit?id=${rubric.id}"><img alt="[Edit Rubric]"
-         title="Edit Rubric" src="<c:url value='/img/icons/table_edit.png'/>" /></a>
+      <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
+         title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>
   </tr>
   </c:forEach>

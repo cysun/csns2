@@ -418,11 +418,11 @@
         point_value int4 not null,
         max_rating int4,
         min_rating int4,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -462,15 +462,15 @@
     create table rubric_indicator_criteria (
         indicator_id int8 not null,
         criterion varchar(255),
-        criterion_order int4 not null,
-        primary key (indicator_id, criterion_order)
+        criterion_index int4 not null,
+        primary key (indicator_id, criterion_index)
     );
 
     create table rubric_indicators (
         id int8 not null,
         name varchar(255) not null,
         rubric_id int8,
-        indicator_order int4,
+        indicator_index int4,
         primary key (id)
     );
 
@@ -675,9 +675,6 @@
 
     alter table mft_scores 
         add constraint UK_cxmltfnit7bi608roobfafund unique (department_id, user_id, date);
-
-    alter table rubric_indicators 
-        add constraint UK_4e8rf697tjpgbxj8a2gfseqty unique (rubric_id, indicator_order);
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);

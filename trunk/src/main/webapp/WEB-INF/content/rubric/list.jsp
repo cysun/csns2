@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
 $(function(){
@@ -87,7 +88,15 @@ function clone( id )
   <c:forEach items="${departmentRubrics}" var="rubric">
   <tr>
     <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
-    <td class="date"><csns:publishDate item="${rubric}" /></td>
+    <td class="date">
+<security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">    
+      <csns:publishDate item="${rubric}" />
+</security:authorize>
+<security:authorize access="not (principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}')">    
+      <c:if test="${rubric.published}">Yes</c:if>
+      <c:if test="${not rubric.published}">No</c:if>
+</security:authorize>
+    </td>
     <td class="action">
       <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
          title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>

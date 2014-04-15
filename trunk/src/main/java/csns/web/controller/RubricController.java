@@ -94,9 +94,8 @@ public class RubricController {
     {
         Rubric oldRubric = rubricDao.getRubric( id );
         Rubric newRubric = oldRubric.clone();
-        newRubric = rubricDao.saveRubric( newRubric );
         newRubric.setCreator( SecurityUtils.getUser() );
-        rubricDao.saveRubric( newRubric );
+        newRubric = rubricDao.saveRubric( newRubric );
 
         logger.info( SecurityUtils.getUser().getUsername() + " cloned rubric "
             + newRubric.getId() + " from " + oldRubric.getId() );

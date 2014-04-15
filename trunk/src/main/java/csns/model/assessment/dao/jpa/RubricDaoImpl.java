@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class RubricDaoImpl implements RubricDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.public or authenticated and (returnObject.creator.id == principal.id or principal.admin)")
     public Rubric getRubric( Long id )
     {
         return entityManager.find( Rubric.class, id );
@@ -77,6 +80,7 @@ public class RubricDaoImpl implements RubricDao {
 
     @Override
     @Transactional
+    @PreAuthorize("authenticated and (#rubric.creator.id == principal.id or principal.admin)")
     public Rubric saveRubric( Rubric rubric )
     {
         return entityManager.merge( rubric );

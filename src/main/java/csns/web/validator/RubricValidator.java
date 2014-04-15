@@ -16,24 +16,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.assessment.dao;
+package csns.web.validator;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-import csns.model.academics.Department;
 import csns.model.assessment.Rubric;
-import csns.model.core.User;
 
-public interface RubricDao {
+@Component
+public class RubricValidator implements Validator {
 
-    Rubric getRubric( Long id );
+    @Override
+    public boolean supports( Class<?> clazz )
+    {
+        return Rubric.class.isAssignableFrom( clazz );
+    }
 
-    List<Rubric> getDepartmentRubrics( Department department );
+    @Override
+    public void validate( Object target, Errors errors )
+    {
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
+            "error.field.required" );
 
-    List<Rubric> getPersonalRubrics( User creator );
-
-    List<Rubric> searchRubrics( String term, int maxResults );
-
-    Rubric saveRubric( Rubric rubric );
+        int scale = ((Rubric) target).getScale();
+        if( scale < 2 || scale > 6 )
+            errors.rejectValue( "scale", "error.rubric.scale.invalid" );
+    }
 
 }

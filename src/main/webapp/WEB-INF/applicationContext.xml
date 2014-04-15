@@ -101,6 +101,7 @@
         <security:intercept-url pattern="/department/*/survey/response/edit" access="permitAll" />
         <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/mft/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/rubric/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/department/*/forum/list" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/list" access="permitAll" />

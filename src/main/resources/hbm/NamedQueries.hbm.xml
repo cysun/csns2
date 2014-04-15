@@ -163,4 +163,13 @@ select min(id) as id, min(department_id) as department_id,
 ]]>
     </sql-query>
 
+    <sql-query name="rubric.search">
+        <return class="csns.model.assessment.Rubric" />
+<![CDATA[
+select * from rubrics where deleted = 'f' and public = 't'
+    and plainto_tsquery(:term) @@ tsv
+    order by name asc
+]]>
+    </sql-query>
+
 </hibernate-mapping>

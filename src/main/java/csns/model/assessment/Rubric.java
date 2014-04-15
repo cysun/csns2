@@ -21,9 +21,11 @@ package csns.model.assessment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,8 +62,9 @@ public class Rubric implements Publishable, Serializable {
     private int scale;
 
     /* Each rubric has a number of performance indicators. */
-    @OneToMany(mappedBy = "rubric")
-    @OrderColumn(name = "indicator_order")
+    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinColumn(name = "rubric_id")
+    @OrderColumn(name = "indicator_index")
     private List<RubricIndicator> indicators;
 
     /* There are two types of rubrics: personal and department. */
@@ -92,8 +95,24 @@ public class Rubric implements Publishable, Serializable {
     public Rubric()
     {
         scale = 5;
-        indicators = new ArrayList<RubricIndicator>();
+        isPublic = false;
         deleted = false;
+        indicators = new ArrayList<RubricIndicator>();
+        sections = new HashSet<Section>();
+        assignments = new HashSet<Assignment>();
+    }
+
+    public Rubric clone()
+    {
+        Rubric newRubric = new Rubric();
+        newRubric.name = "Copy of " + name;
+        newRubric.description = description;
+        newRubric.scale = scale;
+
+        for( RubricIndicator indicator : indicators )
+            newRubric.indicators.add( indicator.clone() );
+
+        return newRubric;
     }
 
     // for Publishable

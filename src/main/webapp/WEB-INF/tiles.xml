@@ -826,6 +826,33 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/list.jsp" />
     </definition>
 
+    <definition name="rubric/view" extends="layout.basic">
+        <put-attribute name="title" value="View Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/view.jsp" />
+    </definition>
+
+    <definition name="rubric/toggle" template="/WEB-INF/content/rubric/toggle.jsp" />
+
+    <definition name="rubric/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/create.jsp" />
+    </definition>
+
+    <definition name="rubric/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/edit.jsp" />
+    </definition>
+
+    <definition name="rubric/addIndicator" extends="layout.qa">
+        <put-attribute name="title" value="Add Performance Indicator" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/addIndicator.jsp" />
+    </definition>
+
+    <definition name="rubric/editIndicator" extends="layout.qa">
+        <put-attribute name="title" value="Edit Performance Indicator" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/editIndicator.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

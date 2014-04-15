@@ -17,6 +17,8 @@ drop table rubric_evaluation_ratings;
 drop table rubric_evaluations;
 drop table rubric_indicator_criteria;
 drop table rubric_indicators;
+drop trigger rubrics_ts_trigger on rubrics;
+drop function rubrics_ts_trigger_function();
 drop table rubrics;
 
 drop table mft_distribution_entries;

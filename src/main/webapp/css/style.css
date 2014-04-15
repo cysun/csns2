@@ -999,6 +999,21 @@ tr th.shrink, tr td.shrink {
     padding: 5px;
     margin: 20px 0px;
 }
+
+/** Rubrics **/
+
+.indicator-name {
+    color: #164FA6;
+	font-size: 16px;
+    font-weight: bold;
+    background: #ffffff url(../img/style/title_bg.gif) repeat top center;
+    height: 30px;
+}
+
+.indicator-criteria p {
+	font-size: 14px;
+}
+
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

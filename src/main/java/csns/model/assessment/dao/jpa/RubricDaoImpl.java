@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,15 @@ public class RubricDaoImpl implements RubricDao {
         return entityManager.createQuery( query, Rubric.class )
             .setParameter( "creator", creator )
             .getResultList();
+    }
+
+    @Override
+    public List<Rubric> searchRubrics( String term, int maxResults )
+    {
+        TypedQuery<Rubric> query = entityManager.createNamedQuery(
+            "rubric.search", Rubric.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

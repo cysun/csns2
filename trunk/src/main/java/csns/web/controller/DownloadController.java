@@ -197,4 +197,23 @@ public class DownloadController {
         return null;
     }
 
+    @RequestMapping(value = "/download", params = "folderId")
+    public String downloadFolderFiles( @RequestParam Long folderId,
+        HttpServletResponse response, ModelMap models ) throws IOException
+    {
+        File folder = fileDao.getFile( folderId );
+        response.setContentType( "application/zip" );
+        response.setHeader( "Content-Disposition", "attachment; filename="
+            + folder.getName() + ".zip" );
+        ZipOutputStream zip = new ZipOutputStream( response.getOutputStream() );
+        addToZip( zip, folder.getName(), fileDao.listFiles( folder ) );
+        zip.close();
+
+        String username = SecurityUtils.isAnonymous() ? "guest"
+            : SecurityUtils.getUser().getUsername();
+        logger.info( username + " downloaded folder " + folderId );
+
+        return null;
+    }
+
 }

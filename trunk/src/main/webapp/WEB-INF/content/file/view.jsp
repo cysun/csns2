@@ -27,6 +27,10 @@ function toggleFilePublic( fileId )
 
 <ul id="title">
 <csns:fileBreadcrumbs file="${folder}" />
+<c:if test="${not empty folder}">
+  <li class="align_right"><a href="<c:url value='/download?folderId=${folder.id}' />"><img
+    title="Download All Files" alt="[Download All Files]" src="<c:url value='/img/icons/download.png' />" /></a></li>
+</c:if>
 </ul>
 
 <c:if test="${folder == null && user != null or folder.owner.id == user.id}">

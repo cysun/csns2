@@ -172,21 +172,21 @@ insert into project_students (project_id, student_id) values (1001300, 1000003);
 
 insert into rubrics (id, name, scale, creator_id) values
     (1001400, 'Oral Communication', 3, 1000001);
-insert into rubric_indicators (id, name, rubric_id, indicator_order) values
+insert into rubric_indicators (id, name, rubric_id, indicator_index) values
     (1001410, 'Logical Organization', 1001400, 0);
-insert into rubric_indicators (id, name, rubric_id, indicator_order) values
+insert into rubric_indicators (id, name, rubric_id, indicator_index) values
     (1001411, 'English Language', 1001400, 1);
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001410, 0, 'Poor');
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001410, 1, 'Satisfactory');
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001410, 2, 'Good');
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001411, 0, 'Poor');
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001411, 1, 'Satisfactory');
-insert into rubric_indicator_criteria (indicator_id, criterion_order, criterion) values
+insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001411, 2, 'Good');
 insert into section_rubrics (section_id, rubric_id) values (1000301, 1001400);
 insert into assignment_rubrics (assignment_id, rubric_id) values (1000502, 1001400);

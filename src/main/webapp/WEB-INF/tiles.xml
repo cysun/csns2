@@ -853,6 +853,11 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/editIndicator.jsp" />
     </definition>
 
+    <definition name="rubric/assignment/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Rubric Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/assignment/create.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

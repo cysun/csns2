@@ -13,8 +13,10 @@ $(function(){
         timeFormat: 'HH:mm:ss'
     });
     $("select[name='assignmentType']").click(function(){
-       if( $(this).val() == "ONLINE")
+       if( $(this).val() == "ONLINE" )
            window.location.href = "online/create?sectionId=${section.id}";
+       else if( $(this).val() == "RUBRIC" )
+    	   window.location.href = "../rubric/assignment/create?sectionId=${section.id}";
     });
     $(".res").hide();
     if($("#description\\.type").val() != "None")
@@ -45,6 +47,7 @@ function help( name )
   <select name="assignmentType" style="margin-left: 2em;">
     <option value="REGULAR">Regular</option>
     <option value="ONLINE">Online</option>
+    <option value="RUBRIC">Rubric</option>
   </select>
 </li>
 <li class="align_right">

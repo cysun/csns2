@@ -15,6 +15,8 @@ drop table assignment_rubrics;
 drop table section_rubrics;
 drop table rubric_evaluation_ratings;
 drop table rubric_evaluations;
+drop table rubric_external_evaluators;
+drop table rubric_assignments;
 drop table rubric_indicator_criteria;
 drop table rubric_indicators;
 drop trigger rubrics_ts_trigger on rubrics;

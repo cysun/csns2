@@ -58,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        text varchar(255),
         rating int4,
+        text varchar(255),
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -416,11 +416,11 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_rating int4,
+        min_rating int4,
         max_selections int4,
         min_selections int4,
         question_section_id int8,
@@ -435,6 +435,19 @@
         type int4,
         url varchar(255),
         file_id int8,
+        primary key (id)
+    );
+
+    create table rubric_assignments (
+        id int8 not null,
+        deleted boolean not null,
+        due_date timestamp,
+        evaluated_by_instructor boolean not null,
+        evaluated_by_students boolean not null,
+        name varchar(255) not null,
+        publish_date timestamp,
+        rubric_id int8 not null,
+        section_id int8 not null,
         primary key (id)
     );
 
@@ -457,6 +470,12 @@
         evaluator_id int8,
         rubric_id int8,
         primary key (id)
+    );
+
+    create table rubric_external_evaluators (
+        rubric_assignment_id int8 not null,
+        evaluator_id int8 not null,
+        primary key (rubric_assignment_id, evaluator_id)
     );
 
     create table rubric_indicator_criteria (
@@ -1179,6 +1198,16 @@
         foreign key (file_id) 
         references files;
 
+    alter table rubric_assignments 
+        add constraint FK_be1rwpp5ioihw303osd5vui3h 
+        foreign key (rubric_id) 
+        references rubrics;
+
+    alter table rubric_assignments 
+        add constraint FK_5ejomot3box7435gah9aeilqc 
+        foreign key (section_id) 
+        references sections;
+
     alter table rubric_evaluation_ratings 
         add constraint FK_na7lb1h97n1rimokl7d1l0h3t 
         foreign key (evaluation_id) 
@@ -1198,6 +1227,16 @@
         add constraint FK_8d8l73a4s0xurs7cgqufa04hi 
         foreign key (rubric_id) 
         references rubrics;
+
+    alter table rubric_external_evaluators 
+        add constraint FK_2alg6e3do16tr4726j214f1vv 
+        foreign key (evaluator_id) 
+        references users;
+
+    alter table rubric_external_evaluators 
+        add constraint FK_rls3ttxbv8j6jmeuxlt2af96 
+        foreign key (rubric_assignment_id) 
+        references rubric_assignments;
 
     alter table rubric_indicator_criteria 
         add constraint FK_tdmi3a3igfd1cf8jeafu6j71s 

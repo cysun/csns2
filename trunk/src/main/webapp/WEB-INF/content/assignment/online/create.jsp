@@ -13,8 +13,10 @@ $(function(){
         timeFormat: 'HH:mm:ss'
     });
     $("select[name='assignmentType']").click(function(){
-        if( $(this).val() == "REGULAR")
+        if( $(this).val() == "REGULAR" )
             window.location.href = "../create?sectionId=${section.id}";
+        else if( $(this).val() == "RUBRIC" )
+            window.location.href = "../../rubric/assignment/create?sectionId=${section.id}";
     });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {
@@ -38,6 +40,7 @@ function help( name )
   <select name="assignmentType" style="margin-left: 2em;">
     <option value="ONLINE">Online</option>
     <option value="REGULAR">Regular</option>
+    <option value="RUBRIC">Rubric</option>
   </select>
 </li>
 <li class="align_right">

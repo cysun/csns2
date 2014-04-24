@@ -34,19 +34,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.springframework.util.StringUtils;
 
 import csns.model.academics.Section;
-import csns.model.assessment.Rubric;
 import csns.model.assessment.Rubricable;
 import csns.model.core.Publishable;
 import csns.model.core.Resource;
@@ -99,13 +95,6 @@ public class Assignment implements Publishable, Rubricable, Serializable {
     @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
         CascadeType.PERSIST })
     protected List<Submission> submissions;
-
-    @ManyToMany
-    @JoinTable(name = "assignment_rubrics",
-        joinColumns = @JoinColumn(name = "assignment_id"),
-        inverseJoinColumns = @JoinColumn(name = "rubric_id"))
-    @OrderBy("name asc")
-    private List<Rubric> rubrics;
 
     @Column(nullable = false)
     protected boolean deleted;
@@ -306,16 +295,6 @@ public class Assignment implements Publishable, Rubricable, Serializable {
     public void setSubmissions( List<Submission> submissions )
     {
         this.submissions = submissions;
-    }
-
-    public List<Rubric> getRubrics()
-    {
-        return rubrics;
-    }
-
-    public void setRubrics( List<Rubric> rubrics )
-    {
-        this.rubrics = rubrics;
     }
 
     public boolean isDeleted()

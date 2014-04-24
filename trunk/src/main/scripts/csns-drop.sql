@@ -11,8 +11,6 @@ drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
-drop table assignment_rubrics;
-drop table section_rubrics;
 drop table rubric_evaluation_ratings;
 drop table rubric_evaluations;
 drop table rubric_external_evaluators;

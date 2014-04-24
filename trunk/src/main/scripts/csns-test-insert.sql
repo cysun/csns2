@@ -188,8 +188,6 @@ insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion)
     (1001411, 1, 'Satisfactory');
 insert into rubric_indicator_criteria (indicator_id, criterion_index, criterion) values
     (1001411, 2, 'Good');
-insert into section_rubrics (section_id, rubric_id) values (1000301, 1001400);
-insert into assignment_rubrics (assignment_id, rubric_id) values (1000502, 1001400);
 insert into rubric_evaluations (id, type, rubric_id, evaluator_id, evaluatee_id, rubricable_id, rubricable_type) values
     (1001450, 0, 1001400, 1000001, 1000002, 1000301, 'SE');
 insert into rubric_evaluations (id, type, rubric_id, evaluator_id, evaluatee_id, rubricable_id, rubricable_type) values

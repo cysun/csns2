@@ -42,7 +42,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
-import csns.model.assessment.Rubric;
+import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.Rubricable;
 import csns.model.core.User;
 
@@ -85,12 +85,10 @@ public class Section implements Rubricable, Serializable, Comparable<Section> {
     @Where(clause = "deleted='f'")
     private List<Assignment> assignments;
 
-    @ManyToMany
-    @JoinTable(name = "section_rubrics",
-        joinColumns = @JoinColumn(name = "section_id"),
-        inverseJoinColumns = @JoinColumn(name = "rubric_id"))
+    @OneToMany(mappedBy = "section")
     @OrderBy("name asc")
-    private List<Rubric> rubrics;
+    @Where(clause = "deleted='f'")
+    private List<RubricAssignment> rubricAssignments;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -219,14 +217,14 @@ public class Section implements Rubricable, Serializable, Comparable<Section> {
         this.assignments = assignments;
     }
 
-    public List<Rubric> getRubrics()
+    public List<RubricAssignment> getRubricAssignments()
     {
-        return rubrics;
+        return rubricAssignments;
     }
 
-    public void setRubrics( List<Rubric> rubrics )
+    public void setRubricAssignments( List<RubricAssignment> rubricAssignments )
     {
-        this.rubrics = rubrics;
+        this.rubricAssignments = rubricAssignments;
     }
 
     public boolean isDeleted()

@@ -56,11 +56,19 @@ function remove( fileId )
 </c:if>
 <c:if test="${not empty assignment.totalPoints}">
 <tr>
-  <th>Total points</th><td>${assignment.totalPoints}</td>
+  <th>Total Points</th><td>${assignment.totalPoints}</td>
 </tr>
 </c:if>
+<c:set var="allowedFileExtensions" value="ALL" />
+<c:if test="${not empty assignment.fileExtensions}">
+  <c:set var="allowedFileExtensions" value="${assignment.fileExtensions}" />
+</c:if>
 <tr>
-  <th>Due Date</th><td><csns:dueDate submission="${submission}" /></td>
+  <th>Allowed File Extensions</th><td>${allowedFileExtensions}</td>
+</tr>
+<tr>
+  <th>Due Date</th><td><csns:dueDate date="${submission.effectiveDueDate.time}"
+  datePassed="${submission.pastDue}" /></td>
 </tr>
 </table>
 

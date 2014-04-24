@@ -48,7 +48,8 @@ $(function(){
   </c:choose>
         <tr>
           <td><a href="${link}">${assignment.name}</a></td>
-          <td class="datetime"><csns:dueDate assignment="${assignment}" /></td>
+          <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
+              datePassed="${assignment.pastDue}" /></td>
         </tr>
 </c:if>
 </c:forEach>

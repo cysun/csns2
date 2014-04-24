@@ -73,7 +73,8 @@ function toggleFilePublic( fileId )
   title="Add/Remove Files" alt="[Add/Remove Files]" src="<c:url value='/img/icons/upload.png' />" /></a></li>
 </ul>
 
-<p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate submission="${submission}" /></p>
+<p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate
+  date="${submission.effectiveDueDate.time}" datePassed="${submission.pastDue}" /></p>
 <form id="dueDateForm" action="edit" method="post">
 <p><input id="dueDate" name="dueDate" class="leftinput" size="20" maxlength="20"
   value="<fmt:formatDate value="${submission.effectiveDueDate.time}" pattern="MM/dd/yyyy HH:mm:ss" />" />

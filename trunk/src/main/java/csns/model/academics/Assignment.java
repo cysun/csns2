@@ -44,7 +44,6 @@ import org.springframework.util.StringUtils;
 
 import csns.model.academics.Section;
 import csns.model.assessment.Rubricable;
-import csns.model.core.Publishable;
 import csns.model.core.Resource;
 
 @Entity
@@ -52,7 +51,7 @@ import csns.model.core.Resource;
 @Inheritance
 @DiscriminatorColumn(name = "assignment_type")
 @DiscriminatorValue("REGULAR")
-public class Assignment implements Publishable, Rubricable, Serializable {
+public class Assignment implements Rubricable, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -151,8 +150,6 @@ public class Assignment implements Publishable, Rubricable, Serializable {
         return dueDate != null && Calendar.getInstance().after( dueDate );
     }
 
-    // for Publishable
-    @Override
     public boolean isPublished()
     {
         return publishDate != null
@@ -173,8 +170,6 @@ public class Assignment implements Publishable, Rubricable, Serializable {
             : fileExtensionSet.contains( fileExtension.toLowerCase() );
     }
 
-    // for Publishable
-    @Override
     public Long getId()
     {
         return id;
@@ -225,8 +220,6 @@ public class Assignment implements Publishable, Rubricable, Serializable {
         this.totalPoints = totalPoints;
     }
 
-    // for Publishable
-    @Override
     public Calendar getPublishDate()
     {
         return publishDate;

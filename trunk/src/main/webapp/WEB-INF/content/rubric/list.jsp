@@ -62,7 +62,8 @@ function clone( id )
           title="Toggle Public/Private" src="<c:url value='/img/icons/${img}' />" /></a></span>
       <a href="view?id=${rubric.id}">${rubric.name}</a>
     </td>
-    <td class="date"><csns:publishDate item="${rubric}" /></td>
+    <td class="date"><csns:publishDate date="${rubric.publishDate.time}"
+      datePassed="${rubric.published}" itemId="${rubric.id}" /></td>
     <td class="action">
       <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
          title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
@@ -90,7 +91,7 @@ function clone( id )
     <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
     <td class="date">
 <security:authorize access="principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}'">    
-      <csns:publishDate item="${rubric}" />
+      <csns:publishDate date="${rubric.publishDate.time}" datePassed="${rubric.published}" itemId="${rubric.id}" />
 </security:authorize>
 <security:authorize access="not (principal.isAdmin('${dept}') or principal.id.toString() == '${rubric.creator.id}')">    
       <c:if test="${rubric.published}">Yes</c:if>

@@ -1217,18 +1217,6 @@ create table rubric_evaluation_ratings (
   primary key (evaluation_id, rating_order)
 );
 
-create table section_rubrics (
-    section_id  bigint not null references sections(id),
-    rubric_id   bigint not null references rubrics(id),
-  primary key (section_id, rubric_id)
-);
-
-create table assignment_rubrics (
-    assignment_id   bigint not null references assignments(id),
-    rubric_id       bigint not null references rubrics(id),
-  primary key( assignment_id, rubric_id)
-);
-
 ------------------------------
 -- functions and procedures --
 ------------------------------

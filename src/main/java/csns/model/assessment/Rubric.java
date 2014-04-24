@@ -21,9 +21,7 @@ package csns.model.assessment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,15 +29,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import csns.model.academics.Assignment;
 import csns.model.academics.Department;
-import csns.model.academics.Section;
 import csns.model.core.Publishable;
 import csns.model.core.User;
 
@@ -82,14 +77,6 @@ public class Rubric implements Publishable, Serializable {
     @Column(name = "public", nullable = false)
     private boolean isPublic;
 
-    // Sections that use this rubric.
-    @ManyToMany(mappedBy = "rubrics")
-    private Set<Section> sections;
-
-    // Assignments that use this rubric.
-    @ManyToMany(mappedBy = "rubrics")
-    private Set<Assignment> assignments;
-
     private boolean deleted;
 
     public Rubric()
@@ -98,8 +85,6 @@ public class Rubric implements Publishable, Serializable {
         isPublic = false;
         deleted = false;
         indicators = new ArrayList<RubricIndicator>();
-        sections = new HashSet<Section>();
-        assignments = new HashSet<Assignment>();
     }
 
     public Rubric clone()
@@ -215,26 +200,6 @@ public class Rubric implements Publishable, Serializable {
     public void setPublic( boolean isPublic )
     {
         this.isPublic = isPublic;
-    }
-
-    public Set<Section> getSections()
-    {
-        return sections;
-    }
-
-    public void setSections( Set<Section> sections )
-    {
-        this.sections = sections;
-    }
-
-    public Set<Assignment> getAssignments()
-    {
-        return assignments;
-    }
-
-    public void setAssignments( Set<Assignment> assignments )
-    {
-        this.assignments = assignments;
     }
 
     public boolean isDeleted()

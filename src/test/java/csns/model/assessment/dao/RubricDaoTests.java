@@ -49,8 +49,6 @@ public class RubricDaoTests extends
     {
         Rubric rubric = rubricDao.getRubric( 1001400L );
         assert rubric != null;
-        assert rubric.getSections().size() == 1;
-        assert rubric.getAssignments().size() == 1;
     }
 
     @Test(dependsOnMethods = "getRubric")

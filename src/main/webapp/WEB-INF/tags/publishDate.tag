@@ -1,19 +1,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ attribute name="item" required="true" rtexprvalue="true" type="csns.model.core.Publishable" %>
+<%@ attribute name="date" required="true" rtexprvalue="true" type="java.util.Date" %>
 <%@ attribute name="datePattern" required="false" %>
+<%@ attribute name="datePassed" required="true" rtexprvalue="true" type="java.lang.Boolean" %>
+<%@ attribute name="itemId" required="true" rtexprvalue="true" type="java.lang.Long" %>
+<%@ attribute name="itemType" required="false" %>
 <%@ tag body-content="empty" trimDirectiveWhitespaces="true" %>
 
-<c:if test="${empty pageScope.datePattern}">
+<c:if test="${empty datePattern}">
   <c:set var="datePattern" value="yyyy-MM-dd" />
 </c:if>
 
-<c:if test="${item.published}">
-  <span id="pdate-${item.id}"><fmt:formatDate value="${item.publishDate.time}" pattern="${datePattern}" /></span>
+<c:if test="${datePassed}">
+  <span id="pdate-${itemId}"><fmt:formatDate value="${date}" pattern="${datePattern}" /></span>
 </c:if>
 
-<c:if test="${not item.published}">
-  <span id="pdate-${item.id}"><a href="javascript:publish(${item.id})"><c:if
-    test="${empty item.publishDate}">Publish</c:if><c:if test="${not empty item.publishDate}"><fmt:formatDate
-    value="${item.publishDate.time}" pattern="${datePattern}" /></c:if></a></span>
+<c:set var="args" value="${itemId}" />
+<c:if test="${not empty itemType}">
+  <c:set var="args" value="${itemId}, '${itemType}'" />
+</c:if>
+
+<c:if test="${not datePassed}">
+  <span id="pdate-${itemId}"><a href="javascript:publish(${args})"><c:if
+    test="${empty date}">Publish</c:if><c:if test="${not empty date}"><fmt:formatDate
+    value="${date}" pattern="${datePattern}" /></c:if></a></span>
 </c:if>

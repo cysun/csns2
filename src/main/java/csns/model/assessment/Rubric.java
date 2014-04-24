@@ -35,12 +35,11 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import csns.model.academics.Department;
-import csns.model.core.Publishable;
 import csns.model.core.User;
 
 @Entity
 @Table(name = "rubrics")
-public class Rubric implements Publishable, Serializable {
+public class Rubric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -100,16 +99,12 @@ public class Rubric implements Publishable, Serializable {
         return newRubric;
     }
 
-    // for Publishable
-    @Override
     public boolean isPublished()
     {
         return publishDate != null
             && Calendar.getInstance().after( publishDate );
     }
 
-    // for Publishable
-    @Override
     public Long getId()
     {
         return id;
@@ -180,8 +175,6 @@ public class Rubric implements Publishable, Serializable {
         this.creator = creator;
     }
 
-    // for Publishable
-    @Override
     public Calendar getPublishDate()
     {
         return publishDate;

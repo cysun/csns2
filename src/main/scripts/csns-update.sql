@@ -1,3 +1,6 @@
+drop table section_rubrics;
+drop table assignment_rubrics;
+
 create table rubric_assignments (
     id                          bigint primary key,
     name                        varchar(255) not null,

@@ -31,7 +31,8 @@ $(function(){
 </c:if>
 </ul>
 
-<p>Due Date: <csns:dueDate assignment="${assignment}" /></p>
+<p>Due Date: <csns:dueDate date="${assignment.dueDate.time}"
+  datePassed="${assignment.pastDue}" /></p>
 
 <c:if test="${not empty assignment.totalPoints}">
 <p>Total points: ${assignment.totalPoints}</p>

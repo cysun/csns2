@@ -26,7 +26,8 @@ $(function(){
 <li>${submission.assignment.name}</li>
 </ul>
 
-<p>Due Date: <csns:dueDate submission="${submission}" /></p>
+<p>Due Date: <csns:dueDate date="${submission.effectiveDueDate.time}"
+  datePassed="${submission.pastDue}" /></p>
 
 <c:if test="${not empty assignment.totalPoints}">
 <p>Total points: ${assignment.totalPoints}</p>

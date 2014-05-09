@@ -40,22 +40,25 @@ import csns.security.SecurityUtils;
 public class NotificationService {
 
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     @Autowired
-    SubscriptionDao subscriptionDao;
+    private SubscriptionDao subscriptionDao;
 
     @Autowired
-    VelocityEngine velocityEngine;
+    private VelocityEngine velocityEngine;
 
     @Autowired
-    MassMailSender massMailSender;
+    private MassMailSender massMailSender;
 
     @Value("#{applicationProperties.url}")
-    String appUrl;
+    private String appUrl;
 
     @Value("#{applicationProperties.email}")
-    String appEmail;
+    private String appEmail;
+
+    @Value("#{applicationProperties.encoding}")
+    private String appEncoding;
 
     public void notifiy( Subscribable subscribable, String subject,
         String vTemplate, Map<String, Object> vModels, boolean notificationFlag )
@@ -81,7 +84,7 @@ public class NotificationService {
         if( addresses.size() > 0 )
         {
             String text = VelocityEngineUtils.mergeTemplateIntoString(
-                velocityEngine, vTemplate, vModels );
+                velocityEngine, vTemplate, appEncoding, vModels );
             SimpleMailMessage email = new SimpleMailMessage();
             email.setFrom( appEmail );
             email.setTo( appEmail );

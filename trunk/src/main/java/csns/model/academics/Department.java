@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -95,6 +95,20 @@ public class Department implements Serializable {
     @OrderBy("firstName asc")
     private List<User> instructors;
 
+    /**
+     * Rubric evaluators, e.g. the IAB members.
+     */
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "department_evaluators",
+        joinColumns = @JoinColumn(name = "department_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @OrderBy("firstName asc")
+    private List<User> evaluators;
+
+    /**
+     * Program reviewers, e.g. abet.
+     */
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_reviewers",
@@ -175,6 +189,7 @@ public class Department implements Serializable {
         administrators = new ArrayList<User>();
         faculty = new ArrayList<User>();
         instructors = new ArrayList<User>();
+        evaluators = new ArrayList<User>();
         reviewers = new ArrayList<User>();
 
         undergraduateCourses = new ArrayList<Course>();
@@ -254,6 +269,16 @@ public class Department implements Serializable {
     public void setInstructors( List<User> instructors )
     {
         this.instructors = instructors;
+    }
+
+    public List<User> getEvaluators()
+    {
+        return evaluators;
+    }
+
+    public void setEvaluators( List<User> evaluators )
+    {
+        this.evaluators = evaluators;
     }
 
     public List<User> getReviewers()

@@ -1,3 +1,8 @@
+create table department_evaluators (
+    department_id   bigint not null references departments(id),
+    user_id         bigint not null references users(id)
+);
+
 drop table section_rubrics;
 drop table assignment_rubrics;
 

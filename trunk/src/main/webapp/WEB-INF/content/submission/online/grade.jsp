@@ -78,7 +78,7 @@ function toggleFilePublic( fileId )
 </ul>
 
 <p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate
-  date="${submission.effectiveDueDate.time}" datePassed="${submission.pastDue}" /></p>
+  date="${submission.effectiveDueDate.time}" datePast="${submission.pastDue}" /></p>
 <form id="dueDateForm" action="<c:url value='/submission/edit' />" method="post">
 <p><input id="dueDate" name="dueDate" class="leftinput" size="20" maxlength="20"
   value="<fmt:formatDate value="${submission.effectiveDueDate.time}" pattern="MM/dd/yyyy HH:mm:ss" />" />

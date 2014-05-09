@@ -146,6 +146,11 @@
         user_id int8 not null
     );
 
+    create table department_evaluators (
+        department_id int8 not null,
+        user_id int8 not null
+    );
+
     create table department_faculty (
         department_id int8 not null,
         user_id int8 not null
@@ -900,6 +905,16 @@
 
     alter table department_administrators 
         add constraint FK_rkx6fhm4yxlcbkdhgwgs4vh0d 
+        foreign key (department_id) 
+        references departments;
+
+    alter table department_evaluators 
+        add constraint FK_kphtmq4rhw14e68gmwkct4d94 
+        foreign key (user_id) 
+        references users;
+
+    alter table department_evaluators 
+        add constraint FK_qsn32vxy3bvasb2cdoodj7cjp 
         foreign key (department_id) 
         references departments;
 

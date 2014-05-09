@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -67,6 +67,9 @@ public class UserController {
     @Value("#{applicationProperties.email}")
     private String appEmail;
 
+    @Value("#{applicationProperties.encoding}")
+    private String appEncoding;
+
     private final static Logger logger = LoggerFactory.getLogger( UserController.class );
 
     @RequestMapping(value = "/user/search")
@@ -127,11 +130,11 @@ public class UserController {
 
         logger.info( "Reset password for " + user.getUsername() );
 
-        Map<String, String> vModels = new HashMap<String, String>();
+        Map<String, Object> vModels = new HashMap<String, Object>();
         vModels.put( "username", user.getUsername() );
         vModels.put( "password", newPassword );
         String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.resetPassword.vm", vModels );
+            velocityEngine, "email.resetPassword.vm", appEncoding, vModels );
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo( user.getPrimaryEmail() );

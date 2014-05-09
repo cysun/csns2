@@ -7,6 +7,7 @@
 app.school=csula
 app.url=http://localhost:8080/csns2
 app.email=csns2@localhost.localdomain
+app.encoding=UTF-8
 app.file.dir=E:/Temp/csns2/files
 app.log.dir=E:/Temp/csns2/logs
 

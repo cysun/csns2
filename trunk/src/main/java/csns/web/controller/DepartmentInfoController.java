@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -36,6 +36,7 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.security.SecurityUtils;
 
 @Controller
 public class DepartmentInfoController {
@@ -83,6 +84,10 @@ public class DepartmentInfoController {
                 role = "DEPT_ROLE_INSTRUCTOR_" + dept;
                 users = department.getInstructors();
                 break;
+            case "evaluator":
+                role = "DEPT_ROLE_EVALUATOR_" + dept;
+                users = department.getEvaluators();
+                break;
             case "reviewer":
                 role = "DEPT_ROLE_REVIEWER_" + dept;
                 users = department.getReviewers();
@@ -100,6 +105,8 @@ public class DepartmentInfoController {
                 {
                     users.add( user );
                     user.getRoles().add( role );
+                    logger.info( SecurityUtils.getUser().getUsername()
+                        + " added " + role + " to " + user.getUsername() );
                 }
                 break;
             case "remove":
@@ -107,6 +114,8 @@ public class DepartmentInfoController {
                 {
                     users.remove( user );
                     user.getRoles().remove( role );
+                    logger.info( SecurityUtils.getUser().getUsername()
+                        + " removed " + role + " from " + user.getUsername() );
                 }
                 break;
             default:

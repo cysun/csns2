@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -33,6 +33,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -83,6 +84,9 @@ public class SubmissionController {
 
     @Autowired
     private VelocityEngine velocityEngine;
+
+    @Value("#{applicationProperties.encoding}")
+    private String appEncoding;
 
     private static final Logger logger = LoggerFactory.getLogger( SubmissionController.class );
 
@@ -338,12 +342,12 @@ public class SubmissionController {
             + " " + submission.getAssignment().getName() + " Grade";
         message.setSubject( subject );
 
-        Map<String, String> vModels = new HashMap<String, String>();
+        Map<String, Object> vModels = new HashMap<String, Object>();
         vModels.put( "grade", submission.getGrade() );
         String comments = submission.getComments();
         vModels.put( "comments", comments != null ? comments : "" );
         String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.submission.grade.vm", vModels );
+            velocityEngine, "email.submission.grade.vm", appEncoding, vModels );
         message.setText( text );
 
         try

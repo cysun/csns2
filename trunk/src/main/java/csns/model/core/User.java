@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -293,6 +293,21 @@ public class User implements Serializable, Cloneable, Comparable<User>,
         return StringUtils.hasText( dept )
             && roles.contains( "DEPT_ROLE_INSTRUCTOR_" + dept )
             || isFaculty( dept );
+    }
+
+    @JsonIgnore
+    public boolean isEvaluator()
+    {
+        for( String role : roles )
+            if( role.startsWith( "DEPT_ROLE_EVALUATOR_" ) ) return true;
+
+        return false;
+    }
+
+    public boolean isEvaluator( String dept )
+    {
+        return StringUtils.hasText( dept )
+            && roles.contains( "DEPT_ROLE_EVALUATOR_" + dept );
     }
 
     @JsonIgnore

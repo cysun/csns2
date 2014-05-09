@@ -68,7 +68,7 @@ function remove( fileId )
 </tr>
 <tr>
   <th>Due Date</th><td><csns:dueDate date="${submission.effectiveDueDate.time}"
-  datePassed="${submission.pastDue}" /></td>
+  datePast="${submission.pastDue}" /></td>
 </tr>
 </table>
 

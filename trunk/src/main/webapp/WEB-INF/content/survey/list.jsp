@@ -58,7 +58,7 @@ function clone( id )
     <td><a href="view?id=${survey.id}">${survey.name}</a></td>
     <td class="shrink">${survey.author.username}</td>
     <td class="date"><csns:publishDate date="${survey.publishDate.time}"
-        datePassed="${survey.published}" itemId="${survey.id}" /></td>
+        datePast="${survey.published}" itemId="${survey.id}" /></td>
     <td class="date"><csns:closeDate survey="${survey}" /></td>
     <td class="action">
       <a href="results?id=${survey.id}"><img alt="[Results]" 
@@ -91,7 +91,7 @@ function clone( id )
     <td><a href="view?id=${survey.id}">${survey.name}</a></td>
     <td class="shrink">${survey.author.username}</td>
     <td class="date"><csns:publishDate date="${survey.publishDate.time}"
-        datePassed="${survey.published}" itemId="${survey.id}" /></td>
+        datePast="${survey.published}" itemId="${survey.id}" /></td>
     <td class="date"><csns:closeDate survey="${survey}" /></td>
     <td class="action">
       <a href="javascript:clone(${survey.id})"><img alt="[Clone Survey]" 
@@ -123,7 +123,7 @@ function clone( id )
     <td><a href="view?id=${survey.id}">${survey.name}</a></td>
     <td class="shrink">${survey.author.username}</td>
     <td class="date"><csns:publishDate date="${survey.publishDate.time}"
-        datePassed="${survey.published}" itemId="${survey.id}" /></td>
+        datePast="${survey.published}" itemId="${survey.id}" /></td>
     <td class="date"><csns:closeDate survey="${survey}" /></td>
     <td class="action">
 <c:if test="${survey.published}">

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -25,6 +25,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -70,6 +71,9 @@ public class DepartmentControllerS {
 
     @Autowired
     private VelocityEngine velocityEngine;
+
+    @Value("#{applicationProperties.encoding}")
+    private String appEncoding;
 
     @Autowired
     private WebApplicationContext context;
@@ -192,7 +196,7 @@ public class DepartmentControllerS {
             revision.setIncludeSidebar( true );
             revision.setSubject( subjects[i] );
             revision.setContent( VelocityEngineUtils.mergeTemplateIntoString(
-                velocityEngine, vTemplates[i], vModels ) );
+                velocityEngine, vTemplates[i], appEncoding, vModels ) );
 
             revisionDao.saveRevision( revision );
         }

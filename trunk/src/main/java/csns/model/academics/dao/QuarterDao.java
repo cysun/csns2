@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -35,6 +35,12 @@ public interface QuarterDao {
      * Returns the quarters in which the student took any class.
      */
     List<Quarter> getQuartersByStudent( User student );
+
+    /**
+     * Returns the quarter in which the user evaluated any rubric as an external
+     * evaluator.
+     */
+    List<Quarter> getQuartersByEvaluator( User evaluator );
 
     /**
      * Returns the quarters in which there were any sections for the department.

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -59,6 +59,19 @@ public class QuarterDaoImpl implements QuarterDao {
 
         return entityManager.createQuery( query, Quarter.class )
             .setParameter( "student", student )
+            .getResultList();
+    }
+
+    @Override
+    public List<Quarter> getQuartersByEvaluator( User evaluator )
+    {
+        String query = "select distinct section.quarter from Section section "
+            + "join section.rubricAssignments assignment "
+            + "join assignment.externalEvaluators evaluator "
+            + "where evaluator = :evaluator order by section.quarter desc";
+
+        return entityManager.createQuery( query, Quarter.class )
+            .setParameter( "evaluator", evaluator )
             .getResultList();
     }
 

@@ -78,6 +78,7 @@ function email( userId )
   <li><a href="#admin">Administrators</a></li>
   <li><a href="#faculty">Faculty</a></li>
   <li><a href="#instructor">Instructors</a></li>
+  <li><a href="#evaluator">Rubric Evaluators</a></li>
   <li><a href="#reviewer">Program Reviewers</a></li>
 </ul>
 
@@ -86,7 +87,7 @@ function email( userId )
 <p><input id="search" name="term" type="text" class="forminput" size="40" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>
-</div>
+</div> <!-- end of all -->
 
 <div id="admin">
 <c:if test="${fn:length(department.administrators) > 0}">
@@ -124,7 +125,7 @@ function email( userId )
 <button class="subbutton clear">Clear</button>
 </p></form>
 </security:authorize>
-</div>
+</div> <!-- end of admin -->
 
 <div id="faculty">
 <c:if test="${fn:length(department.faculty) > 0}">
@@ -162,7 +163,7 @@ function email( userId )
 <button class="subbutton clear">Clear</button>
 </p></form>
 </security:authorize>
-</div>
+</div> <!-- end of faculty -->
 
 <div id="instructor">
 <c:if test="${fn:length(department.instructors) > 0}">
@@ -200,7 +201,45 @@ function email( userId )
 <button class="subbutton clear">Clear</button>
 </p></form>
 </security:authorize>
-</div>
+</div> <!-- end of instructors -->
+
+<div id="evaluator">
+<c:if test="${fn:length(department.evaluators) > 0}">
+<form id="evaluatorForm" method="post">
+<table class="viewtable">
+<tr>
+  <th><input class="selectAll" type="checkbox" /></th>
+  <th>CIN</th><th>Name</th><th>Primary Email</th>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <th class="center"></th>
+  </security:authorize>
+</tr>
+<c:forEach items="${department.evaluators}" var="user">
+<tr>
+  <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
+  <td>${user.cin}</td>
+  <td><a href="<c:url value='/user/view?id=${user.id}' />">${user.name}</a></td>
+  <td><a href="javascript:email(${user.id})">${user.primaryEmail}</a></td>
+  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+  <td class="center"><a href="personnel/evaluator/remove?userId=${user.id}"><img
+    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+  </security:authorize>
+</tr>
+</c:forEach>
+</table>
+<input type="hidden" name="backUrl" value="/department/${dept}/people#evaluator" />
+</form>
+</c:if>
+
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<form action="personnel/evaluator/add" method="post"><p>
+<input type="text" class="forminput add" name="name" size="40"
+    placeholder="Search for users to add" />
+<input type="submit" class="subbutton" name="add" value="Add" />
+<button class="subbutton clear">Clear</button>
+</p></form>
+</security:authorize>
+</div> <!-- end of evaluators -->
 
 <div id="reviewer">
 <c:if test="${fn:length(department.reviewers) > 0}">
@@ -238,6 +277,6 @@ function email( userId )
 <button class="subbutton clear">Clear</button>
 </p></form>
 </security:authorize>
-</div>
+</div> <!-- end of reviewers -->
 
 </div> <!-- tabs -->

@@ -53,6 +53,12 @@ function help( name )
 {
     $("#help-"+name).dialog("open");
 }
+function deleteAssignment( id )
+{
+    var msg = "Are you sure you want to delete this assignment?";
+    if( confirm(msg) )
+        window.location.href = "delete?id=" + id;
+}
 function deleteevaluator( evaluatorId )
 {
     var msg = "Are you sure you want to remove this evaluator?";
@@ -63,13 +69,9 @@ function deleteevaluator( evaluatorId )
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li>Create Assignment
-  <select name="assignmentType" style="margin-left: 2em;">
-    <option value="RUBRIC">Rubric</option>
-    <option value="REGULAR">Regular</option>
-    <option value="ONLINE">Online</option>
-  </select>
-</li>
+<li><csns:truncate value="${assignment.name}" length="60" /></li>
+<li class="align_right"><a href="javascript:deleteAssignment(${assignment.id})"><img title="Delete Assignment"
+  alt="[Delete Assignment]" src="<c:url value='/img/icons/script_delete.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="assignment">
@@ -85,9 +87,12 @@ function deleteevaluator( evaluatorId )
   <tr>
     <th>Rubric</th>
     <td>
+<c:if test="${not assignment.published}">
       <form:select path="rubric">
         <form:options items="${rubrics}" itemLabel="name" />
       </form:select>
+</c:if>
+<c:if test="${assignment.published}">${assignment.rubric.name}</c:if>
     </td>
   </tr>
 
@@ -101,16 +106,25 @@ function deleteevaluator( evaluatorId )
 
   <tr>
     <th><csns:help name="exteva">External Evaluators</csns:help></th>
-    <td><input id="evaluator" type="text" class="forminput add"
-      name="ee" style="width: 150px;" /></td>
+    <td>
+      <c:forEach items="${assignment.externalEvaluators}" var="evaluator">
+        <span id="evaluator-${evaluator.id}">
+          <a href="javascript:deleteevaluator(${evaluator.id})">${evaluator.name}</a>,
+          <input name="userId" type="hidden" value="${evaluator.id}" />
+        </span>
+      </c:forEach>    
+      <input id="evaluator" type="text" class="forminput add"
+        name="ee" style="width: 150px;" /></td>
   </tr>
 
+  <c:if test="${not assignment.published}">
   <tr>
     <th><csns:help name="pubdate">Publish Date</csns:help></th>
     <td>
       <form:input path="publishDate" cssClass="leftinput" size="30" maxlength="30" />
     </td>
   </tr>
+  </c:if>
 
   <tr>
     <th><csns:help name="duedate">Due Date</csns:help></th>
@@ -119,7 +133,7 @@ function deleteevaluator( evaluatorId )
     </td>
   </tr>
 
-  <tr><th></th><td><input class="subbutton" type="submit" value="Create" /></td></tr>
+  <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
 </table>
 </form:form>
 

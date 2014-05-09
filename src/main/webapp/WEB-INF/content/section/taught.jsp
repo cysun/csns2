@@ -41,11 +41,11 @@ $(function(){
         headers: { 3: {sorter: false} }
     });
 });
-function publish( id )
+function publish( id, type )
 {
     var msg = "Do you want to publish this assignment now?";
     if( confirm(msg) )
-        $("#pdate-"+id).load( "<c:url value='/assignment/publish?id=' />" + id );
+        $("#pdate-"+id).load( "<c:url value='/' />" + type + "/publish?id=" + id );
 }
 </script>
 
@@ -81,9 +81,9 @@ function publish( id )
         <tr>
           <td><a href="<c:url value='/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
           <td class="datetime"><csns:publishDate date="${assignment.publishDate.time}" datePattern="yyyy-MM-dd hh:mm a"
-              datePassed="${assignment.published}" itemId="${assignment.id}" itemType="assignment" /></td>
+              datePast="${assignment.published}" itemId="${assignment.id}" itemType="assignment" /></td>
           <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
-              datePassed="${assignment.pastDue}" /></td>
+              datePast="${assignment.pastDue}" /></td>
           <td class="action">
             <c:if test="${assignment.online}">
               <a href="<c:url value='/assignment/online/view?id=${assignment.id}' />"><img alt="[View Assignment]" 
@@ -94,6 +94,21 @@ function publish( id )
                  title="View Assignment" src="<c:url value='/img/icons/script_view.png'/>" /></a>
             </c:if>
             <a href="<c:url value='/assignment/edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
+               title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
+          </td>
+        </tr>
+        </c:forEach>
+        <c:forEach items="${section.rubricAssignments}" var="assignment">
+        <tr>
+          <td>${assignment.name}</td>
+          <td class="datetime"><csns:publishDate date="${assignment.publishDate.time}" datePattern="yyyy-MM-dd hh:mm a"
+              datePast="${assignment.published}" itemId="${assignment.id}" itemType="rubric/assignment" /></td>
+          <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
+              datePast="${assignment.pastDue}" /></td>
+          <td class="action">
+              <a href="<c:url value='/department/${dept}/rubric/view?id=${assignment.rubric.id}' />"><img
+                 alt="[View Rubric]" title="View Rubric" src="<c:url value='/img/icons/script_view.png'/>" /></a>
+            <a href="<c:url value='/rubric/assignment/edit?id=${assignment.id}' />"><img alt="[Edit Assignment]"
                title="Edit Assignment" src="<c:url value='/img/icons/script_edit.png'/>" /></a>
           </td>
         </tr>

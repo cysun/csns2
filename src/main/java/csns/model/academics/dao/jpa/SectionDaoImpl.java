@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -145,6 +145,21 @@ public class SectionDaoImpl implements SectionDao {
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "student", student )
+            .setParameter( "quarter", quarter )
+            .getResultList();
+    }
+
+    @Override
+    public List<Section> getSectionsByEvaluator( User evaluator, Quarter quarter )
+    {
+        String query = "select section from Section section "
+            + "join section.rubricAssignments assignment "
+            + "join assignment.externalEvaluators evaluator "
+            + "where evaluator = :evaluator and section.quarter = :quarter "
+            + "order by section.course.code asc, section.number asc";
+
+        return entityManager.createQuery( query, Section.class )
+            .setParameter( "evaluator", evaluator )
             .setParameter( "quarter", quarter )
             .getResultList();
     }

@@ -19,9 +19,9 @@
 package csns.model.assessment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import csns.model.academics.Section;
@@ -73,7 +74,8 @@ public class RubricAssignment implements Serializable {
     @JoinTable(name = "rubric_external_evaluators",
         joinColumns = @JoinColumn(name = "rubric_assignment_id"),
         inverseJoinColumns = @JoinColumn(name = "evaluator_id"))
-    private Set<User> externalEvaluators;
+    @OrderBy("firstName")
+    private List<User> externalEvaluators;
 
     @Column(name = "publish_date")
     private Calendar publishDate;
@@ -89,7 +91,18 @@ public class RubricAssignment implements Serializable {
         deleted = false;
         evaluatedByInstructors = true;
         evaluatedByStudents = false;
-        externalEvaluators = new HashSet<User>();
+        externalEvaluators = new ArrayList<User>();
+    }
+
+    public boolean isPastDue()
+    {
+        return dueDate != null && Calendar.getInstance().after( dueDate );
+    }
+
+    public boolean isPublished()
+    {
+        return publishDate != null
+            && Calendar.getInstance().after( publishDate );
     }
 
     public Long getId()
@@ -152,12 +165,12 @@ public class RubricAssignment implements Serializable {
         this.evaluatedByStudents = evaluatedByStudents;
     }
 
-    public Set<User> getExternalEvaluators()
+    public List<User> getExternalEvaluators()
     {
         return externalEvaluators;
     }
 
-    public void setExternalEvaluators( Set<User> externalEvaluators )
+    public void setExternalEvaluators( List<User> externalEvaluators )
     {
         this.externalEvaluators = externalEvaluators;
     }

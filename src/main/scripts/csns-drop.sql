@@ -95,6 +95,7 @@ drop table department_graduate_courses;
 drop table department_additional_undergraduate_courses;
 drop table department_undergraduate_courses;
 drop table department_reviewers;
+drop table department_evaluators;
 drop table department_instructors;
 drop table department_faculty;
 drop table department_administrators;

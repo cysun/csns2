@@ -27,7 +27,7 @@ $(function(){
 </ul>
 
 <p>Due Date: <csns:dueDate date="${submission.effectiveDueDate.time}"
-  datePassed="${submission.pastDue}" /></p>
+  datePast="${submission.pastDue}" /></p>
 
 <c:if test="${not empty assignment.totalPoints}">
 <p>Total points: ${assignment.totalPoints}</p>

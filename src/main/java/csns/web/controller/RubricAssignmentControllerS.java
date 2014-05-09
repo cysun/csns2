@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,9 +49,10 @@ import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.CalendarPropertyEditor;
 import csns.web.editor.RubricPropertyEditor;
+import csns.web.validator.RubricAssignmentValidator;
 
 @Controller
-@SessionAttributes("assignment")
+@SessionAttributes({ "assignment", "rubrics" })
 public class RubricAssignmentControllerS {
 
     @Autowired
@@ -64,6 +66,9 @@ public class RubricAssignmentControllerS {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RubricAssignmentValidator rubricAssignmentValidator;
 
     @Autowired
     private WebApplicationContext context;
@@ -111,14 +116,62 @@ public class RubricAssignmentControllerS {
     public String create(
         @ModelAttribute("assignment") RubricAssignment assignment,
         @RequestParam(value = "userId", required = false) Long ids[],
-        SessionStatus sessionStatus )
+        BindingResult result, SessionStatus sessionStatus )
     {
-        assignment.getExternalEvaluators().addAll( userDao.getUsers( ids ) );
+        rubricAssignmentValidator.validate( assignment, result );
+        if( result.hasErrors() ) return "rubric/assignment/create";
+
+        assignment.setExternalEvaluators( userDao.getUsers( ids ) );
         assignment = rubricAssignmentDao.saveRubricAssignment( assignment );
         sessionStatus.setComplete();
 
         logger.info( SecurityUtils.getUser().getUsername()
             + " created rubric assignment " + assignment.getId() );
+
+        return "redirect:/section/taught#section-"
+            + assignment.getSection().getId();
+    }
+
+    @RequestMapping(value = "/rubric/assignment/edit",
+        method = RequestMethod.GET)
+    public String edit( @RequestParam Long id, ModelMap models )
+    {
+        RubricAssignment assignment = rubricAssignmentDao.getRubricAssignment( id );
+
+        User user = SecurityUtils.getUser();
+        Department department = assignment.getSection()
+            .getCourse()
+            .getDepartment();
+        List<Rubric> rubrics = rubricDao.getDepartmentRubrics( department );
+        rubrics.addAll( rubricDao.getPersonalRubrics( user ) );
+        if( rubrics.size() == 0 )
+        {
+            models.put( "message", "error.rubric.no.rubric" );
+            models.put( "backUrl", "/section/taught" );
+            return "error";
+        }
+
+        models.put( "rubrics", rubrics );
+        models.put( "assignment", assignment );
+        return "rubric/assignment/edit";
+    }
+
+    @RequestMapping(value = "/rubric/assignment/edit",
+        method = RequestMethod.POST)
+    public String edit(
+        @ModelAttribute("assignment") RubricAssignment assignment,
+        @RequestParam(value = "userId", required = false) Long ids[],
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        rubricAssignmentValidator.validate( assignment, result );
+        if( result.hasErrors() ) return "rubric/assignment/edit";
+
+        assignment.setExternalEvaluators( userDao.getUsers( ids ) );
+        assignment = rubricAssignmentDao.saveRubricAssignment( assignment );
+        sessionStatus.setComplete();
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " edited rubric assignment " + assignment.getId() );
 
         return "redirect:/section/taught#section-"
             + assignment.getSection().getId();

@@ -443,6 +443,11 @@ create table department_instructors (
     user_id         bigint not null references users(id)
 );
 
+create table department_evaluators (
+    department_id   bigint not null references departments(id),
+    user_id         bigint not null references users(id)
+);
+
 create table department_reviewers (
     department_id   bigint not null references departments(id),
     user_id         bigint not null references users(id)

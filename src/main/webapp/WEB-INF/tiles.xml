@@ -863,6 +863,21 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/assignment/edit.jsp" />
     </definition>
 
+    <definition name="rubric/submission/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view.jsp" />
+    </definition>
+
+    <definition name="rubric/evaluation/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Evaluation" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/evaluation/view.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

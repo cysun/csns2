@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -83,11 +85,22 @@ public class RubricAssignment implements Serializable {
     @Column(name = "due_date")
     private Calendar dueDate;
 
+    @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
+        CascadeType.PERSIST })
+    protected List<RubricSubmission> submissions;
+
     @Column(nullable = false)
     private boolean deleted;
 
     public RubricAssignment()
     {
+        dueDate = Calendar.getInstance();
+        dueDate.add( Calendar.DATE, 7 );
+        dueDate.set( Calendar.HOUR_OF_DAY, 23 );
+        dueDate.set( Calendar.MINUTE, 59 );
+        dueDate.set( Calendar.SECOND, 59 );
+        dueDate.set( Calendar.MILLISECOND, 0 );
+
         deleted = false;
         evaluatedByInstructors = true;
         evaluatedByStudents = false;
@@ -103,6 +116,18 @@ public class RubricAssignment implements Serializable {
     {
         return publishDate != null
             && Calendar.getInstance().after( publishDate );
+    }
+
+    public boolean isEvaluatedByExternal()
+    {
+        return !externalEvaluators.isEmpty();
+    }
+
+    public boolean isExternalEvaluator( User user )
+    {
+        for( User evaluator : externalEvaluators )
+            if( evaluator.getId().equals( user.getId() ) ) return true;
+        return false;
     }
 
     public Long getId()
@@ -193,6 +218,16 @@ public class RubricAssignment implements Serializable {
     public void setDueDate( Calendar dueDate )
     {
         this.dueDate = dueDate;
+    }
+
+    public List<RubricSubmission> getSubmissions()
+    {
+        return submissions;
+    }
+
+    public void setSubmissions( List<RubricSubmission> submissions )
+    {
+        this.submissions = submissions;
     }
 
     public boolean isDeleted()

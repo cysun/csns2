@@ -100,7 +100,7 @@ function publish( id, type )
         </c:forEach>
         <c:forEach items="${section.rubricAssignments}" var="assignment">
         <tr>
-          <td>${assignment.name}</td>
+          <td><a href="<c:url value='/rubric/submission/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
           <td class="datetime"><csns:publishDate date="${assignment.publishDate.time}" datePattern="yyyy-MM-dd hh:mm a"
               datePast="${assignment.published}" itemId="${assignment.id}" itemType="rubric/assignment" /></td>
           <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"

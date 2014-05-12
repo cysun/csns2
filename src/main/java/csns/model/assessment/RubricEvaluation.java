@@ -18,6 +18,7 @@
  */
 package csns.model.assessment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,17 +36,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Any;
-import org.hibernate.annotations.AnyMetaDef;
-import org.hibernate.annotations.MetaValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import csns.model.academics.Assignment;
 import csns.model.academics.Section;
 import csns.model.core.User;
 
 @Entity
 @Table(name = "rubric_evaluations")
-public class RubricEvaluation {
+public class RubricEvaluation implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public enum Type {
         INSTRUCTOR, PEER, EXTERNAL
@@ -54,19 +56,17 @@ public class RubricEvaluation {
     @GeneratedValue
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Type type;
 
     @ManyToOne
-    @JoinColumn(name = "rubric_id")
-    private Rubric rubric;
+    @JoinColumn(name = "submission_id")
+    private RubricSubmission submission;
 
     @ManyToOne
     @JoinColumn(name = "evaluator_id")
     private User evaluator;
-
-    @ManyToOne
-    @JoinColumn(name = "evaluatee_id")
-    private User evaluatee;
 
     @ElementCollection
     @CollectionTable(name = "rubric_evaluation_ratings",
@@ -77,28 +77,43 @@ public class RubricEvaluation {
 
     private String comments;
 
-    @Any(metaColumn = @Column(name = "rubricable_type"),
-        fetch = FetchType.EAGER)
-    @AnyMetaDef(idType = "long", metaType = "string", metaValues = {
-        @MetaValue(value = "SE", targetEntity = Section.class),
-        @MetaValue(value = "AS", targetEntity = Assignment.class) })
-    @JoinColumn(name = "rubricable_id")
-    private Rubricable rubricable;
-
     private Date date;
 
     private boolean deleted;
 
+    private static final Logger logger = LoggerFactory.getLogger( RubricEvaluation.class );
+
     public RubricEvaluation()
     {
+        ratings = new ArrayList<Integer>();
         deleted = false;
     }
 
-    public RubricEvaluation( Rubric rubric )
+    public RubricEvaluation( RubricSubmission submission, User evaluator )
     {
-        this.rubric = rubric;
-        this.ratings = new ArrayList<Integer>();
-        this.deleted = false;
+        this();
+        this.submission = submission;
+        this.evaluator = evaluator;
+
+        RubricAssignment assignment = submission.getAssignment();
+        // I wish I could add nulls to the list, but ArrayList refuses to do it,
+        // so we have to add -1 instead.
+        for( int i = 0; i < assignment.getRubric().getIndicators().size(); ++i )
+            ratings.add( -1 );
+
+        Section section = assignment.getSection();
+        if( section.isInstructor( evaluator ) )
+            type = Type.INSTRUCTOR;
+        else if( section.isEnrolled( evaluator ) )
+            type = Type.PEER;
+        else if( assignment.isExternalEvaluator( evaluator ) )
+            type = Type.EXTERNAL;
+        else
+        {
+            logger.error( "Cannot determine rubric evaluation type for "
+                + evaluator.getUsername() );
+            throw new RuntimeException( "Invalid Rubric Evaluaton" );
+        }
     }
 
     public Long getId()
@@ -121,14 +136,14 @@ public class RubricEvaluation {
         this.type = type;
     }
 
-    public Rubric getRubric()
+    public RubricSubmission getSubmission()
     {
-        return rubric;
+        return submission;
     }
 
-    public void setRubric( Rubric rubric )
+    public void setSubmission( RubricSubmission submission )
     {
-        this.rubric = rubric;
+        this.submission = submission;
     }
 
     public User getEvaluator()
@@ -139,16 +154,6 @@ public class RubricEvaluation {
     public void setEvaluator( User evaluator )
     {
         this.evaluator = evaluator;
-    }
-
-    public User getEvaluatee()
-    {
-        return evaluatee;
-    }
-
-    public void setEvaluatee( User evaluatee )
-    {
-        this.evaluatee = evaluatee;
     }
 
     public List<Integer> getRatings()
@@ -169,16 +174,6 @@ public class RubricEvaluation {
     public void setComments( String comments )
     {
         this.comments = comments;
-    }
-
-    public Rubricable getRubricable()
-    {
-        return rubricable;
-    }
-
-    public void setRubricable( Rubricable rubricable )
-    {
-        this.rubricable = rubricable;
     }
 
     public Date getDate()

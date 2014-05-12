@@ -24,26 +24,26 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import csns.model.assessment.RubricEvaluation;
-import csns.model.assessment.dao.RubricEvaluationDao;
+import csns.model.assessment.RubricSubmission;
+import csns.model.assessment.dao.RubricSubmissionDao;
 
 @Repository
-public class RubricEvaluationDaoImpl implements RubricEvaluationDao {
+public class RubricSubmissionDaoImpl implements RubricSubmissionDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public RubricEvaluation getRubricEvaluation( Long id )
+    public RubricSubmission getRubricSubmission( Long id )
     {
-        return entityManager.find( RubricEvaluation.class, id );
+        return entityManager.find( RubricSubmission.class, id );
     }
 
     @Override
     @Transactional
-    public RubricEvaluation saveRubricEvaluation( RubricEvaluation evaluation )
+    public RubricSubmission saveRubricSubmission( RubricSubmission submission )
     {
-        return entityManager.merge( evaluation );
+        return entityManager.merge( submission );
     }
 
 }

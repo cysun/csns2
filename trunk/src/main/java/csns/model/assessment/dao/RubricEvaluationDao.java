@@ -18,22 +18,12 @@
  */
 package csns.model.assessment.dao;
 
-import java.util.List;
-
 import csns.model.assessment.RubricEvaluation;
-import csns.model.assessment.Rubricable;
-import csns.model.core.User;
 
 public interface RubricEvaluationDao {
 
     RubricEvaluation getRubricEvaluation( Long id );
 
-    List<RubricEvaluation> getRubricEvaluations( Rubricable rubricable,
-        User evaluator );
-
-    List<RubricEvaluation> getRubricEvaluations( Rubricable rubricable,
-        RubricEvaluation.Type type );
-
-    RubricEvaluation saveRubricEvaluation( RubricEvaluation evauation );
+    RubricEvaluation saveRubricEvaluation( RubricEvaluation evaluation );
 
 }

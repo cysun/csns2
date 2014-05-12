@@ -43,7 +43,6 @@ import javax.persistence.Transient;
 import org.springframework.util.StringUtils;
 
 import csns.model.academics.Section;
-import csns.model.assessment.Rubricable;
 import csns.model.core.Resource;
 
 @Entity
@@ -51,7 +50,7 @@ import csns.model.core.Resource;
 @Inheritance
 @DiscriminatorColumn(name = "assignment_type")
 @DiscriminatorValue("REGULAR")
-public class Assignment implements Rubricable, Serializable {
+public class Assignment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -114,13 +113,6 @@ public class Assignment implements Rubricable, Serializable {
         fileExtensionSet = new HashSet<String>();
         availableAfterDueDate = true;
         deleted = false;
-    }
-
-    // for Rubricable
-    @Override
-    public String getType()
-    {
-        return "Assignment";
     }
 
     public Assignment clone()

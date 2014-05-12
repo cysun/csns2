@@ -92,8 +92,8 @@ public class RubricAssignmentControllerS {
         Section section = sectionDao.getSection( sectionId );
         Department department = section.getCourse().getDepartment();
 
-        List<Rubric> rubrics = rubricDao.getDepartmentRubrics( department );
-        rubrics.addAll( rubricDao.getPersonalRubrics( user ) );
+        List<Rubric> rubrics = rubricDao.getPublishedDepartmentRubrics( department );
+        rubrics.addAll( rubricDao.getPublishedPersonalRubrics( user ) );
         if( rubrics.size() == 0 )
         {
             models.put( "message", "error.rubric.no.rubric" );
@@ -142,8 +142,8 @@ public class RubricAssignmentControllerS {
         Department department = assignment.getSection()
             .getCourse()
             .getDepartment();
-        List<Rubric> rubrics = rubricDao.getDepartmentRubrics( department );
-        rubrics.addAll( rubricDao.getPersonalRubrics( user ) );
+        List<Rubric> rubrics = rubricDao.getPublishedDepartmentRubrics( department );
+        rubrics.addAll( rubricDao.getPublishedPersonalRubrics( user ) );
         if( rubrics.size() == 0 )
         {
             models.put( "message", "error.rubric.no.rubric" );

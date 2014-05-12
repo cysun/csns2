@@ -43,13 +43,12 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Where;
 
 import csns.model.assessment.RubricAssignment;
-import csns.model.assessment.Rubricable;
 import csns.model.core.User;
 
 @Entity
 @Table(name = "sections", uniqueConstraints = @UniqueConstraint(columnNames = {
     "quarter", "course_id", "number" }))
-public class Section implements Rubricable, Serializable, Comparable<Section> {
+public class Section implements Serializable, Comparable<Section> {
 
     private static final long serialVersionUID = 1L;
 
@@ -138,13 +137,6 @@ public class Section implements Rubricable, Serializable, Comparable<Section> {
             if( instructor.getId().equals( user.getId() ) ) return true;
 
         return false;
-    }
-
-    // for Rubricable
-    @Override
-    public String getType()
-    {
-        return "Section";
     }
 
     public Long getId()

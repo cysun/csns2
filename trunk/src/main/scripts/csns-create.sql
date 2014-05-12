@@ -1202,15 +1202,21 @@ create table rubric_external_evaluators (
   primary key (rubric_assignment_id, evaluator_id)
 );
 
+create table rubric_submissions (
+    id                          bigint primary key,
+    assignment_id               bigint not null references rubric_assignments(id),
+    student_id                  bigint not null references users(id),
+    instructor_evaluation_count integer not null default 0,
+    peer_evaluation_count       integer not null default 0,
+    external_evaluation_count   integer not null default 0
+);
+
 create table rubric_evaluations (
     id              bigint primary key,
-    type            integer, -- instructor, peer, or external
-    rubric_id       bigint references rubrics(id),
+    type            varchar(255) not null, -- INSTRUCOTR, PEER, or EXTERNAL
+    submission_id   bigint references rubric_submissions(id),
     evaluator_id    bigint references users(id),
-    evaluatee_id    bigint references users(id),
     comments        varchar(8000),
-    rubricable_id   bigint,
-    rubricable_type varchar(255),
     date            timestamp default current_timestamp,
     deleted         boolean not null default 'f'
 );

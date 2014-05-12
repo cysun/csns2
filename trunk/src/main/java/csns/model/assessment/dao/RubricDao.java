@@ -30,7 +30,11 @@ public interface RubricDao {
 
     List<Rubric> getDepartmentRubrics( Department department );
 
+    List<Rubric> getPublishedDepartmentRubrics( Department department );
+
     List<Rubric> getPersonalRubrics( User creator );
+
+    List<Rubric> getPublishedPersonalRubrics( User creator );
 
     List<Rubric> searchRubrics( String term, int maxResults );
 

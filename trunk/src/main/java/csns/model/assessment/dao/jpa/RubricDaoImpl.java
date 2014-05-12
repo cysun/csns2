@@ -18,6 +18,7 @@
  */
 package csns.model.assessment.dao.jpa;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -59,6 +60,19 @@ public class RubricDaoImpl implements RubricDao {
     }
 
     @Override
+    public List<Rubric> getPublishedDepartmentRubrics( Department department )
+    {
+        String query = "from Rubric where department = :department "
+            + "and publishDate is not null and publishDate < :now "
+            + "and deleted = false order by name asc";
+
+        return entityManager.createQuery( query, Rubric.class )
+            .setParameter( "department", department )
+            .setParameter( "now", Calendar.getInstance() )
+            .getResultList();
+    }
+
+    @Override
     public List<Rubric> getPersonalRubrics( User creator )
     {
         String query = "from Rubric where department is null "
@@ -66,6 +80,20 @@ public class RubricDaoImpl implements RubricDao {
 
         return entityManager.createQuery( query, Rubric.class )
             .setParameter( "creator", creator )
+            .getResultList();
+    }
+
+    @Override
+    public List<Rubric> getPublishedPersonalRubrics( User creator )
+    {
+        String query = "from Rubric where department is null "
+            + "and creator = :creator and publishDate is not null "
+            + "and publishDate < :now and deleted = false "
+            + "order by name asc";
+
+        return entityManager.createQuery( query, Rubric.class )
+            .setParameter( "creator", creator )
+            .setParameter( "now", Calendar.getInstance() )
             .getResultList();
     }
 

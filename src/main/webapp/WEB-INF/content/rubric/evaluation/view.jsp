@@ -31,11 +31,12 @@ $(function(){
 			success: function(){
 		        cell.siblings().removeClass("selected");
 		        cell.addClass("selected");
-			}
+			},
+			cache: false
 		});
 	});
     $("#ok").click(function(){
-        window.location.href = "../submission/view?id=${submission.id}";
+        window.location.href = "../../submission/${role}/view?id=${submission.id}";
     });
 });
 </script>
@@ -43,9 +44,9 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code}
    - ${section.number}</a></li>
-<li><a class="bc" href="../submission/list?assignmentId=${assignment.id}"><csns:truncate
+<li><a class="bc" href="../../submission/${role}/list?assignmentId=${assignment.id}"><csns:truncate
   value="${assignment.name}" length="50" /></a></li>
-<li><a class="bc" href="../submission/view?id=${submission.id}"><csns:truncate
+<li><a class="bc" href="../../submission/${role}/view?id=${submission.id}"><csns:truncate
   value="${submission.student.name}" length="25" /></a></li>
 <li>Evaluate</li>
 </ul>
@@ -68,10 +69,10 @@ $(function(){
   <tr>
   <c:forEach begin="0" end="${rubric.scale-1}" step="1" var="index">
     <td id="ic-${status.index}-${index}" 
-      <c:if test="${evaluation.ratings[status.index] == index}">
+      <c:if test="${evaluation.ratings[status.index] == index+1}">
         class="indicator-criterion selected"
       </c:if>
-      <c:if test="${evaluation.ratings[status.index] != index}">
+      <c:if test="${evaluation.ratings[status.index] != index+1}">
         class="indicator-criterion"
       </c:if>
     >${indicator.criteria[index]}</td>

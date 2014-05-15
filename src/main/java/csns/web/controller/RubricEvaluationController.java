@@ -18,15 +18,19 @@
  */
 package csns.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import csns.model.assessment.RubricEvaluation;
 import csns.model.assessment.dao.RubricEvaluationDao;
+import csns.security.SecurityUtils;
 
 @Controller
 public class RubricEvaluationController {
@@ -34,21 +38,30 @@ public class RubricEvaluationController {
     @Autowired
     private RubricEvaluationDao rubricEvaluationDao;
 
-    @RequestMapping("/rubric/evaluation/view")
-    public String view( @RequestParam Long id, ModelMap models )
+    private static final Logger logger = LoggerFactory.getLogger( RubricEvaluationController.class );
+
+    @RequestMapping("/rubric/evaluation/{role}/view")
+    public String view( @PathVariable String role, @RequestParam Long id,
+        ModelMap models )
     {
+        models.put( "role", role );
         models.put( "evaluation", rubricEvaluationDao.getRubricEvaluation( id ) );
         return "rubric/evaluation/view";
     }
 
-    @RequestMapping("/rubric/evaluation/set")
+    @RequestMapping("/rubric/evaluation/{role}/set")
     @ResponseBody
     public String set( @RequestParam Long id, @RequestParam int index,
         @RequestParam int value )
     {
         RubricEvaluation evaluation = rubricEvaluationDao.getRubricEvaluation( id );
-        evaluation.getRatings().set( index, value );
+        evaluation.getRatings().set( index, value + 1 );
         rubricEvaluationDao.saveRubricEvaluation( evaluation );
+
+        logger.info( SecurityUtils.getUser().getUsername() + " rated "
+            + (value + 1) + " for indicator " + index
+            + " in rubric evaluation " + id );
+
         return "";
     }
 

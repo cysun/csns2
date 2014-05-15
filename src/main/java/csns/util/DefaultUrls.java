@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -45,8 +45,17 @@ public class DefaultUrls {
         Cookie cookie = WebUtils.getCookie( request, "default-home" );
         if( cookie != null ) return cookie.getValue();
 
-        return user.isAdmin() ? "/user/search" : user.isFaculty()
-            || user.isInstructor() ? "/section/taught" : "/section/taken";
+        String homeUrl;
+        if( user.isAdmin() )
+            homeUrl = "/user/search";
+        else if( user.isFaculty() || user.isInstructor() )
+            homeUrl = "/section/taught";
+        else if( user.isEvaluator() )
+            homeUrl = "/section/evaluated";
+        else
+            homeUrl = "/section/taken";
+
+        return homeUrl;
     }
 
     public String anonymousHomeUrl( HttpServletRequest request )

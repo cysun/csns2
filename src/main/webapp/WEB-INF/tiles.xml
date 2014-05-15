@@ -319,6 +319,11 @@
         <put-attribute name="content" value="/WEB-INF/content/section/taken.jsp" />
     </definition>
 
+    <definition name="section/evaluated" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/evaluated.jsp" />
+    </definition>
+
     <definition name="section/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Section" />
         <put-attribute name="content" value="/WEB-INF/content/section/edit.jsp" />
@@ -863,14 +868,24 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/assignment/edit.jsp" />
     </definition>
 
-    <definition name="rubric/submission/list" extends="layout.jqueryui">
+    <definition name="rubric/submission/list/instructor" extends="layout.jqueryui">
         <put-attribute name="title" value="Rubric Submissions" />
-        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/instructor.jsp" />
     </definition>
 
-    <definition name="rubric/submission/view" extends="layout.jqueryui">
+    <definition name="rubric/submission/list/evaluator" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/evaluator.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view/instructor" extends="layout.jqueryui">
         <put-attribute name="title" value="Rubric Submission" />
-        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/instructor.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view/evaluator" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/evaluator.jsp" />
     </definition>
 
     <definition name="rubric/evaluation/view" extends="layout.jqueryui">

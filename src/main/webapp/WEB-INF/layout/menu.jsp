@@ -36,6 +36,10 @@ $(function(){
     <li><a href="<c:url value='/section/taught' />"><img alt=""
          src="<c:url value='/img/icons/user_suit.png' />" />Instructor</a></li>
     </security:authorize>
+    <security:authorize access="principal.evaluator">
+    <li><a href="<c:url value='/section/evaluated' />"><img alt=""
+         src="<c:url value='/img/icons/user_gray.png' />" />Evaluator</a></li>
+    </security:authorize>
     <li><a href="<c:url value='/section/taken' />"><img alt=""
            src="<c:url value='/img/icons/user_green.png' />" />Student</a></li>
   </ul></div>

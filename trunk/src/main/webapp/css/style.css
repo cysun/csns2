@@ -1014,6 +1014,14 @@ tr th.shrink, tr td.shrink {
 	font-size: 14px;
 }
 
+.evaluation-type {
+    color: #164FA6;
+    font-size: 14px;
+    font-weight: bold;
+    background: #ffffff url(../img/style/title_bg.gif) repeat top center;
+    height: 30px;
+}
+
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

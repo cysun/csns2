@@ -114,6 +114,12 @@ public class SectionController {
                 view = "section/taken";
                 break;
 
+            case "evaluated":
+                quarters = quarterDao.getQuartersByEvaluator( user );
+                sections = sectionDao.getSectionsByEvaluator( user, quarter );
+                view = "section/evaluated";
+                break;
+
             default:
                 logger.warn( "Invalid section type: " + type );
         }
@@ -124,6 +130,7 @@ public class SectionController {
         Quarter nextQuarter = currentQuarter.next();
         if( !quarters.contains( nextQuarter ) ) quarters.add( 0, nextQuarter );
 
+        models.put( "user", user );
         models.put( "quarter", quarter );
         models.put( "quarters", quarters );
         models.put( "sections", sections );
@@ -152,6 +159,18 @@ public class SectionController {
         response.addCookie( cookie );
 
         return list( "taken", quarter, models, session );
+    }
+
+    @RequestMapping("/section/evaluated")
+    public String evaluated( @RequestParam(required = false) Quarter quarter,
+        ModelMap models, HttpSession session, HttpServletResponse response )
+    {
+        Cookie cookie = new Cookie( "default-home", "/section/evaluated" );
+        cookie.setPath( "/" );
+        cookie.setMaxAge( 100000000 );
+        response.addCookie( cookie );
+
+        return list( "evaluated", quarter, models, session );
     }
 
     @RequestMapping("/section/add")

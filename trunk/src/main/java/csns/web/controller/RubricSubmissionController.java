@@ -25,6 +25,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,8 +47,9 @@ public class RubricSubmissionController {
     @Autowired
     private RubricSubmissionDao rubricSubmissionDao;
 
-    @RequestMapping("/rubric/submission/list")
-    public String list( @RequestParam Long assignmentId, ModelMap models )
+    @RequestMapping("/rubric/submission/{role}/list")
+    public String list( @PathVariable String role,
+        @RequestParam Long assignmentId, ModelMap models )
     {
         RubricAssignment assignment = rubricAssignmentDao.getRubricAssignment( assignmentId );
 
@@ -78,11 +80,13 @@ public class RubricSubmissionController {
         assignment = rubricAssignmentDao.saveRubricAssignment( assignment );
 
         models.put( "assignment", assignment );
-        return "rubric/submission/list";
+        // Instructor, evaluator, and student will see different views.
+        return "rubric/submission/list/" + role;
     }
 
-    @RequestMapping("/rubric/submission/view")
-    public String view( @RequestParam Long id, ModelMap models )
+    @RequestMapping("/rubric/submission/{role}/view")
+    public String view( @PathVariable String role, @RequestParam Long id,
+        ModelMap models )
     {
         RubricSubmission submission = rubricSubmissionDao.getRubricSubmission( id );
 
@@ -100,7 +104,7 @@ public class RubricSubmissionController {
         }
 
         models.put( "submission", submission );
-        return "rubric/submission/view";
+        return "rubric/submission/view/" + role;
     }
 
 }

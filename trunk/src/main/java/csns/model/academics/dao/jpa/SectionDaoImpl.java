@@ -152,11 +152,12 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public List<Section> getSectionsByEvaluator( User evaluator, Quarter quarter )
     {
-        String query = "select section from Section section "
+        String query = "select distinct section from Section section "
             + "join section.rubricAssignments assignment "
             + "join assignment.externalEvaluators evaluator "
             + "where evaluator = :evaluator and section.quarter = :quarter "
-            + "order by section.course.code asc, section.number asc";
+            + "order by section.id asc";
+//            + "order by section.course.code asc, section.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "evaluator", evaluator )

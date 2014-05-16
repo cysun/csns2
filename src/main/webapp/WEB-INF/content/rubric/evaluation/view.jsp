@@ -36,7 +36,14 @@ $(function(){
 		});
 	});
     $("#ok").click(function(){
+      <c:choose>
+    	<c:when test="${role == 'student'}">
+        window.location.href = "../../submission/student/list?assignmentId=${assignment.id}";
+        </c:when>
+        <c:otherwise>
         window.location.href = "../../submission/${role}/view?id=${submission.id}";
+        </c:otherwise>
+      </c:choose>
     });
 });
 </script>
@@ -46,9 +53,14 @@ $(function(){
    - ${section.number}</a></li>
 <li><a class="bc" href="../../submission/${role}/list?assignmentId=${assignment.id}"><csns:truncate
   value="${assignment.name}" length="50" /></a></li>
+<c:if test="${role == 'instructor' or role == 'evaluator'}">
 <li><a class="bc" href="../../submission/${role}/view?id=${submission.id}"><csns:truncate
   value="${submission.student.name}" length="25" /></a></li>
 <li>Evaluate</li>
+</c:if>
+<c:if test="${role == 'student'}">
+<li>${submission.student.name}</li>
+</c:if>
 </ul>
 
 <h3>${rubric.name}</h3>

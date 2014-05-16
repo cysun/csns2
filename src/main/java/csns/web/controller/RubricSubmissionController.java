@@ -79,6 +79,7 @@ public class RubricSubmissionController {
         }
         assignment = rubricAssignmentDao.saveRubricAssignment( assignment );
 
+        models.put( "user", SecurityUtils.getUser() );
         models.put( "assignment", assignment );
         // Instructor, evaluator, and student will see different views.
         return "rubric/submission/list/" + role;
@@ -94,12 +95,21 @@ public class RubricSubmissionController {
         {
             User user = SecurityUtils.getUser();
             RubricEvaluation evaluation = submission.getEvaluation( user );
-            if( evaluation == null )
+            if( evaluation == null
+                && !submission.getStudent().isSameUser( user ) )
             {
                 evaluation = new RubricEvaluation( submission, user );
                 submission.addEvaluation( evaluation );
                 submission = rubricSubmissionDao.saveRubricSubmission( submission );
             }
+
+            evaluation = submission.getEvaluation( user );
+            // Students don't get a ViewRubricSubmission page. If it's a
+            // student, they are redirected to the ViewRubricEvaluation page.
+            if( role.equalsIgnoreCase( "student" ) )
+                return "redirect:/rubric/evaluation/student/view?id="
+                    + evaluation.getId();
+
             models.put( "evaluation", submission.getEvaluation( user ) );
         }
 

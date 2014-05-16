@@ -21,6 +21,8 @@ package csns.model.assessment.dao.jpa;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class RubricEvaluationDaoImpl implements RubricEvaluationDao {
     private EntityManager entityManager;
 
     @Override
+    @PostAuthorize("returnObject.evaluator.isSameUser(principal)")
     public RubricEvaluation getRubricEvaluation( Long id )
     {
         return entityManager.find( RubricEvaluation.class, id );
@@ -41,6 +44,7 @@ public class RubricEvaluationDaoImpl implements RubricEvaluationDao {
 
     @Override
     @Transactional
+    @PreAuthorize("#evaluation.evaluator.isSameUser(principal)")
     public RubricEvaluation saveRubricEvaluation( RubricEvaluation evaluation )
     {
         return entityManager.merge( evaluation );

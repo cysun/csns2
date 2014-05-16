@@ -21,6 +21,8 @@ package csns.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,10 +53,14 @@ public class RubricEvaluationController {
 
     @RequestMapping("/rubric/evaluation/{role}/set")
     @ResponseBody
-    public String set( @RequestParam Long id, @RequestParam int index,
-        @RequestParam int value )
+    public ResponseEntity<String> set( @RequestParam Long id,
+        @RequestParam int index, @RequestParam int value )
     {
         RubricEvaluation evaluation = rubricEvaluationDao.getRubricEvaluation( id );
+        // Ignore the request if the rubric assignment is already past due.
+        if( evaluation.getSubmission().getAssignment().isPastDue() )
+            return new ResponseEntity<String>( HttpStatus.BAD_REQUEST );
+
         evaluation.getRatings().set( index, value + 1 );
         rubricEvaluationDao.saveRubricEvaluation( evaluation );
 
@@ -62,7 +68,7 @@ public class RubricEvaluationController {
             + (value + 1) + " for indicator " + index
             + " in rubric evaluation " + id );
 
-        return "";
+        return new ResponseEntity<String>( HttpStatus.OK );
     }
 
 }

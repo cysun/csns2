@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import csns.model.academics.Project;
 import csns.model.academics.dao.ProjectDao;
 import csns.model.core.Resource;
+import csns.model.core.User;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 
@@ -52,8 +53,18 @@ public class ProjectResourceController {
         @RequestParam Long projectId, @RequestParam Long resourceId,
         ModelMap models, HttpServletResponse response )
     {
+        User user = SecurityUtils.getUser();
         Project project = projectDao.getProject( projectId );
         Resource resource = project.getResource( resourceId );
+
+        if( resource.isPrivate() && !project.isMember( user ) )
+        {
+            String backUrl = "/department/" + dept + "/project/view?id="
+                + projectId;
+            models.put( "backUrl", backUrl );
+            models.put( "message", "error.project.resource.private" );
+            return "error";
+        }
 
         switch( resource.getType() )
         {

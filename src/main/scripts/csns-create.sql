@@ -78,7 +78,8 @@ create table resources (
     type    integer not null,
     text    text,
     file_id bigint references files(id),
-    url     varchar(2000)
+    url     varchar(2000),
+    private boolean not null default 'f'
 );
 
 alter table resources add column tsv tsvector;
@@ -1041,6 +1042,7 @@ create table projects (
     id              bigint primary key,
     title           varchar(255) not null,
     description     varchar(8000),
+    sponsor         varchar(255),
     department_id   bigint references departments(id),
     year            integer not null,
     published       boolean not null default 'f',
@@ -1073,6 +1075,12 @@ create table project_students (
     project_id  bigint not null references projects(id),
     student_id  bigint not null references users(id),
   primary key (project_id, student_id)
+);
+
+create table project_liaisons (
+    project_id  bigint not null references projects(id),
+    liaison_id  bigint not null references users(id),
+  primary key (project_id, liaison_id)
 );
 
 create table project_resources (

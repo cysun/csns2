@@ -23,7 +23,7 @@
         <put-list-attribute name="jsUrls">
             <add-attribute value="${ckeditor.url}" />
             <add-attribute value="${jqueryui.url}" />
-            <add-attribute value="${jquery.plugins}/jquery-jeditable.js" />
+            <add-attribute value="${jquery.plugins}/jquery.jeditable.js" />
             <add-attribute value="${jquery.plugins}/jquery.maskedinput.min.js" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
@@ -763,12 +763,12 @@
         <put-attribute name="content" value="/WEB-INF/content/project/resource/view.jsp" />
     </definition>
 
-    <definition name="project/resource/add" extends="layout.editor">
+    <definition name="project/resource/add" extends="layout.qa">
         <put-attribute name="title" value="Add Resource" />
         <put-attribute name="content" value="/WEB-INF/content/project/resource/add.jsp" />
     </definition>
 
-    <definition name="project/resource/edit" extends="layout.editor">
+    <definition name="project/resource/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Resource" />
         <put-attribute name="content" value="/WEB-INF/content/project/resource/edit.jsp" />
     </definition>

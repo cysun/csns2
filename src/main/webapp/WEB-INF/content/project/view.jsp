@@ -37,17 +37,29 @@ $(function(){
 
 <div class="project-title">${project.title}</div>
 
+<c:if test="${not empty project.sponsor}">
+<div class="project-sponsor">Sponsored by ${project.sponsor}</div>
+</c:if>
+
 <div class="project-members">
   <c:forEach items="${project.students}" var="student" varStatus="status">
     ${student.name}<c:if test="${not status.last}">, </c:if>
   </c:forEach>
 </div>
 
-<div class="project-advisors"> Advisor(s): 
+<div class="project-advisors"> Advisor: 
   <c:forEach items="${project.advisors}" var="advisor" varStatus="status">
     ${advisor.name}<c:if test="${not status.last}">, </c:if>
   </c:forEach>
 </div>
+
+<c:if test="${fn:length(project.liaisons) > 0}">
+<div class="project-liaisons"> Liaison: 
+  <c:forEach items="${project.liaisons}" var="liaison" varStatus="status">
+    ${liaison.name}<c:if test="${not status.last}">, </c:if>
+  </c:forEach>
+</div>
+</c:if>
 
 ${project.description}
 
@@ -63,7 +75,11 @@ ${project.description}
 <tbody>
   <c:forEach items="${project.resources}" var="resource">
   <tr id="${resource.id}">
-    <td><a href="resource/view?projectId=${project.id}&amp;resourceId=${resource.id}">${resource.name}</a></td>
+    <td>
+      <c:if test="${resource.isPrivate()}"><img border="0" alt="[Private Resource]"
+          title="Private Resource" src="<c:url value='/img/icons/lock.png' />" /></c:if>
+      <a href="resource/view?projectId=${project.id}&amp;resourceId=${resource.id}">${resource.name}</a>
+    </td>
     <c:if test="${project.isMember(user) or user.isFaculty(dept)}">
     <td class="center">
       <a href="resource/edit?projectId=${project.id}&amp;resourceId=${resource.id}"><img alt="[Edit Resource]"

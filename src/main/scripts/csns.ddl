@@ -362,6 +362,11 @@
         advisor_id int8 not null
     );
 
+    create table project_liaisons (
+        project_id int8 not null,
+        liaison_id int8 not null
+    );
+
     create table project_resources (
         project_id int8 not null,
         resource_id int8 not null,
@@ -379,6 +384,7 @@
         deleted boolean not null,
         description varchar(255),
         published boolean not null,
+        sponsor varchar(255),
         title varchar(255) not null,
         year int4 not null,
         department_id int8,
@@ -418,11 +424,11 @@
         point_value int4 not null,
         max_selections int4,
         min_selections int4,
-        max_rating int4,
-        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -430,6 +436,7 @@
 
     create table resources (
         id int8 not null,
+        private boolean not null,
         name varchar(255),
         text varchar(255),
         type int4,
@@ -1146,6 +1153,16 @@
 
     alter table project_advisors 
         add constraint FK_hp6rohtsc7nlsh6t5wxhyrpur 
+        foreign key (project_id) 
+        references projects;
+
+    alter table project_liaisons 
+        add constraint FK_sxe2bc8jnmy4ckjb1t3pfkdj4 
+        foreign key (liaison_id) 
+        references users;
+
+    alter table project_liaisons 
+        add constraint FK_lxjadsx4jvo3rq2r3ip0c6fy 
         foreign key (project_id) 
         references projects;
 

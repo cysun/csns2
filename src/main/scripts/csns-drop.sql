@@ -29,6 +29,7 @@ drop table mft_indicators;
 drop table mft_scores;
 
 drop table project_resources;
+drop table project_liaisons;
 drop table project_students;
 drop table project_advisors;
 drop trigger projects_ts_trigger on projects;

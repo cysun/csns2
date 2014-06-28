@@ -32,12 +32,13 @@ $(function(){
 <c:if test="${fn:length(projects) > 0}">
 <table class="viewtable">
 <tr>
-  <th>Project</th><th>Students</th><th>Advisors</th>
+  <th>Project</th><th>Sponsor</th><th>Student</th><th>Advisor</th>
 </tr>
 <c:forEach items="${projects}" var="project">
 <c:if test="${project.published or user.isFaculty(dept) or project.isMember(user)}">
 <tr <c:if test="${not project.published}">style="color: gray;"</c:if>>
   <td><a href="project/view?id=${project.id}">${project.title}</a></td>
+  <td class="center" style="width: 100px;">${project.sponsor}</td>
   <td style="width: 250px;">
     <c:forEach items="${project.students}" var="student" varStatus="status">
       ${student.name}<c:if test="${not status.last}">, </c:if>

@@ -55,6 +55,8 @@ public class Project implements Serializable {
 
     private String description;
 
+    private String sponsor;
+
     @ManyToMany
     @JoinTable(name = "project_students",
         joinColumns = @JoinColumn(name = "project_id"),
@@ -68,6 +70,13 @@ public class Project implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "advisor_id"))
     @OrderBy("lastName asc")
     private List<User> advisors;
+
+    @ManyToMany
+    @JoinTable(name = "project_liaisons",
+        joinColumns = @JoinColumn(name = "project_id"),
+        inverseJoinColumns = @JoinColumn(name = "liaison_id"))
+    @OrderBy("lastName asc")
+    private List<User> liaisons;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "project_resources",
@@ -101,7 +110,7 @@ public class Project implements Serializable {
 
     public boolean isMember( User user )
     {
-        return isStudent( user ) || isAdvisor( user );
+        return isStudent( user ) || isAdvisor( user ) || isLiaison( user );
     }
 
     public boolean isStudent( User user )
@@ -120,6 +129,16 @@ public class Project implements Serializable {
 
         for( User advisor : advisors )
             if( advisor.getId().equals( user.getId() ) ) return true;
+
+        return false;
+    }
+
+    public boolean isLiaison( User user )
+    {
+        if( user == null ) return false;
+
+        for( User liaison : liaisons )
+            if( liaison.getId().equals( user.getId() ) ) return true;
 
         return false;
     }
@@ -188,6 +207,16 @@ public class Project implements Serializable {
         this.description = description;
     }
 
+    public String getSponsor()
+    {
+        return sponsor;
+    }
+
+    public void setSponsor( String sponsor )
+    {
+        this.sponsor = sponsor;
+    }
+
     public List<User> getStudents()
     {
         return students;
@@ -206,6 +235,16 @@ public class Project implements Serializable {
     public void setAdvisors( List<User> advisors )
     {
         this.advisors = advisors;
+    }
+
+    public List<User> getLiaisons()
+    {
+        return liaisons;
+    }
+
+    public void setLiaisons( List<User> liaisons )
+    {
+        this.liaisons = liaisons;
     }
 
     public List<Resource> getResources()

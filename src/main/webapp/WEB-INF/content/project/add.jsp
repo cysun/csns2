@@ -38,6 +38,18 @@ function deletestudents( memberId )
     if( confirm(msg) )
       $("#students-"+memberId).remove();
 }
+function deleteadvisors( memberId )
+{
+    var msg = "Are you sure you want to remove this advisor?";
+    if( confirm(msg) )
+      $("#advisors-"+memberId).remove();
+}
+function deleteliaisons( memberId )
+{
+    var msg = "Are you sure you want to remove this liaison?";
+    if( confirm(msg) )
+      $("#liaisons-"+memberId).remove();
+}
 </script>
 
 <ul id="title">
@@ -57,6 +69,13 @@ function deletestudents( memberId )
   </tr>
 
   <tr>
+    <th>Sponsor</th>
+    <td>
+      <form:input path="sponsor" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
+    </td>
+  </tr>
+
+  <tr>
     <th>Description</th>
     <td><form:textarea path="description" rows="5" cols="80" /></td>
   </tr>
@@ -69,6 +88,11 @@ function deletestudents( memberId )
   <tr>
     <th>Advisors</th>
     <td><input id="advisors" type="text" class="forminput add" name="a" style="width: 150px;" /></td>
+  </tr>
+
+  <tr>
+    <th>Liaisons</th>
+    <td><input id="liaisons" type="text" class="forminput add" name="a" style="width: 150px;" /></td>
   </tr>
 
   <tr>

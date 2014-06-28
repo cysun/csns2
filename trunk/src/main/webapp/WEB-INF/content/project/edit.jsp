@@ -46,6 +46,12 @@ function deleteadvisors( memberId )
     if( confirm(msg) )
       $("#advisors-"+memberId).remove();
 }
+function deleteliaisons( memberId )
+{
+    var msg = "Are you sure you want to remove this liaison?";
+    if( confirm(msg) )
+      $("#liaisons-"+memberId).remove();
+}
 function deleteProject()
 {
     var msg = "Are you sure you want to delete this project?";
@@ -72,6 +78,13 @@ function deleteProject()
     <td>
       <form:input id="prj_title" path="title" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
       <div class="error"><form:errors path="title" /></div>
+    </td>
+  </tr>
+
+  <tr>
+    <th>Sponsor</th>
+    <td>
+      <form:input path="sponsor" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
     </td>
   </tr>
 
@@ -118,6 +131,28 @@ function deleteProject()
         <c:otherwise>
           <c:forEach items="${project.advisors}" var="advisor" varStatus="status">
             ${advisor.name}<c:if test="${not status.last}">, </c:if>
+          </c:forEach>
+        </c:otherwise>
+      </c:choose>
+    </td>
+  </tr>
+
+  <tr>
+    <th>Liaisons</th>
+    <td>
+      <c:choose>
+        <c:when test="${project.isAdvisor(user) or user.isFaculty(dept)}">
+          <c:forEach items="${project.liaisons}" var="liaison" varStatus="status">
+            <span id="liaisons-${liaison.id}">
+              <a href="javascript:deleteliaisons(${liaison.id})">${liaison.name}</a>,
+              <input type="hidden" name="liaisons" value="${liaison.id}" />
+            </span>
+          </c:forEach>
+          <input id="liaisons" type="text" class="forminput add" name="a" style="width: 150px;" />
+        </c:when>
+        <c:otherwise>
+          <c:forEach items="${project.liaisons}" var="liaison" varStatus="status">
+            ${liaison.name}<c:if test="${not status.last}">, </c:if>
           </c:forEach>
         </c:otherwise>
       </c:choose>

@@ -17,12 +17,20 @@ $(function(){
           toolbar : "Default"
         });
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
 function deleteResource()
 {
     var msg = "Are you sure you want to delete this resource?";
     if( confirm(msg) )
         window.location.href = "delete?projectId=${project.id}&resourceId=${resource.id}";
+}
+function help( name )
+{
+    $("#help-"+name).dialog("open");
 }
 </script>
 
@@ -44,6 +52,11 @@ function deleteResource()
       <form:input path="name" cssClass="leftinput" cssStyle="width: 99%;" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
     </td>
+  </tr>
+
+  <tr>
+    <th><csns:help name="private">Private</csns:help></th>
+    <td><form:checkbox path="private" /></td>
   </tr>
 
   <tr>
@@ -84,3 +97,7 @@ function deleteResource()
   <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
 </table>
 </form:form>
+
+<div id="help-private" class="help">
+A <em>private</em> resource can only be accessed by the people who are involved
+in the project, i.e. the students, advisors, and project liaisons.</div>

@@ -21,6 +21,7 @@ package csns.model.core;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -50,8 +51,12 @@ public class Resource implements Serializable {
 
     private String url;
 
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
+
     public Resource()
     {
+        isPrivate = false;
     }
 
     public Resource( String name )
@@ -131,6 +136,16 @@ public class Resource implements Serializable {
     public void setUrl( String url )
     {
         this.url = url;
+    }
+
+    public boolean isPrivate()
+    {
+        return isPrivate;
+    }
+
+    public void setPrivate( boolean isPrivate )
+    {
+        this.isPrivate = isPrivate;
     }
 
 }

@@ -970,7 +970,14 @@ tr th.shrink, tr td.shrink {
     color: #164FA6;
     font: 20px Impact, Charcoal, sans-serif;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 5px 0;
+}
+
+.project-sponsor {
+    color: #164FA6;
+    font: 16px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 5px 0;
 }
 
 .project-members {
@@ -978,10 +985,17 @@ tr th.shrink, tr td.shrink {
     font: 16px 'Trebuchet MS', Arial;
     font-weight: bold;
     text-align: center;
-    margin: 5px 0;
+    margin: 15px 0 5px;
 }
 
 .project-advisors {
+    color: #164FA6;
+    font: 16px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 5px 0;
+}
+
+.project-liaisons {
     color: #164FA6;
     font: 16px 'Trebuchet MS', Arial;
     text-align: center;

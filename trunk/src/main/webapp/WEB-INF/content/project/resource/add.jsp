@@ -17,7 +17,15 @@ $(function(){
           toolbar : "Default"
         });
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
 </script>
 
 <ul id="title">
@@ -49,6 +57,11 @@ $(function(){
     </td>
   </tr>
 
+  <tr>
+    <th><csns:help name="private">Private</csns:help></th>
+    <td><form:checkbox path="private" /></td>
+  </tr>
+
   <tr id="resTEXT" class="res">
     <th></th>
     <td>
@@ -76,3 +89,7 @@ $(function(){
   <tr><th></th><td><input class="subbutton" type="submit" value="Add" /></td></tr>
 </table>
 </form:form>
+
+<div id="help-private" class="help">
+A <em>private</em> resource can only be accessed by the people who are involved
+in the project, i.e. the students, advisors, and project liaisons.</div>

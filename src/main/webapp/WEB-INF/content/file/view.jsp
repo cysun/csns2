@@ -7,6 +7,7 @@ $(function() {
     $("#newFolderForm").hide();
     $("#uploadFileForm").hide();
     $("table").tablesorter();
+    $("input[name='parentId'][value='']").remove();
 });
 function toggleNewFolderForm()
 {

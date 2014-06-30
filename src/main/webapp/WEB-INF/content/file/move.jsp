@@ -5,6 +5,7 @@
 <script type="text/javascript">
 $(function() {
     $("#subfolders").hide();
+    $("input[name='destId'][value='']").remove();
 });
 function toggleSubfolders()
 {

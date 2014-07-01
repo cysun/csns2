@@ -97,7 +97,7 @@ public class SubmissionController {
             new CalendarPropertyEditor( "MM/dd/yyyy HH:mm:ss" ) );
     }
 
-    @RequestMapping(value = "submission/view", params = "id")
+    @RequestMapping(value = "/submission/view", params = "id")
     public String view1( @RequestParam Long id, ModelMap models )
     {
         models.put( "submission", submissionDao.getSubmission( id ) );

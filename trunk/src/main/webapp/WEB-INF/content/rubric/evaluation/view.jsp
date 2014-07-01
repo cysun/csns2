@@ -2,7 +2,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<c:set var="submission" value="${evaluation.submission}" />
 <c:set var="assignment" value="${submission.assignment}" />
 <c:set var="section" value="${assignment.section}" />
 <c:set var="rubric" value="${assignment.rubric}" />
@@ -18,6 +17,7 @@
 
 <script>
 $(function(){
+<c:if test="${not empty evaluation}">
 	$("td.indicator-criterion").click(function(){
 		var cell = $(this);
 		var values = $(this).attr("id").split("-");
@@ -35,6 +35,7 @@ $(function(){
 			cache: false
 		});
 	});
+</c:if>
     $("#ok").click(function(){
       <c:choose>
     	<c:when test="${role == 'student'}">
@@ -63,6 +64,18 @@ $(function(){
 </c:if>
 </ul>
 
+<c:if test="${empty evaluation}">
+  <c:choose>
+    <c:when test="${not assignment.published}">
+      <p>This assignment is not published yet.</p>
+    </c:when>
+    <c:otherwise>
+      <p>This assignment is past due.</p>
+    </c:otherwise>
+  </c:choose>
+</c:if>
+
+<c:if test="${not empty evaluation}">
 <h3>${rubric.name}</h3>
 
 <table class="viewtable">
@@ -93,5 +106,6 @@ $(function(){
 </c:forEach>
 </tbody>
 </table>
+</c:if> <%-- end of "not empty evaluation" --%>
 
 <p><button id="ok" class="subbutton">OK</button></p>

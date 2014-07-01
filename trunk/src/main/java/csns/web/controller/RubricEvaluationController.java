@@ -30,12 +30,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricEvaluation;
+import csns.model.assessment.RubricSubmission;
 import csns.model.assessment.dao.RubricEvaluationDao;
+import csns.model.assessment.dao.RubricSubmissionDao;
+import csns.model.core.User;
 import csns.security.SecurityUtils;
 
 @Controller
 public class RubricEvaluationController {
+
+    @Autowired
+    private RubricSubmissionDao rubricSubmissionDao;
 
     @Autowired
     private RubricEvaluationDao rubricEvaluationDao;
@@ -43,11 +50,27 @@ public class RubricEvaluationController {
     private static final Logger logger = LoggerFactory.getLogger( RubricEvaluationController.class );
 
     @RequestMapping("/rubric/evaluation/{role}/view")
-    public String view( @PathVariable String role, @RequestParam Long id,
-        ModelMap models )
+    public String view( @PathVariable String role,
+        @RequestParam Long submissionId, ModelMap models )
     {
+        User user = SecurityUtils.getUser();
+        RubricSubmission submission = rubricSubmissionDao.getRubricSubmission( submissionId );
+        RubricAssignment assignment = submission.getAssignment();
+        if( assignment.isPublished() && !assignment.isPastDue() )
+        {
+            RubricEvaluation evaluation = submission.getEvaluation( user );
+            if( evaluation == null
+                && !submission.getStudent().isSameUser( user ) )
+            {
+                evaluation = new RubricEvaluation( submission, user );
+                submission.addEvaluation( evaluation );
+                submission = rubricSubmissionDao.saveRubricSubmission( submission );
+            }
+        }
+
         models.put( "role", role );
-        models.put( "evaluation", rubricEvaluationDao.getRubricEvaluation( id ) );
+        models.put( "submission", submission );
+        models.put( "evaluation", submission.getEvaluation( user ) );
         return "rubric/evaluation/view";
     }
 

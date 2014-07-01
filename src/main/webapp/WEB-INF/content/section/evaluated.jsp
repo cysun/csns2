@@ -9,7 +9,7 @@ $(function(){
     });
     $("select[name='quarter']").change(function(){
         var quarter = $("select[name='quarter'] option:selected").val();
-        window.location.href = "taught?quarter=" + quarter;
+        window.location.href = "evaluated?quarter=" + quarter;
     });
     $(".viewtable").tablesorter({
         headers: { 3: {sorter: false} }

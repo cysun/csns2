@@ -10,7 +10,7 @@
 <script>
 $(function(){
 	$("#evaluate").click(function(){
-		window.location.href = "../../evaluation/instructor/view?id=${evaluation.id}";
+		window.location.href = "../../evaluation/instructor/view?submissionId=${submission.id}";
 	});
     $("#ok").click(function(){
         window.location.href = "list?assignmentId=${assignment.id}";
@@ -37,7 +37,10 @@ $(function(){
 </c:if>
 
 <c:if test="${assignment.published}">
+
+<c:if test="${not assignment.pastDue}">
 <p style="text-align: right;"><button id="evaluate" class="subbutton">Evaluate</button></p>
+</c:if>
 
 <table class="viewtable">
 <thead>

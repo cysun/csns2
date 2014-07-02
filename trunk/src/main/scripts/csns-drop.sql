@@ -137,6 +137,10 @@ drop table subscriptions;
 drop trigger resources_ts_trigger on resources;
 drop function resources_ts_trigger_function();
 drop table resources;
+
+alter table users drop constraint original_picture_id_fkey;
+alter table users drop constraint profile_picture_id_fkey;
+alter table users drop constraint profile_thumbnail_id_fkey;
 drop table files;
 
 drop table persistent_logins;

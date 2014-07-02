@@ -28,9 +28,9 @@ create table users (
     cell_phone              varchar(255),
     home_phone              varchar(255),
     work_phone              varchar(255),
-    original_picture_id     bigint references files(id),
-    profile_picture_id      bigint references files(id),
-    profile_thumbnail_id    bigint references files(id),
+    original_picture_id     bigint,
+    profile_picture_id      bigint,
+    profile_thumbnail_id    bigint,
     enabled                 boolean not null default 't',
     temporary               boolean not null default 'f',
     num_of_forum_posts      integer not null default 0,
@@ -74,6 +74,13 @@ create table files (
     regular         boolean not null default 'f',
     deleted         boolean not null default 'f'
 );
+
+alter table users add constraint original_picture_id_fkey
+    foreign key (original_picture_id) references files(id);
+alter table users add constraint profile_picture_id_fkey
+    foreign key (profile_picture_id) references files(id);
+alter table users add constraint profile_thumbnail_id_fkey
+    foreign key (profile_thumbnail_id) references files(id);
 
 create table resources (
     id      bigint primary key,

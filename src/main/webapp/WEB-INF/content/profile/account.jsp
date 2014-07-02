@@ -35,6 +35,19 @@ $(function() {
   <li><a href="<c:url value='/profile/mailinglists' />">Mailing List Subscriptions</a></li>
 </ul>
 <div id="account">
+
+<div style="float: right; margin-left: 1em;">
+<c:choose>
+<c:when test="${not empty user.profilePicture}">
+  <img src="<c:url value='/download.html?fileId=${user.profilePicture.id}' />"
+       alt="[Profile Picture]" title="Profile Picture" />
+</c:when>
+<c:otherwise>
+  <img src="<c:url value='/img/nopp.png' />" alt="[NoPP]" title="No Profile Picture" />
+</c:otherwise>
+</c:choose>
+</div>
+
 <table class="general autowidth">
   <tr>
     <th>Name</th>

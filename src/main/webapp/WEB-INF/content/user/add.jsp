@@ -38,7 +38,7 @@ function help( name )
 are the user's CIN. When the user logs onto the system for the first time,
 they will be asked to choose their own username and password.</p>
 
-<form:form modelAttribute="user">
+<form:form modelAttribute="user" enctype="multipart/form-data">
 <table class="general">
   <tr>
     <th>First Name *</th>
@@ -129,6 +129,12 @@ they will be asked to choose their own username and password.</p>
     </td>
   </tr>
   <tr>
+    <th><csns:help name="pp">Profile Picture</csns:help></th>
+    <td>
+      <input name="file" type="file" class="forminput" />
+    </td>
+  </tr>
+  <tr>
     <th></th>
     <td>
       <input type="submit" class="subbutton" value="Add" />
@@ -143,3 +149,7 @@ a faculty member, please click on <span class="tt">Generate CIN</span> to
 generate a CIN number for this user.</p>
 <p>Note that CIN is very important for the system, so if a user does have a CIN,
 please enter the real CIN; otherwise there will be problems later.</p></div>
+<div id="help-pp" class="help">
+<p><em>Profile picture</em> should be a square jpg or png image with at least
+320x320 resolution.</p>
+</div>

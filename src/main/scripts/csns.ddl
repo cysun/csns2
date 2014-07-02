@@ -58,8 +58,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -627,6 +627,9 @@
         username varchar(255) not null,
         work_phone varchar(255),
         zip varchar(255),
+        original_picture_id int8,
+        profile_picture_id int8,
+        profile_thumbnail_id int8,
         primary key (id)
     );
 
@@ -1355,6 +1358,21 @@
         add constraint FK_bu5cyb5by7ge6h0m8pergtx83 
         foreign key (user_id) 
         references users;
+
+    alter table users 
+        add constraint FK_c5mga1l7ury0q5lit8j53d43r 
+        foreign key (original_picture_id) 
+        references files;
+
+    alter table users 
+        add constraint FK_k0y369dffniq4d2myb2kbkw2h 
+        foreign key (profile_picture_id) 
+        references files;
+
+    alter table users 
+        add constraint FK_fx0l629tx63f2r40mn9qvxp3q 
+        foreign key (profile_thumbnail_id) 
+        references files;
 
     alter table wiki_discussions 
         add constraint FK_6yk6dpleuknebuqmajkjupxec 

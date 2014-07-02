@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -38,10 +38,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import csns.model.core.File;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.FileIO;
+import csns.util.ImageUtils;
 import csns.web.validator.AddUserValidator;
 import csns.web.validator.EditUserValidator;
 import csns.web.validator.RegistrationValidator;
@@ -66,6 +70,12 @@ public class UserControllerS {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private FileIO fileIO;
+
+    @Autowired
+    private ImageUtils imageUtils;
+
     private static final Logger logger = LoggerFactory.getLogger( UserControllerS.class );
 
     /*
@@ -87,8 +97,9 @@ public class UserControllerS {
     }
 
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
-    public String add( @ModelAttribute User user, BindingResult bindingResult,
-        SessionStatus sessionStatus )
+    public String add( @ModelAttribute User user, @RequestParam(value = "file",
+        required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         addUserValidator.validate( user, bindingResult );
         if( bindingResult.hasErrors() ) return "user/add";
@@ -103,6 +114,8 @@ public class UserControllerS {
         logger.info( SecurityUtils.getUser().getUsername() + " created user "
             + user.getId() );
 
+        handleProfilePicture( user, uploadedFile );
+
         sessionStatus.setComplete();
         return "redirect:/user/view?id=" + user.getId();
     }
@@ -115,8 +128,10 @@ public class UserControllerS {
     }
 
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
-    public String edit( @ModelAttribute User user, BindingResult bindingResult,
-        SessionStatus sessionStatus )
+    public String edit(
+        @ModelAttribute User user,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         editUserValidator.validate( user, bindingResult );
         if( bindingResult.hasErrors() ) return "user/edit";
@@ -129,8 +144,25 @@ public class UserControllerS {
         logger.info( SecurityUtils.getUser().getUsername() + " edit user "
             + user.getId() );
 
+        handleProfilePicture( user, uploadedFile );
+
         sessionStatus.setComplete();
         return "redirect:/user/view?id=" + user.getId();
+    }
+
+    private void handleProfilePicture( User user, MultipartFile uploadedFile )
+    {
+        if( uploadedFile == null || uploadedFile.isEmpty() ) return;
+
+        File picture0 = fileIO.save( uploadedFile, user, true );
+        File picture1 = imageUtils.resizeToProfilePicture( picture0 );
+        File picture2 = imageUtils.resizeToProfileThumbnail( picture0 );
+        user.setOriginalPicture( picture0 );
+        user.setProfilePicture( picture1 );
+        user.setProfileThumbnail( picture2 );
+        user = userDao.saveUser( user );
+
+        logger.info( "Saved profile picture for " + user.getUsername() );
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)

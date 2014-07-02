@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -59,6 +59,11 @@ public class FileIO {
     {
     }
 
+    public java.io.File getDiskFile( File file )
+    {
+        return new java.io.File( fileDir, file.getId().toString() );
+    }
+
     public File save( MultipartFile uploadedFile, User user, boolean isPublic )
     {
         return save( uploadedFile, user, null, isPublic );
@@ -78,8 +83,7 @@ public class FileIO {
         file.setPublic( isPublic );
         file = fileDao.saveFile( file );
 
-        String fileId = file.getId().toString();
-        java.io.File diskFile = new java.io.File( fileDir, fileId );
+        java.io.File diskFile = getDiskFile( file );
         try
         {
             uploadedFile.transferTo( diskFile );
@@ -104,8 +108,7 @@ public class FileIO {
 
     public void save( File file, MultipartFile uploadedFile )
     {
-        String fileId = file.getId().toString();
-        java.io.File diskFile = new java.io.File( fileDir, fileId );
+        java.io.File diskFile = getDiskFile( file );
         try
         {
             uploadedFile.transferTo( diskFile );
@@ -135,8 +138,7 @@ public class FileIO {
     {
         try
         {
-            String fileId = file.getId().toString();
-            java.io.File diskFile = new java.io.File( fileDir, fileId );
+            java.io.File diskFile = getDiskFile( file );
             FileInputStream in = new FileInputStream( diskFile );
             copy( in, out );
             in.close();
@@ -151,8 +153,7 @@ public class FileIO {
     {
         try
         {
-            String fileId = to.getId().toString();
-            java.io.File diskFile = new java.io.File( fileDir, fileId );
+            java.io.File diskFile = getDiskFile( to );
             FileOutputStream out = new FileOutputStream( diskFile );
             copy( from, out );
             out.close();
@@ -165,8 +166,7 @@ public class FileIO {
 
     public void delete( File file )
     {
-        String fileId = file.getId().toString();
-        java.io.File diskFile = new java.io.File( fileDir, fileId );
+        java.io.File diskFile = getDiskFile( file );
         if( !diskFile.delete() )
             logger.error( "Failed to delete file " + diskFile.getAbsolutePath() );
     }

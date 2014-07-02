@@ -36,6 +36,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -136,6 +137,21 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @JsonIgnore
     @Column(name = "work_phone")
     private String workPhone;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "original_picture_id")
+    private File originalPicture;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "profile_picture_id")
+    private File profilePicture;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "profile_thumbnail_id")
+    private File profileThumbnail;
 
     @JsonIgnore
     @Column(nullable = false)
@@ -613,6 +629,36 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setWorkPhone( String workPhone )
     {
         this.workPhone = workPhone;
+    }
+
+    public File getOriginalPicture()
+    {
+        return originalPicture;
+    }
+
+    public void setOriginalPicture( File originalPicture )
+    {
+        this.originalPicture = originalPicture;
+    }
+
+    public File getProfilePicture()
+    {
+        return profilePicture;
+    }
+
+    public void setProfilePicture( File profilePicture )
+    {
+        this.profilePicture = profilePicture;
+    }
+
+    public File getProfileThumbnail()
+    {
+        return profileThumbnail;
+    }
+
+    public void setProfileThumbnail( File profileThumbnail )
+    {
+        this.profileThumbnail = profileThumbnail;
     }
 
     public boolean isEnabled()

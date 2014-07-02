@@ -16,7 +16,14 @@ $(function(){
             if( ui.item )
                 window.location.href = "<c:url value='/user/view' />?id=" + ui.item.id;
         }
-    });
+    })
+    .autocomplete( "instance" )._renderItem = function(ul, item){
+        var li = $("<li>");
+        var downloadUrl = "<c:url value='/download.html?fileId=' />";
+        if( item.thumbnail )
+            li.append("<img src='" + downloadUrl + item.thumbnail + "' alt='' style='vertical-align: middle; margin-right: 0.5em;' />");
+        return li.append(item.label).appendTo(ul);
+    };
     $(".add").each(function(){
         $(this).autocomplete({
             source: "<c:url value='/autocomplete/user' />",

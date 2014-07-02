@@ -11,7 +11,14 @@ $(function(){
             if( ui.item )
                 window.location.href = "view?id=" + ui.item.id;
         }
-    });
+    })
+    .autocomplete( "instance" )._renderItem = function(ul, item){
+    	var li = $("<li>");
+    	var downloadUrl = "<c:url value='/download.html?fileId=' />";
+    	if( item.thumbnail )
+    		li.append("<img src='" + downloadUrl + item.thumbnail + "' alt='' style='vertical-align: middle; margin-right: 0.5em;' />");
+        return li.append(item.label).appendTo(ul);
+    };
     $("#selectAll").click(function(){
         var checked = $("#selectAll").is(":checked");
         $(":checkbox[name='userId']").prop("checked",checked);
@@ -21,6 +28,15 @@ $(function(){
             alert( "Please select the user(s) to contact." );
         else
             $("#usersForm").attr("action", "<c:url value='/email/compose' />").submit();
+    });
+    $(".thumbnails").mouseover(function(){
+    	$(".ui-dialog-content").dialog("close");
+        var downloadUrl = "<c:url value='/download.html?fileId=' />" + $(this).attr("name");
+    	$("<div>").append("<img src='" + downloadUrl + "' alt='' />").dialog({
+            autoOpen:       true,
+            height:         400,
+            width:          350
+    	});
     });
 });
 </script>
@@ -42,12 +58,18 @@ $(function(){
 <form id="usersForm" method="post">
 <table class="viewtable">
 <tr>
-  <th><input id="selectAll" type="checkbox" /></th>
+  <th><input id="selectAll" type="checkbox" /></th><th></th>
   <th>CIN</th><th>Name</th><th>Email</th><th></th>
 </tr>
 <c:forEach items="${users}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
+  <td class="shrink">
+    <c:if test="${not empty user.profileThumbnail}">
+    <img src="<c:url value='/download.html?fileId=${user.profileThumbnail.id}' />"
+      alt="[Profile Thumbnail]" class="thumbnails" name="${user.profilePicture.id}" />
+    </c:if>
+  </td>
   <td>${user.cin}</td>
   <td><a href="view?id=${user.id}">${user.name}</a></td>
   <td>

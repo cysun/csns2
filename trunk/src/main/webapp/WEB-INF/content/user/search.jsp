@@ -51,6 +51,7 @@ $(function(){
 
 <form action="search" method="get">
 <p><input id="search" name="term" type="text" class="forminput" size="40" />
+<input name="dept" type="hidden" value="${dept}" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>
 
@@ -67,7 +68,8 @@ $(function(){
   <td class="shrink">
     <c:if test="${not empty user.profileThumbnail}">
     <img src="<c:url value='/download.html?fileId=${user.profileThumbnail.id}' />"
-      alt="[Profile Thumbnail]" class="thumbnails" name="${user.profilePicture.id}" />
+      alt="[Profile Thumbnail]" class="thumbnails" name="${user.profilePicture.id}"
+      width="24" height="24" />
     </c:if>
   </td>
   <td>${user.cin}</td>

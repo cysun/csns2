@@ -74,10 +74,21 @@ public class UserController {
 
     @RequestMapping(value = "/user/search")
     public String search( @RequestParam(required = false) String term,
-        ModelMap models )
+        @RequestParam(required = false) String dept, ModelMap models )
     {
         List<User> users = null;
-        if( StringUtils.hasText( term ) ) users = userDao.searchUsers( term );
+        if( StringUtils.hasText( term ) )
+        {
+            if( term.toLowerCase().contains( "standing:" ) )
+            {
+                String words[] = term.split( ":" );
+                if( words.length > 1 )
+                    users = userDao.searchUsersByStanding( dept,
+                        words[1].trim() );
+            }
+            else
+                users = userDao.searchUsers( term );
+        }
         models.addAttribute( "users", users );
         return "user/search";
     }

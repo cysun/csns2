@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -39,6 +39,8 @@ public interface UserDao {
     List<User> searchUsers( String term );
 
     List<User> searchUsersByPrefix( String term, int maxResults );
+
+    List<User> searchUsersByStanding( String dept, String sybmol );
 
     User saveUser( User user );
 

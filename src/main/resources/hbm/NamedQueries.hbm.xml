@@ -172,4 +172,17 @@ select * from rubrics where deleted = 'f' and public = 't'
 ]]>
     </sql-query>
 
+    <sql-query name="user.search.by.standing">
+        <return class="csns.model.core.User" />
+<![CDATA[
+select u.* from users u
+    inner join current_standings c on c.student_id = u.id
+    inner join departments d on c.department_id = d.id
+    inner join academic_standings a on c.academic_standing_id = a.id
+    inner join standings s on a.standing_id = s.id
+    where d.abbreviation = :dept and s.symbol = :symbol
+    order by u.first_name, u.last_name
+]]>    
+    </sql-query>
+
 </hibernate-mapping>

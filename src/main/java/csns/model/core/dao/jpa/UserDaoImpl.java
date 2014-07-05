@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -142,6 +142,16 @@ public class UserDaoImpl implements UserDao {
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )
             .setMaxResults( maxResults )
+            .getResultList();
+    }
+
+    @Override
+    public List<User> searchUsersByStanding( String dept, String symbol )
+    {
+        return entityManager.createNamedQuery( "user.search.by.standing",
+            User.class )
+            .setParameter( "dept", dept )
+            .setParameter( "symbol", symbol.toUpperCase() )
             .getResultList();
     }
 

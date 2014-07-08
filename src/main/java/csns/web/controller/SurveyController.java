@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -24,10 +24,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +46,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.core.User;
 import csns.model.qa.Question;
 import csns.model.qa.QuestionSection;
 import csns.model.survey.Survey;
+import csns.model.survey.SurveyType;
 import csns.model.survey.dao.SurveyDao;
 import csns.security.SecurityUtils;
 
@@ -54,6 +62,9 @@ public class SurveyController {
 
     @Autowired
     private DepartmentDao departmentDao;
+
+    @Resource(name = "contentTypes")
+    private Properties contentTypes;
 
     private static final Logger logger = LoggerFactory.getLogger( SurveyController.class );
 
@@ -262,6 +273,96 @@ public class SurveyController {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
         return "survey/results";
+    }
+
+    @RequestMapping(value = "/department/{dept}/survey/results",
+        params = "export=excel")
+    public String exportExcel( @RequestParam Long id,
+        HttpServletResponse response ) throws IOException
+    {
+        Survey survey = surveyDao.getSurvey( id );
+        Workbook wb = new XSSFWorkbook();
+
+        for( int i = 0; i < survey.getQuestionSheet().getNumOfSections(); ++i )
+            exportExcel( survey, i, wb );
+
+        response.setContentType( contentTypes.getProperty( "xlsx" ) );
+        response.setHeader( "Content-Disposition", "attachment; filename="
+            + survey.getName().replaceAll( " ", "_" ) + "_Results.xlsx" );
+
+        wb.write( response.getOutputStream() );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " exported the results of survey " + survey.getId() );
+
+        return null;
+    }
+
+    private void exportExcel( Survey survey, int sectionIndex, Workbook wb )
+    {
+        Sheet sheet = wb.createSheet( "Section " + (sectionIndex + 1) );
+        int numOfResponses = survey.getNumOfResponses();
+
+        // The first column is the timestamp of the response.
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
+        Row row = sheet.createRow( 0 );
+        row.createCell( 0 ).setCellValue( "Date" );
+        for( int i = 0; i < numOfResponses; ++i )
+            sheet.createRow( 1 + i )
+                .createCell( 0 )
+                .setCellValue(
+                    dateFormat.format( survey.getResponses()
+                        .get( i )
+                        .getAnswerSheet()
+                        .getDate() ) );
+
+        // If the survey is NAMED, the next two columns are the CIN and name
+        // of the respondent.
+        int startColumnIndex = 1;
+        if( survey.getType() == SurveyType.NAMED )
+        {
+            row = sheet.getRow( 0 );
+            row.createCell( 1 ).setCellValue( "CIN" );
+            row.createCell( 2 ).setCellValue( "Name" );
+            for( int i = 0; i < numOfResponses; ++i )
+            {
+                User respondent = survey.getResponses()
+                    .get( i )
+                    .getAnswerSheet()
+                    .getAuthor();
+                row = sheet.getRow( 1 + i );
+                row.createCell( 1 ).setCellValue( respondent.getCin() );
+                row.createCell( 2 )
+                    .setCellValue(
+                        respondent.getLastName() + ", "
+                            + respondent.getFirstName() );
+            }
+            startColumnIndex = 3;
+        }
+
+        int numOfQuestions = survey.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex )
+            .getQuestions()
+            .size();
+        for( int i = 0; i < numOfQuestions; ++i )
+        {
+            sheet.getRow( 0 )
+                .createCell( startColumnIndex + i )
+                .setCellValue( "Q" + (i + 1) );
+            for( int j = 0; j < numOfResponses; ++j )
+                sheet.getRow( 1 + j )
+                    .createCell( startColumnIndex + i )
+                    .setCellValue(
+                        survey.getResponses()
+                            .get( j )
+                            .getAnswerSheet()
+                            .getSections()
+                            .get( sectionIndex )
+                            .getAnswers()
+                            .get( i )
+                            .toString() );
+        }
     }
 
 }

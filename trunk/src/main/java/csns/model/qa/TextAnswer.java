@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -50,6 +50,12 @@ public class TextAnswer extends Answer {
     public int check()
     {
         return 0;
+    }
+
+    @Override
+    public String toString()
+    {
+        return text != null ? text : "";
     }
 
     public String getText()

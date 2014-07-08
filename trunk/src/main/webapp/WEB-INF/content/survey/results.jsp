@@ -21,6 +21,8 @@ $(function(){
 <li><a class="bc" href="view?id=${survey.id}&amp;sectionIndex=${sectionIndex}"><csns:truncate
   value="${survey.name}" length="65" /></a></li>
 <li>Result Summary</li>
+<li class="align_right"><a href="results?id=${survey.id}&amp;export=excel"><img title="Export to Excel"
+    alt="[Export to Excel]" src="<c:url value='/img/icons/export_excel.png' />" /></a></li>
 </ul>
 
 <h3>Number of responses: <a href="response/list?surveyId=${survey.id}">${survey.numOfResponses}</a></h3>

@@ -65,6 +65,8 @@ function clone( id )
     <td class="date"><csns:publishDate date="${rubric.publishDate.time}"
       datePast="${rubric.published}" itemId="${rubric.id}" /></td>
     <td class="action">
+      <a href="results?id=${rubric.id}"><img alt="[Results]" 
+         title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a>
       <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
          title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>
@@ -99,6 +101,8 @@ function clone( id )
 </security:authorize>
     </td>
     <td class="action">
+      <a href="results?id=${rubric.id}"><img alt="[Results]" 
+         title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a>
       <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
          title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>

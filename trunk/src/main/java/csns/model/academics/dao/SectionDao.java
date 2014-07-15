@@ -24,6 +24,7 @@ import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
+import csns.model.assessment.Rubric;
 import csns.model.core.User;
 
 public interface SectionDao {
@@ -42,6 +43,8 @@ public interface SectionDao {
     List<Section> getSectionsByStudent( User student, Quarter quarter );
 
     List<Section> getSectionsByEvaluator( User evaluator, Quarter quarter );
+
+    List<Section> getSectionsByRubric( Rubric rubric );
 
     List<Section> searchSections( String term, int maxResults );
 

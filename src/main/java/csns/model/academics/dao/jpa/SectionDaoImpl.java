@@ -34,6 +34,7 @@ import csns.model.academics.Department;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.SectionDao;
+import csns.model.assessment.Rubric;
 import csns.model.core.User;
 
 @Repository
@@ -157,11 +158,22 @@ public class SectionDaoImpl implements SectionDao {
             + "join assignment.externalEvaluators evaluator "
             + "where evaluator = :evaluator and section.quarter = :quarter "
             + "order by section.id asc";
-//            + "order by section.course.code asc, section.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "evaluator", evaluator )
             .setParameter( "quarter", quarter )
+            .getResultList();
+    }
+
+    @Override
+    public List<Section> getSectionsByRubric( Rubric rubric )
+    {
+        String query = "select distinct section from Section section "
+            + "join section.rubricAssignments assignment "
+            + "where assignment.rubric = :rubric order by section.id asc";
+
+        return entityManager.createQuery( query, Section.class )
+            .setParameter( "rubric", rubric )
             .getResultList();
     }
 

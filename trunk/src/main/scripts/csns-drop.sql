@@ -2,6 +2,7 @@
 
 set client_min_messages=WARNING;
 
+drop sequence result_sequence;
 drop sequence hibernate_sequence;
 
 drop aggregate median( numeric );

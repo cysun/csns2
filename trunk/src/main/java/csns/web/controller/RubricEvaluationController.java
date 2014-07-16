@@ -85,6 +85,7 @@ public class RubricEvaluationController {
             return new ResponseEntity<String>( HttpStatus.BAD_REQUEST );
 
         evaluation.getRatings().set( index, value + 1 );
+        evaluation.setCompleted();
         rubricEvaluationDao.saveRubricEvaluation( evaluation );
 
         logger.info( SecurityUtils.getUser().getUsername() + " rated "

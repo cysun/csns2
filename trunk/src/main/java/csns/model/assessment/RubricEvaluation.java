@@ -79,6 +79,8 @@ public class RubricEvaluation implements Serializable {
 
     private Date date;
 
+    private boolean completed;
+
     private boolean deleted;
 
     private static final Logger logger = LoggerFactory.getLogger( RubricEvaluation.class );
@@ -86,6 +88,7 @@ public class RubricEvaluation implements Serializable {
     public RubricEvaluation()
     {
         ratings = new ArrayList<Integer>();
+        completed = false;
         deleted = false;
     }
 
@@ -114,6 +117,14 @@ public class RubricEvaluation implements Serializable {
                 + evaluator.getUsername() );
             throw new RuntimeException( "Invalid Rubric Evaluaton" );
         }
+    }
+
+    public void setCompleted()
+    {
+        for( int rating : ratings )
+            if( rating < 0 ) return;
+
+        completed = true;
     }
 
     public Long getId()
@@ -184,6 +195,16 @@ public class RubricEvaluation implements Serializable {
     public void setDate( Date date )
     {
         this.date = date;
+    }
+
+    public boolean isCompleted()
+    {
+        return completed;
+    }
+
+    public void setCompleted( boolean completed )
+    {
+        this.completed = completed;
     }
 
     public boolean isDeleted()

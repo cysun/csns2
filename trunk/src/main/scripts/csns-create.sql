@@ -5,6 +5,9 @@ set client_min_messages=WARNING;
 
 create sequence hibernate_sequence minvalue 2000000;
 
+-- This sequence is used to generate peudo-id's for query results.
+create sequence result_sequence cycle;
+
 ---------------------
 -- users and roles --
 ---------------------
@@ -1236,6 +1239,7 @@ create table rubric_evaluations (
     evaluator_id    bigint references users(id),
     comments        varchar(8000),
     date            timestamp default current_timestamp,
+    completed       boolean not null default 'f',
     deleted         boolean not null default 'f'
 );
 

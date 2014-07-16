@@ -20,12 +20,8 @@ package csns.web.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,11 +36,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import csns.model.academics.Course;
 import csns.model.academics.Department;
-import csns.model.academics.Section;
 import csns.model.academics.dao.DepartmentDao;
-import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.dao.RubricDao;
 import csns.model.core.User;
@@ -55,9 +48,6 @@ public class RubricController {
 
     @Autowired
     private RubricDao rubricDao;
-
-    @Autowired
-    private SectionDao sectionDao;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -180,30 +170,6 @@ public class RubricController {
         session.setAttribute( "rubricSearchTerm", term );
         session.setAttribute( "rubricSearchResults", rubrics );
         return "redirect:list#search";
-    }
-
-    @RequestMapping("/department/{dept}/rubric/results")
-    public String results( @RequestParam Long id, ModelMap models )
-    {
-        Rubric rubric = rubricDao.getRubric( id );
-        List<Section> sections = sectionDao.getSectionsByRubric( rubric );
-        Collections.sort( sections );
-
-        Map<Course, List<Section>> mappedSections = new TreeMap<Course, List<Section>>();
-        for( Section section : sections )
-        {
-            List<Section> ss = mappedSections.get( section.getCourse() );
-            if( ss == null )
-            {
-                ss = new ArrayList<Section>();
-                mappedSections.put( section.getCourse(), ss );
-            }
-            ss.add( section );
-        }
-
-        models.put( "rubric", rubric );
-        models.put( "mappedSections", mappedSections );
-        return "rubric/results";
     }
 
 }

@@ -2,20 +2,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<script>
-$(function(){
-    $("#prev").click(function(){
-        window.location.href = "results?id=${survey.id}&sectionIndex=${sectionIndex-1}"; 
-    });
-    $("#next").click(function(){
-        window.location.href = "results?id=${survey.id}&sectionIndex=${sectionIndex+1}"; 
-    });
-    $("#ok").click(function(){
-        window.location.href = "list"; 
-    });
-});
-</script>
-
 <ul id="title">
 <li><a class="bc" href="list">Rubrics</a></li>
 <li><a class="bc" href="view?id=${rubric.id}"><csns:truncate
@@ -35,7 +21,7 @@ $(function(){
   <td class="center">${mappedSection.key.code}</td>
   <td>
   <c:forEach items="${mappedSection.value}" var="section">
-    ${section.quarter.shortString}
+    <a href="results.html?rubricId=${rubric.id}&amp;sectionId=${section.id}">${section.quarter.shortString}</a>
   </c:forEach>
   </td>
 </tr>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -42,6 +42,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
+import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
 import csns.model.core.User;
 
@@ -137,6 +138,15 @@ public class Section implements Serializable, Comparable<Section> {
             if( instructor.getId().equals( user.getId() ) ) return true;
 
         return false;
+    }
+
+    public List<RubricAssignment> getRubricAssignments( Rubric rubric )
+    {
+        List<RubricAssignment> results = new ArrayList<RubricAssignment>();
+        for( RubricAssignment rubricAssignment : rubricAssignments )
+            if( rubricAssignment.getRubric().getId().equals( rubric.getId() ) )
+                results.add( rubricAssignment );
+        return results;
     }
 
     public Long getId()

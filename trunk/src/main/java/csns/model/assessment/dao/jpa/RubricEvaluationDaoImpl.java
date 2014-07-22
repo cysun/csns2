@@ -18,6 +18,8 @@
  */
 package csns.model.assessment.dao.jpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -26,6 +28,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.helper.RubricEvaluationStats;
+import csns.model.academics.Section;
+import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricEvaluation;
 import csns.model.assessment.dao.RubricEvaluationDao;
 
@@ -40,6 +45,18 @@ public class RubricEvaluationDaoImpl implements RubricEvaluationDao {
     public RubricEvaluation getRubricEvaluation( Long id )
     {
         return entityManager.find( RubricEvaluation.class, id );
+    }
+
+    @Override
+    public List<RubricEvaluationStats> getRubricEvaluationStats( Rubric rubric,
+        Section section, RubricEvaluation.Type type )
+    {
+        return entityManager.createNamedQuery(
+            "rubric.evaluation.stats.by.section", RubricEvaluationStats.class )
+            .setParameter( "rubricId", rubric.getId() )
+            .setParameter( "sectionId", section.getId() )
+            .setParameter( "type", type.name() )
+            .getResultList();
     }
 
     @Override

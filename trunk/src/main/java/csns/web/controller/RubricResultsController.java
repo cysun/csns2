@@ -34,6 +34,8 @@ import csns.model.academics.Course;
 import csns.model.academics.Section;
 import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.Rubric;
+import csns.model.assessment.RubricAssignment;
+import csns.model.assessment.RubricEvaluation;
 import csns.model.assessment.dao.RubricDao;
 import csns.model.assessment.dao.RubricEvaluationDao;
 
@@ -71,6 +73,45 @@ public class RubricResultsController {
         models.put( "rubric", rubric );
         models.put( "mappedSections", mappedSections );
         return "rubric/results";
+    }
+
+    @RequestMapping(value = "/department/{dept}/rubric/results", params = {
+        "rubricId", "sectionId" })
+    public String results( @RequestParam Long rubricId,
+        @RequestParam Long sectionId, ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "rubric", rubric );
+        models.put( "section", section );
+
+        boolean instructorEvaluated = false;
+        boolean studentEvaluated = false;
+        boolean externalEvaluated = false;
+        for( RubricAssignment assignment : section.getRubricAssignments( rubric ) )
+        {
+            if( assignment.isEvaluatedByInstructors() )
+                instructorEvaluated = true;
+            if( assignment.isEvaluatedByStudents() ) studentEvaluated = true;
+            if( assignment.isEvaluatedByExternal() ) externalEvaluated = true;
+        }
+
+        if( instructorEvaluated )
+            models.put( "iEvalStats",
+                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
+                    RubricEvaluation.Type.INSTRUCTOR ) );
+
+        if( studentEvaluated )
+            models.put( "sEvalStats",
+                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
+                    RubricEvaluation.Type.PEER ) );
+
+        if( externalEvaluated )
+            models.put( "eEvalStats",
+                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
+                    RubricEvaluation.Type.EXTERNAL ) );
+
+        return "rubric/result/section";
     }
 
 }

@@ -24,18 +24,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import csns.helper.RubricEvaluationStats;
+import csns.helper.highcharts.Chart;
+import csns.helper.highcharts.Series;
 import csns.model.academics.Course;
 import csns.model.academics.Section;
 import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricEvaluation;
+import csns.model.assessment.RubricIndicator;
 import csns.model.assessment.dao.RubricDao;
 import csns.model.assessment.dao.RubricEvaluationDao;
 
@@ -50,6 +59,10 @@ public class RubricResultsController {
 
     @Autowired
     private SectionDao sectionDao;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final Logger logger = LoggerFactory.getLogger( RubricResultsController.class );
 
     @RequestMapping(value = "/department/{dept}/rubric/results", params = "id")
     public String results( @RequestParam Long id, ModelMap models )
@@ -75,6 +88,20 @@ public class RubricResultsController {
         return "rubric/results";
     }
 
+    private void addSeries( Chart chart, String name,
+        List<RubricEvaluationStats> stats )
+    {
+        if( stats.get( 0 ).getCount() == 0 ) return;
+
+        List<Double> data = new ArrayList<Double>();
+        for( int i = 1; i < stats.size(); ++i )
+            data.add( stats.get( i ).getMean() );
+        // The overall stats is the first one in the list
+        data.add( stats.get( 0 ).getMean() );
+
+        chart.getSeries().add( new Series( name, data, true ) );
+    }
+
     @RequestMapping(value = "/department/{dept}/rubric/results", params = {
         "rubricId", "sectionId" })
     public String results( @RequestParam Long rubricId,
@@ -96,20 +123,50 @@ public class RubricResultsController {
             if( assignment.isEvaluatedByExternal() ) externalEvaluated = true;
         }
 
+        Chart chart = new Chart( rubric.getName() + ", "
+            + section.getCourse().getCode() + " "
+            + section.getQuarter().getShortString(), "Indicator", "Mean Rating" );
+
+        List<String> xLabels = new ArrayList<String>();
+        for( RubricIndicator indicator : rubric.getIndicators() )
+            xLabels.add( indicator.getName() );
+        xLabels.add( "Overall" );
+        chart.getxAxis().setCategories( xLabels );
+        chart.getyAxis().setMax( rubric.getScale() );
+
+        List<RubricEvaluationStats> stats;
         if( instructorEvaluated )
-            models.put( "iEvalStats",
-                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
-                    RubricEvaluation.Type.INSTRUCTOR ) );
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.INSTRUCTOR );
+            models.put( "iEvalStats", stats );
+            addSeries( chart, "Instructor", stats );
+        }
 
         if( studentEvaluated )
-            models.put( "sEvalStats",
-                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
-                    RubricEvaluation.Type.PEER ) );
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.PEER );
+            models.put( "sEvalStats", stats );
+            addSeries( chart, "Peer", stats );
+        }
 
         if( externalEvaluated )
-            models.put( "eEvalStats",
-                rubricEvaluationDao.getRubricEvaluationStats( rubric, section,
-                    RubricEvaluation.Type.EXTERNAL ) );
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.EXTERNAL );
+            models.put( "eEvalStats", stats );
+            addSeries( chart, "External", stats );
+        }
+
+        try
+        {
+            models.put( "chart", objectMapper.writeValueAsString( chart ) );
+        }
+        catch( JsonProcessingException e )
+        {
+            logger.warn( "Cannot serialize chart.", e );
+        }
 
         return "rubric/result/section";
     }

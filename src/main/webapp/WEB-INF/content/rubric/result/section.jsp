@@ -11,13 +11,14 @@
 <script>
 $(function(){
     $("#tabs").tabs();
+    $("#chartContainer").highcharts(${chart});
 });
 </script>
 
 <ul id="title">
 <li><a class="bc" href="list">Rubrics</a></li>
 <li><a class="bc" href="results?id=${rubric.id}"><csns:truncate
-  value="${rubric.name}" length="35" /></a></li>
+  value="${rubric.name}" length="50" /></a></li>
 <li>${section.course.code}, ${section.quarter}</li>
 </ul>
 
@@ -99,6 +100,7 @@ $(function(){
 </div> <!--  end of tab-data -->
 
 <div id="tab-chart">
+<div id="chartContainer" style="width: 880px; height: 400px;"></div>
 </div> <!--  end of tab-chart -->
 
 </div> <!--  end of tabs -->

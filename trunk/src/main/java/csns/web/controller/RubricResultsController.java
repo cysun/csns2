@@ -267,8 +267,8 @@ public class RubricResultsController {
             meansByIndicator.get( stat.getIndicatorIndex() ).set(
                 stat.getYear() - beginYear, stat.getMean() );
 
-        Chart chart = new Chart( rubric.getName() + ", " + course.getCode(),
-            "Year", "Mean Rating" );
+        Chart chart = new Chart( rubric.getName() + ", " + course.getCode()
+            + " (" + type.name() + " Evaluation)", "Year", "Mean Rating" );
 
         List<String> xLabels = new ArrayList<String>();
         for( int i = beginYear; i <= endYear; ++i )

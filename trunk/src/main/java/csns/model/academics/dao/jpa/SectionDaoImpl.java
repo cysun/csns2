@@ -44,7 +44,7 @@ public class SectionDaoImpl implements SectionDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.isInstructor(principal) or returnObject.isEnrolled(principal) or principal.admin")
+    @PostAuthorize("returnObject.isInstructor(principal) or returnObject.isEnrolled(principal) or principal.faculty")
     public Section getSection( Long id )
     {
         return entityManager.find( Section.class, id );

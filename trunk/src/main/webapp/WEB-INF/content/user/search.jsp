@@ -50,7 +50,7 @@ $(function(){
 </ul>
 
 <form action="search" method="get">
-<p><input id="search" name="term" type="text" class="forminput" size="40" />
+<p><input id="search" name="term" type="text" class="forminput" size="40" value="${param.term}" />
 <input name="dept" type="hidden" value="${dept}" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>

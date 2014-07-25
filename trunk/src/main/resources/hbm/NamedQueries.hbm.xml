@@ -188,9 +188,9 @@ select u.* from users u
     <sql-query name="rubric.evaluation.stats.by.section">
         <return class="csns.helper.RubricEvaluationStats" />
 <![CDATA[
-( select nextval('result_sequence') as id, 0 as indicator, count(*) as count,
-    avg(rating) as mean, median(rating) as median,
-    min(rating) as min, max(rating) as max
+( select nextval('result_sequence') as id, null as year, null as type,
+    0 as indicator, count(*) as count, avg(rating) as mean,
+    median(rating) as median, min(rating) as min, max(rating) as max
     from
     ( select e.id, avg(rating) as rating
         from rubric_assignments a
@@ -203,9 +203,9 @@ select u.* from users u
     ) as t
 )
 union
-( select nextval('result_sequence') as id, r.rating_order+1 as indicator,
-    count(rating) as count, avg(rating) as mean, median(rating) as median,
-    min(rating) as min, max(rating) as max
+( select nextval('result_sequence') as id, null as year, null as type,
+    r.rating_order+1 as indicator, count(rating) as count, avg(rating) as mean,
+    median(rating) as median, min(rating) as min, max(rating) as max
     from rubric_assignments a
     inner join rubric_submissions s on a.id = s.assignment_id
     inner join rubric_evaluations e on s.id = e.submission_id
@@ -216,6 +216,75 @@ union
     order by indicator
 )
 order by indicator
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.stats.by.course">
+        <return class="csns.helper.RubricEvaluationStats" />
+<![CDATA[
+( select nextval('result_sequence') as id, year(x.quarter) as year,
+    null as type, 0 as indicator, null as count,
+    avg(t.rating) as mean, null as median, null as min, null as max
+    from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
+    where r.id = :rubricId and c.id = :courseId and e.type = :type
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and e.deleted = 'f' and e.completed = 't'
+    group by year
+)
+union
+(
+select nextval('result_sequence') as id, year(x.quarter) as year,
+    null as type, t.rating_order+1 as indicator, null as count,
+    avg(t.rating) as mean, null as median, null as min, null as max
+    from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
+    where r.id = :rubricId and c.id = :courseId and e.type = :type
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear 
+    and e.deleted = 'f' and e.completed = 't'
+    group by year, indicator
+)
+order by year, indicator
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.years">
+        <return-scalar column="year" type="java.lang.Integer" />
+<![CDATA[
+select s.quarter/10 + 1900 as year from rubrics r
+    inner join rubric_assignments a on a.rubric_id = r.id
+    inner join sections s on s.id = a.section_id
+    inner join courses c on c.id = s.course_id
+    where r.id = :rubricId and c.id = :courseId
+    order by year desc
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.counts">
+        <return class="csns.helper.RubricEvaluationStats" />
+<![CDATA[
+select nextval('result_sequence') as id, year(x.quarter) as year, e.type,
+    0 as indicator, count(e.id) as count, null as mean, null as median,
+    null as min, null as max from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    where r.id = :rubricId and c.id = :courseId
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and e.deleted = 'f' and e.completed = 't'
+    group by year, e.type
 ]]>
     </sql-query>
 

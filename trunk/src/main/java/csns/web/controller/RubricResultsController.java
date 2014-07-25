@@ -40,6 +40,7 @@ import csns.helper.highcharts.Chart;
 import csns.helper.highcharts.Series;
 import csns.model.academics.Course;
 import csns.model.academics.Section;
+import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
@@ -56,6 +57,9 @@ public class RubricResultsController {
 
     @Autowired
     private RubricEvaluationDao rubricEvaluationDao;
+
+    @Autowired
+    private CourseDao courseDao;
 
     @Autowired
     private SectionDao sectionDao;
@@ -169,6 +173,118 @@ public class RubricResultsController {
         }
 
         return "rubric/result/section";
+    }
+
+    @RequestMapping(value = "/department/{dept}/rubric/results", params = {
+        "rubricId", "courseId" })
+    public String results( @RequestParam Long rubricId,
+        @RequestParam Long courseId,
+        @RequestParam(required = false) Integer beginYear,
+        @RequestParam(required = false) Integer endYear, ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Course course = courseDao.getCourse( courseId );
+        models.put( "rubric", rubric );
+        models.put( "course", course );
+
+        List<Integer> years = rubricEvaluationDao.getRubricEvaluationYears(
+            rubric, course );
+        if( beginYear == null ) beginYear = years.get( 0 );
+        if( endYear == null ) endYear = years.get( years.size() - 1 );
+        if( endYear - 10 > beginYear ) beginYear = endYear - 10;
+        models.put( "years", years );
+        models.put( "beginYear", beginYear );
+        models.put( "endYear", endYear );
+
+        Map<RubricEvaluation.Type, List<Integer>> countsByType;
+        countsByType = new TreeMap<RubricEvaluation.Type, List<Integer>>();
+        for( RubricEvaluation.Type type : RubricEvaluation.Type.values() )
+        {
+            List<Integer> counts = new ArrayList<Integer>();
+            for( int i = beginYear; i <= endYear; ++i )
+                counts.add( 0 );
+            countsByType.put( type, counts );
+        }
+        List<RubricEvaluationStats> stats = rubricEvaluationDao.getRubricEvaluationCounts(
+            rubric, course, beginYear, endYear );
+        for( RubricEvaluationStats stat : stats )
+            countsByType.get( stat.getEvalType() ).set(
+                stat.getYear() - beginYear, stat.getCount() );
+        models.put( "countsByType", countsByType );
+
+        return "rubric/result/course";
+    }
+
+    @RequestMapping("/department/{dept}/rubric/result/stats")
+    public String stats( @RequestParam Long rubricId,
+        @RequestParam Long courseId, @RequestParam Integer beginYear,
+        @RequestParam Integer endYear,
+        @RequestParam RubricEvaluation.Type type, ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Course course = courseDao.getCourse( courseId );
+        models.put( "rubric", rubric );
+        models.put( "course", course );
+
+        List<RubricEvaluationStats> stats = rubricEvaluationDao.getRubricEvaluationStats(
+            rubric, course, type, beginYear, endYear );
+        Map<Integer, List<Double>> meansByYear = new TreeMap<Integer, List<Double>>();
+        for( RubricEvaluationStats stat : stats )
+        {
+            List<Double> means = meansByYear.get( stat.getYear() );
+            if( means == null )
+            {
+                means = new ArrayList<Double>();
+                meansByYear.put( stat.getYear(), means );
+            }
+            means.add( stat.getMean() );
+        }
+        models.put( "meansByYear", meansByYear );
+
+        return "rubric/result/stats";
+    }
+
+    @RequestMapping("/department/{dept}/rubric/result/chart")
+    public String chart( @RequestParam Long rubricId,
+        @RequestParam Long courseId, @RequestParam Integer beginYear,
+        @RequestParam Integer endYear,
+        @RequestParam RubricEvaluation.Type type, ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Course course = courseDao.getCourse( courseId );
+
+        List<RubricEvaluationStats> stats = rubricEvaluationDao.getRubricEvaluationStats(
+            rubric, course, type, beginYear, endYear );
+        Map<Integer, List<Double>> meansByIndicator = new TreeMap<Integer, List<Double>>();
+        for( int i = 0; i <= rubric.getIndicators().size(); ++i )
+        {
+            List<Double> means = new ArrayList<Double>();
+            for( int j = beginYear; j <= endYear; ++j )
+                means.add( 0d );
+            meansByIndicator.put( i, means );
+        }
+        for( RubricEvaluationStats stat : stats )
+            meansByIndicator.get( stat.getIndicatorIndex() ).set(
+                stat.getYear() - beginYear, stat.getMean() );
+
+        Chart chart = new Chart( rubric.getName() + ", " + course.getCode(),
+            "Year", "Mean Rating" );
+
+        List<String> xLabels = new ArrayList<String>();
+        for( int i = beginYear; i <= endYear; ++i )
+            xLabels.add( "" + i );
+        chart.getxAxis().setCategories( xLabels );
+        chart.getyAxis().setMax( rubric.getScale() );
+
+        for( int i = 0; i < rubric.getIndicators().size(); ++i )
+            chart.getSeries().add(
+                new Series( rubric.getIndicators().get( i ).getName(),
+                    meansByIndicator.get( i + 1 ), true ) );
+        chart.getSeries().add(
+            new Series( "Overall", meansByIndicator.get( 0 ), true ) );
+
+        models.put( "chart", chart );
+        return "jsonView";
     }
 
 }

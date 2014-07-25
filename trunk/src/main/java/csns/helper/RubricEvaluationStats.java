@@ -22,16 +22,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import csns.model.assessment.RubricEvaluation;
+
 /**
- * RubricEvaluationStats holds the result fields of an aggregation query of
+ * RubricEvaluationStats holds the result fields of aggregation queries of
  * rubric evaluations. It is an entity class because JPA native SQL query cannot
- * return non-entity classes.
+ * return non-entity classes. Note that not all fields of RubricEvaluationStats
+ * are used in all queries.
  */
 @Entity
 public class RubricEvaluationStats {
 
     @Id
     private Long id;
+
+    private Integer year;
+
+    private String type;
 
     @Column(name = "indicator")
     private int indicatorIndex;
@@ -46,6 +53,11 @@ public class RubricEvaluationStats {
     {
     }
 
+    public RubricEvaluation.Type getEvalType()
+    {
+        return RubricEvaluation.Type.valueOf( type );
+    }
+
     public Long getId()
     {
         return id;
@@ -54,6 +66,26 @@ public class RubricEvaluationStats {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public Integer getYear()
+    {
+        return year;
+    }
+
+    public void setYear( Integer year )
+    {
+        this.year = year;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType( String type )
+    {
+        this.type = type;
     }
 
     public int getIndicatorIndex()

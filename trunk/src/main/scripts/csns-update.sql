@@ -6,3 +6,9 @@ update rubric_evaluations e set completed = 't' where 5 = (
     );
 
 create sequence result_sequence cycle;
+
+create or replace function year( p_code integer ) returns integer as $$
+begin
+    return p_code / 10 + 1900;                                                  
+end;
+$$ language plpgsql;

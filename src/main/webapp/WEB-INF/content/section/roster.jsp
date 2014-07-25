@@ -33,6 +33,15 @@ $(function(){
            if( confirm("Are you sure you want to drop these students from the class?") )
                $("#studentsForm").attr("action", "roster/drop").submit();
    });
+   $(".thumbnails").mouseover(function(){
+       $(".ui-dialog-content").dialog("close");
+       var downloadUrl = "<c:url value='/download.html?fileId=' />" + $(this).attr("name");
+       $("<div>").append("<img src='" + downloadUrl + "' alt='' />").dialog({
+           autoOpen:       true,
+           height:         400,
+           width:          350
+       });
+   });
 });
 </script>
 
@@ -56,7 +65,7 @@ $(function(){
 <table class="viewtable">
 <thead>
   <tr>
-    <th><input id="selectAll" type="checkbox" /></th>
+    <th><input id="selectAll" type="checkbox" /></th><th></th>
     <th>Name</th><th>Grade</th>
     <c:forEach items="${section.assignments}" var="assignment">
       <th>${assignment.alias}</th>
@@ -68,6 +77,13 @@ $(function(){
   <c:set var="enrollment" value="${studentGrade.key}" />
     <tr>
       <td class="center"><input type="checkbox" name="userId" value="${enrollment.student.id}" /></td>
+        <td class="shrink">
+          <c:if test="${not empty enrollment.student.profileThumbnail}">
+          <img src="<c:url value='/download.html?fileId=${enrollment.student.profileThumbnail.id}' />"
+            alt="[Profile Thumbnail]" class="thumbnails" name="${enrollment.student.profilePicture.id}"
+            width="24" height="24" />
+          </c:if>
+      </td>
       <td><a href="grade?enrollmentId=${enrollment.id}">${enrollment.student.lastName},
         ${enrollment.student.firstName}</a></td>
       <td class="center">

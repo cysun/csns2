@@ -35,6 +35,19 @@ $(function(){
 			cache: false
 		});
 	});
+    $("#comments").editable( "set", {
+        submitdata: { "id": ${evaluation.id} },
+        name: "comments",
+        placeholder: "&nbsp;",
+        type: "textarea",
+        rows: 10,
+        event: "dblclick",
+        submit: "Save",
+        onblur: "submit"
+    });
+    $("#commentsLink").click(function(){
+        $("#comments").trigger("dblclick"); 
+    });
 </c:if>
     $("#ok").click(function(){
       <c:choose>
@@ -106,6 +119,9 @@ $(function(){
 </c:forEach>
 </tbody>
 </table>
+
+<h4><a id="commentsLink" href="javascript:void(0)">Additional Comments</a></h4>
+<pre id="comments"><c:out value="${evaluation.comments}" escapeXml="true" /></pre>
 </c:if> <%-- end of "not empty evaluation" --%>
 
 <p><button id="ok" class="subbutton">OK</button></p>

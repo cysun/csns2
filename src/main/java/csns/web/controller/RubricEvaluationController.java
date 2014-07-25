@@ -21,7 +21,9 @@ package csns.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -74,7 +76,8 @@ public class RubricEvaluationController {
         return "rubric/evaluation/view";
     }
 
-    @RequestMapping("/rubric/evaluation/{role}/set")
+    @RequestMapping(value = "/rubric/evaluation/{role}/set", params = {
+        "index", "value" })
     @ResponseBody
     public ResponseEntity<String> set( @RequestParam Long id,
         @RequestParam int index, @RequestParam int value )
@@ -93,6 +96,25 @@ public class RubricEvaluationController {
             + " in rubric evaluation " + id );
 
         return new ResponseEntity<String>( HttpStatus.OK );
+    }
+
+    @RequestMapping(value = "/rubric/evaluation/{role}/set",
+        params = "comments")
+    @ResponseBody
+    public ResponseEntity<String> set( @RequestParam Long id,
+        @RequestParam String comments )
+    {
+        RubricEvaluation evaluation = rubricEvaluationDao.getRubricEvaluation( id );
+        // Ignore the request if the rubric assignment is already past due.
+        if( evaluation.getSubmission().getAssignment().isPastDue() )
+            return new ResponseEntity<String>( HttpStatus.BAD_REQUEST );
+
+        evaluation.setComments( comments );
+        rubricEvaluationDao.saveRubricEvaluation( evaluation );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType( MediaType.TEXT_PLAIN );
+        return new ResponseEntity<String>( comments, headers, HttpStatus.OK );
     }
 
 }

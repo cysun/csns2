@@ -846,6 +846,13 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/result/section.jsp" />
     </definition>
 
+    <definition name="rubric/result/course" extends="layout.chart">
+        <put-attribute name="title" value="Rubric Results" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/result/course.jsp" />
+    </definition>
+
+    <definition name="rubric/result/stats" template="/WEB-INF/content/rubric/result/stats.jsp" />
+
     <definition name="rubric/toggle" template="/WEB-INF/content/rubric/toggle.jsp" />
 
     <definition name="rubric/create" extends="layout.qa">

@@ -1310,6 +1310,15 @@ end;
 $$ language plpgsql;
 
 --
+-- Given a quarter code, returns the year of the quarter.
+--
+create or replace function year( p_code integer ) returns integer as $$
+begin
+    return p_code / 10 + 1900;                                                  
+end;
+$$ language plpgsql;
+
+--
 -- Median Aggregation Function for PostgreSQL 8.4+
 --
 -- Written by Scott Bailey 'Artacus'

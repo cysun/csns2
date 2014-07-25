@@ -914,9 +914,11 @@ table {
 }
 #wiki_content table {
 	border:1px solid #bbbbbb;
+	margin-bottom: 1em;
 }
 #wiki_content td {
 	background-color:#eeeeee;
+	padding: 0.5em;
 }
 #wiki_content th {
 	background-color:#e1e1e1;

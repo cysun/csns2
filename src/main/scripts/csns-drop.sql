@@ -86,6 +86,10 @@ drop trigger forums_ts_trigger on forums;
 drop function forums_ts_trigger_function();
 drop table forums;
 
+drop table survey_chart_points;
+drop table survey_chart_series;
+drop table survey_chart_xlabels;
+drop table survey_charts;
 drop table surveys_taken;
 drop table survey_responses;
 drop trigger surveys_ts_trigger on surveys;

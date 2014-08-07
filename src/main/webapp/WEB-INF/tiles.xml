@@ -548,10 +548,6 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/results.jsp" />
     </definition>
 
-    <!-- =============== -->
-    <!-- Survey Response -->
-    <!-- =============== -->
-
     <definition name="survey/response/edit" extends="layout.qa">
         <put-attribute name="title" value="Take Survey" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/edit.jsp" />
@@ -565,6 +561,11 @@
     <definition name="survey/response/list" extends="layout.jqueryui">
         <put-attribute name="title" value="List of Survey Responses" />
         <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
+    </definition>
+
+    <definition name="survey/chart/list" extends="layout.basic">
+        <put-attribute name="title" value="Survey Charts" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/list.jsp" />
     </definition>
 
     <!-- ===== -->

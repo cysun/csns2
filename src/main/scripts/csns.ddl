@@ -1,4 +1,17 @@
 
+    create table RubricEvaluationStats (
+        id int8 not null,
+        count int4,
+        indicator int4,
+        max int4,
+        mean float8,
+        median float8,
+        min int4,
+        type varchar(255),
+        year int4,
+        primary key (id)
+    );
+
     create table WikiSearchResult (
         id int8 not null,
         content varchar(255),
@@ -422,13 +435,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        attachment_allowed boolean not null,
-        correct_answer varchar(255),
-        text_length int4,
         max_selections int4,
         min_selections int4,
         max_rating int4,
         min_rating int4,
+        attachment_allowed boolean not null,
+        correct_answer varchar(255),
+        text_length int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -574,6 +587,46 @@
         subscribable_type varchar(255),
         subscribable_id int8,
         subscriber_id int8 not null,
+        primary key (id)
+    );
+
+    create table survey_chart_points (
+        id int8 not null,
+        question_index int4 not null,
+        section_index int4 not null,
+        survey_id int8,
+        series_id int8,
+        point_index int4,
+        primary key (id)
+    );
+
+    create table survey_chart_series (
+        id int8 not null,
+        name varchar(255),
+        stat_type varchar(255),
+        chart_id int8,
+        series_index int4,
+        primary key (id)
+    );
+
+    create table survey_chart_xlabels (
+        chart_id int8 not null,
+        xlabel varchar(255),
+        label_order int4 not null,
+        primary key (chart_id, label_order)
+    );
+
+    create table survey_charts (
+        id int8 not null,
+        date timestamp,
+        deleted boolean not null,
+        title varchar(255) not null,
+        x_title varchar(255),
+        y_max int4,
+        y_min int4,
+        y_title varchar(255),
+        author_id int8,
+        department_id int8,
         primary key (id)
     );
 
@@ -1324,6 +1377,36 @@
         add constraint FK_qhna8fdv16ljlwghm6vebsxdr 
         foreign key (subscriber_id) 
         references users;
+
+    alter table survey_chart_points 
+        add constraint FK_161bmbgp5qv8a2s3rn80ilp0q 
+        foreign key (survey_id) 
+        references surveys;
+
+    alter table survey_chart_points 
+        add constraint FK_80fj5bmp6qi7g0s7k29a1cxm2 
+        foreign key (series_id) 
+        references survey_chart_series;
+
+    alter table survey_chart_series 
+        add constraint FK_448xbia6kua6pfjxq383i0bf3 
+        foreign key (chart_id) 
+        references survey_charts;
+
+    alter table survey_chart_xlabels 
+        add constraint FK_nfgy2l87hg5hdu8blfavrm06r 
+        foreign key (chart_id) 
+        references survey_charts;
+
+    alter table survey_charts 
+        add constraint FK_bfpixd0u5re4rwu5p8cqe2kk9 
+        foreign key (author_id) 
+        references users;
+
+    alter table survey_charts 
+        add constraint FK_906egie9e2592l6hmj15nkbua 
+        foreign key (department_id) 
+        references departments;
 
     alter table survey_responses 
         add constraint FK_5yuaiow1kfy6r5p1ri01ls6mt 

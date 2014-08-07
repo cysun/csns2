@@ -32,6 +32,8 @@ function clone( id )
 <li>Surveys</li>
 <li class="align_right"><a href="create"><img alt="[Create Survey]"
   title="Create Survey" src="<c:url value='/img/icons/script_add.png' />" /></a></li>
+<li class="align_right"><a href="chart/list"><img alt="[Survey Charts]"
+  title="Survey Charts" src="<c:url value='/img/icons/chart_bar.png' />" /></a></li>
 </ul>
 
 <div id="tabs">

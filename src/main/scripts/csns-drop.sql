@@ -88,7 +88,7 @@ drop table forums;
 
 drop table survey_chart_points;
 drop table survey_chart_series;
-drop table survey_chart_xlabels;
+drop table survey_chart_xcoordinates;
 drop table survey_charts;
 drop table surveys_taken;
 drop table survey_responses;

@@ -50,20 +50,20 @@ public class SurveyChart implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
-    @Column(name = "x_title")
-    private String xTitle;
+    @Column(name = "x_label")
+    private String xLabel;
 
     @ElementCollection
-    @CollectionTable(name = "survey_chart_xlabels",
+    @CollectionTable(name = "survey_chart_xcoordinates",
         joinColumns = @JoinColumn(name = "chart_id"))
-    @Column(name = "xlabel")
-    @OrderColumn(name = "label_order")
-    private List<String> xLabels;
+    @Column(name = "coordinate")
+    @OrderColumn(name = "coordinate_order")
+    private List<String> xCoordinates;
 
-    @Column(name = "y_title")
-    private String yTitle;
+    @Column(name = "y_label")
+    private String yLabel;
 
     @Column(name = "y_min")
     private Integer yMin;
@@ -90,7 +90,7 @@ public class SurveyChart implements Serializable {
 
     public SurveyChart()
     {
-        xLabels = new ArrayList<String>();
+        xCoordinates = new ArrayList<String>();
         series = new ArrayList<SurveyChartSeries>();
         date = new Date();
         deleted = false;
@@ -106,44 +106,44 @@ public class SurveyChart implements Serializable {
         this.id = id;
     }
 
-    public String getTitle()
+    public String getName()
     {
-        return title;
+        return name;
     }
 
-    public void setTitle( String title )
+    public void setName( String name )
     {
-        this.title = title;
+        this.name = name;
     }
 
-    public String getxTitle()
+    public String getxLabel()
     {
-        return xTitle;
+        return xLabel;
     }
 
-    public void setxTitle( String xTitle )
+    public void setxLabel( String xLabel )
     {
-        this.xTitle = xTitle;
+        this.xLabel = xLabel;
     }
 
-    public List<String> getxLabels()
+    public List<String> getxCoordinates()
     {
-        return xLabels;
+        return xCoordinates;
     }
 
-    public void setxLabels( List<String> xLabels )
+    public void setxCoordinates( List<String> xCoordinates )
     {
-        this.xLabels = xLabels;
+        this.xCoordinates = xCoordinates;
     }
 
-    public String getyTitle()
+    public String getyLabel()
     {
-        return yTitle;
+        return yLabel;
     }
 
-    public void setyTitle( String yTitle )
+    public void setyLabel( String yLabel )
     {
-        this.yTitle = yTitle;
+        this.yLabel = yLabel;
     }
 
     public Integer getyMin()

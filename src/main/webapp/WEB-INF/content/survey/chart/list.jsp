@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
@@ -16,13 +17,14 @@
 <c:if test="${fn:length(charts) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Name</th><th>Author</th><th></th></tr>
+  <tr><th>Name</th><th>Author</th><th>Updated</th><th></th></tr>
 </thead>
 <tbody>
   <c:forEach items="${charts}" var="chart">
   <tr>
-    <td><a href="view?id=${chart.id}">${chart.title}</a></td>
+    <td><a href="view?id=${chart.id}">${chart.name}</a></td>
     <td class="shrink">${chart.author.username}</td>
+    <td class="shrink"><fmt:formatDate value="${chart.date}" pattern="MM/dd/yyyy" /></td>
     <td class="action">
       <a href="edit?id=${chart.id}"><img alt="[Edit Chart]"
          title="Edit Chart" src="<c:url value='/img/icons/chart_bar_edit.png'/>" /></a>

@@ -568,6 +568,16 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/list.jsp" />
     </definition>
 
+    <definition name="survey/chart/create" extends="layout.basic">
+        <put-attribute name="title" value="Create Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/create.jsp" />
+    </definition>
+
+    <definition name="survey/chart/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/edit.jsp" />
+    </definition>
+
     <!-- ===== -->
     <!-- Forum -->
     <!-- ===== -->

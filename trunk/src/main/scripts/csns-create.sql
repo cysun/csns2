@@ -548,9 +548,9 @@ create table surveys_taken (
 
 create table survey_charts (
     id              bigint primary key,
-    title           varchar(255) not null,
-    x_title         varchar(255),
-    y_title         varchar(255),
+    name            varchar(255) not null,
+    x_label         varchar(255),
+    y_label         varchar(255),
     y_min           integer,
     y_max           integer,
     author_id       bigint references users(id),
@@ -559,11 +559,11 @@ create table survey_charts (
     deleted         boolean not null default 'f'
 );
 
-create table survey_chart_xlabels (
-    chart_id    bigint not null references survey_charts(id),
-    xlabel      varchar(255),
-    label_order integer not null,
-  primary key (chart_id, label_order)
+create table survey_chart_xcoordinates (
+    chart_id            bigint not null references survey_charts(id),
+    coordinate          varchar(255),
+    coordinate_order    integer not null,
+  primary key (chart_id, coordinate_order)
 );
 
 create table survey_chart_series (

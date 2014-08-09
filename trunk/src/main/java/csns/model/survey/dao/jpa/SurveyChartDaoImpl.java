@@ -57,7 +57,7 @@ public class SurveyChartDaoImpl implements SurveyChartDao {
 
     @Override
     @Transactional
-    @PreAuthorize("principal.isFaculty(#survey.department.abbreviation)")
+    @PreAuthorize("principal.isFaculty(#chart.department.abbreviation)")
     public SurveyChart saveSurveyChart( SurveyChart chart )
     {
         return entityManager.merge( chart );

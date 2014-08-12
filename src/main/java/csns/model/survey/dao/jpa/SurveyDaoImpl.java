@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -117,6 +117,19 @@ public class SurveyDaoImpl implements SurveyDao {
         if( maxResults > 0 ) query.setMaxResults( maxResults );
         return query.setParameter( "departmentId", department.getId() )
             .setParameter( "term", term )
+            .getResultList();
+    }
+
+    @Override
+    @PreAuthorize("principal.isFaculty(#department.abbreviation)")
+    public List<Survey> searchSurveysByPrefix( Department department,
+        String term, int maxResults )
+    {
+        String query = "from Survey where lower(name) like :term || '%'";
+
+        return entityManager.createQuery( query, Survey.class )
+            .setParameter( "term", term.toLowerCase() )
+            .setMaxResults( maxResults )
             .getResultList();
     }
 

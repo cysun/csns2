@@ -438,10 +438,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -605,7 +605,6 @@
         name varchar(255),
         stat_type varchar(255),
         chart_id int8,
-        series_index int4,
         primary key (id)
     );
 

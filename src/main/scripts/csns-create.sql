@@ -41,6 +41,19 @@ create table users (
     access_key              varchar(255) unique
 );
 
+create unique index user_cin_index on users (cin varchar_pattern_ops);
+create unique index user_username_index
+    on users (lower(username) varchar_pattern_ops);
+create unique index user_primary_email_index
+    on users (lower(primary_email) varchar_pattern_ops);
+
+create index user_firstname_index
+    on users (lower(first_name) varchar_pattern_ops);
+create index user_lastname_index
+    on users (lower(last_name) varchar_pattern_ops);
+create index user_fullname_index
+    on users (lower(first_name || ' ' || last_name) varchar_pattern_ops);
+
 create table authorities (
     user_id bigint not null references users(id),
     role    varchar(255)
@@ -513,6 +526,8 @@ create table surveys (
     deleted             boolean not null default 'f'
 );
 
+create index survey_name_index on surveys (lower(name) varchar_pattern_ops);
+
 alter table surveys add column tsv tsvector;
 
 create function surveys_ts_trigger_function() returns trigger as $$
@@ -568,10 +583,9 @@ create table survey_chart_xcoordinates (
 
 create table survey_chart_series (
     id              bigint primary key,
-    name            varchar(255),
-    stat_type       varchar(255),
     chart_id        bigint references survey_charts(id),
-    series_index    integer
+    name            varchar(255),
+    stat_type       varchar(255)
 );
 
 create table survey_chart_points (

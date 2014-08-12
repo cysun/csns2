@@ -1,6 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<script>
+$(function(){
+    $("#chartContainer").highcharts(${highchart});
+});
+</script>
+
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="list">Charts</a></li>
@@ -27,3 +33,5 @@
 </tr>
 </c:forEach>
 </table>
+
+<div id="chartContainer" style="width: 880px; height: 400px; margin-top: 2em;"></div>

@@ -27,6 +27,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import csns.helper.highcharts.Chart;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.survey.SurveyChart;
@@ -47,6 +51,8 @@ public class SurveyChartController {
     @Autowired
     private SurveyChartSeriesDao surveyChartSeriesDao;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private static final Logger logger = LoggerFactory.getLogger( SurveyChartController.class );
 
     @RequestMapping("/department/{dept}/survey/chart/list")
@@ -60,8 +66,13 @@ public class SurveyChartController {
 
     @RequestMapping("/department/{dept}/survey/chart/view")
     public String view( @RequestParam Long id, ModelMap models )
+        throws JsonProcessingException
     {
-        models.put( "chart", surveyChartDao.getSurveyChart( id ) );
+        SurveyChart chart = surveyChartDao.getSurveyChart( id );
+        Chart highchart = chart.getHighchart();
+
+        models.put( "chart", chart );
+        models.put( "highchart", objectMapper.writeValueAsString( highchart ) );
         return "survey/chart/view";
     }
 

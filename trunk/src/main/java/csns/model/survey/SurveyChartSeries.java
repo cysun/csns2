@@ -33,6 +33,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import csns.helper.highcharts.Series;
+
 @Entity
 @Table(name = "survey_chart_series")
 public class SurveyChartSeries implements Serializable {
@@ -68,6 +70,11 @@ public class SurveyChartSeries implements Serializable {
         for( SurveyChartPoint point : points )
             values.add( point.getValue( statType ) );
         return values;
+    }
+
+    public Series getHighchartSeries( boolean showInLegend )
+    {
+        return new Series( name, getValues(), showInLegend );
     }
 
     public Long getId()

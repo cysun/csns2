@@ -36,6 +36,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import csns.helper.highcharts.Chart;
 import csns.model.academics.Department;
 import csns.model.core.User;
 
@@ -93,6 +94,18 @@ public class SurveyChart implements Serializable {
         series = new ArrayList<SurveyChartSeries>();
         date = new Date();
         deleted = false;
+    }
+
+    public Chart getHighchart()
+    {
+        Chart chart = new Chart( name, xLabel, yLabel );
+        chart.getxAxis().setCategories( xCoordinates );
+
+        boolean showInLegend = series.size() > 1;
+        for( SurveyChartSeries serie : series )
+            chart.getSeries().add( serie.getHighchartSeries( showInLegend ) );
+
+        return chart;
     }
 
     public Long getId()

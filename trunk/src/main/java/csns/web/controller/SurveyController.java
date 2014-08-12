@@ -23,7 +23,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -34,6 +36,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +71,29 @@ public class SurveyController {
     private Properties contentTypes;
 
     private static final Logger logger = LoggerFactory.getLogger( SurveyController.class );
+
+    @RequestMapping(value = "/department/{dept}/survey/autocomplete")
+    public String autocomplete( @PathVariable String dept,
+        @RequestParam String term, HttpServletResponse response )
+        throws JSONException, IOException
+    {
+        Department department = departmentDao.getDepartment( dept );
+        JSONArray jsonArray = new JSONArray();
+        List<Survey> surveys = surveyDao.searchSurveysByPrefix( department,
+            term, 10 );
+        for( Survey survey : surveys )
+        {
+            Map<String, String> json = new HashMap<String, String>();
+            json.put( "id", survey.getId().toString() );
+            json.put( "value", survey.getName() );
+            json.put( "label", survey.getName() );
+            jsonArray.put( json );
+        }
+
+        response.setContentType( "application/json" );
+        jsonArray.write( response.getWriter() );
+        return null;
+    }
 
     @RequestMapping("/department/{dept}/survey/current")
     public String current( @PathVariable String dept, ModelMap models )

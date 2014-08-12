@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,29 +18,12 @@
  */
 package csns.model.survey.dao;
 
-import java.util.List;
+import csns.model.survey.SurveyChartSeries;
 
-import csns.model.academics.Department;
-import csns.model.survey.Survey;
+public interface SurveyChartSeriesDao {
 
-public interface SurveyDao {
+    SurveyChartSeries getSurveyChartSeries( Long id );
 
-    Survey getSurvey( Long id );
-
-    List<Survey> getOpenSurveys( Department department );
-
-    List<Survey> getClosedSurveys( Department department );
-
-    List<Survey> getUnpublishedSurveys( Department department );
-
-    List<Survey> getSurveys( Department department );
-
-    List<Survey> searchSurveys( Department department, String term,
-        int maxResults );
-
-    List<Survey> searchSurveysByPrefix( Department department, String term,
-        int maxResults );
-
-    Survey saveSurvey( Survey survey );
+    SurveyChartSeries saveSurveyChartSeries( SurveyChartSeries series );
 
 }

@@ -42,12 +42,21 @@ $(function(){
 	    event.preventDefault();
 	});
 });
+function deleteChart()
+{
+	if( confirm("Are you sure you want to delete this chart?") )
+		window.location.href = "delete?id=${chart.id}";
+}
 </script>
 
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="list">Charts</a></li>
 <li>Edit</li>
+<li class="align_right"><a href="addSeries?chartId=${chart.id}"><img alt="[Add Series]"
+  title="Add Series" src="<c:url value='/img/icons/chart_line_add.png' />" /></a></li>
+<li class="align_right"><a href="javascript:deleteChart()"><img alt="[Delete Chart]"
+  title="Delete Chart" src="<c:url value='/img/icons/chart_bar_delete.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="chart">

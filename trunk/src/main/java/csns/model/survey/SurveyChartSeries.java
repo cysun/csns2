@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -41,6 +42,10 @@ public class SurveyChartSeries implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "chart_id")
+    private SurveyChart chart;
 
     private String name;
 
@@ -57,6 +62,14 @@ public class SurveyChartSeries implements Serializable {
         points = new ArrayList<SurveyChartPoint>();
     }
 
+    public List<Number> getValues()
+    {
+        List<Number> values = new ArrayList<Number>();
+        for( SurveyChartPoint point : points )
+            values.add( point.getValue( statType ) );
+        return values;
+    }
+
     public Long getId()
     {
         return id;
@@ -65,6 +78,16 @@ public class SurveyChartSeries implements Serializable {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public SurveyChart getChart()
+    {
+        return chart;
+    }
+
+    public void setChart( SurveyChart chart )
+    {
+        this.chart = chart;
     }
 
     public String getName()

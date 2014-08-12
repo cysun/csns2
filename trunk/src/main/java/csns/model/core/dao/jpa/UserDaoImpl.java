@@ -64,10 +64,10 @@ public class UserDaoImpl implements UserDao {
         // granted authorities (i.e. roles), so here we load the roles
         // collection "eagerly" using a join fetch to avoid a second query.
         String query = "from User user left join fetch user.roles "
-            + "where username = :username";
+            + "where lower(username) = :username";
 
         List<User> users = entityManager.createQuery( query, User.class )
-            .setParameter( "username", username )
+            .setParameter( "username", username.toLowerCase() )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
     }
@@ -75,10 +75,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmail( String email )
     {
-        String query = "from User where primaryEmail = :email";
+        String query = "from User where lower(primaryEmail) = :email";
 
         List<User> users = entityManager.createQuery( query, User.class )
-            .setParameter( "email", email )
+            .setParameter( "email", email.toLowerCase() )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
     }
@@ -107,10 +107,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsers( String lastName, String firstName )
     {
-        String query = "from User where lower(concat(lastName,firstName)) = :name";
+        String query = "from User where lower(lastName) = :lastName "
+            + "and lower(firstName) = :firstName";
 
         return entityManager.createQuery( query, User.class )
-            .setParameter( "name", (lastName + firstName).toLowerCase() )
+            .setParameter( "lastName", lastName.toLowerCase() )
+            .setParameter( "firstName", firstName.toLowerCase() )
             .getResultList();
     }
 
@@ -121,7 +123,7 @@ public class UserDaoImpl implements UserDao {
         String query = "from User where cin = :term or lower(username) = :term "
             + "or lower(firstName) = :term or lower(lastName) = :term "
             + "or lower(firstName || ' ' || lastName) = :term "
-            + "or primaryEmail = :term order by firstName asc";
+            + "or lower(primaryEmail) = :term order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )
@@ -137,7 +139,8 @@ public class UserDaoImpl implements UserDao {
             + "or lower(firstName) like :term || '%' "
             + "or lower(lastName) like :term || '%' "
             + "or lower(firstName || ' ' || lastName) like :term || '%' "
-            + "or primaryEmail like :term || '%' order by firstName asc";
+            + "or lower(primaryEmail) like :term || '%' "
+            + "order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
             .setParameter( "term", term )

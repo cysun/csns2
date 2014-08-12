@@ -38,22 +38,36 @@ import org.springframework.web.bind.support.SessionStatus;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
 import csns.model.survey.SurveyChart;
+import csns.model.survey.SurveyChartPoint;
+import csns.model.survey.SurveyChartSeries;
 import csns.model.survey.dao.SurveyChartDao;
+import csns.model.survey.dao.SurveyChartSeriesDao;
+import csns.model.survey.dao.SurveyDao;
 import csns.security.SecurityUtils;
+import csns.web.validator.SurveyChartSeriesValidator;
 import csns.web.validator.SurveyChartValidator;
 
 @Controller
-@SessionAttributes("chart")
+@SessionAttributes({ "chart", "series" })
 public class SurveyChartControllerS {
 
     @Autowired
     private DepartmentDao departmentDao;
 
     @Autowired
+    private SurveyDao surveyDao;
+
+    @Autowired
     private SurveyChartDao surveyChartDao;
 
     @Autowired
+    private SurveyChartSeriesDao surveyChartSeriesDao;
+
+    @Autowired
     private SurveyChartValidator surveyChartValidator;
+
+    @Autowired
+    private SurveyChartSeriesValidator surveyChartSeriesValidator;
 
     private static final Logger logger = LoggerFactory.getLogger( SurveyChartControllerS.class );
 
@@ -83,7 +97,7 @@ public class SurveyChartControllerS {
             + chart.getId() );
 
         sessionStatus.setComplete();
-        return "redirect:list";
+        return "redirect:view?id=" + chart.getId();
     }
 
     @RequestMapping(value = "/department/{dept}/survey/chart/edit",
@@ -104,7 +118,6 @@ public class SurveyChartControllerS {
         if( result.hasErrors() ) return "survey/chart/edit";
 
         User user = SecurityUtils.getUser();
-        chart.setAuthor( user );
         chart.setDate( new Date() );
         chart = surveyChartDao.saveSurveyChart( chart );
 
@@ -112,7 +125,7 @@ public class SurveyChartControllerS {
             + chart.getId() );
 
         sessionStatus.setComplete();
-        return "redirect:list";
+        return "redirect:view?id=" + chart.getId();
     }
 
     @RequestMapping("/department/{dept}/survey/chart/addXCoordinate")
@@ -132,6 +145,105 @@ public class SurveyChartControllerS {
     {
         chart.getxCoordinates().remove( coordinate );
         logger.info( "X coordinate removed: " + coordinate );
+        return "";
+    }
+
+    @RequestMapping(value = "/department/{dept}/survey/chart/addSeries",
+        method = RequestMethod.GET)
+    public String addSeries( @RequestParam Long chartId, ModelMap models )
+    {
+        SurveyChartSeries series = new SurveyChartSeries();
+        series.setChart( surveyChartDao.getSurveyChart( chartId ) );
+        models.put( "series", series );
+        return "survey/chart/addSeries";
+    }
+
+    @RequestMapping(value = "/department/{dept}/survey/chart/addSeries",
+        method = RequestMethod.POST)
+    public String addSeries(
+        @ModelAttribute("series") SurveyChartSeries series,
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        surveyChartSeriesValidator.validate( series, result );
+        if( result.hasErrors() ) return "survey/chart/addSeries";
+
+        series.getChart().setDate( new Date() );
+        series = surveyChartSeriesDao.saveSurveyChartSeries( series );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " added survey chart series " + series.getId() );
+
+        sessionStatus.setComplete();
+        return "redirect:viewSeries?id=" + series.getId();
+    }
+
+    @RequestMapping(value = "/department/{dept}/survey/chart/editSeries",
+        method = RequestMethod.GET)
+    public String editSeries( @RequestParam Long id, ModelMap models )
+    {
+        models.put( "series", surveyChartSeriesDao.getSurveyChartSeries( id ) );
+        return "survey/chart/editSeries";
+    }
+
+    @RequestMapping(value = "/department/{dept}/survey/chart/editSeries",
+        method = RequestMethod.POST)
+    public String editSeries(
+        @ModelAttribute("series") SurveyChartSeries series,
+        BindingResult result, SessionStatus sessionStatus )
+    {
+        surveyChartSeriesValidator.validate( series, result );
+        if( result.hasErrors() ) return "survey/chart/editSeries";
+
+        series.getChart().setDate( new Date() );
+        series = surveyChartSeriesDao.saveSurveyChartSeries( series );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " edited survey chart series " + series.getId() );
+
+        sessionStatus.setComplete();
+        return "redirect:viewSeries?id=" + series.getId();
+    }
+
+    @RequestMapping("/department/{dept}/survey/chart/addPoint")
+    public @ResponseBody
+    String addPoint( @ModelAttribute("series") SurveyChartSeries series,
+        @RequestParam Long surveyId, @RequestParam int sectionIndex,
+        @RequestParam int questionIndex )
+    {
+        series.getPoints().add(
+            new SurveyChartPoint( surveyDao.getSurvey( surveyId ),
+                sectionIndex, questionIndex ) );
+        logger.info( "Chart point added: (" + surveyId + "," + sectionIndex
+            + "," + questionIndex + ")" );
+        return "";
+    }
+
+    @RequestMapping("/department/{dept}/survey/chart/removePoint")
+    public @ResponseBody
+    String removePoint( @ModelAttribute("series") SurveyChartSeries series,
+        @RequestParam Long surveyId, @RequestParam int sectionIndex,
+        @RequestParam int questionIndex )
+    {
+        SurveyChartPoint foundPoint = null;
+        for( SurveyChartPoint point : series.getPoints() )
+            if( point.getSurvey().getId().equals( surveyId )
+                && point.getSectionIndex() == sectionIndex
+                && point.getQuestionIndex() == questionIndex )
+            {
+                foundPoint = point;
+                break;
+            }
+
+        if( foundPoint != null )
+        {
+            series.getPoints().remove( foundPoint );
+            logger.info( "Chart point removed: (" + surveyId + ","
+                + sectionIndex + "," + questionIndex + ")" );
+        }
+        else
+            logger.info( "Chart point not found: (" + surveyId + ","
+                + sectionIndex + "," + questionIndex + ")" );
+
         return "";
     }
 

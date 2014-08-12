@@ -28,6 +28,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import csns.model.qa.RatingQuestion;
+
 /**
  * Each SurveyChartPoint is basically a survey question (a RatingQuestion to be
  * exact). The reason we create this class instead of using RatingQuestion
@@ -59,6 +61,23 @@ public class SurveyChartPoint implements Serializable {
     {
         sectionIndex = 0;
         questionIndex = 0;
+    }
+
+    public SurveyChartPoint( Survey survey, int sectionIndex, int questionIndex )
+    {
+        this.survey = survey;
+        this.sectionIndex = sectionIndex;
+        this.questionIndex = questionIndex;
+    }
+
+    public Number getValue( String statType )
+    {
+        RatingQuestion question = (RatingQuestion) survey.getQuestionSheet()
+            .getSections()
+            .get( sectionIndex )
+            .getQuestions()
+            .get( questionIndex );
+        return question.getRatingStats().get( statType.toLowerCase() );
     }
 
     public Long getId()

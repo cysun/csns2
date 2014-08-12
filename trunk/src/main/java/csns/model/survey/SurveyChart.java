@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -33,6 +32,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
@@ -71,9 +71,8 @@ public class SurveyChart implements Serializable {
     @Column(name = "y_max")
     private Integer yMax;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "chart_id")
-    @OrderColumn(name = "series_index")
+    @OneToMany(mappedBy = "chart")
+    @OrderBy("name asc")
     private List<SurveyChartSeries> series;
 
     @ManyToOne

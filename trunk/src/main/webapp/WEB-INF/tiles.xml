@@ -568,6 +568,11 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/list.jsp" />
     </definition>
 
+    <definition name="survey/chart/view" extends="layout.chart">
+        <put-attribute name="title" value="Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/view.jsp" />
+    </definition>
+
     <definition name="survey/chart/create" extends="layout.basic">
         <put-attribute name="title" value="Create Survey Chart" />
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/create.jsp" />
@@ -578,6 +583,21 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/edit.jsp" />
     </definition>
 
+    <definition name="survey/chart/viewSeries" extends="layout.basic">
+        <put-attribute name="title" value="View Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/viewSeries.jsp" />
+    </definition>
+
+    <definition name="survey/chart/addSeries" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/addSeries.jsp" />
+    </definition>
+
+    <definition name="survey/chart/editSeries" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/editSeries.jsp" />
+    </definition>
+ 
     <!-- ===== -->
     <!-- Forum -->
     <!-- ===== -->

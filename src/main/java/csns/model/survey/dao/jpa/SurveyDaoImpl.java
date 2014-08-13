@@ -125,7 +125,8 @@ public class SurveyDaoImpl implements SurveyDao {
     public List<Survey> searchSurveysByPrefix( Department department,
         String term, int maxResults )
     {
-        String query = "from Survey where lower(name) like :term || '%'";
+        String query = "from Survey where lower(name) like :term || '%' "
+            + "and deleted = false order by name asc";
 
         return entityManager.createQuery( query, Survey.class )
             .setParameter( "term", term.toLowerCase() )

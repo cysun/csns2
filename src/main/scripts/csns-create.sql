@@ -593,6 +593,11 @@ create table survey_chart_points (
     survey_id       bigint references surveys(id),
     section_index   integer not null default 0,
     question_index  integer not null default 0,
+    min             double precision,
+    max             double precision,
+    average         double precision,
+    median          double precision,
+    values_set      boolean not null default 'f',
     series_id       bigint references survey_chart_series(id),
     point_index     integer
 );

@@ -64,12 +64,44 @@ public class SurveyChartSeries implements Serializable {
         points = new ArrayList<SurveyChartPoint>();
     }
 
+    public SurveyChartPoint getPoint( Long surveyId, int sectionIndex,
+        int questionIndex )
+    {
+        if( surveyId <= 0 ) return getEmptyPoint();
+
+        for( int i = points.size() - 1; i >= 0; --i )
+        {
+            SurveyChartPoint point = points.get( i );
+            if( point.getSurvey() != null
+                && point.getSurvey().getId().equals( surveyId )
+                && point.getSectionIndex() == sectionIndex
+                && point.getQuestionIndex() == questionIndex ) return point;
+        }
+
+        return null;
+    }
+
+    public SurveyChartPoint getEmptyPoint()
+    {
+        for( int i = points.size() - 1; i >= 0; --i )
+            if( points.get( i ).getSurvey() == null ) return points.get( i );
+        return null;
+    }
+
     public List<Number> getValues()
     {
         List<Number> values = new ArrayList<Number>();
         for( SurveyChartPoint point : points )
             values.add( point.getValue( statType ) );
         return values;
+    }
+
+    public boolean setValues()
+    {
+        boolean valuesSet = false;
+        for( SurveyChartPoint point : points )
+            if( point.setValues() ) valuesSet = true;
+        return valuesSet;
     }
 
     public Series getHighchartSeries( boolean showInLegend )

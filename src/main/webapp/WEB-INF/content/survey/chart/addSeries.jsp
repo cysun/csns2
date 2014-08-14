@@ -14,35 +14,36 @@ $(function(){
 });
 function addPoint()
 {
-	if( $("#survey").val() && $("#section").val() && $("#question").val() )
-	{
-		var s = "<a href='javascript:removePoint(" + $("#survey").val() + ","
-		        + ($("#section").val()-1) + "," + ($("#question").val()-1)
-		        + ")'><img alt='[Delete Point]' title='Delete Point' "
-		        + "src='<c:url value='/img/icons/delete.png' />' /></a>";
-	    $.ajax({
-		    url: "addPoint",
-		    data: {
-			    "surveyId": $("#survey").val(),
-			    "sectionIndex": $("#section").val()-1,
-			    "questionIndex": $("#question").val()-1,
-			    "_cid": "${_cid}"
-		    },
-		    success: function(){
-		    	$("#addRow").before(
-		    	    $("<tr>").attr("id","p"+$("#survey").val()+"-"+($("#section").val()-1)+"-"+($("#question").val()-1))
-		    	    .append($("<td>").text($("#search").val()))
-		            .append($("<td>").text($("#section").val()).addClass("center"))
-		            .append($("<td>").text($("#question").val()).addClass("center"))
-		            .append($("<td>").html(s))
-		        );
-		    	$("#search").val("");
-		    	$("#survey").val("");
-		    	$("#section").val("");
-		    	$("#question").val("");
-		    }
-	    });
-	}
+	var survey = $("#survey").val() ? $("#survey").val() : 0;
+	var section = $("#section").val() ? $("#section").val() : 1;
+	var question = $("#question").val() ? $("#question").val() : 1;
+	
+    var s = "<a href='javascript:removePoint(" + survey + ","
+	        + (section-1) + "," + (question-1)
+	        + ")'><img alt='[Delete Point]' title='Delete Point' "
+	        + "src='<c:url value='/img/icons/delete.png' />' /></a>";
+    $.ajax({
+	    url: "addPoint",
+	    data: {
+		    "surveyId": survey,
+		    "sectionIndex": section-1,
+		    "questionIndex": question-1,
+		    "_cid": "${_cid}"
+	    },
+	    success: function(){
+	    	$("#addRow").before(
+	    	    $("<tr>").attr("data-id", survey+"-"+(section-1)+"-"+(question-1))
+	    	    .append($("<td>").text(survey > 0 ? $("#search").val() : "[Empty Point]"))
+	            .append($("<td>").text(survey > 0 ? section : "").addClass("center"))
+	            .append($("<td>").text(survey > 0 ? question : "").addClass("center"))
+	            .append($("<td>").html(s))
+	        );
+	    	$("#search").val("");
+	    	$("#survey").val("");
+	    	$("#section").val("");
+	    	$("#question").val("");
+	    }
+    });
 }
 function removePoint( surveyId, sectionIndex, questionIndex )
 {
@@ -55,7 +56,8 @@ function removePoint( surveyId, sectionIndex, questionIndex )
             "_cid": "${_cid}"
         },
         success: function(){
-        	$("#p" + surveyId + "-" + sectionIndex + "-" + questionIndex).remove();
+        	$("tr[data-id='" + surveyId + "-" + sectionIndex + "-"
+        	    + questionIndex + "']:last").remove();
         }
     });
 }
@@ -64,8 +66,8 @@ function removePoint( surveyId, sectionIndex, questionIndex )
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="list">Charts</a></li>
-<li><a class="bc" href="view?id=${series.chart.id}"><csns:truncate
-  value="${series.chart.name}" length="50" /></a></li>
+<li><a class="bc" title="${series.chart.name}" href="view?id=${series.chart.id}"><csns:truncate
+  value="${series.chart.name}" length="60" /></a></li>
 <li>Add Series</li>
 </ul>
 
@@ -95,13 +97,22 @@ function removePoint( surveyId, sectionIndex, questionIndex )
 <tr><th>Survey</th><th class="shrink">Section</th><th class="shrink">Question</th>
   <th class="shrink"></th></tr>
 <c:forEach items="${series.points}" var="point">
-<tr id="p${point.survey.id}-${point.sectionIndex}-${point.questionIndex}">
+<c:if test="${not empty point.survey}">
+<tr data-id="${point.survey.id}-${point.sectionIndex}-${point.questionIndex}">
   <td>${point.survey.name}</td>
   <td class="center">${point.sectionIndex+1}</td>
   <td class="center">${point.questionIndex+1}</td>
   <td><a href="javascript:removePoint(${point.survey.id},${point.sectionIndex},${point.questionIndex})"><img
          alt="[Delete Point]" title="Delete Point" src="<c:url value='/img/icons/delete.png' />" /></a></td>
 </tr>
+</c:if>
+<c:if test="${empty point.survey}">
+<tr data-id="0-0-0">
+  <td>[Empty Point]</td><td></td><td></td>
+  <td><a href="javascript:removePoint(0,0,0)"><img alt="[Delete Point]" title="Delete Point"
+         src="<c:url value='/img/icons/delete.png' />" /></a></td>
+</tr>
+</c:if>
 </c:forEach>
 <tr id="addRow">
   <td><input id="search" type="text" class="leftinput" style="width: 99%"

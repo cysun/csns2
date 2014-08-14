@@ -17,7 +17,7 @@
 <c:if test="${fn:length(charts) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Name</th><th>Author</th><th>Updated</th><th></th></tr>
+  <tr><th>Name</th><th>Author</th><th>Updated</th></tr>
 </thead>
 <tbody>
   <c:forEach items="${charts}" var="chart">
@@ -25,10 +25,6 @@
     <td><a href="view?id=${chart.id}">${chart.name}</a></td>
     <td class="shrink">${chart.author.username}</td>
     <td class="shrink"><fmt:formatDate value="${chart.date}" pattern="MM/dd/yyyy" /></td>
-    <td class="action">
-      <a href="edit?id=${chart.id}"><img alt="[Edit Chart]"
-         title="Edit Chart" src="<c:url value='/img/icons/chart_bar_edit.png'/>" /></a>
-    </td>
   </tr>
   </c:forEach>
 </tbody>

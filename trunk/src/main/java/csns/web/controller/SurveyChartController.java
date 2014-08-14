@@ -69,6 +69,8 @@ public class SurveyChartController {
         throws JsonProcessingException
     {
         SurveyChart chart = surveyChartDao.getSurveyChart( id );
+        if( chart.setValues() )
+            chart = surveyChartDao.saveSurveyChart( chart );
         Chart highchart = chart.getHighchart();
 
         models.put( "chart", chart );

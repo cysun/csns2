@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -10,7 +11,8 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="list">Charts</a></li>
-<li>${chart.name}</li>
+<li title="${chart.name}"><csns:truncate
+  value="${chart.name}" length="75" /></li>
 <li class="align_right"><a href="addSeries?chartId=${chart.id}"><img alt="[Add Series]"
   title="Add Series" src="<c:url value='/img/icons/chart_line_add.png' />" /></a></li>
 <li class="align_right"><a href="edit?id=${chart.id}"><img alt="[Edit Chart]"

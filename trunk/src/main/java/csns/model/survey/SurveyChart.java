@@ -108,6 +108,14 @@ public class SurveyChart implements Serializable {
         return chart;
     }
 
+    public boolean setValues()
+    {
+        boolean valuesSet = false;
+        for( SurveyChartSeries serie : series )
+            if( serie.setValues() ) valuesSet = true;
+        return valuesSet;
+    }
+
     public Long getId()
     {
         return id;

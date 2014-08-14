@@ -210,9 +210,12 @@ public class SurveyChartControllerS {
         @RequestParam Long surveyId, @RequestParam int sectionIndex,
         @RequestParam int questionIndex )
     {
-        series.getPoints().add(
-            new SurveyChartPoint( surveyDao.getSurvey( surveyId ),
-                sectionIndex, questionIndex ) );
+        SurveyChartPoint point = new SurveyChartPoint();
+        if( surveyId > 0 ) // not an empty point
+            point = new SurveyChartPoint( surveyDao.getSurvey( surveyId ),
+                sectionIndex, questionIndex );
+        series.getPoints().add( point );
+
         logger.info( "Chart point added: (" + surveyId + "," + sectionIndex
             + "," + questionIndex + ")" );
         return "";
@@ -224,19 +227,11 @@ public class SurveyChartControllerS {
         @RequestParam Long surveyId, @RequestParam int sectionIndex,
         @RequestParam int questionIndex )
     {
-        SurveyChartPoint foundPoint = null;
-        for( SurveyChartPoint point : series.getPoints() )
-            if( point.getSurvey().getId().equals( surveyId )
-                && point.getSectionIndex() == sectionIndex
-                && point.getQuestionIndex() == questionIndex )
-            {
-                foundPoint = point;
-                break;
-            }
-
-        if( foundPoint != null )
+        SurveyChartPoint point = series.getPoint( surveyId, sectionIndex,
+            questionIndex );
+        if( point != null )
         {
-            series.getPoints().remove( foundPoint );
+            series.getPoints().remove( point );
             logger.info( "Chart point removed: (" + surveyId + ","
                 + sectionIndex + "," + questionIndex + ")" );
         }

@@ -438,10 +438,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -592,8 +592,13 @@
 
     create table survey_chart_points (
         id int8 not null,
+        average float8,
+        max float8,
+        median float8,
+        min float8,
         question_index int4 not null,
         section_index int4 not null,
+        values_set boolean not null,
         survey_id int8,
         series_id int8,
         point_index int4,

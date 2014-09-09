@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics.dao.jpa;
+package csns.model.site.dao.jpa;
 
 import java.util.List;
 
@@ -24,50 +24,47 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Course;
-import csns.model.academics.dao.CourseDao;
+import csns.model.core.User;
+import csns.model.site.Site;
+import csns.model.site.dao.SiteDao;
 
 @Repository
-public class CourseDaoImpl implements CourseDao {
+public class SiteDaoImpl implements SiteDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public Course getCourse( Long id )
+    public Site getSite( Long id )
     {
-        return entityManager.find( Course.class, id );
+        return entityManager.find( Site.class, id );
     }
 
     @Override
-    public Course getCourse( String code )
+    public List<Site> getSites( Course course, User instructor, int maxResults )
     {
-        List<Course> courses = entityManager.createQuery(
-            "from Course where code = :code", Course.class )
-            .setParameter( "code", code.toUpperCase() )
-            .getResultList();
-        return courses.size() == 0 ? null : courses.get( 0 );
-    }
+        String query = "select s from Site s join s.section.instructors i "
+            + "where s.section.course = :course and (s.shared = true or i = :instructor) "
+            + "order by s.section.quarter desc, s.section.number asc";
 
-    @Override
-    public List<Course> searchCourses( String term, int maxResults )
-    {
-        TypedQuery<Course> query = entityManager.createNamedQuery(
-            "course.search", Course.class );
-        if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        TypedQuery<Site> typedQuery = entityManager.createQuery( query,
+            Site.class )
+            .setParameter( "course", course )
+            .setParameter( "instructor", instructor );
+        if( maxResults > 0 ) typedQuery.setMaxResults( maxResults );
+
+        return typedQuery.getResultList();
     }
 
     @Override
     @Transactional
-    @PreAuthorize("principal.admin or principal.id == #course.coordinator.id")
-    public Course saveCourse( Course course )
+    public Site saveSite( Site site )
     {
-        return entityManager.merge( course );
+        return entityManager.merge( site );
     }
 
 }

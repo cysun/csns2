@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -98,6 +98,11 @@ public class Quarter implements Serializable, Comparable<Quarter> {
             throw new IllegalArgumentException( "Cannot compare to NULL." );
 
         return code - quarter.code;
+    }
+
+    public boolean isValid()
+    {
+        return code != -1;
     }
 
     private void setCode( Calendar calendar )
@@ -211,6 +216,33 @@ public class Quarter implements Serializable, Comparable<Quarter> {
 
         int year = ((code / 10) + 1900) % 100;
         return s + (year < 10 ? "0" + year : year);
+    }
+
+    public void setShortString( String s )
+    {
+        int year = 2000 + Integer.parseInt( s.substring( 1, 3 ) );
+        int newCode = (year - 1900) * 10;
+
+        switch( s.substring( 0, 1 ).toUpperCase() )
+        {
+            case "W":
+                newCode += 1;
+                break;
+            case "S":
+                newCode += 3;
+                break;
+            case "X":
+                newCode += 6;
+                break;
+            case "F":
+                newCode += 9;
+                break;
+            default:
+                newCode = -1;
+                logger.warn( "Invalid quarter short string: " + s );
+        }
+
+        code = newCode;
     }
 
     public int getYear()

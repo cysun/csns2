@@ -27,7 +27,10 @@ $(function(){
 <a id="section-${section.id}"></a>
 <table class="outer_viewtable">
   <tr class="rowtypea">
-    <td>${section.course.code} ${section.course.name} - ${section.number}</td>
+    <td>
+      <a href="<c:url value='/site/${section.quarter.shortString.toLowerCase()}/${section.course.code.toLowerCase()}-${section.number}' />">${section.course.code}
+         ${section.course.name} - ${section.number}</a>
+    </td>
   </tr>
   <tr> 
     <td>

@@ -35,6 +35,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -45,6 +46,7 @@ import org.hibernate.annotations.Where;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
 import csns.model.core.User;
+import csns.model.site.Site;
 
 @Entity
 @Table(name = "sections", uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -89,6 +91,9 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderBy("name asc")
     @Where(clause = "deleted='f'")
     private List<RubricAssignment> rubricAssignments;
+
+    @OneToOne(mappedBy = "section")
+    private Site site;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -227,6 +232,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setRubricAssignments( List<RubricAssignment> rubricAssignments )
     {
         this.rubricAssignments = rubricAssignments;
+    }
+
+    public Site getSite()
+    {
+        return site;
+    }
+
+    public void setSite( Site site )
+    {
+        this.site = site;
     }
 
     public boolean isDeleted()

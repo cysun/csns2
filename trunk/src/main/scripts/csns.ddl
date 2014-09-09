@@ -71,8 +71,8 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
@@ -546,6 +546,45 @@
         number int4 not null,
         quarter int4 not null,
         course_id int8 not null,
+        primary key (id)
+    );
+
+    create table site_announcements (
+        id int8 not null,
+        content varchar(255),
+        date timestamp not null,
+        site_id int8,
+        primary key (id)
+    );
+
+    create table site_blocks (
+        id int8 not null,
+        hidden boolean not null,
+        name varchar(255),
+        placeholder boolean not null,
+        site_id int8,
+        block_index int4,
+        primary key (id)
+    );
+
+    create table site_item_additional_resources (
+        item_id int8 not null,
+        resource_id int8 not null
+    );
+
+    create table site_items (
+        id int8 not null,
+        hidden boolean not null,
+        resource_id int8,
+        block_id int8,
+        item_index int4,
+        primary key (id)
+    );
+
+    create table sites (
+        id int8 not null,
+        shared boolean not null,
+        section_id int8,
         primary key (id)
     );
 
@@ -1356,6 +1395,41 @@
         add constraint FK_j52kea1adexdgmvwldq0uluko 
         foreign key (course_id) 
         references courses;
+
+    alter table site_announcements 
+        add constraint FK_oj2vrsf4hwfjx943c14gvxpr6 
+        foreign key (site_id) 
+        references sites;
+
+    alter table site_blocks 
+        add constraint FK_8dena1stthxg1npvrqrgwf2pu 
+        foreign key (site_id) 
+        references sites;
+
+    alter table site_item_additional_resources 
+        add constraint FK_2hsbsaek40kolelovkvfpx7br 
+        foreign key (resource_id) 
+        references resources;
+
+    alter table site_item_additional_resources 
+        add constraint FK_d47ahbwgrniftplj0ii3mmwss 
+        foreign key (item_id) 
+        references site_items;
+
+    alter table site_items 
+        add constraint FK_fu2v34mff8ajn5jjo9xfooym7 
+        foreign key (resource_id) 
+        references resources;
+
+    alter table site_items 
+        add constraint FK_ntpgyvgtuwsb5ja1g794ucy7j 
+        foreign key (block_id) 
+        references site_blocks;
+
+    alter table sites 
+        add constraint FK_lbvw5a0cnlm760o1e0ilsffys 
+        foreign key (section_id) 
+        references sections;
 
     alter table standing_mailinglists 
         add constraint FK_futm4ar6w96g0yxx6ml4v48tp 

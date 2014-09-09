@@ -1038,6 +1038,73 @@ tr th.shrink, tr td.shrink {
     height: 30px;
 }
 
+/** Site **/
+
+.site-title {
+    color: #164FA6;
+    font: 20px 'Trebuchet MS', Arial;
+    font-weight: bold;
+    text-align: center;
+    margin: 5px 0;
+}
+.site-quarter {
+    color: #164FA6;
+    font: 18px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 10px 0 5px;
+}
+#site {
+     border-collapse: collapse;
+     border-spacing: 0px;
+}
+#site td {
+    vertical-align:top;
+    padding: 0px;
+}
+#site-sidebar {
+    margin-top: 10px;
+    border-radius: 5px;
+}
+#site-sidebar ul {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+#site-sidebar ul li a {
+    display:block;
+    padding:5px 10px;
+    width:130px;
+    font-size:12px;
+    border-bottom:1px solid #dddddd;
+    border-top:1px solid #ffffff;
+    border-right:1px solid #ffffff;
+    border-left:5px solid #0070fa;
+    background-color:#eeeeee;
+    color:#0070fa;
+}
+#site-sidebar ul li a:hover {
+    color:#4a4a4a;
+    border-left:5px solid #000000;
+    color: #164fa6;
+}
+.site-block {
+    margin: 10px;
+}
+.site-block-title {
+    color: #164FA6;
+    font-size: 16px;
+    font-weight: bold;
+    background: #ffffff url(../img/style/title_bg.gif) repeat-x top center;
+    border:1px solid #dddddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 0;
+}
+.site-block-content {
+    padding: 5px;
+    margin: 5px 0;
+}
+
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

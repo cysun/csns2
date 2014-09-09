@@ -951,6 +951,25 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/evaluation/view.jsp" />
     </definition>
 
+    <!-- ==== -->
+    <!-- Site -->
+    <!-- ==== -->
+
+    <definition name="site/view" extends="layout.basic">
+        <put-attribute name="title" value="View Site" />
+        <put-attribute name="content" value="/WEB-INF/content/site/view.jsp" />
+    </definition>
+
+    <definition name="site/nosite" extends="layout.basic">
+        <put-attribute name="title" value="Site Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/site/nosite.jsp" />
+    </definition>
+
+    <definition name="site/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Site" />
+        <put-attribute name="content" value="/WEB-INF/content/site/create.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

@@ -546,6 +546,7 @@
         number int4 not null,
         quarter int4 not null,
         course_id int8 not null,
+        syllabus_id int8,
         primary key (id)
     );
 
@@ -561,10 +562,18 @@
         id int8 not null,
         hidden boolean not null,
         name varchar(255),
-        placeholder boolean not null,
+        type varchar(255) not null,
         site_id int8,
         block_index int4,
         primary key (id)
+    );
+
+    create table site_class_info (
+        site_id int8 not null,
+        name varchar(255),
+        value varchar(255),
+        entry_index int4 not null,
+        primary key (site_id, entry_index)
     );
 
     create table site_item_additional_resources (
@@ -1396,6 +1405,11 @@
         foreign key (course_id) 
         references courses;
 
+    alter table sections 
+        add constraint FK_tb2sois1r297sjjopec8sntu4 
+        foreign key (syllabus_id) 
+        references resources;
+
     alter table site_announcements 
         add constraint FK_oj2vrsf4hwfjx943c14gvxpr6 
         foreign key (site_id) 
@@ -1403,6 +1417,11 @@
 
     alter table site_blocks 
         add constraint FK_8dena1stthxg1npvrqrgwf2pu 
+        foreign key (site_id) 
+        references sites;
+
+    alter table site_class_info 
+        add constraint FK_mwdxpihsngivuk1j751ttgo1m 
         foreign key (site_id) 
         references sites;
 

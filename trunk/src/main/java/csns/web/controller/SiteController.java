@@ -61,14 +61,13 @@ public class SiteController {
         Course course = courseDao.getCourse( cc );
         Section section = sectionDao.getSection( quarter, course, sn );
 
+        models.put( "section", section );
+        if( section != null && SecurityUtils.isAuthenticated() )
+            models.put( "isInstructor",
+                section.isInstructor( SecurityUtils.getUser() ) );
+
         if( section == null || section.getSite() == null )
-        {
-            models.put( "section", section );
-            if( section != null && SecurityUtils.isAuthenticated() )
-                models.put( "isInstructor",
-                    section.isInstructor( SecurityUtils.getUser() ) );
             return "site/nosite";
-        }
         else
         {
             models.put( "site", section.getSite() );

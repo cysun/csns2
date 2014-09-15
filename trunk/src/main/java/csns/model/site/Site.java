@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -50,6 +52,12 @@ public class Site implements Serializable {
     @JoinColumn(name = "section_id")
     private Section section;
 
+    @ElementCollection
+    @CollectionTable(name = "site_class_info",
+        joinColumns = @JoinColumn(name = "site_id"))
+    @OrderColumn(name = "entry_index")
+    private List<InfoEntry> infoEntries;
+
     @OneToMany(mappedBy = "site")
     @OrderBy("date desc")
     private List<Announcement> announcements;
@@ -65,9 +73,9 @@ public class Site implements Serializable {
     public Site()
     {
         blocks = new ArrayList<Block>();
-        blocks.add( new Block( "Announcements", true ) );
-        blocks.add( new Block( "Lecture Notes", false ) );
-        blocks.add( new Block( "Homework", true ) );
+        blocks.add( new Block( "Announcements", Block.Type.ANNOUNCEMENTS ) );
+        blocks.add( new Block( "Lecture Notes", Block.Type.REGULAR ) );
+        blocks.add( new Block( "Assignments", Block.Type.ASSIGNMENTS ) );
 
         shared = false;
     }
@@ -104,6 +112,16 @@ public class Site implements Serializable {
     public void setSection( Section section )
     {
         this.section = section;
+    }
+
+    public List<InfoEntry> getInfoEntries()
+    {
+        return infoEntries;
+    }
+
+    public void setInfoEntries( List<InfoEntry> infoEntries )
+    {
+        this.infoEntries = infoEntries;
     }
 
     public List<Announcement> getAnnouncements()

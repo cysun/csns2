@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -36,41 +38,45 @@ public class Block implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public enum Type {
+        REGULAR, ANNOUNCEMENTS, ASSIGNMENTS, EXAMS, QUIZZES, EXERCISES
+    };
+
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
+    // Used to identify special blocks like Announcements and Assignments.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Type type;
+
     @OneToMany
     @JoinColumn(name = "block_id")
     @OrderColumn(name = "item_index")
     private List<Item> items;
-
-    // A placeholder block does not have its own items - it's used for special
-    // items such as announcements and homework assignments.
-    @Column(nullable = false)
-    private boolean placeholder;
 
     @Column(nullable = false)
     private boolean hidden;
 
     public Block()
     {
-        placeholder = false;
+        type = Type.REGULAR;
         hidden = false;
     }
 
     public Block( String name )
     {
-        this( name, false );
+        this( name, Type.REGULAR );
     }
 
-    public Block( String name, boolean placeholder )
+    public Block( String name, Type type )
     {
         this();
         this.name = name;
-        this.placeholder = placeholder;
+        this.type = type;
     }
 
     public Long getId()
@@ -81,6 +87,16 @@ public class Block implements Serializable {
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+    public Type getType()
+    {
+        return type;
+    }
+
+    public void setType( Type type )
+    {
+        this.type = type;
     }
 
     public String getName()
@@ -101,16 +117,6 @@ public class Block implements Serializable {
     public void setItems( List<Item> items )
     {
         this.items = items;
-    }
-
-    public boolean isPlaceholder()
-    {
-        return placeholder;
-    }
-
-    public void setPlaceholder( boolean placeholder )
-    {
-        this.placeholder = placeholder;
     }
 
     public boolean isHidden()

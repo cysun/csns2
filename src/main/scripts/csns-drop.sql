@@ -100,6 +100,7 @@ drop table site_item_additional_resources;
 drop table site_items;
 drop table site_blocks;
 drop table site_announcements;
+drop table site_class_info;
 drop table sites;
 
 alter table courses drop constraint courses_department_fk;

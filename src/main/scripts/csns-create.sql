@@ -319,6 +319,7 @@ create table sections (
     quarter         integer not null,
     course_id       bigint not null references courses(id),
     number          integer not null default 1,
+    syllabus_id     bigint references resources(id),
     deleted         boolean not null default 'f',
   unique (quarter, course_id, number)
 );
@@ -519,6 +520,14 @@ create table sites (
     shared      boolean not null default 'f'
 );
 
+create table site_class_info (
+    site_id     bigint not null references sites(id),
+    entry_index integer not null,
+    name        varchar(255),
+    value       varchar(8000),
+  primary key (site_id, entry_index)
+);
+
 create table site_announcements (
     id      bigint primary key,
     date    timestamp not null default current_timestamp,
@@ -529,7 +538,7 @@ create table site_announcements (
 create table site_blocks (
     id          bigint primary key,
     name        varchar(255),
-    placeholder boolean not null default 'f',
+    type        varchar(255) not null default 'REGULAR',
     hidden      boolean not null default 'f',
     site_id     bigint references sites(id),
     block_index integer

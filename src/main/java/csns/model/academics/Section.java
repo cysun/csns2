@@ -45,6 +45,7 @@ import org.hibernate.annotations.Where;
 
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
+import csns.model.core.Resource;
 import csns.model.core.User;
 import csns.model.site.Site;
 
@@ -91,6 +92,10 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderBy("name asc")
     @Where(clause = "deleted='f'")
     private List<RubricAssignment> rubricAssignments;
+
+    @OneToOne
+    @JoinColumn(name = "syllabus_id")
+    private Resource syllabus;
 
     @OneToOne(mappedBy = "section")
     private Site site;
@@ -232,6 +237,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setRubricAssignments( List<RubricAssignment> rubricAssignments )
     {
         this.rubricAssignments = rubricAssignments;
+    }
+
+    public Resource getSyllabus()
+    {
+        return syllabus;
+    }
+
+    public void setSyllabus( Resource syllabus )
+    {
+        this.syllabus = syllabus;
     }
 
     public Site getSite()

@@ -1,7 +1,17 @@
+alter table sections add column syllabus_id bigint references resources(id);
+
 create table sites (
     id          bigint primary key,
     section_id  bigint unique references sections(id),
     shared      boolean not null default 'f'
+);
+
+create table site_class_info (
+    site_id     bigint not null references sites(id),
+    entry_index integer not null,
+    name        varchar(255),
+    value       varchar(8000),
+  primary key (site_id, entry_index)
 );
 
 create table site_announcements (
@@ -14,7 +24,7 @@ create table site_announcements (
 create table site_blocks (
     id          bigint primary key,
     name        varchar(255),
-    placeholder boolean not null default 'f',
+    type        varchar(255) not null default 'REGULAR',
     hidden      boolean not null default 'f',
     site_id     bigint references sites(id),
     block_index integer

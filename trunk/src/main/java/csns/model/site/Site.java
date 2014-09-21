@@ -86,14 +86,6 @@ public class Site implements Serializable {
         this.section = section;
     }
 
-    public String getUrl()
-    {
-        return section == null ? "" : "/site/"
-            + section.getQuarter().getShortString().toLowerCase() + "/"
-            + section.getCourse().getCode().toLowerCase() + "-"
-            + section.getNumber();
-    }
-
     public Long getId()
     {
         return id;

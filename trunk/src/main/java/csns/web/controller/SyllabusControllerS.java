@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,19 +33,21 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import csns.model.academics.Course;
+import csns.model.academics.Quarter;
 import csns.model.academics.Section;
+import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
 import csns.model.core.User;
-import csns.model.site.Site;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 
 @Controller
 @SessionAttributes("syllabus")
-public class SiteSyllabusControllerS {
+public class SyllabusControllerS {
 
     @Autowired
     private SiteDao siteDao;
@@ -52,29 +56,55 @@ public class SiteSyllabusControllerS {
     private SectionDao sectionDao;
 
     @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( SiteSyllabusControllerS.class );
+    private static final Logger logger = LoggerFactory.getLogger( SyllabusControllerS.class );
 
-    private String get( Section section, ModelMap models )
+    private Section getSection( String qtr, String cc, int sn )
     {
-        Resource syllabus = section.getSyllabus();
-        if( syllabus == null ) syllabus = new Resource();
-
-        models.put( "syllabus", syllabus );
-        return "section/syllabus/edit";
+        Quarter quarter = new Quarter();
+        quarter.setShortString( qtr );
+        Course course = courseDao.getCourse( cc );
+        return sectionDao.getSection( quarter, course, sn );
     }
 
-    private String post( Section section, Resource syllabus,
-        MultipartFile uploadedFile, String url, SessionStatus sessionStatus )
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/syllabus/edit",
+        method = RequestMethod.GET)
+    public String edit( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, ModelMap models )
+    {
+        Section section = getSection( qtr, cc, sn );
+        Resource syllabus = section.getSyllabus();
+        if( syllabus == null ) syllabus = new Resource( ResourceType.TEXT );
+
+        models.put( "section", section );
+        models.put( "syllabus", syllabus );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "site/syllabus/edit";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/syllabus/edit",
+        method = RequestMethod.POST)
+    public String edit(
+        @PathVariable String qtr,
+        @PathVariable String cc,
+        @PathVariable int sn,
+        @ModelAttribute("syllabus") Resource syllabus,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+        BindingResult result, SessionStatus sessionStatus )
     {
         User user = SecurityUtils.getUser();
+        Section section = getSection( qtr, cc, sn );
         if( syllabus.getType() == ResourceType.NONE )
             section.setSyllabus( null );
-        else if( syllabus.getType() == ResourceType.FILE )
+        else
         {
-            syllabus.setFile( fileIO.save( uploadedFile, user, true ) );
             section.setSyllabus( syllabus );
+            if( syllabus.getType() == ResourceType.FILE )
+                syllabus.setFile( fileIO.save( uploadedFile, user, true ) );
         }
         sectionDao.saveSection( section );
         sessionStatus.setComplete();
@@ -82,26 +112,7 @@ public class SiteSyllabusControllerS {
         logger.info( user.getUsername() + " edited the syllabus of section "
             + section.getId() );
 
-        return "redirect:" + url;
-    }
-
-    @RequestMapping(value = "/site/edit/syllabus", method = RequestMethod.GET)
-    public String edit( @RequestParam Long siteId, ModelMap models )
-    {
-        Site site = siteDao.getSite( siteId );
-        models.put( "site", site );
-        return get( site.getSection(), models );
-    }
-
-    @RequestMapping(value = "/site/edit/syllabus", method = RequestMethod.POST)
-    public String edit( @ModelAttribute("syllabus") Resource syllabus,
-        @RequestParam Long siteId, @RequestParam(value = "file",
-            required = false) MultipartFile uploadedFile,
-        SessionStatus sessionStatus )
-    {
-        Site site = siteDao.getSite( siteId );
-        return post( site.getSection(), syllabus, uploadedFile, site.getUrl(),
-            sessionStatus );
+        return "redirect:" + section.getSiteUrl() + "/syllabus";
     }
 
 }

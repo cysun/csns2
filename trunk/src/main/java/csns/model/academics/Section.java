@@ -93,7 +93,7 @@ public class Section implements Serializable, Comparable<Section> {
     @Where(clause = "deleted='f'")
     private List<RubricAssignment> rubricAssignments;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "syllabus_id")
     private Resource syllabus;
 
@@ -144,8 +144,11 @@ public class Section implements Serializable, Comparable<Section> {
 
     public boolean isInstructor( User user )
     {
-        for( User instructor : instructors )
-            if( instructor.getId().equals( user.getId() ) ) return true;
+        if( user != null )
+        {
+            for( User instructor : instructors )
+                if( instructor.getId().equals( user.getId() ) ) return true;
+        }
 
         return false;
     }
@@ -157,6 +160,12 @@ public class Section implements Serializable, Comparable<Section> {
             if( rubricAssignment.getRubric().getId().equals( rubric.getId() ) )
                 results.add( rubricAssignment );
         return results;
+    }
+
+    public String getSiteUrl()
+    {
+        return "/site/" + quarter.getShortString().toLowerCase() + "/"
+            + course.getCode().toLowerCase() + "-" + number;
     }
 
     public Long getId()

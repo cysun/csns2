@@ -12,11 +12,11 @@ $(function(){
 <li><a href="<c:url value='/section/taught' />" class="bc">Instructor's Home</a></li>
 <li>${section.course.code}-${section.number}</li>
 <li class="align_right"><a href="blocks?id=${site.id}"><img title="Edit Blocks"
-  alt="[Edit Blocks]" src="<c:url value='/img/icons/bricks.png' />" /></a></li>
+  alt="[Edit Blocks]" src="<c:url value='/img/icons/brick_edit.png' />" /></a></li>
 <li class="align_right"><a href="info?id=${site.id}"><img title="Edit Class Info"
-  alt="[Edit Class Info]" src="<c:url value='/img/icons/document_info.png' />" /></a></li>
-<li class="align_right"><a href="syllabus?id=${site.id}"><img title="Edit Syllabus"
-  alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_text.png' />" /></a></li>
+  alt="[Edit Class Info]" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='${section.siteUrl}/syllabus/edit' />"><img title="Edit Syllabus"
+  alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
 </c:if>
 
@@ -29,7 +29,7 @@ $(function(){
 <td id="site-sidebar" colspan="1" rowspan="2" class="shrink">
 <ul>
   <c:if test="${not empty section.syllabus}">
-  <li><a href="/syllabus">Syllabus</a></li>
+  <li><a href="<c:url value='${section.siteUrl}/syllabus' />">Syllabus</a></li>
   </c:if>
   <c:forEach items="${site.blocks}" var="block">
   <li><a href="#b${block.id}">${block.name}</a></li>

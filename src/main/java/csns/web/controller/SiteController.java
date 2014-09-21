@@ -78,13 +78,13 @@ public class SiteController {
     private String createSite( Section section )
     {
         if( section.getSite() != null )
-            return "redirect:" + section.getSite().getUrl();
+            return "redirect:" + section.getSiteUrl();
 
         Site site = new Site( section );
         site = siteDao.saveSite( site );
         logger.info( SecurityUtils.getUser().getUsername()
             + " create site for section " + section.getId() );
-        return "redirect:" + site.getUrl();
+        return "redirect:" + section.getSiteUrl();
     }
 
     @RequestMapping(value = "/site/create")

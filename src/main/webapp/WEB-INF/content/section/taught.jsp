@@ -63,7 +63,7 @@ function publish( id, type )
 <table class="outer_viewtable">
   <tr class="rowtypea">
     <td>
-      <a href="<c:url value='/site/${section.quarter.shortString.toLowerCase()}/${section.course.code.toLowerCase()}-${section.number}' />">${section.course.code}
+      <a href="<c:url value='${section.siteUrl}' />">${section.course.code}
          ${section.course.name} - ${section.number}</a>
     </td>
     <td class="action">

@@ -970,6 +970,16 @@
         <put-attribute name="content" value="/WEB-INF/content/site/create.jsp" />
     </definition>
 
+    <definition name="site/syllabus/view" extends="layout.basic">
+        <put-attribute name="title" value="Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/site/syllabus/view.jsp" />
+    </definition>
+
+    <definition name="site/syllabus/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/site/syllabus/edit.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

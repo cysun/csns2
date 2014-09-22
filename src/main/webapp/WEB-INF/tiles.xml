@@ -980,6 +980,26 @@
         <put-attribute name="content" value="/WEB-INF/content/site/syllabus/edit.jsp" />
     </definition>
 
+    <definition name="site/info/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Class Info" />
+        <put-attribute name="content" value="/WEB-INF/content/site/info/edit.jsp" />
+    </definition>
+
+    <definition name="site/block/list" extends="layout.basic">
+        <put-attribute name="title" value="Blocks" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/list.jsp" />
+    </definition>
+
+    <definition name="site/block/add" extends="layout.basic">
+        <put-attribute name="title" value="Add Block" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/add.jsp" />
+    </definition>
+
+    <definition name="site/block/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Block" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/edit.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

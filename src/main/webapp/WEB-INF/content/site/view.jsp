@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+
+<c:set var="site" value="${section.site}" />
 
 <script>
 $(function(){
@@ -11,17 +14,17 @@ $(function(){
 <ul id="title">
 <li><a href="<c:url value='/section/taught' />" class="bc">Instructor's Home</a></li>
 <li>${section.course.code}-${section.number}</li>
-<li class="align_right"><a href="blocks?id=${site.id}"><img title="Edit Blocks"
-  alt="[Edit Blocks]" src="<c:url value='/img/icons/brick_edit.png' />" /></a></li>
-<li class="align_right"><a href="info?id=${site.id}"><img title="Edit Class Info"
+<li class="align_right"><a href="<c:url value='${section.siteUrl}/block/list' />"><img title="Edit Blocks"
+  alt="[Edit Blocks]" src="<c:url value='/img/icons/bricks.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='${section.siteUrl}/info/edit' />"><img title="Edit Class Info"
   alt="[Edit Class Info]" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='${section.siteUrl}/syllabus/edit' />"><img title="Edit Syllabus"
   alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
 </c:if>
 
-<div class="site-title">${site.section.course.code} ${site.section.course.name}</div>
-<div class="site-quarter">${site.section.quarter}</div>
+<div class="site-title">${section.course.code} ${section.course.name}</div>
+<div class="site-quarter">${section.quarter}</div>
 
 <table id="site" style="width: 100%;">
 <tr>
@@ -39,24 +42,16 @@ $(function(){
 
 <!-- class info -->
 <td>
-<table class="general autowidth" style="margin-left: 10px">
-<tr>
-  <th>Instructor</th>
-  <td style="vertical-align: middle; padding: 5px;">Chengyu Sun</td>
-</tr>
-<tr>
-  <th>Lecture</th>
-  <td style="vertical-align: middle; padding: 5px;">Monday 2-3pm</td>
-</tr>
-<tr>
-  <th>Lab</th>
-  <td style="vertical-align: middle; padding: 5px;">Wednesday 3-4pm</td>
-</tr>
-<tr>
-  <th>Office Hours</th>
-  <td style="vertical-align: middle; padding: 5px;">MW 2-3pm in E&amp;T A317</td>
-</tr>
+<c:if test="${fn:length(site.infoEntries) > 0}">
+<table id="site-class-info" class="general">
+  <c:forEach items="${site.infoEntries}" var="infoEntry">
+  <tr>
+    <th>${infoEntry.name}</th>
+    <td>${infoEntry.value}</td>
+  </tr>
+  </c:forEach>
 </table>
+</c:if>
 </td> <!-- end of class info -->
 </tr>
 

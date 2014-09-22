@@ -72,8 +72,10 @@ public class Site implements Serializable {
 
     public Site()
     {
+        infoEntries = new ArrayList<InfoEntry>();
+        announcements = new ArrayList<Announcement>();
+
         blocks = new ArrayList<Block>();
-        blocks.add( new Block( "Announcements", Block.Type.ANNOUNCEMENTS ) );
         blocks.add( new Block( "Lecture Notes", Block.Type.REGULAR ) );
         blocks.add( new Block( "Assignments", Block.Type.ASSIGNMENTS ) );
 
@@ -84,6 +86,24 @@ public class Site implements Serializable {
     {
         this();
         this.section = section;
+    }
+
+    public Block getBlock( Long blockId )
+    {
+        for( Block block : blocks )
+            if( block.getId().equals( blockId ) ) return block;
+
+        return null;
+    }
+
+    public void removeBlock( Long blockId )
+    {
+        for( int i = 0; i < blocks.size(); ++i )
+            if( blocks.get( i ).getId().equals( blockId ) )
+            {
+                blocks.remove( i );
+                break;
+            }
     }
 
     public Long getId()

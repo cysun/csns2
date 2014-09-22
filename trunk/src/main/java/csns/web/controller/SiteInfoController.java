@@ -18,8 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +32,13 @@ import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.site.InfoEntry;
 import csns.model.site.Site;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 
 @Controller
-public class SiteController {
-
-    @Autowired
-    private SiteDao siteDao;
+public class SiteInfoController {
 
     @Autowired
     private CourseDao courseDao;
@@ -50,53 +46,55 @@ public class SiteController {
     @Autowired
     private SectionDao sectionDao;
 
-    private static Logger logger = LoggerFactory.getLogger( SiteController.class );
+    @Autowired
+    private SiteDao siteDao;
 
-    @RequestMapping("/site/{qtr}/{cc}-{sn}")
-    public String view( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, ModelMap models )
+    private static final Logger logger = LoggerFactory.getLogger( SiteInfoController.class );
+
+    private Section getSection( String qtr, String cc, int sn )
     {
         Quarter quarter = new Quarter();
         quarter.setShortString( qtr );
         Course course = courseDao.getCourse( cc );
-        Section section = sectionDao.getSection( quarter, course, sn );
-
-        models.put( "section", section );
-        if( section != null && SecurityUtils.isAuthenticated() )
-            models.put( "isInstructor",
-                section.isInstructor( SecurityUtils.getUser() ) );
-
-        return section == null || section.getSite() == null ? "site/nosite"
-            : "site/view";
+        return sectionDao.getSection( quarter, course, sn );
     }
 
-    private String createSite( Section section )
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/info/edit")
+    public String edit( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, ModelMap models )
     {
-        if( section.getSite() != null )
-            return "redirect:" + section.getSiteUrl();
+        Section section = getSection( qtr, cc, sn );
+        models.put( "section", section );
+        return "site/info/edit";
+    }
 
-        Site site = new Site( section );
-        site = siteDao.saveSite( site );
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/info/add")
+    public String add( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam String name,
+        @RequestParam String value )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        site.getInfoEntries().add( new InfoEntry( name, value ) );
+        siteDao.saveSite( site );
+
         logger.info( SecurityUtils.getUser().getUsername()
-            + " create site for section " + section.getId() );
-        return "redirect:" + section.getSiteUrl();
+            + " added an info entry to site " + site.getId() );
+
+        return "redirect:edit";
     }
 
-    @RequestMapping(value = "/site/create")
-    public String create( @RequestParam Long sectionId,
-        @RequestParam(required = false, value = "new") Boolean newSite,
-        ModelMap models )
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/info/delete")
+    public String delete( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam int index )
     {
-        Section section = sectionDao.getSection( sectionId );
-        if( newSite != null && newSite ) return createSite( section );
+        Site site = getSection( qtr, cc, sn ).getSite();
+        site.getInfoEntries().remove( index );
+        siteDao.saveSite( site );
 
-        List<Site> sites = siteDao.getSites( section.getCourse(),
-            SecurityUtils.getUser(), 20 );
-        if( sites.size() == 0 ) return createSite( section );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted an info entry from site " + site.getId() );
 
-        models.put( "section", section );
-        models.put( "sites", sites );
-        return "site/create";
+        return "redirect:edit";
     }
 
 }

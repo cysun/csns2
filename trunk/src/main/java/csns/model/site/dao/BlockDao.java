@@ -16,49 +16,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.site;
+package csns.model.site.dao;
 
-import java.io.Serializable;
+import csns.model.site.Block;
 
-import javax.persistence.Embeddable;
+public interface BlockDao {
 
-@Embeddable
-public class InfoEntry implements Serializable {
+    Block getBlock( Long id );
 
-    private static final long serialVersionUID = 1L;
-
-    private String name;
-
-    private String value;
-
-    public InfoEntry()
-    {
-    }
-
-    public InfoEntry( String name, String value )
-    {
-        this.name = name;
-        this.value = value;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-
-    public String getValue()
-    {
-        return value;
-    }
-
-    public void setValue( String value )
-    {
-        this.value = value;
-    }
+    Block saveBlock( Block block );
 
 }

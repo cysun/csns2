@@ -16,49 +16,34 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.site;
+package csns.model.site.dao.jpa;
 
-import java.io.Serializable;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import javax.persistence.Embeddable;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Embeddable
-public class InfoEntry implements Serializable {
+import csns.model.site.Block;
+import csns.model.site.dao.BlockDao;
 
-    private static final long serialVersionUID = 1L;
+@Repository
+public class BlockDaoImpl implements BlockDao {
 
-    private String name;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    private String value;
-
-    public InfoEntry()
+    @Override
+    public Block getBlock( Long id )
     {
+        return entityManager.find( Block.class, id );
     }
 
-    public InfoEntry( String name, String value )
+    @Override
+    @Transactional
+    public Block saveBlock( Block block )
     {
-        this.name = name;
-        this.value = value;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-
-    public String getValue()
-    {
-        return value;
-    }
-
-    public void setValue( String value )
-    {
-        this.value = value;
+        return entityManager.merge( block );
     }
 
 }

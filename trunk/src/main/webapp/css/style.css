@@ -1087,6 +1087,14 @@ tr th.shrink, tr td.shrink {
     border-left:5px solid #000000;
     color: #164fa6;
 }
+#site-class-info {
+    width: auto;
+    margin-left: 10px;
+}
+#site-class-info td {
+    vertical-align: middle;
+    padding: 5px 10px 5px 10px;
+}
 .site-block {
     margin: 10px;
 }
@@ -1104,7 +1112,13 @@ tr th.shrink, tr td.shrink {
     padding: 5px;
     margin: 5px 0;
 }
-
+.site-block-operations {
+    float: right;
+}
+.site-block-operations a {
+    vertical-align: middle;
+    margin: 5px;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

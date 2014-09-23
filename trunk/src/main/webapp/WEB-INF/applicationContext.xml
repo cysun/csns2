@@ -120,6 +120,10 @@
         <security:intercept-url pattern="/wiki/discuss" access="authenticated" />
         <security:intercept-url pattern="/department/*/news/current" access="permitAll" />
         <security:intercept-url pattern="/department/*/news/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/site/create" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/syllabus/edit" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/info/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/block/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/file/view" access="permitAll" />
         <security:intercept-url pattern="/file/**" access="authenticated" />
         <security:intercept-url pattern="/ckeditor/**" access="authenticated" />

@@ -29,7 +29,7 @@
 <table class="viewtable autowidth">
   <c:forEach items="${block.items}" var="item">
   <tr>
-    <td><a href="viewItem?id=${item.id}">${item.resource.name}</a></td>
+    <td><a href="../item/${item.id}">${item.name}</a></td>
     <td><a href="editItem?blockId=${block.id}&amp;itemId=${item.id}"><img title="Edit Item"
            alt="[Edit Item]" src="<c:url value='/img/icons/plugin_edit.png' />" /></a></td>
   </tr>

@@ -1073,7 +1073,7 @@ tr th.shrink, tr td.shrink {
 #site-sidebar ul li a {
     display:block;
     padding:5px 10px;
-    width:130px;
+    width: 160px;
     font-size:12px;
     border-bottom:1px solid #dddddd;
     border-top:1px solid #ffffff;
@@ -1111,6 +1111,9 @@ tr th.shrink, tr td.shrink {
 .site-block-content {
     padding: 5px;
     margin: 5px 0;
+}
+.site-block-content li {
+    margin: 0 0 5px 0;
 }
 .site-block-operations {
     float: right;

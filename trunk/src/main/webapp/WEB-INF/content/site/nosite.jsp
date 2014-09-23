@@ -5,7 +5,7 @@
 ${section.quarter}</em> does not exist.
 <c:if test="${isInstructor}">
 Do you want to create this site?
-<a href="<c:url value='/site/create?sectionId=${section.id}' />">Yes</a> |
+<a href="<c:url value='/site/create?sectionId=${section.id}&new=true' />">Yes</a> |
 <a href="<c:url value='/section/taught/' />">No</a>
 </c:if>
 </p>

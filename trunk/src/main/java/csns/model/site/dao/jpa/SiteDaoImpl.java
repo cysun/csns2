@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +63,7 @@ public class SiteDaoImpl implements SiteDao {
 
     @Override
     @Transactional
+    @PreAuthorize("authenticated and (principal.admin or #site.section.isInstructor(principal))")
     public Site saveSite( Site site )
     {
         return entityManager.merge( site );

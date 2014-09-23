@@ -26,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -210,6 +211,7 @@ public class SectionDaoImpl implements SectionDao {
 
     @Override
     @Transactional
+    @PreAuthorize("authenticated and (principal.admin or #section.isInstructor(principal))")
     public Section saveSection( Section section )
     {
         return entityManager.merge( section );

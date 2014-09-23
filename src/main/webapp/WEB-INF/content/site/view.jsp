@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="site" value="${section.site}" />
 
@@ -59,15 +60,63 @@ $(function(){
 <!-- blocks -->
 <td id="site-content">
 <c:forEach items="${site.blocks}" var="block">
-<a id="b${block.id}"></a><div class="site-block">
+<a id="b${block.id}"></a>
+<div class="site-block">
 <div class="site-block-title">${block.name}</div>
 <div class="site-block-content">
+  <%-- Regular Block --%>
+  <c:if test="${block.type == 'REGULAR'}">
   <ul>
-    <li>This is an item.</li>
-    <li>This is another item.</li>
+    <c:forEach items="${block.items}" var="item">
+    <li><a href="<c:url value='${section.siteUrl}/item/${item.id}' />">${item.name}</a></li>
+    </c:forEach>
   </ul>
+  </c:if>
+  <%-- Assignment Block --%>
+  <c:if test="${block.type == 'ASSIGNMENTS'}">
+  <ul>
+    <c:choose>
+      <c:when test="${isInstructor}">
+        <c:forEach items="${section.assignments}" var="assignment">
+          <li><a href="<c:url value='/section/taught#section-${section.id}' />">${assignment.name}</a>,
+            Due: <csns:dueDate date="${assignment.dueDate.time}" datePast="${assignment.pastDue}"
+            datePattern="EEEE, MMMM dd" /></li>
+        </c:forEach>
+        <c:forEach items="${section.rubricAssignments}" var="assignment">
+          <li><a href="<c:url value='/section/taught#section-${section.id}' />">${assignment.name}</a>,
+            Due: <csns:dueDate date="${assignment.dueDate.time}" datePast="${assignment.pastDue}"
+            datePattern="EEEE, MMMM dd" /></li>
+        </c:forEach>
+      </c:when>
+      <c:when test="${isStudent}">
+        <c:forEach items="${section.assignments}" var="assignment">
+          <c:if test="${assignment.published}">
+          <li><a href="<c:url value='/section/taken#section-${section.id}' />">${assignment.name}</a>,
+            Due: <csns:dueDate date="${assignment.dueDate.time}" datePast="${assignment.pastDue}"
+            datePattern="EEEE, MMMM dd" /></li>
+          </c:if>
+        </c:forEach>
+        <c:forEach items="${section.rubricAssignments}" var="assignment">
+          <c:if test="${assignment.evaluatedByStudents and assignment.published}">
+          <li><a href="<c:url value='/section/taught#section-${section.id}' />">${assignment.name}</a>,
+            Due: <csns:dueDate date="${assignment.dueDate.time}" datePast="${assignment.pastDue}"
+            datePattern="EEEE, MMMM dd" /></li>
+          </c:if>
+        </c:forEach>
+      </c:when>
+      <c:otherwise>
+        <c:forEach items="${section.assignments}" var="assignment">
+          <c:if test="${assignment.published}">
+          <li>${assignment.name}, Due: <csns:dueDate date="${assignment.dueDate.time}"
+            datePast="${assignment.pastDue}" datePattern="EEEE, MMMM dd" /></li>
+          </c:if>
+        </c:forEach>
+      </c:otherwise>
+    </c:choose>
+  </ul>
+  </c:if>
 </div>
-</div> <!-- end of site-block -->
+</div>
 </c:forEach>
 </td> <!-- end of blocks -->
 </tr>

@@ -97,7 +97,7 @@ public class SyllabusController {
             case URL:
                 return "redirect:" + syllabus.getUrl();
 
-            default: // TEXT
+            default:
                 logger.warn( "Invalid resource type: " + syllabus.getType() );
                 return "redirect:" + siteUrl;
         }

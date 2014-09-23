@@ -20,6 +20,8 @@ package csns.web.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,14 @@ import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.Resource;
+import csns.model.core.User;
+import csns.model.site.Item;
 import csns.model.site.Site;
+import csns.model.site.dao.ItemDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
+import csns.util.FileIO;
 
 @Controller
 public class SiteController {
@@ -45,27 +52,39 @@ public class SiteController {
     private SiteDao siteDao;
 
     @Autowired
+    private ItemDao itemDao;
+
+    @Autowired
     private CourseDao courseDao;
 
     @Autowired
     private SectionDao sectionDao;
 
+    @Autowired
+    private FileIO fileIO;
+
     private static Logger logger = LoggerFactory.getLogger( SiteController.class );
+
+    private Section getSection( String qtr, String cc, int sn )
+    {
+        Quarter quarter = new Quarter();
+        quarter.setShortString( qtr );
+        Course course = courseDao.getCourse( cc );
+        return sectionDao.getSection( quarter, course, sn );
+    }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}")
     public String view( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, ModelMap models )
     {
-        Quarter quarter = new Quarter();
-        quarter.setShortString( qtr );
-        Course course = courseDao.getCourse( cc );
-        Section section = sectionDao.getSection( quarter, course, sn );
-
+        Section section = getSection( qtr, cc, sn );
         models.put( "section", section );
         if( section != null && SecurityUtils.isAuthenticated() )
-            models.put( "isInstructor",
-                section.isInstructor( SecurityUtils.getUser() ) );
-
+        {
+            User user = SecurityUtils.getUser();
+            models.put( "isInstructor", section.isInstructor( user ) );
+            models.put( "isStudent", section.isEnrolled( user ) );
+        }
         return section == null || section.getSite() == null ? "site/nosite"
             : "site/view";
     }
@@ -82,7 +101,7 @@ public class SiteController {
         return "redirect:" + section.getSiteUrl();
     }
 
-    @RequestMapping(value = "/site/create")
+    @RequestMapping("/site/create")
     public String create( @RequestParam Long sectionId,
         @RequestParam(required = false, value = "new") Boolean newSite,
         ModelMap models )
@@ -97,6 +116,32 @@ public class SiteController {
         models.put( "section", section );
         models.put( "sites", sites );
         return "site/create";
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/item/{itemId}")
+    public String item( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @PathVariable Long itemId, ModelMap models,
+        HttpServletResponse response )
+    {
+        Item item = itemDao.getItem( itemId );
+        Resource resource = item.getResource();
+        switch( resource.getType() )
+        {
+            case TEXT:
+                models.put( "item", item );
+                return "site/item";
+
+            case FILE:
+                fileIO.write( resource.getFile(), response );
+                return null;
+
+            case URL:
+                return "redirect:" + resource.getUrl();
+
+            default:
+                logger.warn( "Invalid resource type: " + resource.getType() );
+                return "redirect:" + getSection( qtr, cc, sn ).getSiteUrl();
+        }
     }
 
 }

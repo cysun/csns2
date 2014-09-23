@@ -68,6 +68,11 @@ public class Item implements Serializable {
         additionalResources = new ArrayList<Resource>();
     }
 
+    public String getName()
+    {
+        return resource.getName();
+    }
+
     public Long getId()
     {
         return id;

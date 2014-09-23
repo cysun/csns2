@@ -1000,6 +1000,16 @@
         <put-attribute name="content" value="/WEB-INF/content/site/block/edit.jsp" />
     </definition>
 
+    <definition name="site/block/addItem" extends="layout.qa">
+        <put-attribute name="title" value="Add Item" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/addItem.jsp" />
+    </definition>
+
+    <definition name="site/block/editItem" extends="layout.qa">
+        <put-attribute name="title" value="Edit Item" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/editItem.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

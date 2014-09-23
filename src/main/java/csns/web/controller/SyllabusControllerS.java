@@ -78,7 +78,12 @@ public class SyllabusControllerS {
     {
         Section section = getSection( qtr, cc, sn );
         Resource syllabus = section.getSyllabus();
-        if( syllabus == null ) syllabus = new Resource( ResourceType.TEXT );
+        if( syllabus == null )
+        {
+            syllabus = new Resource( cc.toUpperCase() + " " + qtr.toUpperCase()
+                + " Syllabus" );
+            syllabus.setType( ResourceType.TEXT );
+        }
 
         models.put( "section", section );
         models.put( "syllabus", syllabus );

@@ -31,21 +31,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Course;
 import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.Resource;
+import csns.model.core.ResourceType;
 import csns.model.core.User;
 import csns.model.site.Block;
+import csns.model.site.Item;
 import csns.model.site.Site;
 import csns.model.site.dao.BlockDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
+import csns.util.FileIO;
 
 @Controller
-@SessionAttributes("block")
+@SessionAttributes({ "block", "item" })
 public class SiteBlockControllerS {
 
     @Autowired
@@ -59,6 +64,9 @@ public class SiteBlockControllerS {
 
     @Autowired
     private BlockDao blockDao;
+
+    @Autowired
+    private FileIO fileIO;
 
     private static final Logger logger = LoggerFactory.getLogger( SiteBlockControllerS.class );
 
@@ -121,6 +129,78 @@ public class SiteBlockControllerS {
         sessionStatus.setComplete();
 
         logger.info( user.getUsername() + " edited block " + block.getId() );
+
+        return "redirect:list";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addItem",
+        method = RequestMethod.GET)
+    public String addItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam Long blockId, ModelMap models )
+    {
+        models.put( "section", getSection( qtr, cc, sn ) );
+        models.put( "block", blockDao.getBlock( blockId ) );
+        models.put( "item", new Item() );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "site/block/addItem";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addItem",
+        method = RequestMethod.POST)
+    public String addItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @ModelAttribute Item item,
+        @RequestParam Long blockId, @RequestParam(value = "uploadedFile",
+            required = false) MultipartFile uploadedFile, BindingResult result,
+        SessionStatus sessionStatus )
+    {
+        User user = SecurityUtils.getUser();
+        Block block = blockDao.getBlock( blockId );
+        Resource resource = item.getResource();
+        if( resource.getType() != ResourceType.NONE )
+        {
+            if( resource.getType() == ResourceType.FILE )
+                resource.setFile( fileIO.save( uploadedFile, user, true ) );
+            block.getItems().add( item );
+            block = blockDao.saveBlock( block );
+            sessionStatus.setComplete();
+
+            logger.info( user.getUsername() + " added an item to block "
+                + block.getId() );
+        }
+        return "redirect:list";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editItem",
+        method = RequestMethod.GET)
+    public String editItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam Long blockId,
+        @RequestParam Long itemId, ModelMap models )
+    {
+        Block block = blockDao.getBlock( blockId );
+        models.put( "section", getSection( qtr, cc, sn ) );
+        models.put( "block", block );
+        models.put( "item", block.getItem( itemId ) );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "site/block/editItem";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editItem",
+        method = RequestMethod.POST)
+    public String editItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @ModelAttribute Block block,
+        @ModelAttribute Item item, @RequestParam(value = "uploadedFile",
+            required = false) MultipartFile uploadedFile, BindingResult result,
+        SessionStatus sessionStatus )
+    {
+        User user = SecurityUtils.getUser();
+        Resource resource = item.getResource();
+        if( resource.getType() == ResourceType.FILE )
+            resource.setFile( fileIO.save( uploadedFile, user, true ) );
+        block = blockDao.saveBlock( block );
+        sessionStatus.setComplete();
+
+        logger.info( user.getUsername() + " edited item " + item.getId()
+            + " in block " + block.getId() );
 
         return "redirect:list";
     }

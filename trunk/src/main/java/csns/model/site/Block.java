@@ -21,6 +21,7 @@ package csns.model.site;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -39,7 +40,7 @@ public class Block implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public enum Type {
-        REGULAR, ANNOUNCEMENTS, ASSIGNMENTS, EXAMS, QUIZZES, EXERCISES
+        REGULAR, ASSIGNMENTS
     };
 
     @Id
@@ -53,7 +54,7 @@ public class Block implements Serializable {
     @Column(nullable = false)
     private Type type;
 
-    @OneToMany
+    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "block_id")
     @OrderColumn(name = "item_index")
     private List<Item> items;
@@ -77,6 +78,23 @@ public class Block implements Serializable {
         this();
         this.name = name;
         this.type = type;
+    }
+
+    public Item getItem( Long itemId )
+    {
+        for( Item item : items )
+            if( item.getId().equals( itemId ) ) return item;
+
+        return null;
+    }
+
+    public Item removeItem( Long itemId )
+    {
+        for( int i = 0; i < items.size(); ++i )
+            if( items.get( i ).getId().equals( itemId ) )
+                return items.remove( i );
+
+        return null;
     }
 
     public Long getId()

@@ -96,14 +96,13 @@ public class Site implements Serializable {
         return null;
     }
 
-    public void removeBlock( Long blockId )
+    public Block removeBlock( Long blockId )
     {
         for( int i = 0; i < blocks.size(); ++i )
             if( blocks.get( i ).getId().equals( blockId ) )
-            {
-                blocks.remove( i );
-                break;
-            }
+                return blocks.remove( i );
+
+        return null;
     }
 
     public Long getId()

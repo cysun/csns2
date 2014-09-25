@@ -45,11 +45,6 @@ $(function(){
       <form:select path="resource.type">
         <form:options items="${resourceTypes}" />
       </form:select>
-      <c:if test="${resource.type == 'FILE' and resource.file != null}">
-        <span style="margin-left: 2em;">
-        <a href="<c:url value='/download?fileId=${resource.file.id}' />">${resource.file.name}</a>
-        </span>
-      </c:if>
   </tr>
 
   <tr id="resTEXT" class="res">

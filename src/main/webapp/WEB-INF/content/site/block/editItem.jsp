@@ -53,11 +53,6 @@ function removeItem( blockId, itemId )
       <form:select path="resource.type">
         <form:options items="${resourceTypes}" />
       </form:select>
-      <c:if test="${item.resource.type == 'FILE' and item.resource.file != null}">
-        <span style="margin-left: 2em;">
-        <a href="<c:url value='/download?fileId=${item.resource.file.id}' />">${item.resource.file.name}</a>
-        </span>
-      </c:if>
   </tr>
 
   <tr id="resTEXT" class="res">
@@ -71,7 +66,12 @@ function removeItem( blockId, itemId )
   <tr id="resFILE" class="res">
     <th></th>
     <td>
-      <input name="uploadedFile" type="file" size="80" style="width: 99%;" class="leftinput">
+      <input name="uploadedFile" type="file" class="leftinput">
+      <c:if test="${item.resource.type == 'FILE' and item.resource.file != null}">
+        <span style="margin-left: 2em;">
+        <a href="<c:url value='/download?fileId=${item.resource.file.id}' />">${item.resource.file.name}</a>
+        </span>
+      </c:if>
       <div class="error"><form:errors path="resource.file" /></div>
     </td>
   </tr>

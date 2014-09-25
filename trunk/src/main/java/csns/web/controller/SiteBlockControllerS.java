@@ -48,6 +48,8 @@ import csns.model.site.dao.BlockDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
+import csns.web.validator.BlockValidator;
+import csns.web.validator.ItemValidator;
 
 @Controller
 @SessionAttributes({ "block", "item" })
@@ -64,6 +66,12 @@ public class SiteBlockControllerS {
 
     @Autowired
     private BlockDao blockDao;
+
+    @Autowired
+    private BlockValidator blockValidator;
+
+    @Autowired
+    private ItemValidator itemValidator;
 
     @Autowired
     private FileIO fileIO;
@@ -93,8 +101,16 @@ public class SiteBlockControllerS {
         method = RequestMethod.POST)
     public String add( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Block block,
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
     {
+        blockValidator.validate( block, bindingResult );
+        if( bindingResult.hasErrors() )
+        {
+            models.put( "section", getSection( qtr, cc, sn ) );
+            return "site/block/add";
+        }
+
         User user = SecurityUtils.getUser();
         Site site = getSection( qtr, cc, sn ).getSite();
         site.getBlocks().add( block );
@@ -122,8 +138,16 @@ public class SiteBlockControllerS {
         method = RequestMethod.POST)
     public String edit( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Block block,
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
     {
+        blockValidator.validate( block, bindingResult );
+        if( bindingResult.hasErrors() )
+        {
+            models.put( "section", getSection( qtr, cc, sn ) );
+            return "site/block/edit";
+        }
+
         User user = SecurityUtils.getUser();
         block = blockDao.saveBlock( block );
         sessionStatus.setComplete();
@@ -150,15 +174,24 @@ public class SiteBlockControllerS {
     public String addItem( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Item item,
         @RequestParam Long blockId, @RequestParam(value = "uploadedFile",
-            required = false) MultipartFile uploadedFile, BindingResult result,
-        SessionStatus sessionStatus )
+            required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
     {
+        itemValidator.validate( item, uploadedFile, bindingResult );
+        if( bindingResult.hasErrors() )
+        {
+            models.put( "section", getSection( qtr, cc, sn ) );
+            return "site/block/addItem";
+        }
+
         User user = SecurityUtils.getUser();
         Block block = blockDao.getBlock( blockId );
         Resource resource = item.getResource();
         if( resource.getType() != ResourceType.NONE )
         {
-            if( resource.getType() == ResourceType.FILE )
+            if( resource.getType() == ResourceType.FILE && uploadedFile != null
+                && !uploadedFile.isEmpty() )
                 resource.setFile( fileIO.save( uploadedFile, user, true ) );
             block.getItems().add( item );
             block = blockDao.saveBlock( block );
@@ -189,12 +222,21 @@ public class SiteBlockControllerS {
     public String editItem( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Block block,
         @ModelAttribute Item item, @RequestParam(value = "uploadedFile",
-            required = false) MultipartFile uploadedFile, BindingResult result,
-        SessionStatus sessionStatus )
+            required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
     {
+        itemValidator.validate( item, uploadedFile, bindingResult );
+        if( bindingResult.hasErrors() )
+        {
+            models.put( "section", getSection( qtr, cc, sn ) );
+            return "site/block/editItem";
+        }
+
         User user = SecurityUtils.getUser();
         Resource resource = item.getResource();
-        if( resource.getType() == ResourceType.FILE )
+        if( resource.getType() == ResourceType.FILE && uploadedFile != null
+            && !uploadedFile.isEmpty() )
             resource.setFile( fileIO.save( uploadedFile, user, true ) );
         block = blockDao.saveBlock( block );
         sessionStatus.setComplete();

@@ -8,7 +8,7 @@
 $(function(){
    $("table").tablesorter({
        headers: { 0: {sorter: false} },
-       sortList: [[1,0]]
+       sortList: [[2,0]]
    });
    $("select").each(function(){
        $(this).change(function(event){

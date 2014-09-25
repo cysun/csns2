@@ -38,12 +38,14 @@ import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.File;
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
 import csns.model.core.User;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
+import csns.web.validator.ResourceValidator;
 
 @Controller
 @SessionAttributes("syllabus")
@@ -57,6 +59,9 @@ public class SyllabusControllerS {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private ResourceValidator resourceValidator;
 
     @Autowired
     private FileIO fileIO;
@@ -80,8 +85,8 @@ public class SyllabusControllerS {
         Resource syllabus = section.getSyllabus();
         if( syllabus == null )
         {
-            syllabus = new Resource( cc.toUpperCase() + " " + qtr.toUpperCase()
-                + " Syllabus" );
+            syllabus = new Resource( cc.toUpperCase() + "-" + sn + " "
+                + qtr.toUpperCase() + " Syllabus" );
             syllabus.setType( ResourceType.TEXT );
         }
 
@@ -99,25 +104,43 @@ public class SyllabusControllerS {
         @PathVariable int sn,
         @ModelAttribute("syllabus") Resource syllabus,
         @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
     {
-        User user = SecurityUtils.getUser();
         Section section = getSection( qtr, cc, sn );
+        resourceValidator.validate( syllabus, uploadedFile, bindingResult );
+        if( bindingResult.hasErrors() )
+        {
+            models.put( "section", section );
+            return "site/syllabus/edit";
+        }
+
         if( syllabus.getType() == ResourceType.NONE )
             section.setSyllabus( null );
         else
-        {
             section.setSyllabus( syllabus );
-            if( syllabus.getType() == ResourceType.FILE )
-                syllabus.setFile( fileIO.save( uploadedFile, user, true ) );
+
+        // This is a workaround for a rather weird behavior in Hibernate: when
+        // FileDao.saveFile() is called, the syllabus Resource object is
+        // automatically flushed with a persist(), which will cause a
+        // "persisting a detached object" exception. So here we re-attach
+        // syllabus first, and then save the uploaded file if there is one.
+        section = sectionDao.saveSection( section );
+        syllabus = section.getSyllabus();
+        User user = SecurityUtils.getUser();
+        if( syllabus.getType() == ResourceType.FILE && uploadedFile != null
+            && !uploadedFile.isEmpty() )
+        {
+            File file = fileIO.save( uploadedFile, user, true );
+            syllabus.setFile( file );
+            sectionDao.saveSection( section );
         }
-        sectionDao.saveSection( section );
         sessionStatus.setComplete();
 
         logger.info( user.getUsername() + " edited the syllabus of section "
             + section.getId() );
 
-        return "redirect:" + section.getSiteUrl() + "/syllabus";
+        return "redirect:" + section.getSiteUrl();
     }
 
 }

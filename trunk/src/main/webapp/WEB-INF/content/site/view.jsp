@@ -7,7 +7,7 @@
 
 <script>
 $(function(){
-    document.title = "${section.course.code} ${section.quarter.shortString}";
+    document.title = "${section.course.code}-${section.number} ${section.quarter.shortString}";
 });
 </script>
 

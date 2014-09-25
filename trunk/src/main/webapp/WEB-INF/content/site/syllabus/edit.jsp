@@ -31,11 +31,6 @@ $(function(){
       <form:select path="type">
         <form:options items="${resourceTypes}" />
       </form:select>
-      <c:if test="${syllabus.type == 'FILE' and syllabus.file != null}">
-        <span style="margin-left: 2em;">
-        <a href="<c:url value='/download?fileId=${syllabus.file.id}' />">${syllabus.file.name}</a>
-        </span>
-      </c:if>
   </tr>
 
   <tr id="resTEXT" class="res">
@@ -47,7 +42,12 @@ $(function(){
 
   <tr id="resFILE" class="res">
     <td>
-      <input name="uploadedFile" type="file" size="80" style="width: 99%;" class="leftinput">
+      <input name="uploadedFile" type="file" class="leftinput">
+      <c:if test="${syllabus.type == 'FILE' and syllabus.file != null}">
+        <span style="margin-left: 2em;">
+        <a href="<c:url value='/download?fileId=${syllabus.file.id}' />">${syllabus.file.name}</a>
+        </span>
+      </c:if>
       <div class="error"><form:errors path="file" /></div>
     </td>
   </tr>

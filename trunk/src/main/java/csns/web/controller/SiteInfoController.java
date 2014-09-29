@@ -97,4 +97,24 @@ public class SiteInfoController {
         return "redirect:edit";
     }
 
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/info/reorder")
+    public String reorder( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam int oldIndex,
+        @RequestParam int newIndex )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        InfoEntry entry = site.getInfoEntries().remove( oldIndex );
+        if( entry != null )
+        {
+            site.getInfoEntries().add( newIndex, entry );
+            siteDao.saveSite( site );
+        }
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " moved an info entry from position " + oldIndex + " to "
+            + newIndex );
+
+        return "redirect:edit";
+    }
+
 }

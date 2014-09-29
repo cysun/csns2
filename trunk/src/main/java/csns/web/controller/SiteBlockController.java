@@ -34,6 +34,7 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.site.Announcement;
 import csns.model.site.Block;
+import csns.model.site.Item;
 import csns.model.site.Site;
 import csns.model.site.dao.AnnouncementDao;
 import csns.model.site.dao.BlockDao;
@@ -119,6 +120,26 @@ public class SiteBlockController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " removed item "
             + itemId + " from block " + blockId );
+
+        return "redirect:list";
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/reorderItem")
+    public String reorderItem( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn,
+        @RequestParam Long blockId, @RequestParam Long itemId,
+        @RequestParam int newIndex )
+    {
+        Block block = blockDao.getBlock( blockId );
+        Item item = block.removeItem( itemId );
+        if( item != null )
+        {
+            block.getItems().add( newIndex, item );
+            block = blockDao.saveBlock( block );
+        }
+
+        logger.info( SecurityUtils.getUser().getUsername() + " moved item "
+            + itemId + " in block " + blockId + " to position " + newIndex );
 
         return "redirect:list";
     }

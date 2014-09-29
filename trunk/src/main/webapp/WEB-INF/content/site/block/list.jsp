@@ -5,6 +5,7 @@
 
 <script>
 $(function(){
+    document.title = "${section.course.code}-${section.number} Blocks";
     $("#sortableBlocks").sortable({
         update: function(event,ui){
             $.ajax({
@@ -18,6 +19,20 @@ $(function(){
         }
     });
     $("#sortableBlocks").disableSelection();
+    $(".sortableElements").sortable({
+        update: function(event,ui){
+            $.ajax({
+                type: "POST",
+                url:  "reorderItem",
+                data: {
+                    "blockId": ui.item.attr("data-block-id"),
+                    "itemId": ui.item.attr("data-item-id"),
+                    "newIndex": ui.item.index()
+                }
+            });
+        }
+    });
+    $(".sortableElements").disableSelection();
 });
 </script>
 
@@ -48,13 +63,15 @@ $(function(){
 <div class="site-block-content">
 <c:if test="${fn:length(block.items) > 0}">
 <table class="viewtable autowidth">
+  <tbody class="sortableElements">
   <c:forEach items="${block.items}" var="item">
-  <tr>
+  <tr data-block-id="${block.id}" data-item-id="${item.id}">
     <td><a href="../item/${item.id}">${item.name}</a></td>
     <td><a href="editItem?blockId=${block.id}&amp;itemId=${item.id}"><img title="Edit Item"
            alt="[Edit Item]" src="<c:url value='/img/icons/plugin_edit.png' />" /></a></td>
   </tr>
   </c:forEach>
+  </tbody>
 </table>
 </c:if>
 </div>

@@ -985,7 +985,7 @@
         <put-attribute name="content" value="/WEB-INF/content/site/syllabus/edit.jsp" />
     </definition>
 
-    <definition name="site/info/edit" extends="layout.basic">
+    <definition name="site/info/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Class Info" />
         <put-attribute name="content" value="/WEB-INF/content/site/info/edit.jsp" />
     </definition>

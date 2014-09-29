@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
@@ -114,6 +115,19 @@ $(function(){
       </c:otherwise>
     </c:choose>
   </ul>
+  </c:if>
+  <%-- Announcement Block --%>
+  <c:if test="${block.type == 'ANNOUNCEMENTS'}">
+  <table>
+    <c:forEach items="${site.announcements}" var="announcement">
+    <tr>
+      <td style="padding: 0 0.5em 0 1em">
+        <p><fmt:formatDate value="${announcement.date}" pattern="M/dd" /></p>
+      </td>
+      <td style="padding: 0 0.5em 0 1em">${announcement.content}</td>
+    </tr>
+    </c:forEach>
+  </table>
   </c:if>
 </div>
 </div>

@@ -40,7 +40,7 @@ public class Block implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public enum Type {
-        REGULAR, ASSIGNMENTS
+        REGULAR, ASSIGNMENTS, ANNOUNCEMENTS
     };
 
     @Id

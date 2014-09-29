@@ -41,18 +41,21 @@ import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
 import csns.model.core.User;
+import csns.model.site.Announcement;
 import csns.model.site.Block;
 import csns.model.site.Item;
 import csns.model.site.Site;
+import csns.model.site.dao.AnnouncementDao;
 import csns.model.site.dao.BlockDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
+import csns.web.validator.AnnouncementValidator;
 import csns.web.validator.BlockValidator;
 import csns.web.validator.ItemValidator;
 
 @Controller
-@SessionAttributes({ "block", "item" })
+@SessionAttributes({ "section", "block", "item", "announcement" })
 public class SiteBlockControllerS {
 
     @Autowired
@@ -68,10 +71,16 @@ public class SiteBlockControllerS {
     private BlockDao blockDao;
 
     @Autowired
+    private AnnouncementDao announcementDao;
+
+    @Autowired
     private BlockValidator blockValidator;
 
     @Autowired
     private ItemValidator itemValidator;
+
+    @Autowired
+    private AnnouncementValidator announcementValidator;
 
     @Autowired
     private FileIO fileIO;
@@ -101,15 +110,10 @@ public class SiteBlockControllerS {
         method = RequestMethod.POST)
     public String add( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Block block,
-        BindingResult bindingResult, SessionStatus sessionStatus,
-        ModelMap models )
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         blockValidator.validate( block, bindingResult );
-        if( bindingResult.hasErrors() )
-        {
-            models.put( "section", getSection( qtr, cc, sn ) );
-            return "site/block/add";
-        }
+        if( bindingResult.hasErrors() ) return "site/block/add";
 
         User user = SecurityUtils.getUser();
         Site site = getSection( qtr, cc, sn ).getSite();
@@ -138,15 +142,10 @@ public class SiteBlockControllerS {
         method = RequestMethod.POST)
     public String edit( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Block block,
-        BindingResult bindingResult, SessionStatus sessionStatus,
-        ModelMap models )
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         blockValidator.validate( block, bindingResult );
-        if( bindingResult.hasErrors() )
-        {
-            models.put( "section", getSection( qtr, cc, sn ) );
-            return "site/block/edit";
-        }
+        if( bindingResult.hasErrors() ) return "site/block/edit";
 
         User user = SecurityUtils.getUser();
         block = blockDao.saveBlock( block );
@@ -175,15 +174,10 @@ public class SiteBlockControllerS {
         @PathVariable int sn, @ModelAttribute Item item,
         @RequestParam Long blockId, @RequestParam(value = "uploadedFile",
             required = false) MultipartFile uploadedFile,
-        BindingResult bindingResult, SessionStatus sessionStatus,
-        ModelMap models )
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         itemValidator.validate( item, uploadedFile, bindingResult );
-        if( bindingResult.hasErrors() )
-        {
-            models.put( "section", getSection( qtr, cc, sn ) );
-            return "site/block/addItem";
-        }
+        if( bindingResult.hasErrors() ) return "site/block/addItem";
 
         User user = SecurityUtils.getUser();
         Block block = blockDao.getBlock( blockId );
@@ -223,15 +217,10 @@ public class SiteBlockControllerS {
         @PathVariable int sn, @ModelAttribute Block block,
         @ModelAttribute Item item, @RequestParam(value = "uploadedFile",
             required = false) MultipartFile uploadedFile,
-        BindingResult bindingResult, SessionStatus sessionStatus,
-        ModelMap models )
+        BindingResult bindingResult, SessionStatus sessionStatus )
     {
         itemValidator.validate( item, uploadedFile, bindingResult );
-        if( bindingResult.hasErrors() )
-        {
-            models.put( "section", getSection( qtr, cc, sn ) );
-            return "site/block/editItem";
-        }
+        if( bindingResult.hasErrors() ) return "site/block/editItem";
 
         User user = SecurityUtils.getUser();
         Resource resource = item.getResource();
@@ -243,6 +232,68 @@ public class SiteBlockControllerS {
 
         logger.info( user.getUsername() + " edited item " + item.getId()
             + " in block " + block.getId() );
+
+        return "redirect:list";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addAnnouncement",
+        method = RequestMethod.GET)
+    public String addAnnouncement( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn, ModelMap models )
+    {
+        Section section = getSection( qtr, cc, sn );
+        models.put( "section", section );
+        models.put( "announcement", new Announcement( section.getSite() ) );
+        return "site/block/addAnnouncement";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addAnnouncement",
+        method = RequestMethod.POST)
+    public String addAnnouncement( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn,
+        @ModelAttribute Announcement announcement, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        announcementValidator.validate( announcement, bindingResult );
+        if( bindingResult.hasErrors() ) return "site/block/addAnnouncement";
+
+        announcement = announcementDao.saveAnnouncement( announcement );
+        sessionStatus.setComplete();
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " added an announcement " + announcement.getId() + " to site "
+            + announcement.getSite().getId() );
+
+        return "redirect:list";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editAnnouncement",
+        method = RequestMethod.GET)
+    public String editAnnouncement( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn, @RequestParam Long id,
+        ModelMap models )
+    {
+        models.put( "section", getSection( qtr, cc, sn ) );
+        models.put( "announcement", announcementDao.getAnnouncement( id ) );
+        return "site/block/editAnnouncement";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editAnnouncement",
+        method = RequestMethod.POST)
+    public String editAnnouncement( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn,
+        @ModelAttribute Announcement announcement, BindingResult bindingResult,
+        SessionStatus sessionStatus )
+    {
+        announcementValidator.validate( announcement, bindingResult );
+        if( bindingResult.hasErrors() ) return "site/block/editAnnouncement";
+
+        announcement = announcementDao.saveAnnouncement( announcement );
+        sessionStatus.setComplete();
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " edited announcement " + announcement.getId() + " of site "
+            + announcement.getSite().getId() );
 
         return "redirect:list";
     }

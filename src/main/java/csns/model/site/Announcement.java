@@ -53,6 +53,12 @@ public class Announcement implements Serializable {
         date = new Date();
     }
 
+    public Announcement( Site site )
+    {
+        this();
+        this.site = site;
+    }
+
     public Long getId()
     {
         return id;
@@ -81,6 +87,16 @@ public class Announcement implements Serializable {
     public void setContent( String content )
     {
         this.content = content;
+    }
+
+    public Site getSite()
+    {
+        return site;
+    }
+
+    public void setSite( Site site )
+    {
+        this.site = site;
     }
 
 }

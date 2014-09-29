@@ -58,7 +58,7 @@ public class Site implements Serializable {
     @OrderColumn(name = "entry_index")
     private List<InfoEntry> infoEntries;
 
-    @OneToMany(mappedBy = "site")
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     @OrderBy("date desc")
     private List<Announcement> announcements;
 

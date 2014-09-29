@@ -32,8 +32,10 @@ import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.site.Announcement;
 import csns.model.site.Block;
 import csns.model.site.Site;
+import csns.model.site.dao.AnnouncementDao;
 import csns.model.site.dao.BlockDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
@@ -52,6 +54,9 @@ public class SiteBlockController {
 
     @Autowired
     private BlockDao blockDao;
+
+    @Autowired
+    private AnnouncementDao announcementDao;
 
     private static final Logger logger = LoggerFactory.getLogger( SiteBlockController.class );
 
@@ -74,7 +79,7 @@ public class SiteBlockController {
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/remove")
     public String remove( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, @RequestParam Long id, ModelMap models )
+        @PathVariable int sn, @RequestParam Long id )
     {
         Site site = getSection( qtr, cc, sn ).getSite();
         site.removeBlock( id );
@@ -86,9 +91,27 @@ public class SiteBlockController {
         return "redirect:list";
     }
 
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/reorder")
+    public String reorder( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam Long id, @RequestParam int newIndex )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        Block block = site.removeBlock( id );
+        if( block != null )
+        {
+            site.getBlocks().add( newIndex, block );
+            site = siteDao.saveSite( site );
+        }
+
+        logger.info( SecurityUtils.getUser().getUsername() + " moved block "
+            + id + " in site " + site.getId() + " to position " + newIndex );
+
+        return "redirect:list";
+    }
+
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/removeItem")
-    public String remove( @RequestParam Long blockId,
-        @RequestParam Long itemId, ModelMap models )
+    public String removeItem( @RequestParam Long blockId,
+        @RequestParam Long itemId )
     {
         Block block = blockDao.getBlock( blockId );
         block.removeItem( itemId );
@@ -96,6 +119,20 @@ public class SiteBlockController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " removed item "
             + itemId + " from block " + blockId );
+
+        return "redirect:list";
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/removeAnnouncement")
+    public String removeAnnouncement( @RequestParam Long id )
+    {
+        Announcement announcement = announcementDao.getAnnouncement( id );
+        Site site = announcement.getSite();
+        announcement.setSite( null );
+        announcement = announcementDao.saveAnnouncement( announcement );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " removed announcement " + id + " from site " + site.getId() );
 
         return "redirect:list";
     }

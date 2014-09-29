@@ -990,7 +990,7 @@
         <put-attribute name="content" value="/WEB-INF/content/site/info/edit.jsp" />
     </definition>
 
-    <definition name="site/block/list" extends="layout.basic">
+    <definition name="site/block/list" extends="layout.jqueryui">
         <put-attribute name="title" value="Blocks" />
         <put-attribute name="content" value="/WEB-INF/content/site/block/list.jsp" />
     </definition>
@@ -1013,6 +1013,16 @@
     <definition name="site/block/editItem" extends="layout.qa">
         <put-attribute name="title" value="Edit Item" />
         <put-attribute name="content" value="/WEB-INF/content/site/block/editItem.jsp" />
+    </definition>
+
+    <definition name="site/block/addAnnouncement" extends="layout.qa">
+        <put-attribute name="title" value="Add Announcement" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/addAnnouncement.jsp" />
+    </definition>
+
+    <definition name="site/block/editAnnouncement" extends="layout.qa">
+        <put-attribute name="title" value="Edit Announcement" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/editAnnouncement.jsp" />
     </definition>
 
     <!-- ======== -->

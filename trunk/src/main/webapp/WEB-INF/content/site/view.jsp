@@ -18,8 +18,8 @@ $(function(){
 <li>${section.course.code}-${section.number}</li>
 <li class="align_right"><a href="<c:url value='${section.siteUrl}/block/list' />"><img title="Edit Blocks"
   alt="[Edit Blocks]" src="<c:url value='/img/icons/bricks.png' />" /></a></li>
-<li class="align_right"><a href="<c:url value='${section.siteUrl}/info/edit' />"><img title="Edit Class Info"
-  alt="[Edit Class Info]" src="<c:url value='/img/icons/table_edit.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='${section.siteUrl}/info/list' />"><img title="Edit Class Info"
+  alt="[Edit Class Info]" src="<c:url value='/img/icons/table.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='${section.siteUrl}/syllabus/edit' />"><img title="Edit Syllabus"
   alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
@@ -36,8 +36,13 @@ $(function(){
   <c:if test="${not empty section.syllabus}">
   <li><a href="<c:url value='${section.siteUrl}/syllabus' />">Syllabus</a></li>
   </c:if>
+  <c:if test="${not empty dept}">
+  <li><a href="<c:url value='/department/${dept}/forum/view?id=${section.course.forum.id}' />">Class Forum</a></li>
+  </c:if>
   <c:forEach items="${site.blocks}" var="block">
-  <li><a href="#b${block.id}">${block.name}</a></li>
+    <c:if test="${not block.hidden}">
+    <li><a href="#b${block.id}">${block.name}</a></li>
+    </c:if>
   </c:forEach>
 </ul>
 </td> <!-- end of sidebar -->
@@ -61,6 +66,7 @@ $(function(){
 <!-- blocks -->
 <td id="site-content">
 <c:forEach items="${site.blocks}" var="block">
+<c:if test="${not block.hidden}">
 <a id="b${block.id}"></a>
 <div class="site-block">
 <div class="site-block-title">${block.name}</div>
@@ -69,7 +75,9 @@ $(function(){
   <c:if test="${block.type == 'REGULAR'}">
   <ul>
     <c:forEach items="${block.items}" var="item">
-    <li><a href="<c:url value='${section.siteUrl}/item/${item.id}' />">${item.name}</a></li>
+      <c:if test="${not item.hidden}">
+      <li><a href="<c:url value='${section.siteUrl}/item/${item.id}' />">${item.name}</a></li>
+      </c:if>
     </c:forEach>
   </ul>
   </c:if>
@@ -131,6 +139,7 @@ $(function(){
   </c:if>
 </div>
 </div>
+</c:if>
 </c:forEach>
 </td> <!-- end of blocks -->
 </tr>

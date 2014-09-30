@@ -80,6 +80,12 @@ public class Block implements Serializable {
         this.type = type;
     }
 
+    public boolean toggle()
+    {
+        hidden = !hidden;
+        return hidden;
+    }
+
     public Item getItem( Long itemId )
     {
         for( Item item : items )

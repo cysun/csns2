@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <script>
 $(function(){
     $(".res").hide();
@@ -20,8 +21,7 @@ $(function(){
 <ul id="title">
 <li><a href="<c:url value='/section/taught' />" class="bc">Instructor's Home</a></li>
 <li><a href="<c:url value='${section.siteUrl}' />" class="bc">${section.course.code}-${section.number}</a></li>
-<li><a href="<c:url value='${section.siteUrl}/syllabus' />" class="bc">Syllabus</a></li>
-<li>Edit</li>
+<li>Edit Syllabus</li>
 </ul>
 
 <form:form modelAttribute="syllabus" enctype="multipart/form-data">

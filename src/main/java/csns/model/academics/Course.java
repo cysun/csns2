@@ -32,6 +32,7 @@ import javax.persistence.Table;
 
 import csns.model.core.File;
 import csns.model.core.User;
+import csns.model.forum.Forum;
 
 @Entity
 @Table(name = "courses")
@@ -66,6 +67,9 @@ public class Course implements Serializable, Comparable<Course> {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "syllabus_id")
     private File syllabus;
+
+    @OneToOne(mappedBy = "course")
+    private Forum forum;
 
     @Column(nullable = false)
     private boolean obsolete;
@@ -172,6 +176,16 @@ public class Course implements Serializable, Comparable<Course> {
     public void setSyllabus( File syllabus )
     {
         this.syllabus = syllabus;
+    }
+
+    public Forum getForum()
+    {
+        return forum;
+    }
+
+    public void setForum( Forum forum )
+    {
+        this.forum = forum;
     }
 
     public boolean isObsolete()

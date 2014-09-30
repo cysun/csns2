@@ -21,11 +21,13 @@ package csns.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import csns.model.academics.Course;
 import csns.model.academics.Quarter;
@@ -78,6 +80,19 @@ public class SiteBlockController {
         return "site/block/list";
     }
 
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/toggle")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggle( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam Long id )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        String action = site.getBlock( id ).toggle() ? "hided" : "unhided";
+        site = siteDao.saveSite( site );
+
+        logger.info( SecurityUtils.getUser().getUsername() + " " + action
+            + " block " + id + " in site " + site.getId() );
+    }
+
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/remove")
     public String remove( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @RequestParam Long id )
@@ -93,7 +108,8 @@ public class SiteBlockController {
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/reorder")
-    public String reorder( @PathVariable String qtr, @PathVariable String cc,
+    @ResponseStatus(HttpStatus.OK)
+    public void reorder( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @RequestParam Long id, @RequestParam int newIndex )
     {
         Site site = getSection( qtr, cc, sn ).getSite();
@@ -106,8 +122,19 @@ public class SiteBlockController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " moved block "
             + id + " in site " + site.getId() + " to position " + newIndex );
+    }
 
-        return "redirect:list";
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/toggleItem")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleItem( @RequestParam Long blockId,
+        @RequestParam Long itemId )
+    {
+        Block block = blockDao.getBlock( blockId );
+        String action = block.getItem( itemId ).toggle() ? "hided" : "unhided";
+        block = blockDao.saveBlock( block );
+
+        logger.info( SecurityUtils.getUser().getUsername() + " " + action
+            + " item " + itemId + " in block " + blockId );
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/removeItem")
@@ -125,10 +152,10 @@ public class SiteBlockController {
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/reorderItem")
-    public String reorderItem( @PathVariable String qtr,
-        @PathVariable String cc, @PathVariable int sn,
-        @RequestParam Long blockId, @RequestParam Long itemId,
-        @RequestParam int newIndex )
+    @ResponseStatus(HttpStatus.OK)
+    public void reorderItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @RequestParam Long blockId,
+        @RequestParam Long itemId, @RequestParam int newIndex )
     {
         Block block = blockDao.getBlock( blockId );
         Item item = block.removeItem( itemId );
@@ -140,8 +167,6 @@ public class SiteBlockController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " moved item "
             + itemId + " in block " + blockId + " to position " + newIndex );
-
-        return "redirect:list";
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/removeAnnouncement")

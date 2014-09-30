@@ -73,6 +73,12 @@ public class Item implements Serializable {
         return resource.getName();
     }
 
+    public boolean toggle()
+    {
+        hidden = !hidden;
+        return hidden;
+    }
+
     public Long getId()
     {
         return id;

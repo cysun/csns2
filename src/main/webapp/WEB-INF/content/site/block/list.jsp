@@ -33,6 +33,23 @@ $(function(){
         }
     });
     $(".sortableElements").disableSelection();
+    $(".block-toggle").change(function(){
+        $.ajax({
+           url: "toggle",
+           data: {
+               "id": $(this).attr("data-id")
+           }
+        });
+    });
+    $(".item-toggle").change(function(){
+        $.ajax({
+           url: "toggleItem",
+           data: {
+               "blockId": $(this).attr("data-block-id"),
+               "itemId": $(this).attr("data-item-id")
+           }
+        });
+    });
 });
 </script>
 
@@ -52,7 +69,10 @@ $(function(){
 <%-- Regular Block --%>
 <c:if test="${block.type == 'REGULAR'}">
 <div class="site-block" data-id="${block.id}">
-<div class="site-block-title">${block.name}
+<div class="site-block-title">
+  <input type="checkbox" class="block-toggle" data-id="${block.id}"
+   <c:if test="${not block.hidden}">checked="checked"</c:if> />
+  ${block.name}
   <div class="site-block-operations">
     <a href="<c:url value='${section.siteUrl}/block/edit?id=${block.id}' />"><img
        title="Edit Block" alt="[Edit Block]" src="<c:url value='/img/icons/brick_edit.png' />" /></a>
@@ -66,7 +86,11 @@ $(function(){
   <tbody class="sortableElements">
   <c:forEach items="${block.items}" var="item">
   <tr data-block-id="${block.id}" data-item-id="${item.id}">
-    <td><a href="../item/${item.id}">${item.name}</a></td>
+    <td>
+      <input type="checkbox" class="item-toggle" data-block-id="${block.id}" data-item-id="${item.id}"
+         <c:if test="${not item.hidden}">checked="checked"</c:if> />
+      <a href="../item/${item.id}">${item.name}</a>
+    </td>
     <td><a href="editItem?blockId=${block.id}&amp;itemId=${item.id}"><img title="Edit Item"
            alt="[Edit Item]" src="<c:url value='/img/icons/plugin_edit.png' />" /></a></td>
   </tr>
@@ -80,7 +104,11 @@ $(function(){
 <%-- Assignments Block --%>
 <c:if test="${block.type == 'ASSIGNMENTS'}">
 <div class="site-block" data-id="${block.id}">
-<div class="site-block-title">${block.name}</div>
+<div class="site-block-title">
+  <input type="checkbox" class="block-toggle" data-id="${block.id}"
+   <c:if test="${not block.hidden}">checked="checked"</c:if> />
+  ${block.name}
+</div>
 <div class="site-block-content">
   <ul>
     <c:forEach items="${section.assignments}" var="assignment">
@@ -98,7 +126,10 @@ $(function(){
 <%-- Announcements Block --%>
 <c:if test="${block.type == 'ANNOUNCEMENTS'}">
 <div class="site-block" data-id="${block.id}">
-<div class="site-block-title">${block.name}
+<div class="site-block-title">
+  <input type="checkbox" class="block-toggle" data-id="${block.id}"
+   <c:if test="${not block.hidden}">checked="checked"</c:if> />
+  ${block.name}
   <div class="site-block-operations">
     <a href="<c:url value='${section.siteUrl}/block/edit?id=${block.id}' />"><img
        title="Edit Block" alt="[Edit Block]" src="<c:url value='/img/icons/brick_edit.png' />" /></a>

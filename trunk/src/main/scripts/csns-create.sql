@@ -517,6 +517,7 @@ alter table courses add constraint courses_department_fk
 create table sites (
     id          bigint primary key,
     section_id  bigint unique references sections(id),
+    folder_id   bigint references files(id),
     shared      boolean not null default 'f'
 );
 

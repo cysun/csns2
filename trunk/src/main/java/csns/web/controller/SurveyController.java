@@ -80,7 +80,7 @@ public class SurveyController {
         Department department = departmentDao.getDepartment( dept );
         JSONArray jsonArray = new JSONArray();
         List<Survey> surveys = surveyDao.searchSurveysByPrefix( department,
-            term, 10 );
+            term, 20 );
         for( Survey survey : surveys )
         {
             Map<String, String> json = new HashMap<String, String>();

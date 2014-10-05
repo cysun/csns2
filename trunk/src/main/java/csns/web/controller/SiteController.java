@@ -36,8 +36,10 @@ import csns.model.academics.Quarter;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.core.File;
 import csns.model.core.Resource;
 import csns.model.core.User;
+import csns.model.core.dao.FileDao;
 import csns.model.site.Item;
 import csns.model.site.Site;
 import csns.model.site.dao.ItemDao;
@@ -59,6 +61,9 @@ public class SiteController {
 
     @Autowired
     private SectionDao sectionDao;
+
+    @Autowired
+    private FileDao fileDao;
 
     @Autowired
     private FileIO fileIO;
@@ -142,6 +147,55 @@ public class SiteController {
                 logger.warn( "Invalid resource type: " + resource.getType() );
                 return "redirect:" + getSection( qtr, cc, sn ).getSiteUrl();
         }
+    }
+
+    private File getFolder( File parent, String name )
+    {
+        User user = SecurityUtils.getUser();
+        List<File> results = fileDao.getFiles( user, parent, name, true );
+        if( results.size() > 0 ) return results.get( 0 );
+
+        File folder = new File();
+        folder.setName( name );
+        folder.setFolder( true );
+        folder.setRegular( true );
+        folder.setParent( parent );
+        folder.setOwner( user );
+        folder = fileDao.saveFile( folder );
+
+        String parentName = parent != null ? parent.getName() : "root";
+        logger.info( user.getUsername() + " created folder " + name + " under "
+            + parentName );
+
+        return folder;
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/files/")
+    public String folder( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        if( site.getFolder() != null )
+            return "redirect:/file/view?id=" + site.getFolder().getId();
+
+        File folder = getFolder( null, "Courses" );
+        folder = getFolder( folder, cc.toUpperCase() );
+        folder = getFolder( folder, qtr.toUpperCase() );
+        site.setFolder( folder );
+        site = siteDao.saveSite( site );
+
+        return "redirect:/file/view?id=" + folder.getId();
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/files/remove")
+    public String removeFolder( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        site.setFolder( null );
+        site = siteDao.saveSite( site );
+
+        return "redirect:/site/" + qtr + "/" + cc + "-" + sn;
     }
 
 }

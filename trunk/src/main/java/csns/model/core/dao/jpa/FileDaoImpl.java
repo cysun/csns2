@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +44,25 @@ public class FileDaoImpl implements FileDao {
     public File getFile( Long id )
     {
         return entityManager.find( File.class, id );
+    }
+
+    @Override
+    @PreAuthorize("authenticated and (#parent == null or #owner.id == principal.id)")
+    public List<File> getFiles( User owner, File parent, String name,
+        boolean isFolder )
+    {
+        String query = "from File where owner = :owner and name = :name "
+            + "and folder = :isFolder and deleted = false and ";
+        query += parent != null ? "parent = :parent" : "parent is null";
+
+        TypedQuery<File> typedQuery = entityManager.createQuery( query,
+            File.class )
+            .setParameter( "owner", owner )
+            .setParameter( "name", name )
+            .setParameter( "isFolder", isFolder );
+        if( parent != null ) typedQuery.setParameter( "parent", parent );
+
+        return typedQuery.getResultList();
     }
 
     @Override

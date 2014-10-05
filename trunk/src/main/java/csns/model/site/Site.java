@@ -37,6 +37,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import csns.model.academics.Section;
+import csns.model.core.File;
 
 @Entity
 @Table(name = "sites")
@@ -66,6 +67,10 @@ public class Site implements Serializable {
     @JoinColumn(name = "site_id")
     @OrderColumn(name = "block_index")
     private List<Block> blocks;
+
+    @OneToOne
+    @JoinColumn(name = "folder_id")
+    private File folder;
 
     @Column(nullable = false)
     private boolean shared;
@@ -153,6 +158,16 @@ public class Site implements Serializable {
     public void setBlocks( List<Block> blocks )
     {
         this.blocks = blocks;
+    }
+
+    public File getFolder()
+    {
+        return folder;
+    }
+
+    public void setFolder( File folder )
+    {
+        this.folder = folder;
     }
 
     public boolean isShared()

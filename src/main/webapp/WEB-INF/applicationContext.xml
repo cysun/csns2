@@ -124,6 +124,7 @@
         <security:intercept-url pattern="/site/*/*/syllabus/edit" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/site/*/*/info/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/site/*/*/block/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/files/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/file/view" access="permitAll" />
         <security:intercept-url pattern="/file/**" access="authenticated" />
         <security:intercept-url pattern="/ckeditor/**" access="authenticated" />

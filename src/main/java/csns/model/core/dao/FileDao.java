@@ -27,6 +27,8 @@ public interface FileDao {
 
     File getFile( Long id );
 
+    List<File> getFiles( User owner, File parent, String name, boolean isFolder );
+
     File getCKEditorFolder( User owner );
 
     List<File> listFiles( User owner );

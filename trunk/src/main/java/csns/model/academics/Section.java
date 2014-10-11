@@ -43,6 +43,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
+import csns.model.assessment.CourseJournal;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricAssignment;
 import csns.model.core.Resource;
@@ -99,6 +100,9 @@ public class Section implements Serializable, Comparable<Section> {
 
     @OneToOne(mappedBy = "section")
     private Site site;
+
+    @OneToOne(mappedBy = "section")
+    private CourseJournal courseJournal;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -266,6 +270,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setSite( Site site )
     {
         this.site = site;
+    }
+
+    public CourseJournal getCourseJournal()
+    {
+        return courseJournal;
+    }
+
+    public void setCourseJournal( CourseJournal courseJournal )
+    {
+        this.courseJournal = courseJournal;
     }
 
     public boolean isDeleted()

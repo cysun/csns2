@@ -116,6 +116,11 @@ drop table department_faculty;
 drop table department_administrators;
 drop table departments;
 
+drop table course_journal_student_samples;
+drop table course_journal_assignments;
+drop table course_journal_handouts;
+drop table course_journals;
+
 alter table files drop constraint files_submission_id_fkey;
 drop table submissions;
 drop trigger assignments_ts_trigger on assignments;

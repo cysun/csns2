@@ -102,6 +102,33 @@
         role varchar(255)
     );
 
+    create table course_journal_assignments (
+        course_journal_id int8 not null,
+        assignment_id int8 not null,
+        assignment_order int4 not null,
+        primary key (course_journal_id, assignment_order)
+    );
+
+    create table course_journal_handouts (
+        course_journal_id int8 not null,
+        resource_id int8 not null,
+        handout_order int4 not null,
+        primary key (course_journal_id, handout_order)
+    );
+
+    create table course_journal_student_samples (
+        course_journal_id int8 not null,
+        enrollment_id int8 not null
+    );
+
+    create table course_journals (
+        id int8 not null,
+        approve_date timestamp,
+        submit_date timestamp,
+        section_id int8,
+        primary key (id)
+    );
+
     create table course_substitutions (
         id int8 not null,
         advisement_record_id int8,
@@ -435,13 +462,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_rating int4,
-        min_rating int4,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -777,6 +804,9 @@
     alter table assignments 
         add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
 
+    alter table course_journal_student_samples 
+        add constraint UK_p314skj0hft837qpu21d77dgj unique (course_journal_id, enrollment_id);
+
     alter table courses 
         add constraint UK_61og8rbqdd2y28rx2et5fdnxd unique (code);
 
@@ -935,6 +965,41 @@
         add constraint FK_s21btj9mlob1djhm3amivbe5e 
         foreign key (user_id) 
         references users;
+
+    alter table course_journal_assignments 
+        add constraint FK_eivqiu4y1n2ijqe4jqpgwcrua 
+        foreign key (assignment_id) 
+        references assignments;
+
+    alter table course_journal_assignments 
+        add constraint FK_7rciorn2b1tqbinh0qndw8rv1 
+        foreign key (course_journal_id) 
+        references course_journals;
+
+    alter table course_journal_handouts 
+        add constraint FK_i6x8y4el6rb082k6hsgjriuu2 
+        foreign key (resource_id) 
+        references resources;
+
+    alter table course_journal_handouts 
+        add constraint FK_6u818e0hvsqmd68kp3494ap6s 
+        foreign key (course_journal_id) 
+        references course_journals;
+
+    alter table course_journal_student_samples 
+        add constraint FK_c5jfng49990md8krgmybfinrh 
+        foreign key (enrollment_id) 
+        references enrollments;
+
+    alter table course_journal_student_samples 
+        add constraint FK_dofrwq6gyt6if5g22a0vyop7m 
+        foreign key (course_journal_id) 
+        references course_journals;
+
+    alter table course_journals 
+        add constraint FK_nkrm0rgmmh65an5qpcod88xld 
+        foreign key (section_id) 
+        references sections;
 
     alter table course_substitutions 
         add constraint FK_4xv8mf3jidbdi508wufg15vv3 

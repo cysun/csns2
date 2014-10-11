@@ -445,6 +445,37 @@ create table submissions (
 alter table files add constraint files_submission_id_fkey
     foreign key (submission_id) references submissions(id);
 
+---------------------
+-- course journals --
+---------------------
+
+create table course_journals (
+    id              bigint primary key,
+    section_id      bigint references sections(id),
+    submit_date     timestamp,
+    approve_date    timestamp
+);
+
+create table course_journal_handouts (
+    course_journal_id   bigint not null references course_journals(id),
+    resource_id         bigint not null references resources(id),
+    handout_order       integer not null,
+  primary key (course_journal_id, handout_order)
+);
+
+create table course_journal_assignments (
+    course_journal_id   bigint not null references course_journals(id),
+    assignment_id       bigint not null references assignments(id),
+    assignment_order    bigint not null,
+  primary key (course_journal_id, assignment_order)
+);
+
+create table course_journal_student_samples (
+    course_journal_id   bigint not null references course_journals(id),
+    enrollment_id       bigint not null references enrollments(id),
+  unique (course_journal_id, enrollment_id)
+);
+
 -----------------
 -- departments --
 -----------------

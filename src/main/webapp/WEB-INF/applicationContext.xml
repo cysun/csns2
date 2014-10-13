@@ -121,6 +121,7 @@
         <security:intercept-url pattern="/department/*/news/current" access="permitAll" />
         <security:intercept-url pattern="/department/*/news/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/site/create" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/settings/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/site/*/*/syllabus/edit" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/site/*/*/info/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/site/*/*/block/**" access="authenticated and principal.instructor" />

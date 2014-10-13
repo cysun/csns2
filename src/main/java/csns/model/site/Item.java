@@ -51,7 +51,7 @@ public class Item implements Serializable {
     @JoinColumn(name = "resource_id")
     private Resource resource;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "site_item_additional_resources",
         joinColumns = @JoinColumn(name = "item_id"),
         inverseJoinColumns = @JoinColumn(name = "resource_id"))
@@ -66,6 +66,18 @@ public class Item implements Serializable {
         hidden = false;
         resource = new Resource( ResourceType.FILE );
         additionalResources = new ArrayList<Resource>();
+    }
+
+    public Item clone()
+    {
+        Item newItem = new Item();
+        newItem.hidden = true;
+
+        newItem.resource = resource.clone();
+        for( Resource additionalResource : additionalResources )
+            newItem.additionalResources.add( additionalResource.clone() );
+
+        return newItem;
     }
 
     public String getName()

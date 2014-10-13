@@ -35,6 +35,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import csns.model.academics.Submission;
+import csns.security.SecurityUtils;
 
 @Entity
 @Table(name = "files")
@@ -72,6 +73,15 @@ public class File implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private File parent;
+
+    /**
+     * The reference is kind of like a shortcut on Windows or a symbolic link on
+     * Linux, which indicates that this file is a copy of the referenced file.
+     */
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reference_id")
+    private File reference;
 
     @JsonIgnore
     @Column(name = "folder", nullable = false)
@@ -121,8 +131,10 @@ public class File implements Serializable {
         newFile.type = type;
         newFile.size = size;
         newFile.date = new Date();
+        newFile.owner = SecurityUtils.getUser();
 
         newFile.parent = parent;
+        newFile.reference = this;
 
         newFile.isFolder = isFolder;
         newFile.isPublic = isPublic;
@@ -262,6 +274,16 @@ public class File implements Serializable {
     public void setParent( File parent )
     {
         this.parent = parent;
+    }
+
+    public File getReference()
+    {
+        return reference;
+    }
+
+    public void setReference( File reference )
+    {
+        this.reference = reference;
     }
 
     @JsonIgnore

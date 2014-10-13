@@ -84,6 +84,7 @@ create table files (
     date            timestamp not null default current_timestamp,
     owner_id        bigint not null references users(id),
     parent_id       bigint references files(id),
+    reference_id    bigint references files(id),
     folder          boolean not null default 'f',
     public          boolean not null default 'f',
     submission_id   bigint,
@@ -549,6 +550,8 @@ create table sites (
     id          bigint primary key,
     section_id  bigint unique references sections(id),
     folder_id   bigint references files(id),
+    restricted  boolean not null default 'f',
+    limited     boolean not null default 'f',
     shared      boolean not null default 'f'
 );
 

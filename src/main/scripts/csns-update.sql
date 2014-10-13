@@ -1,3 +1,7 @@
+alter table files add column reference_id bigint references files(id);
+alter table sites add column restricted boolean not null default 'f';
+alter table sites add column limited boolean not null default 'f';
+
 -- course_journals
 
 alter table course_journals alter id type bigint;

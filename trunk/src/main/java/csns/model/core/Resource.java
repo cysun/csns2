@@ -79,8 +79,8 @@ public class Resource implements Serializable {
         resource.name = name;
         resource.type = type;
         resource.text = text;
-        resource.file = file;
         resource.url = url;
+        if( file != null ) resource.file = file.clone();
 
         return resource;
     }

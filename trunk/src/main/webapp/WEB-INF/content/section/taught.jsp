@@ -67,8 +67,10 @@ function publish( id, type )
          ${section.course.name} - ${section.number}</a>
     </td>
     <td class="action">
+      <a href="<c:url value='/section/journal/view?sectionId=${section.id}' />"> <img alt="[Course Journal]"
+         title="Course Journal" src="<c:url value='/img/icons/report.png'/>" /></a>
       <a href="<c:url value='/section/edit?id=${section.id}' />"> <img alt="[Edit]"
-         title="Edit" src="<c:url value='/img/icons/table_edit.png'/>" /></a>
+         title="Edit" src="<c:url value='/img/icons/table_edit.png'/>" style="margin-left: 10px;"/></a>
     </td>
   </tr>
   <tr> 
@@ -124,8 +126,7 @@ function publish( id, type )
     <td colspan="2">
       <a href="<c:url value='/assignment/create?sectionId=${section.id}' />">Create Assignment</a> |
       <a href="roster?id=${section.id}">View Students</a> |
-      <a href="roster/import?sectionId=${section.id}">Enroll Students</a> |
-      <a href="<c:url value='/assessment/editCourseJournal.html?sectionId=${section.id}'/>">Assessment</a>
+      <a href="roster/import?sectionId=${section.id}">Enroll Students</a>
     </td>
   </tr>
 </table>

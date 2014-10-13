@@ -143,7 +143,7 @@ public class Section implements Serializable, Comparable<Section> {
 
     public boolean isEnrolled( User user )
     {
-        return getEnrollment( user ) != null;
+        return user != null ? getEnrollment( user ) != null : false;
     }
 
     public boolean isInstructor( User user )

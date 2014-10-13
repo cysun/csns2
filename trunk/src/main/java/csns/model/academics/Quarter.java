@@ -289,6 +289,16 @@ public class Quarter implements Serializable, Comparable<Quarter> {
         return quarter == null ? false : code > quarter.code;
     }
 
+    public boolean before( Date date )
+    {
+        return before( new Quarter( date ) );
+    }
+
+    public boolean after( Date date )
+    {
+        return after( new Quarter( date ) );
+    }
+
     public int getQuarterSuffix()
     {
         return code % 10;

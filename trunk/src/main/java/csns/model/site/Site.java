@@ -72,6 +72,15 @@ public class Site implements Serializable {
     @JoinColumn(name = "folder_id")
     private File folder;
 
+    /** Whether the site is available to public or just the class. */
+    @Column(nullable = false)
+    private boolean restricted;
+
+    /** Whether the site is available after the quarter ends. */
+    @Column(nullable = false)
+    private boolean limited;
+
+    /** Whether the site can be cloned by other instructors. */
     @Column(nullable = false)
     private boolean shared;
 
@@ -84,6 +93,8 @@ public class Site implements Serializable {
         blocks.add( new Block( "Lecture Notes", Block.Type.REGULAR ) );
         blocks.add( new Block( "Assignments", Block.Type.ASSIGNMENTS ) );
 
+        restricted = false;
+        limited = false;
         shared = false;
     }
 
@@ -91,6 +102,49 @@ public class Site implements Serializable {
     {
         this();
         this.section = section;
+    }
+
+    public Site clone()
+    {
+        Site newSite = new Site();
+
+        for( InfoEntry infoEntry : infoEntries )
+            newSite.infoEntries.add( infoEntry.clone() );
+
+        newSite.blocks.clear();
+        for( Block block : blocks )
+            newSite.blocks.add( block.clone() );
+
+        newSite.restricted = restricted;
+        newSite.limited = limited;
+        newSite.shared = shared;
+
+        return newSite;
+    }
+
+    public Boolean toggleSetting( String setting )
+    {
+        Boolean result;
+
+        switch( setting.toLowerCase() )
+        {
+            case "restricted":
+                result = restricted = !restricted;
+                break;
+
+            case "limited":
+                result = limited = !limited;
+                break;
+
+            case "shared":
+                result = shared = !shared;
+                break;
+
+            default:
+                result = null;
+        }
+
+        return result;
     }
 
     public Block getBlock( Long blockId )
@@ -168,6 +222,26 @@ public class Site implements Serializable {
     public void setFolder( File folder )
     {
         this.folder = folder;
+    }
+
+    public boolean isRestricted()
+    {
+        return restricted;
+    }
+
+    public void setRestricted( boolean restricted )
+    {
+        this.restricted = restricted;
+    }
+
+    public boolean isLimited()
+    {
+        return limited;
+    }
+
+    public void setLimited( boolean limited )
+    {
+        this.limited = limited;
     }
 
     public boolean isShared()

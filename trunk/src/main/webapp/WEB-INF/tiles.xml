@@ -975,6 +975,11 @@
         <put-attribute name="content" value="/WEB-INF/content/site/create.jsp" />
     </definition>
 
+    <definition name="site/settings" extends="layout.basic">
+        <put-attribute name="title" value="Settings" />
+        <put-attribute name="content" value="/WEB-INF/content/site/settings.jsp" />
+    </definition>
+
     <definition name="site/syllabus/view" extends="layout.basic">
         <put-attribute name="title" value="Syllabus" />
         <put-attribute name="content" value="/WEB-INF/content/site/syllabus/view.jsp" />

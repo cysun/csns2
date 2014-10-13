@@ -252,6 +252,7 @@
         type varchar(255),
         owner_id int8 not null,
         parent_id int8,
+        reference_id int8,
         submission_id int8,
         primary key (id)
     );
@@ -462,13 +463,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
-        max_selections int4,
-        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -619,6 +620,8 @@
 
     create table sites (
         id int8 not null,
+        limited boolean not null,
+        restricted boolean not null,
         shared boolean not null,
         folder_id int8,
         section_id int8,
@@ -1184,6 +1187,11 @@
     alter table files 
         add constraint FK_aretmtw1sqqw1pfkqdew9f7y7 
         foreign key (parent_id) 
+        references files;
+
+    alter table files 
+        add constraint FK_74qy8ulabtqbbsbqq1iyq2la7 
+        foreign key (reference_id) 
         references files;
 
     alter table files 

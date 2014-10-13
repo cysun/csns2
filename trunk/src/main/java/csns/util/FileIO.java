@@ -61,7 +61,17 @@ public class FileIO {
 
     public java.io.File getDiskFile( File file )
     {
-        return new java.io.File( fileDir, file.getId().toString() );
+        return getDiskFile( file, true );
+    }
+
+    public java.io.File getDiskFile( File file, boolean followReference )
+    {
+        java.io.File diskFile = new java.io.File( fileDir, file.getId()
+            .toString() );
+
+        return diskFile.exists() || !followReference
+            ? diskFile
+            : new java.io.File( fileDir, file.getReference().getId().toString() );
     }
 
     public File save( MultipartFile uploadedFile, User user, boolean isPublic )
@@ -83,7 +93,7 @@ public class FileIO {
         file.setPublic( isPublic );
         file = fileDao.saveFile( file );
 
-        java.io.File diskFile = getDiskFile( file );
+        java.io.File diskFile = getDiskFile( file, false );
         try
         {
             uploadedFile.transferTo( diskFile );
@@ -108,7 +118,7 @@ public class FileIO {
 
     public void save( File file, MultipartFile uploadedFile )
     {
-        java.io.File diskFile = getDiskFile( file );
+        java.io.File diskFile = getDiskFile( file, false );
         try
         {
             uploadedFile.transferTo( diskFile );
@@ -153,7 +163,7 @@ public class FileIO {
     {
         try
         {
-            java.io.File diskFile = getDiskFile( to );
+            java.io.File diskFile = getDiskFile( to, false );
             FileOutputStream out = new FileOutputStream( diskFile );
             copy( from, out );
             out.close();
@@ -166,7 +176,7 @@ public class FileIO {
 
     public void delete( File file )
     {
-        java.io.File diskFile = getDiskFile( file );
+        java.io.File diskFile = getDiskFile( file, false );
         if( !diskFile.delete() )
             logger.error( "Failed to delete file " + diskFile.getAbsolutePath() );
     }

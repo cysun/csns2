@@ -24,6 +24,8 @@ $(function(){
   alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 <li class="align_right"><a href="<c:url value='${section.siteUrl}/files/' />"><img title="Files"
   alt="[Files]" src="<c:url value='/img/icons/file_manager.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='${section.siteUrl}/settings/' />"><img title="Settings"
+  alt="[Settings]" src="<c:url value='/img/icons/setting_tools.png' />" /></a></li>
 </ul>
 </c:if>
 

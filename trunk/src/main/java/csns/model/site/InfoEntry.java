@@ -41,6 +41,14 @@ public class InfoEntry implements Serializable {
         this.value = value;
     }
 
+    public InfoEntry clone()
+    {
+        InfoEntry newInfoEntry = new InfoEntry();
+        newInfoEntry.name = name;
+        newInfoEntry.value = value;
+        return newInfoEntry;
+    }
+
     public String getName()
     {
         return name;

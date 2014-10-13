@@ -18,6 +18,7 @@
  */
 package csns.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +26,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import csns.model.academics.Course;
 import csns.model.academics.Quarter;
@@ -83,44 +86,93 @@ public class SiteController {
         @PathVariable int sn, ModelMap models )
     {
         Section section = getSection( qtr, cc, sn );
+        User user = SecurityUtils.getUser();
+        boolean isInstructor = section.isInstructor( user );
+        boolean isStudent = section.isEnrolled( user );
+        boolean isAdmin = user != null && user.isAdmin();
         models.put( "section", section );
-        if( section != null && SecurityUtils.isAuthenticated() )
+        models.put( "isInstructor", isInstructor );
+        models.put( "isStudent", isStudent );
+
+        if( section == null || section.getSite() == null )
         {
-            User user = SecurityUtils.getUser();
-            models.put( "isInstructor", section.isInstructor( user ) );
-            models.put( "isStudent", section.isEnrolled( user ) );
+            if( isInstructor )
+                models.put( "sites",
+                    siteDao.getSites( section.getCourse(), user, 10 ) );
+            return "site/nosite";
         }
-        return section == null || section.getSite() == null ? "site/nosite"
-            : "site/view";
-    }
 
-    private String createSite( Section section )
-    {
-        if( section.getSite() != null )
-            return "redirect:" + section.getSiteUrl();
+        Site site = section.getSite();
 
-        Site site = new Site( section );
-        site = siteDao.saveSite( site );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " create site for section " + section.getId() );
-        return "redirect:" + section.getSiteUrl();
+        if( site.isRestricted() && !isStudent && !isInstructor && !isAdmin )
+        {
+            models.put( "message", "error.site.restricted" );
+            return "error";
+        }
+
+        if( site.isLimited() && section.getQuarter().before( new Date() )
+            && !isInstructor && !isAdmin )
+        {
+            models.put( "message", "error.site.limited" );
+            return "error";
+        }
+
+        return "site/view";
     }
 
     @RequestMapping("/site/create")
     public String create( @RequestParam Long sectionId,
-        @RequestParam(required = false, value = "new") Boolean newSite,
-        ModelMap models )
+        @RequestParam(required = false) Long siteId, ModelMap models )
     {
         Section section = sectionDao.getSection( sectionId );
-        if( newSite != null && newSite ) return createSite( section );
+        if( section.getSite() != null )
+            return "redirect:" + section.getSiteUrl();
 
-        List<Site> sites = siteDao.getSites( section.getCourse(),
-            SecurityUtils.getUser(), 20 );
-        if( sites.size() == 0 ) return createSite( section );
+        Site site = new Site( section );
+        if( siteId != null )
+        {
+            Site oldSite = siteDao.getSite( siteId );
+            site = oldSite.clone();
+            site.setSection( section );
 
+            if( oldSite.getSection().getSyllabus() != null
+                && section.getSyllabus() == null )
+            {
+                section.setSyllabus( oldSite.getSection().getSyllabus().clone() );
+                section = sectionDao.saveSection( section );
+            }
+        }
+        site = siteDao.saveSite( site );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " created site for section " + section.getId() );
+
+        String url = "redirect:" + section.getSiteUrl();
+        return siteId == null ? url : url + "/block/list";
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/settings")
+    public String settings( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, ModelMap models )
+    {
+        Section section = getSection( qtr, cc, sn );
         models.put( "section", section );
-        models.put( "sites", sites );
-        return "site/create";
+        models.put( "site", section.getSite() );
+        return "site/settings";
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/settings/toggle")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleSetting( @PathVariable String qtr,
+        @PathVariable String cc, @PathVariable int sn,
+        @RequestParam String setting, ModelMap models )
+    {
+        Site site = getSection( qtr, cc, sn ).getSite();
+        Boolean result = site.toggleSetting( setting );
+        site = siteDao.saveSite( site );
+
+        logger.info( SecurityUtils.getUser().getUsername() + " set " + setting
+            + " to " + result + " for site " + site.getId() );
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/item/{itemId}")

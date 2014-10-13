@@ -19,6 +19,7 @@
 package csns.model.site;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -64,6 +65,8 @@ public class Block implements Serializable {
 
     public Block()
     {
+        items = new ArrayList<Item>();
+
         type = Type.REGULAR;
         hidden = false;
     }
@@ -78,6 +81,20 @@ public class Block implements Serializable {
         this();
         this.name = name;
         this.type = type;
+    }
+
+    public Block clone()
+    {
+        Block newBlock = new Block();
+
+        newBlock.name = name;
+        newBlock.type = type;
+        newBlock.hidden = true;
+
+        for( Item item : items )
+            newBlock.items.add( item.clone() );
+
+        return newBlock;
     }
 
     public boolean toggle()

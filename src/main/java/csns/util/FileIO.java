@@ -70,8 +70,8 @@ public class FileIO {
             .toString() );
 
         return diskFile.exists() || !followReference
-            ? diskFile
-            : new java.io.File( fileDir, file.getReference().getId().toString() );
+            || file.getReference() == null ? diskFile : new java.io.File(
+            fileDir, file.getReference().getId().toString() );
     }
 
     public File save( MultipartFile uploadedFile, User user, boolean isPublic )

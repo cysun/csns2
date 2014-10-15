@@ -81,7 +81,7 @@ public class ImageUtils {
             newFile.setPublic( file.isPublic() );
             newFile = fileDao.saveFile( newFile );
 
-            tempFile.renameTo( fileIO.getDiskFile( newFile ) );
+            tempFile.renameTo( fileIO.getDiskFile( newFile, false ) );
         }
         catch( IOException e )
         {

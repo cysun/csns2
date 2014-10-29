@@ -101,7 +101,8 @@ public class Section implements Serializable, Comparable<Section> {
     @OneToOne(mappedBy = "section")
     private Site site;
 
-    @OneToOne(mappedBy = "section")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_journal_id", unique = true)
     private CourseJournal courseJournal;
 
     @Column(nullable = false)

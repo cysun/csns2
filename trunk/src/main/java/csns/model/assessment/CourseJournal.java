@@ -19,9 +19,11 @@
 package csns.model.assessment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,31 +52,31 @@ public class CourseJournal implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "courseJournal")
     @JoinColumn(name = "section_id")
     private Section section;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "course_journal_handouts",
         joinColumns = @JoinColumn(name = "course_journal_id"),
         inverseJoinColumns = @JoinColumn(name = "resource_id"))
     @OrderColumn(name = "handout_order")
     private List<Resource> handouts;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "course_journal_assignments",
         joinColumns = @JoinColumn(name = "course_journal_id"),
         inverseJoinColumns = @JoinColumn(name = "assignment_id"))
     @OrderColumn(name = "assignment_order")
     private List<Assignment> assignments;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "course_journal_student_samples",
         joinColumns = @JoinColumn(name = "course_journal_id"),
         inverseJoinColumns = @JoinColumn(name = "enrollment_id"),
         uniqueConstraints = @UniqueConstraint(columnNames = {
             "course_journal_id", "enrollment_id" }))
-    @OrderBy("student.lastName asc")
+    @OrderBy("id asc")
     private List<Enrollment> studentSamples;
 
     @Column(name = "submit_date")
@@ -85,12 +87,34 @@ public class CourseJournal implements Serializable {
 
     public CourseJournal()
     {
+        handouts = new ArrayList<Resource>();
+        assignments = new ArrayList<Assignment>();
+        studentSamples = new ArrayList<Enrollment>();
     }
 
     public CourseJournal( Section section )
     {
         this();
         this.section = section;
+    }
+
+    public boolean isSubmitted()
+    {
+        return submitDate != null;
+    }
+
+    public boolean isApproved()
+    {
+        return approveDate != null;
+    }
+
+    public boolean removeHandout( Long resourceId )
+    {
+        for( Resource handout : handouts )
+            if( handout.getId().equals( resourceId ) )
+                return handouts.remove( handout );
+
+        return false;
     }
 
     public Long getId()

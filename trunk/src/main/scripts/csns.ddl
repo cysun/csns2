@@ -125,7 +125,6 @@
         id int8 not null,
         approve_date timestamp,
         submit_date timestamp,
-        section_id int8,
         primary key (id)
     );
 
@@ -159,8 +158,9 @@
         name varchar(255) not null,
         obsolete boolean not null,
         coordinator_id int8,
+        course_journal_id int8,
         department_id int8,
-        syllabus_id int8,
+        description_id int8,
         primary key (id)
     );
 
@@ -463,11 +463,11 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
         question_section_id int8,
@@ -574,6 +574,7 @@
         number int4 not null,
         quarter int4 not null,
         course_id int8 not null,
+        course_journal_id int8,
         syllabus_id int8,
         primary key (id)
     );
@@ -813,6 +814,9 @@
     alter table courses 
         add constraint UK_61og8rbqdd2y28rx2et5fdnxd unique (code);
 
+    alter table courses 
+        add constraint UK_a2pfwrv9e0jck13cudlo7wkuc unique (course_journal_id);
+
     alter table current_standings 
         add constraint UK_4a9ef8cucw6u69q55ovpnoxck unique (academic_standing_id);
 
@@ -848,6 +852,9 @@
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
+
+    alter table sections 
+        add constraint UK_knl25os9w7qr4rgi88h00ukhn unique (course_journal_id);
 
     alter table standings 
         add constraint UK_frgiry5vvnksrumybvsdws5l9 unique (symbol);
@@ -999,11 +1006,6 @@
         foreign key (course_journal_id) 
         references course_journals;
 
-    alter table course_journals 
-        add constraint FK_nkrm0rgmmh65an5qpcod88xld 
-        foreign key (section_id) 
-        references sections;
-
     alter table course_substitutions 
         add constraint FK_4xv8mf3jidbdi508wufg15vv3 
         foreign key (advisement_record_id) 
@@ -1045,13 +1047,18 @@
         references users;
 
     alter table courses 
+        add constraint FK_a2pfwrv9e0jck13cudlo7wkuc 
+        foreign key (course_journal_id) 
+        references course_journals;
+
+    alter table courses 
         add constraint FK_i4cr87kpfjdhpko2ahmpcdv51 
         foreign key (department_id) 
         references departments;
 
     alter table courses 
-        add constraint FK_9nrwscagtmas6q6txrmoa444d 
-        foreign key (syllabus_id) 
+        add constraint FK_4d959m04dfro4ed100rro7q0b 
+        foreign key (description_id) 
         references files;
 
     alter table current_standings 
@@ -1478,6 +1485,11 @@
         add constraint FK_j52kea1adexdgmvwldq0uluko 
         foreign key (course_id) 
         references courses;
+
+    alter table sections 
+        add constraint FK_knl25os9w7qr4rgi88h00ukhn 
+        foreign key (course_journal_id) 
+        references course_journals;
 
     alter table sections 
         add constraint FK_tb2sois1r297sjjopec8sntu4 

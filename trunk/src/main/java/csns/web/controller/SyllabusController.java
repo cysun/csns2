@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.academics.Course;
 import csns.model.academics.Quarter;
@@ -35,7 +36,6 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
 import csns.model.core.ResourceType;
-import csns.model.core.User;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 
@@ -61,34 +61,23 @@ public class SyllabusController {
         return sectionDao.getSection( quarter, course, sn );
     }
 
-    @RequestMapping("/site/{qtr}/{cc}-{sn}/syllabus")
-    public String view( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, ModelMap models, HttpServletResponse response )
+    private String view( Section section, ModelMap models,
+        HttpServletResponse response )
     {
-        Section section = getSection( qtr, cc, sn );
         Resource syllabus = section.getSyllabus();
-        User user = SecurityUtils.getUser();
-        String siteUrl = "/site/" + qtr + "/" + cc + "-" + sn;
 
         if( syllabus == null || syllabus.getType() == ResourceType.NONE )
         {
-            if( section.isInstructor( user ) )
-                return "redirect:" + siteUrl + "/syllabus/edit";
-            else
-            {
-                models.put( "message", "error.section.nosyllabus" );
-                models.put( "backUrl", siteUrl );
-                return "error";
-            }
+            models.put( "message", "error.section.nosyllabus" );
+            return "error";
         }
 
         switch( syllabus.getType() )
         {
             case TEXT:
                 models.put( "section", section );
-                models.put( "isInstructor", section.isInstructor( user ) );
                 models.put( "syllabus", syllabus );
-                return "site/syllabus/view";
+                return "syllabus/view";
 
             case FILE:
                 fileIO.write( syllabus.getFile(), response );
@@ -99,8 +88,29 @@ public class SyllabusController {
 
             default:
                 logger.warn( "Invalid resource type: " + syllabus.getType() );
-                return "redirect:" + siteUrl;
+                models.put( "message", "error.resource.type.invalid" );
+                return "error";
         }
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/syllabus")
+    public String view( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, ModelMap models, HttpServletResponse response )
+    {
+        Section section = getSection( qtr, cc, sn );
+        models.put( "view", "site" );
+        models.put( "isInstructor",
+            section.isInstructor( SecurityUtils.getUser() ) );
+        return view( section, models, response );
+    }
+
+    @RequestMapping("/section/journal/viewSyllabus")
+    public String view( @RequestParam Long sectionId, ModelMap models,
+        HttpServletResponse response )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "view", "journal1" );
+        return view( section, models, response );
     }
 
 }

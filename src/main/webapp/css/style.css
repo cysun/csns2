@@ -1038,6 +1038,52 @@ tr th.shrink, tr td.shrink {
     height: 30px;
 }
 
+/** Course Journal **/
+
+.journal-title {
+    font: 20px 'Trebuchet MS', Arial;
+    font-weight: bold;
+    text-align: center;
+    margin: 5px 0;
+}
+.journal-quarter {
+    font: 18px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 10px 0 10px;
+}
+.journal-instructor {
+    font: 16px 'Trebuchet MS', Arial;
+    text-align: center;
+    margin: 10px 0 10px;
+}
+.journal-section {
+    margin: 10px;
+}
+.journal-section-title {
+    font-size: 16px;
+    font-weight: bold;
+    border:1px solid #dddddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 15px 0 5px 0;
+}
+.journal-section-operations {
+    float: right;
+}
+.journal-section-operations a {
+    vertical-align: middle;
+    margin: 5px;
+}
+.journal-section-content p {
+    margin: 10px 1.5em 0px 1.5em;
+}
+.journal-section-content li {
+    margin: 0 0 8px 0;
+}
+.journal-section-content img {
+    vertical-align: middle;
+}
+
 /** Site **/
 
 .site-title {

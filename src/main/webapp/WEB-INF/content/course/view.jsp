@@ -32,10 +32,10 @@
     <td>${course.coordinator.name}</td>
   </tr>
   <tr>
-    <th>Syllabus</th>
+    <th>Description</th>
     <td>
-      <c:if test="${course.syllabus != null}">
-      <a href="<c:url value='/download?fileId=${course.syllabus.id}' />">View</a>
+      <c:if test="${course.description != null}">
+      <a href="<c:url value='/download?fileId=${course.description.id}' />">View</a>
       </c:if>
     </td>
   </tr>

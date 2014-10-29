@@ -134,9 +134,19 @@
         <put-attribute name="content" value="/WEB-INF/content/exception/email.jsp" />
     </definition>
 
-    <!-- ===== -->
-    <!-- Admin -->
-    <!-- ===== -->
+    <!-- ======== -->
+    <!-- Resource -->
+    <!-- ======== -->
+
+    <definition name="resource/view" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/resource/view.jsp" />
+    </definition>
+
+    <definition name="resource/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/resource/edit.jsp" />
+    </definition>
 
     <!-- ==== -->
     <!-- User -->
@@ -361,9 +371,33 @@
         <put-attribute name="content" value="/WEB-INF/content/section/search.jsp" />
     </definition>
 
+    <!-- =============== -->
+    <!-- Course Journals -->
+    <!-- =============== -->
+
     <definition name="section/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Section" />
         <put-attribute name="content" value="/WEB-INF/content/section/view.jsp" />
+    </definition>
+
+    <definition name="section/journal/view" extends="layout.basic">
+        <put-attribute name="title" value="Course Journal" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/view.jsp" />
+    </definition>
+
+    <definition name="section/journal/handouts" extends="layout.jqueryui">
+        <put-attribute name="title" value="Handouts" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/handouts.jsp" />
+    </definition>
+
+    <definition name="section/journal/assignments" extends="layout.jqueryui">
+        <put-attribute name="title" value="Assignments" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/assignments.jsp" />
+    </definition>
+
+    <definition name="section/journal/samples" extends="layout.jqueryui">
+        <put-attribute name="title" value="Student Samples" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/samples.jsp" />
     </definition>
 
     <!-- ========== -->
@@ -804,6 +838,25 @@
         <put-attribute name="content" value="/WEB-INF/content/project/resource/edit.jsp" />
     </definition>
 
+    <!-- ================ -->
+    <!-- Course Journals  -->
+    <!-- ================ -->
+
+    <definition name="journal/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Course Journals" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/list.jsp" />
+    </definition>
+
+    <definition name="journal/view" extends="layout.basic">
+        <put-attribute name="title" value="Course Journal" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/view.jsp" />
+    </definition>
+
+    <definition name="journal/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Course Journal" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/edit.jsp" />
+    </definition>
+
     <!-- === -->
     <!-- MFT -->
     <!-- === -->
@@ -949,6 +1002,20 @@
     <definition name="rubric/evaluation/view" extends="layout.jqueryui">
         <put-attribute name="title" value="Rubric Evaluation" />
         <put-attribute name="content" value="/WEB-INF/content/rubric/evaluation/view.jsp" />
+    </definition>
+
+    <!-- ======== -->
+    <!-- Syllabus -->
+    <!-- ======== -->
+
+    <definition name="syllabus/view" extends="layout.basic">
+        <put-attribute name="title" value="Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/syllabus/view.jsp" />
+    </definition>
+
+    <definition name="syllabus/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/syllabus/edit.jsp" />
     </definition>
 
     <!-- ==== -->

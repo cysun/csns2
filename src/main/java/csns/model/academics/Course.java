@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -30,6 +30,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import csns.model.assessment.CourseJournal;
 import csns.model.core.File;
 import csns.model.core.User;
 import csns.model.forum.Forum;
@@ -65,8 +66,12 @@ public class Course implements Serializable, Comparable<Course> {
     private User coordinator;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "syllabus_id")
-    private File syllabus;
+    @JoinColumn(name = "description_id")
+    private File description;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_journal_id", unique = true)
+    private CourseJournal courseJournal;
 
     @OneToOne(mappedBy = "course")
     private Forum forum;
@@ -168,14 +173,24 @@ public class Course implements Serializable, Comparable<Course> {
         this.coordinator = coordinator;
     }
 
-    public File getSyllabus()
+    public File getDescription()
     {
-        return syllabus;
+        return description;
     }
 
-    public void setSyllabus( File syllabus )
+    public void setDescription( File description )
     {
-        this.syllabus = syllabus;
+        this.description = description;
+    }
+
+    public CourseJournal getCourseJournal()
+    {
+        return courseJournal;
+    }
+
+    public void setCourseJournal( CourseJournal courseJournal )
+    {
+        this.courseJournal = courseJournal;
     }
 
     public Forum getForum()

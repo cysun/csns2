@@ -47,6 +47,12 @@ function publish( id, type )
     if( confirm(msg) )
         $("#pdate-"+id).load( "<c:url value='/' />" + type + "/publish?id=" + id );
 }
+function createJournal( sectionId )
+{
+    var msg = "Do you want to create a course journal for this section?";
+    if( confirm(msg) )
+        window.location.href = "journal/create?sectionId=" + sectionId;
+}
 </script>
 
 <ul id="title">
@@ -67,8 +73,16 @@ function publish( id, type )
          ${section.course.name} - ${section.number}</a>
     </td>
     <td class="action">
-      <a href="<c:url value='/section/journal/view?sectionId=${section.id}' />"> <img alt="[Course Journal]"
+<c:choose>
+  <c:when test="${empty section.courseJournal}">
+      <a href="javascript:createJournal(${section.id})"> <img alt="[Course Journal]"
          title="Course Journal" src="<c:url value='/img/icons/report.png'/>" /></a>
+  </c:when>
+  <c:otherwise>
+      <a href="journal/view?sectionId=${section.id}"> <img alt="[Course Journal]"
+         title="Course Journal" src="<c:url value='/img/icons/report.png'/>" /></a>
+  </c:otherwise>
+</c:choose>
       <a href="<c:url value='/section/edit?id=${section.id}' />"> <img alt="[Edit]"
          title="Edit" src="<c:url value='/img/icons/table_edit.png'/>" style="margin-left: 10px;"/></a>
     </td>

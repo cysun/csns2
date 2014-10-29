@@ -48,7 +48,7 @@ import csns.util.FileIO;
 import csns.web.validator.ResourceValidator;
 
 @Controller
-@SessionAttributes("syllabus")
+@SessionAttributes({ "syllabus", "view" })
 public class SyllabusControllerS {
 
     @Autowired
@@ -76,43 +76,51 @@ public class SyllabusControllerS {
         return sectionDao.getSection( quarter, course, sn );
     }
 
-    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/syllabus/edit",
-        method = RequestMethod.GET)
-    public String edit( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, ModelMap models )
+    private String edit( Section section, ModelMap models )
     {
-        Section section = getSection( qtr, cc, sn );
         Resource syllabus = section.getSyllabus();
         if( syllabus == null )
         {
-            syllabus = new Resource( cc.toUpperCase() + "-" + sn + " "
-                + qtr.toUpperCase() + " Syllabus" );
+            syllabus = new Resource( section.getCourse().getCode() + "-"
+                + section.getNumber() + " " + section.getQuarter()
+                + " Syllabus" );
             syllabus.setType( ResourceType.TEXT );
         }
 
         models.put( "section", section );
         models.put( "syllabus", syllabus );
         models.put( "resourceTypes", ResourceType.values() );
-        return "site/syllabus/edit";
+        return "syllabus/edit";
     }
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/syllabus/edit",
-        method = RequestMethod.POST)
-    public String edit(
-        @PathVariable String qtr,
-        @PathVariable String cc,
-        @PathVariable int sn,
-        @ModelAttribute("syllabus") Resource syllabus,
-        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
-        BindingResult bindingResult, SessionStatus sessionStatus,
-        ModelMap models )
+        method = RequestMethod.GET)
+    public String edit( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, ModelMap models )
     {
+        models.put( "view", "site" );
         Section section = getSection( qtr, cc, sn );
+        return edit( section, models );
+    }
+
+    @RequestMapping(value = "/section/journal/editSyllabus",
+        method = RequestMethod.GET)
+    public String edit( @RequestParam Long sectionId, ModelMap models )
+    {
+        models.put( "view", "journal1" );
+        Section section = sectionDao.getSection( sectionId );
+        return edit( section, models );
+    }
+
+    private String edit( Section section, Resource syllabus,
+        MultipartFile uploadedFile, BindingResult bindingResult,
+        SessionStatus sessionStatus, ModelMap models, String redirectUrl )
+    {
         resourceValidator.validate( syllabus, uploadedFile, bindingResult );
         if( bindingResult.hasErrors() )
         {
             models.put( "section", section );
-            return "site/syllabus/edit";
+            return "syllabus/edit";
         }
 
         if( syllabus.getType() == ResourceType.NONE )
@@ -140,7 +148,37 @@ public class SyllabusControllerS {
         logger.info( user.getUsername() + " edited the syllabus of section "
             + section.getId() );
 
-        return "redirect:" + section.getSiteUrl();
+        return "redirect:" + redirectUrl;
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/syllabus/edit",
+        method = RequestMethod.POST)
+    public String edit(
+        @PathVariable String qtr,
+        @PathVariable String cc,
+        @PathVariable int sn,
+        @ModelAttribute("syllabus") Resource syllabus,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
+    {
+        Section section = getSection( qtr, cc, sn );
+        return edit( section, syllabus, uploadedFile, bindingResult,
+            sessionStatus, models, section.getSiteUrl() );
+    }
+
+    @RequestMapping(value = "/section/journal/editSyllabus",
+        method = RequestMethod.POST)
+    public String edit(
+        @RequestParam Long sectionId,
+        @ModelAttribute("syllabus") Resource syllabus,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus,
+        ModelMap models )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        return edit( section, syllabus, uploadedFile, bindingResult,
+            sessionStatus, models, "view?sectionId=" + sectionId );
     }
 
 }

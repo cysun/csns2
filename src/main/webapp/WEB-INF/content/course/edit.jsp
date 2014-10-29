@@ -59,7 +59,7 @@ function help( name )
     </td>
   </tr>
   <tr>
-    <th>Syllabus</th>
+    <th>Description</th>
     <td>
       <input name="file" type="file" class="forminput" style="width: 600px;" />
     </td>

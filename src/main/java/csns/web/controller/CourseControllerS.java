@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -94,7 +94,7 @@ public class CourseControllerS {
         if( bindingResult.hasErrors() ) return "course/create";
 
         if( uploadedFile != null && !uploadedFile.isEmpty() )
-            course.setSyllabus( fileIO.save( uploadedFile,
+            course.setDescription( fileIO.save( uploadedFile,
                 SecurityUtils.getUser(), true ) );
 
         course.setDepartment( departmentDao.getDepartment( course.getDept() ) );
@@ -128,7 +128,7 @@ public class CourseControllerS {
         if( bindingResult.hasErrors() ) return "course/edit";
 
         if( uploadedFile != null && !uploadedFile.isEmpty() )
-            course.setSyllabus( fileIO.save( uploadedFile,
+            course.setDescription( fileIO.save( uploadedFile,
                 SecurityUtils.getUser(), true ) );
 
         course.setDepartment( departmentDao.getDepartment( course.getDept() ) );

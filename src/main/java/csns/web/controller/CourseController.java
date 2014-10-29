@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -36,7 +36,7 @@ public class CourseController {
     @Autowired
     private CourseDao courseDao;
 
-    @RequestMapping(value = "/course/search")
+    @RequestMapping("/course/search")
     public String search( @RequestParam(required = false) String term,
         ModelMap models )
     {
@@ -48,7 +48,7 @@ public class CourseController {
         return "course/search";
     }
 
-    @RequestMapping(value = "/course/view")
+    @RequestMapping("/course/view")
     public String view( @RequestParam Long id, ModelMap models )
     {
         models.put( "course", courseDao.getCourse( id ) );

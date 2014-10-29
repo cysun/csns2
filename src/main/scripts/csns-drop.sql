@@ -116,6 +116,8 @@ drop table department_faculty;
 drop table department_administrators;
 drop table departments;
 
+alter table sections drop constraint sections_course_journal_id_fkey;
+alter table courses drop constraint courses_course_journal_id_fkey;
 drop table course_journal_student_samples;
 drop table course_journal_assignments;
 drop table course_journal_handouts;

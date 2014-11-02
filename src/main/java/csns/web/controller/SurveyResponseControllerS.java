@@ -22,6 +22,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -58,6 +60,8 @@ public class SurveyResponseControllerS {
 
     @Autowired
     private SurveyResponseValidator surveyResponseValidator;
+
+    private static final Logger logger = LoggerFactory.getLogger( SurveyResponseControllerS.class );
 
     @RequestMapping(value = "/department/{dept}/survey/response/edit",
         method = RequestMethod.GET)
@@ -134,6 +138,12 @@ public class SurveyResponseControllerS {
             }
             response.getAnswerSheet().setDate( new Date() );
             response = surveyResponseDao.saveSurveyResponse( response );
+
+            if( survey.getType() == SurveyType.NAMED )
+                logger.info( SecurityUtils.getUser().getUsername()
+                    + " completed survey " + survey.getId() );
+            else
+                logger.info( "A user completed survey " + survey.getId() );
 
             sessionStatus.setComplete();
             models.put( "message", "status.survey.completed" );

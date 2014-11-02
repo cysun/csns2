@@ -70,8 +70,8 @@ public class Course implements Serializable, Comparable<Course> {
     private File description;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_journal_id", unique = true)
-    private CourseJournal courseJournal;
+    @JoinColumn(name = "journal_id", unique = true)
+    private CourseJournal journal;
 
     @OneToOne(mappedBy = "course")
     private Forum forum;
@@ -183,14 +183,14 @@ public class Course implements Serializable, Comparable<Course> {
         this.description = description;
     }
 
-    public CourseJournal getCourseJournal()
+    public CourseJournal getJournal()
     {
-        return courseJournal;
+        return journal;
     }
 
-    public void setCourseJournal( CourseJournal courseJournal )
+    public void setJournal( CourseJournal journal )
     {
-        this.courseJournal = courseJournal;
+        this.journal = journal;
     }
 
     public Forum getForum()

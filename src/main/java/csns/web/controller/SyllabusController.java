@@ -105,11 +105,20 @@ public class SyllabusController {
     }
 
     @RequestMapping("/section/journal/viewSyllabus")
-    public String view( @RequestParam Long sectionId, ModelMap models,
+    public String view1( @RequestParam Long sectionId, ModelMap models,
         HttpServletResponse response )
     {
         Section section = sectionDao.getSection( sectionId );
         models.put( "view", "journal1" );
+        return view( section, models, response );
+    }
+
+    @RequestMapping("/department/{dept}/journal/viewSyllabus")
+    public String view2( @RequestParam Long sectionId, ModelMap models,
+        HttpServletResponse response )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "view", "journal2" );
         return view( section, models, response );
     }
 

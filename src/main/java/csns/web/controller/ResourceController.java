@@ -28,7 +28,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import csns.model.academics.Assignment;
 import csns.model.academics.Section;
+import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.Resource;
 import csns.model.core.dao.ResourceDao;
@@ -45,16 +47,16 @@ public class ResourceController {
     private SectionDao sectionDao;
 
     @Autowired
+    private AssignmentDao assignmentDao;
+
+    @Autowired
     private FileIO fileIO;
 
     private static final Logger logger = LoggerFactory.getLogger( ResourceController.class );
 
-    @RequestMapping("/resource/view")
-    public String view( @RequestParam Long id, ModelMap models,
+    private String view( Resource resource, ModelMap models,
         HttpServletResponse response )
     {
-        Resource resource = resourceDao.getResource( id );
-
         switch( resource.getType() )
         {
             case TEXT:
@@ -75,13 +77,30 @@ public class ResourceController {
         }
     }
 
+    @RequestMapping("/resource/view")
+    public String view( @RequestParam Long id, ModelMap models,
+        HttpServletResponse response )
+    {
+        return view( resourceDao.getResource( id ), models, response );
+    }
+
+    @RequestMapping("/department/{dept}/journal/viewAssignment")
+    public String viewAssignment( @RequestParam Long assignmentId,
+        ModelMap models, HttpServletResponse response )
+    {
+        Assignment assignment = assignmentDao.getAssignment( assignmentId );
+        models.put( "view", "CourseJournal" );
+        models.put( "assignment", assignment );
+        return view( assignment.getDescription(), models, response );
+    }
+
     @RequestMapping("/section/journal/removeHandout")
     public String remove( @RequestParam Long sectionId,
         @RequestParam Long resourceId )
     {
         String username = SecurityUtils.getUser().getUsername();
         Section section = sectionDao.getSection( sectionId );
-        boolean removed = section.getCourseJournal().removeHandout( resourceId );
+        boolean removed = section.getJournal().removeHandout( resourceId );
         if( removed )
         {
             section = sectionDao.saveSection( section );

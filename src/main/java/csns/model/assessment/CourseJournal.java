@@ -52,7 +52,7 @@ public class CourseJournal implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(mappedBy = "courseJournal")
+    @OneToOne(mappedBy = "journal")
     @JoinColumn(name = "section_id")
     private Section section;
 

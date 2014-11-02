@@ -102,8 +102,8 @@ public class Section implements Serializable, Comparable<Section> {
     private Site site;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_journal_id", unique = true)
-    private CourseJournal courseJournal;
+    @JoinColumn(name = "journal_id", unique = true)
+    private CourseJournal journal;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -273,14 +273,14 @@ public class Section implements Serializable, Comparable<Section> {
         this.site = site;
     }
 
-    public CourseJournal getCourseJournal()
+    public CourseJournal getJournal()
     {
-        return courseJournal;
+        return journal;
     }
 
-    public void setCourseJournal( CourseJournal courseJournal )
+    public void setJournal( CourseJournal journal )
     {
-        this.courseJournal = courseJournal;
+        this.journal = journal;
     }
 
     public boolean isDeleted()

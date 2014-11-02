@@ -18,36 +18,51 @@
  */
 package csns.web.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import csns.model.academics.Course;
 import csns.model.academics.Department;
-import csns.model.academics.Section;
+import csns.model.academics.Enrollment;
+import csns.model.academics.dao.AssignmentDao;
+import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.academics.dao.SubmissionDao;
 import csns.model.assessment.CourseJournal;
 import csns.model.assessment.dao.CourseJournalDao;
-import csns.model.site.Block;
-import csns.model.site.Item;
-import csns.model.site.Site;
 import csns.security.SecurityUtils;
 
 @Controller
 public class CourseJournalController {
 
-    // XXX INCOMPLETE
-
     @Autowired
     private SectionDao sectionDao;
 
     @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
     private DepartmentDao departmentDao;
+
+    @Autowired
+    private AssignmentDao assignmentDao;
+
+    @Autowired
+    private SubmissionDao submissionDao;
+
+    @Autowired
+    private EnrollmentDao enrollmentDao;
 
     @Autowired
     private CourseJournalDao courseJournalDao;
@@ -67,42 +82,71 @@ public class CourseJournalController {
     @RequestMapping("/department/{dept}/journal/view")
     public String view( @RequestParam Long id, ModelMap models )
     {
-        models.put( "courseJournal", courseJournalDao.getCourseJournal( id ) );
+        models.put( "journal", courseJournalDao.getCourseJournal( id ) );
         return "journal/view";
     }
 
-    @RequestMapping("/department/{dept}/journal/edit")
-    public String edit( @RequestParam Long id, ModelMap models )
+    @RequestMapping("/department/{dept}/journal/viewOnlineAssignment")
+    public String viewOnlineAssignment( @RequestParam Long assignmentId,
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
-        models.put( "courseJournal", courseJournalDao.getCourseJournal( id ) );
-        return "journal/edit";
+        models.put( "assignment", assignmentDao.getAssignment( assignmentId ) );
+        models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
+        return "journal/viewOnlineAssignment";
     }
 
-    @RequestMapping("/department/{dept}/journal/create")
-    public String create( @RequestParam Long sectionId )
+    @RequestMapping("/department/{dept}/journal/viewStudent")
+    public String viewStudent( @RequestParam Long enrollmentId, ModelMap models )
     {
-        Section section = sectionDao.getSection( sectionId );
-        if( section.getCourseJournal() != null )
-            return "redirect:view?id=" + section.getCourseJournal().getId();
+        Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
+        models.put( "enrollment", enrollment );
+        models.put(
+            "submissions",
+            submissionDao.getSubmissions( enrollment.getStudent(),
+                enrollment.getSection() ) );
+        return "journal/viewStudent";
+    }
 
-        CourseJournal courseJournal = new CourseJournal( section );
+    @RequestMapping("/department/{dept}/journal/viewSubmission")
+    public String viewSubmission( @RequestParam Long id,
+        @RequestParam Long enrollmentId, ModelMap models )
+    {
+        models.put( "submission", submissionDao.getSubmission( id ) );
+        return "journal/viewSubmission";
+    }
 
-        // Populate handouts if the section has a class website
-        Site site = section.getSite();
-        if( site != null )
-            for( Block block : site.getBlocks() )
-                if( block.getType().equals( Block.Type.REGULAR ) )
-                    for( Item item : block.getItems() )
-                        courseJournal.getHandouts().add( item.getResource() );
+    @RequestMapping("/department/{dept}/journal/approve")
+    @PreAuthorize("authenticated and principal.isAdmin(#dept)")
+    public String approve( @PathVariable String dept, @RequestParam Long id )
+    {
+        // Save the journal
+        CourseJournal journal = courseJournalDao.getCourseJournal( id );
+        journal.setApproveDate( new Date() );
+        journal = courseJournalDao.saveCourseJournal( journal );
 
-        // Populate assignments
-        courseJournal.getAssignments().addAll( section.getAssignments() );
+        // Set the journal to be the official journal of the course
+        Course course = journal.getSection().getCourse();
+        course.setJournal( journal );
+        course = courseDao.saveCourse( course );
 
-        courseJournal = courseJournalDao.saveCourseJournal( courseJournal );
         logger.info( SecurityUtils.getUser().getUsername()
-            + " created course journal " + courseJournal.getId() );
+            + " approved course journal " + id );
 
-        return "redirect?view?id=" + courseJournal.getId();
+        return "redirect:list";
+    }
+
+    @RequestMapping("/department/{dept}/journal/reject")
+    @PreAuthorize("authenticated and principal.isAdmin(#dept)")
+    public String reject( @PathVariable String dept, @RequestParam Long id )
+    {
+        CourseJournal journal = courseJournalDao.getCourseJournal( id );
+        journal.setSubmitDate( null );
+        journal = courseJournalDao.saveCourseJournal( journal );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " rejected course journal " + id );
+
+        return "redirect:list#submitted";
     }
 
 }

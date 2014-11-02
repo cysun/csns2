@@ -71,7 +71,7 @@ $(function(){
         alt="" src="<c:url value='/img/icons/reports.png' />" />Course Journals</a></li>
 <security:authorize access="principal.isFaculty('${dept}')">
     <li id="mft-menu-item"><a href="<c:url value='/department/${dept}/mft/overview' />"><img
-        alt="" src="<c:url value='/img/icons/mft.png' />" />MFT</a></li>
+        alt="" src="<c:url value='/img/icons/mft.png' />" />Major Field Test</a></li>
 </security:authorize>
   </ul></div>
 </li>

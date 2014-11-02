@@ -21,7 +21,7 @@ function removeHandout( resourceId )
 
 <table class="viewtable autowidth">
   <tbody class="sortableElements">
-  <c:forEach items="${section.courseJournal.handouts}" var="handout">
+  <c:forEach items="${section.journal.handouts}" var="handout">
   <tr data-handout-id="${handout.id}">
     <td><a href="<c:url value='/resource/view?id=${handout.id}' />">${handout.name}</a></td>
     <td>

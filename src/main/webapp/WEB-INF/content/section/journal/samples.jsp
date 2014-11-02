@@ -6,7 +6,7 @@ $(function(){
         $.ajax({
            url: "toggleEnrollment",
            data: {
-               "journalId": ${section.courseJournal.id},
+               "journalId": ${section.journal.id},
                "enrollmentId": $(this).attr("data-enrollment-id")
            },
            cache: false
@@ -14,7 +14,7 @@ $(function(){
     });
     $("table").tablesorter({
         headers: { 0: {sorter: false} },
-        sortList: [[1,0]]
+        sortList: [[1,0], [0,0]]
     });
 });
 </script>
@@ -35,7 +35,7 @@ $(function(){
   <tr>
     <td>
       <input type="checkbox" class="enrollment-toggle" data-enrollment-id="${enrollment.id}"
-        <c:if test="${section.courseJournal.studentSamples.contains(enrollment)}">checked="checked"</c:if> />
+        <c:if test="${section.journal.studentSamples.contains(enrollment)}">checked="checked"</c:if> />
       ${enrollment.student.name}
     </td>
     <td class="center"><a href="../grade?enrollmentId=${enrollment.id}">${enrollment.grade.symbol}</a></td>

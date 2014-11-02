@@ -6,7 +6,7 @@ $(function(){
         $.ajax({
            url: "toggleAssignment",
            data: {
-               "journalId": ${section.courseJournal.id},
+               "journalId": ${section.journal.id},
                "assignmentId": $(this).attr("data-assignment-id")
            },
            cache: false
@@ -28,7 +28,7 @@ $(function(){
   <tr data-assignment-id="${assignment.id}">
     <td>
       <input type="checkbox" class="assignment-toggle" data-assignment-id="${assignment.id}"
-        <c:if test="${section.courseJournal.assignments.contains(assignment)}">checked="checked"</c:if> />
+        <c:if test="${section.journal.assignments.contains(assignment)}">checked="checked"</c:if> />
     </td>
     <td>
     <c:choose>

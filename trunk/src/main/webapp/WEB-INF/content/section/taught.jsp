@@ -74,7 +74,7 @@ function createJournal( sectionId )
     </td>
     <td class="action">
 <c:choose>
-  <c:when test="${empty section.courseJournal}">
+  <c:when test="${empty section.journal}">
       <a href="javascript:createJournal(${section.id})"> <img alt="[Course Journal]"
          title="Course Journal" src="<c:url value='/img/icons/report.png'/>" /></a>
   </c:when>

@@ -288,16 +288,16 @@ insert into grades (id, symbol, value, description) values
 ----------------------------------------
 
 create table courses (
-    id                  bigint primary key,
-    department_id       bigint,
-    code                varchar(255) not null unique,
-    name                varchar(255) not null,
-    min_units           integer not null default 4,
-    max_units           integer not null default 4,
-    coordinator_id      bigint references users(id),
-    description_id      bigint references files(id),
-    course_journal_id   bigint unique,
-    obsolete            boolean not null default 'f'
+    id              bigint primary key,
+    department_id   bigint,
+    code            varchar(255) not null unique,
+    name            varchar(255) not null,
+    min_units       integer not null default 4,
+    max_units       integer not null default 4,
+    coordinator_id  bigint references users(id),
+    description_id  bigint references files(id),
+    journal_id      bigint unique,
+    obsolete        boolean not null default 'f'
 );
 
 alter table courses add column tsv tsvector;
@@ -317,13 +317,13 @@ create trigger courses_ts_trigger
 create index courses_ts_index on courses using gin(tsv);
 
 create table sections (
-    id                  bigint primary key,
-    quarter             integer not null,
-    course_id           bigint not null references courses(id),
-    number              integer not null default 1,
-    syllabus_id         bigint references resources(id),
-    course_journal_id   bigint unique,
-    deleted             boolean not null default 'f',
+    id          bigint primary key,
+    quarter     integer not null,
+    course_id   bigint not null references courses(id),
+    number      integer not null default 1,
+    syllabus_id bigint references resources(id),
+    journal_id  bigint unique,
+    deleted     boolean not null default 'f',
   unique (quarter, course_id, number)
 );
 
@@ -479,10 +479,10 @@ create table course_journal_student_samples (
   unique (course_journal_id, enrollment_id)
 );
 
-alter table courses add constraint courses_course_journal_id_fkey
-    foreign key (course_journal_id) references course_journals(id);
-alter table sections add constraint sections_course_journal_id_fkey
-    foreign key (course_journal_id) references course_journals(id);
+alter table courses add constraint courses_journal_id_fkey
+    foreign key (journal_id) references course_journals(id);
+alter table sections add constraint sections_journal_id_fkey
+    foreign key (journal_id) references course_journals(id);
 
 -----------------
 -- departments --

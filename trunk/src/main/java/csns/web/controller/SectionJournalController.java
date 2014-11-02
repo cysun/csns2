@@ -66,11 +66,11 @@ public class SectionJournalController {
     public String create( @RequestParam Long sectionId )
     {
         Section section = sectionDao.getSection( sectionId );
-        if( section.getCourseJournal() != null )
+        if( section.getJournal() != null )
             return "redirect:view?sectionId=" + sectionId;
 
-        CourseJournal courseJournal = new CourseJournal( section );
-        section.setCourseJournal( courseJournal );
+        CourseJournal journal = new CourseJournal( section );
+        section.setJournal( journal );
 
         // Populate handouts if the section has a class website
         Site site = section.getSite();
@@ -78,10 +78,10 @@ public class SectionJournalController {
             for( Block block : site.getBlocks() )
                 if( block.getType().equals( Block.Type.REGULAR ) )
                     for( Item item : block.getItems() )
-                        courseJournal.getHandouts().add( item.getResource() );
+                        journal.getHandouts().add( item.getResource().clone() );
 
         // Populate assignments
-        courseJournal.getAssignments().addAll( section.getAssignments() );
+        journal.getAssignments().addAll( section.getAssignments() );
 
         section = sectionDao.saveSection( section );
         logger.info( SecurityUtils.getUser().getUsername()
@@ -94,7 +94,7 @@ public class SectionJournalController {
     public String view( @RequestParam Long sectionId, ModelMap models )
     {
         Section section = sectionDao.getSection( sectionId );
-        if( section.getCourseJournal() == null )
+        if( section.getJournal() == null )
         {
             models.put( "message", "error.section.nosyllabus" );
             return "error";
@@ -113,9 +113,9 @@ public class SectionJournalController {
     public String submit( @RequestParam Long sectionId )
     {
         Section section = sectionDao.getSection( sectionId );
-        if( section.getCourseJournal().getSubmitDate() == null )
+        if( section.getJournal().getSubmitDate() == null )
         {
-            section.getCourseJournal().setSubmitDate( new Date() );
+            section.getJournal().setSubmitDate( new Date() );
             section = sectionDao.saveSection( section );
             logger.info( SecurityUtils.getUser().getUsername()
                 + " submitted course journal for section " + sectionId );

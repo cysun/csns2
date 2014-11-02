@@ -24,6 +24,15 @@
   alt="[Edit Syllabus]" src="<c:url value='/img/icons/script_edit.png' />" /></a></li>
 </ul>
 </c:when>
+
+<%-- view syllabus in course journal as a reviewer or department chair --%>
+<c:when test="${view == 'journal2'}">
+<ul id="title">
+<li><a href="list" class="bc">Course Journals</a></li>
+<li><a href="view?id=${section.journal.id}" class="bc">${section.course.code}</a></li>
+<li>Syllabus</li>
+</ul>
+</c:when>
 </c:choose>
 
 ${syllabus.text}

@@ -109,7 +109,7 @@ public class ResourceControllerS {
         }
 
         resource = save( resource, uploadedFile, sessionStatus );
-        section.getCourseJournal().getHandouts().add( resource );
+        section.getJournal().getHandouts().add( resource );
         section = sectionDao.saveSection( section );
         return "redirect:/section/journal/handouts?sectionId="
             + section.getId();

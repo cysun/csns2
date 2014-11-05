@@ -81,6 +81,7 @@ alter table forums drop constraint fk_forum_last_post;
 drop table forum_post_attachments;
 drop table forum_posts;
 drop table forum_topics;
+drop table forum_members;
 drop table forum_moderators;
 drop trigger forums_ts_trigger on forums;
 drop function forums_ts_trigger_function();

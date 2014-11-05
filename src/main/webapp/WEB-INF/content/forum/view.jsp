@@ -52,6 +52,10 @@ function unsubscribe()
 <li class="align_right"><a href="<c:url value='/profile#ui-tabs-1' />"><img alt="[Forum Subscriptions]"
   title="Forum Subscriptons" src="<c:url value='/img/icons/star.png' />" /></a></li>
 </security:authorize>
+<security:authorize access="authenticated and principal.isAdmin('${forum.department.abbreviation}')">
+<li class="align_right"><a href="edit?id=${forum.id}"><img alt="[Edit Forum]"
+  title="Edit Forum" src="<c:url value='/img/icons/comments_edit.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <div id="forums_menu"> 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -67,6 +67,14 @@ public class ForumController {
         Department department = departmentDao.getDepartment( dept );
         models.put( "department", department );
         models.put( "systemForums", forumDao.getSystemForums() );
+
+        User user = SecurityUtils.getUser();
+        List<Forum> departmentForums = new ArrayList<Forum>();
+        for( Forum departmentForum : department.getForums() )
+            if( !departmentForum.isMembersOnly()
+                || departmentForum.isMember( user ) )
+                departmentForums.add( departmentForum );
+        models.put( "departmentForums", departmentForums );
 
         if( showAll != null )
         {

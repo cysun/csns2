@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -73,6 +73,12 @@ public class Forum implements Subscribable, Serializable {
         inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> moderators;
 
+    @ManyToMany
+    @JoinTable(name = "forum_members",
+        joinColumns = @JoinColumn(name = "forum_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> members;
+
     @Column(name = "num_of_topics", nullable = false)
     private int numOfTopics;
 
@@ -96,6 +102,9 @@ public class Forum implements Subscribable, Serializable {
     @Where(clause = "deleted='f'")
     private List<Topic> topics;
 
+    @Column(name = "members_only", nullable = false)
+    private boolean membersOnly;
+
     /**
      * Hidden forums are not shown in forum listings, e.g. Wiki Discussion.
      */
@@ -107,7 +116,9 @@ public class Forum implements Subscribable, Serializable {
         numOfTopics = 0;
         numOfPosts = 0;
         moderators = new HashSet<User>();
+        members = new HashSet<User>();
         hidden = false;
+        membersOnly = false;
     }
 
     public Forum( String name )
@@ -127,13 +138,57 @@ public class Forum implements Subscribable, Serializable {
         return "Forum";
     }
 
+    public boolean isAdmin( User user )
+    {
+        return user != null && department != null
+            && user.isAdmin( department.getAbbreviation() );
+    }
+
+    public boolean isCoordinator( User user )
+    {
+        return user != null && course != null
+            && course.getCoordinator() != null
+            && course.getCoordinator().getId().equals( user.getId() );
+    }
+
     public boolean isModerator( User user )
     {
-        return department != null
-            && user.isAdmin( department.getAbbreviation() ) || course != null
-            && course.getCoordinator() != null
-            && course.getCoordinator().equals( user )
-            || moderators.contains( user );
+        if( user == null ) return false;
+
+        boolean result = false;
+        for( User moderator : moderators )
+            if( moderator.getId().equals( user.getId() ) )
+            {
+                result = true;
+                break;
+            }
+
+        return result || isAdmin( user ) || isCoordinator( user );
+    }
+
+    public boolean isMember( User user )
+    {
+        if( user == null ) return false;
+
+        boolean result = false;
+        for( User member : members )
+            if( member.getId().equals( user.getId() ) )
+            {
+                result = true;
+                break;
+            }
+
+        return result || isModerator( user );
+    }
+
+    public void removeMember( Long userId )
+    {
+        for( User member : members )
+            if( member.getId().equals( userId ) )
+            {
+                members.remove( member );
+                return;
+            }
     }
 
     public void incrementNumOfTopics()
@@ -195,6 +250,16 @@ public class Forum implements Subscribable, Serializable {
     public void setModerators( Set<User> moderators )
     {
         this.moderators = moderators;
+    }
+
+    public Set<User> getMembers()
+    {
+        return members;
+    }
+
+    public void setMembers( Set<User> members )
+    {
+        this.members = members;
     }
 
     public int getNumOfTopics()
@@ -265,6 +330,16 @@ public class Forum implements Subscribable, Serializable {
     public void setTopics( List<Topic> topics )
     {
         this.topics = topics;
+    }
+
+    public boolean isMembersOnly()
+    {
+        return membersOnly;
+    }
+
+    public void setMembersOnly( boolean membersOnly )
+    {
+        this.membersOnly = membersOnly;
     }
 
 }

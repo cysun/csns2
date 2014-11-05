@@ -671,6 +671,16 @@
         <put-attribute name="content" value="/WEB-INF/content/forum/view.jsp" />
     </definition>
 
+    <definition name="forum/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/create.jsp" />
+    </definition>
+
+    <definition name="forum/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/edit.jsp" />
+    </definition>
+
     <definition name="forum/topic/view" extends="layout.basic">
         <put-attribute name="title" value="View Forum Topic" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />

@@ -257,6 +257,12 @@
         primary key (id)
     );
 
+    create table forum_members (
+        forum_id int8 not null,
+        user_id int8 not null,
+        primary key (forum_id, user_id)
+    );
+
     create table forum_moderators (
         forum_id int8 not null,
         user_id int8 not null,
@@ -298,6 +304,7 @@
         date timestamp,
         description varchar(255),
         hidden boolean not null,
+        members_only boolean not null,
         name varchar(255) not null,
         num_of_posts int4 not null,
         num_of_topics int4 not null,
@@ -463,11 +470,11 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_selections int4,
+        min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
         max_rating int4,
         min_rating int4,
         question_section_id int8,
@@ -1205,6 +1212,16 @@
         add constraint FK_r3ilikiw4pt9owf91wedbh472 
         foreign key (submission_id) 
         references submissions;
+
+    alter table forum_members 
+        add constraint FK_pxnh2fvvk4hl7feh80hf9wj4g 
+        foreign key (user_id) 
+        references users;
+
+    alter table forum_members 
+        add constraint FK_k7pfx0npdsrweyedme6ta67h6 
+        foreign key (forum_id) 
+        references forums;
 
     alter table forum_moderators 
         add constraint FK_nqdympblfjedsdgvbbkkvirgs 

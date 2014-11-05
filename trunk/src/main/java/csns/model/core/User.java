@@ -66,7 +66,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
 
     private static final Logger logger = LoggerFactory.getLogger( User.class );
 
-    @JsonIgnore
     @Id
     @GeneratedValue
     private Long id;
@@ -118,7 +117,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @JsonIgnore
     private String zip;
 
-    @JsonIgnore
     @Column(name = "primary_email", nullable = false, unique = true)
     private String primaryEmail;
 

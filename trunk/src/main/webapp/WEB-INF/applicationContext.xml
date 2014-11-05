@@ -111,6 +111,9 @@
         <security:intercept-url pattern="/department/*/journal/**" access="authenticated and (principal.instructor or principal.reviewer)" />
         <security:intercept-url pattern="/department/*/forum/list" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/create" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/forum/edit" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/forum/delete" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/forum/topic/list" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/search" access="permitAll" />

@@ -21,8 +21,10 @@ insert into authorities values (1000004, 'DEPT_ROLE_FACULTY_cs');
 insert into authorities values (1000001, 'DEPT_ROLE_FACULTY_cs');
 insert into authorities values (1000002, 'DEPT_ROLE_INSTRUCTOR_cs');
 
-insert into departments (id, name, abbreviation) values (1000100, 'Computer Science', 'cs');
-insert into departments (id, name, abbreviation) values (1000101, 'Mathematics', 'math');
+insert into departments (id, name, full_name, abbreviation)
+    values (1000100, 'Computer Science', 'Computer Science Department', 'cs');
+insert into departments (id, name, full_name, abbreviation)
+    values (1000101, 'Mathematics', 'Mathematics Department', 'math');
 
 insert into department_administrators values (1000100, 1000005);
 insert into department_administrators values (1000100, 1000004);

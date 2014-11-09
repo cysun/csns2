@@ -183,7 +183,14 @@ http://www.w3.org/TR/html401/struct/global.html
 		 	</regexp-list>
 		 </attribute>
 
-		 
+        <attribute name="dir">
+            <literal-list>
+                <literal value="ltr" />
+                <literal value="rtl" />
+                <literal value="auto" />
+            </literal-list>
+        </attribute>
+
  		<!-- the "style" attribute will be validated by an inline stylesheet scanner, so no need to define anything here - i hate having to special case this but no other choice -->
 		 <attribute name="style" description="The 'style' attribute provides the ability for users to change many attributes of the tag's contents using a strict syntax"/>
 		 
@@ -499,6 +506,7 @@ http://www.w3.org/TR/html401/struct/global.html
 		<attribute name="class"/>
 		<!-- Not valid in base, br, frame, frameset, hr, iframe, param, and script elements.  -->
 		<attribute name="lang"/>
+        <attribute name="dir" />
 	</global-tag-attributes>
 	
 	<tags-to-encode>

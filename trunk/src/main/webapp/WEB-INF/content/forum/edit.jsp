@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
@@ -83,12 +84,22 @@ function removeMember( userId )
        }
     });
 }
+function deleteForum()
+{
+    var msg = "Are you sure you want to delete this forum?"
+    if( confirm(msg) )
+        window.location.href = "delete?id=${forum.id}";
+}
 </script>
 
 <ul id="title">
 <li><a class="bc" href="list">Forums</a></li>
 <li><a class="bc" href="view?id=${forum.id}">${forum.name}</a></li>
 <li>Edit Forum</li>
+<security:authorize access="${not empty forum.department} and authenticated and principal.isAdmin('${forum.department.abbreviation}')">
+<li class="align_right"><a href="javascript:deleteForum()"><img title="Delete Forum"
+    alt="[Delete Forum]" src="<c:url value='/img/icons/comments_delete.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <form:form modelAttribute="forum">
@@ -101,21 +112,14 @@ function removeMember( userId )
     <th>Name *</th>
     <td>
       <form:input path="name" cssClass="forminput" cssStyle="width: 600px;" />
-      <div class="error"><form:errors path="name"  /></div>
+      <div class="error"><form:errors path="name" /></div>
     </td>
   </tr>
   <tr>
     <th><csns:help name="membersOnly">Members Only</csns:help></th>
     <td><form:checkbox path="membersOnly" /></td>
   </tr>
-  <tr>
-    <th></th>
-    <td>
-      <input type="submit" class="subbutton" value="Save" />
-    </td>
-  </tr>
 </table>
-</form:form>
 
 <div id="members">
 <h4>Members</h4>
@@ -135,12 +139,15 @@ function removeMember( userId )
 </table>
 
 <p>
-<input id="search" type="text" class="forminput" name="name" size="40"
+<input id="search" type="text" class="forminput" size="40"
     placeholder="Search for users to add" />
 <button id="add" class="subbutton">Add</button>
 <button id="clear" class="subbutton">Clear</button>
 </p>
 </div>
+
+<p><input type="submit" class="subbutton" value="Save" /></p>
+</form:form>
 
 <div id="help-membersOnly" class="help">Only the department administrators and
 the members of this forum can access this forum.</div>

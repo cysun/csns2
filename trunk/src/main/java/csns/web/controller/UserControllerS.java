@@ -176,7 +176,9 @@ public class UserControllerS {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register( @ModelAttribute("user") User cmd,
+    public String register(
+        @ModelAttribute("user") User cmd,
+        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         registrationValidator.validate( cmd, bindingResult );
@@ -191,6 +193,8 @@ public class UserControllerS {
         userDao.saveUser( user );
 
         logger.info( user.getUsername() + " completed registration" );
+
+        handleProfilePicture( user, uploadedFile );
 
         sessionStatus.setComplete();
         return "redirect:/j_spring_security_logout";

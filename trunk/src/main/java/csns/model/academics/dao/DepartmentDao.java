@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -29,6 +29,8 @@ public interface DepartmentDao {
     Department getDepartment( String abbreviation );
 
     Department getDepartmentByName( String name );
+
+    Department getDepartmentByFullName( String fullName );
 
     List<Department> getDepartments();
 

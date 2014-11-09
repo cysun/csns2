@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -59,7 +61,9 @@ public class ForumController {
     @Autowired
     private SubscriptionDao subscriptionDao;
 
-    @RequestMapping(value = "/department/{dept}/forum/list")
+    private static final Logger logger = LoggerFactory.getLogger( ForumController.class );
+
+    @RequestMapping("/department/{dept}/forum/list")
     public String list( @PathVariable String dept,
         @RequestParam(required = false) Boolean showAll, HttpSession session,
         ModelMap models )
@@ -105,7 +109,7 @@ public class ForumController {
         return "forum/list";
     }
 
-    @RequestMapping(value = "/department/{dept}/forum/view")
+    @RequestMapping("/department/{dept}/forum/view")
     public String view( @PathVariable String dept, @RequestParam Long id,
         ModelMap models )
     {
@@ -122,6 +126,23 @@ public class ForumController {
         models.put( "department", departmentDao.getDepartment( dept ) );
 
         return "forum/view";
+    }
+
+    @RequestMapping("/department/{dept}/forum/delete")
+    public String delete( @RequestParam Long id )
+    {
+        Forum forum = forumDao.getForum( id );
+        if( forum.getDepartment() != null )
+        {
+            forum.setDepartment( null );
+            forum.setHidden( true );
+            forum = forumDao.saveForum( forum );
+        }
+
+        logger.info( SecurityUtils.getUser().getUsername() + " deleted forum "
+            + forum.getId() );
+
+        return "redirect:list";
     }
 
 }

@@ -181,14 +181,17 @@ public class Forum implements Subscribable, Serializable {
         return result || isModerator( user );
     }
 
-    public void removeMember( Long userId )
+    public void removeMember( User user )
     {
-        for( User member : members )
-            if( member.getId().equals( userId ) )
-            {
-                members.remove( member );
-                return;
-            }
+        if( user != null )
+        {
+            for( User member : members )
+                if( member.getId().equals( user.getId() ) )
+                {
+                    members.remove( member );
+                    return;
+                }
+        }
     }
 
     public void incrementNumOfTopics()

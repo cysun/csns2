@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script type="text/javascript">
 $(function() {
@@ -26,14 +27,22 @@ $(function() {
         event.preventDefault();
         $("#confirm").dialog("open");
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
 </script>
 
 <ul id="title">
 <li>Registration</li>
 </ul>
 
-<form:form modelAttribute="user">
+<form:form modelAttribute="user" enctype="multipart/form-data">
 <table class="general">
   <tr>
     <th>Name</th>
@@ -131,6 +140,12 @@ $(function() {
     </td>
   </tr>
   <tr>
+    <th><csns:help name="pp">Profile Picture</csns:help></th>
+    <td>
+      <input name="file" type="file" class="forminput" />
+    </td>
+  </tr>
+  <tr>
     <th></th>
     <td>
       <button id="register" class="subbutton">Register</button>
@@ -143,4 +158,9 @@ $(function() {
 <p>After registration is completed, you will be redirected to the login page
 where you may sign in using your new username and password.</p>
 <p>Do you want to proceed?</p>
+</div>
+
+<div id="help-pp" class="help">
+<p><em>Profile picture</em> should be a square jpg or png image with at least
+320x320 resolution.</p>
 </div>

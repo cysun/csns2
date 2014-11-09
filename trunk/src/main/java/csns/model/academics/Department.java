@@ -54,11 +54,17 @@ public class Department implements Serializable {
     private Long id;
 
     /**
-     * <code>name</code> is the full name of a department, e.g. Computer
-     * Science.
+     * <code>name</code> is the name of a department, e.g. Computer Science.
      */
     @Column(nullable = false, unique = true)
     private String name;
+
+    /**
+     * <code>fullName</code> is the full name of a department, e.g. Computer
+     * Science Department or Department of Computer Science.
+     */
+    @Column(name = "full_name", nullable = false, unique = true)
+    private String fullName;
 
     /**
      * <code>abbreviation</code> is the abbreviated department name, e.g. cs.
@@ -219,6 +225,16 @@ public class Department implements Serializable {
     public void setName( String name )
     {
         this.name = name;
+    }
+
+    public String getFullName()
+    {
+        return fullName;
+    }
+
+    public void setFullName( String fullName )
+    {
+        this.fullName = fullName;
     }
 
     public String getAbbreviation()

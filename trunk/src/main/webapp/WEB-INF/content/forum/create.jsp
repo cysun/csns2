@@ -102,14 +102,7 @@ function removeMember( userId )
     <th><csns:help name="membersOnly">Members Only</csns:help></th>
     <td><form:checkbox path="membersOnly" /></td>
   </tr>
-  <tr>
-    <th></th>
-    <td>
-      <input type="submit" class="subbutton" value="Create" />
-    </td>
-  </tr>
 </table>
-</form:form>
 
 <div id="members">
 <h4>Members</h4>
@@ -129,12 +122,15 @@ function removeMember( userId )
 </table>
 
 <p>
-<input id="search" type="text" class="forminput" name="name" size="40"
+<input id="search" type="text" class="forminput" size="40"
     placeholder="Search for users to add" />
 <button id="add" class="subbutton">Add</button>
 <button id="clear" class="subbutton">Clear</button>
 </p>
 </div>
+
+<p><input type="submit" class="subbutton" value="Create" /></p>
+</form:form>
 
 <div id="help-membersOnly" class="help">Only the department administrators and
 the members of this forum can access this forum.</div>

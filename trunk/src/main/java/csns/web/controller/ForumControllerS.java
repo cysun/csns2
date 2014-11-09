@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.core.User;
+import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
@@ -66,6 +67,9 @@ public class ForumControllerS {
     private DepartmentDao departmentDao;
 
     @Autowired
+    private SubscriptionDao subscriptionDao;
+
+    @Autowired
     private ForumValidator forumValidator;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -79,6 +83,7 @@ public class ForumControllerS {
     {
         User user = userDao.getUser( userId );
         forum.getMembers().add( user );
+        if( forum.getId() != null ) subscriptionDao.subscribe( forum, user );
 
         logger.info( SecurityUtils.getUser().getUsername() + " added member "
             + userId + " to forum " + forum.getId() );
@@ -95,7 +100,10 @@ public class ForumControllerS {
     public void removeMember( @ModelAttribute Forum forum,
         @RequestParam Long userId )
     {
-        forum.removeMember( userId );
+        User user = userDao.getUser( userId );
+        forum.removeMember( user );
+        if( forum.getId() != null ) subscriptionDao.unsubscribe( forum, user );
+
         logger.info( SecurityUtils.getUser().getUsername() + " removed member "
             + userId + " from forum " + forum.getId() );
     }
@@ -122,6 +130,14 @@ public class ForumControllerS {
         forum.setDate( new Date() );
         forum = forumDao.saveForum( forum );
         sessionStatus.setComplete();
+
+        if( forum.isMembersOnly() )
+        {
+            for( User member : forum.getMembers() )
+                subscriptionDao.subscribe( forum, member );
+            for( User admin : forum.getDepartment().getAdministrators() )
+                subscriptionDao.subscribe( forum, admin );
+        }
 
         logger.info( SecurityUtils.getUser().getUsername() + " created forum "
             + forum.getId() );

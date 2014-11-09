@@ -491,6 +491,7 @@ alter table sections add constraint sections_journal_id_fkey
 create table departments (
     id              bigint primary key,
     name            varchar(255) not null unique,
+    full_name       varchar(255) not null unique,
     abbreviation    varchar(255) not null unique,
     welcome_message text
 );

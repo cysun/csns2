@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -59,6 +59,16 @@ public class DepartmentDaoImpl implements DepartmentDao {
         List<Department> departments = entityManager.createQuery(
             "from Department where name = :name", Department.class )
             .setParameter( "name", name )
+            .getResultList();
+        return departments.size() == 0 ? null : departments.get( 0 );
+    }
+
+    @Override
+    public Department getDepartmentByFullName( String fullName )
+    {
+        List<Department> departments = entityManager.createQuery(
+            "from Department where fullName = :fullName", Department.class )
+            .setParameter( "fullName", fullName )
             .getResultList();
         return departments.size() == 0 ? null : departments.get( 0 );
     }

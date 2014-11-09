@@ -28,15 +28,23 @@ $(function(){
   <tr>
     <th>Name</th>
     <td>
-      <form:input path="name" cssClass="leftinput" size="40" maxlength="255" />
+      <form:input path="name" cssClass="leftinput" size="80" maxlength="255" />
       <div class="error"><form:errors path="name" /></div>
+    </td>
+  </tr>
+
+  <tr>
+    <th>Full Name</th>
+    <td>
+      <form:input path="fullName" cssClass="leftinput" size="80" maxlength="255" />
+      <div class="error"><form:errors path="fullName" /></div>
     </td>
   </tr>
 
   <tr>
     <th>Abbreviation</th>
     <td>
-      <form:input path="abbreviation" cssClass="leftinput" size="40" maxlength="10" />
+      <form:input path="abbreviation" cssClass="leftinput" size="10" maxlength="10" />
       <div class="error"><form:errors path="abbreviation" /></div>
     </td>
   </tr>

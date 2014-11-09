@@ -8,12 +8,13 @@
 
 <table class="viewtable">
 <tr>
-  <th>Abbreviation</th><th>Name</th><th>Administrators</th><th><br /></th>
+  <th>Abbreviation</th><th>Name</th><th>Full Name</th><th>Administrators</th><th><br /></th>
 </tr>
 <c:forEach items="${departments}" var="department">
 <tr>
   <td class="tt">${department.abbreviation}</td>
   <td>${department.name}</td>
+  <td>${department.fullName}</td>
   <td>
     <c:forEach items="${department.administrators}" var="administrator" varStatus="status">
     ${administrator.name}<c:if test="${not status.last}">, </c:if>

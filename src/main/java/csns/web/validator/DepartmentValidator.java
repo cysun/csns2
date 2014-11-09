@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -55,6 +55,16 @@ public class DepartmentValidator implements Validator {
             Department d = departmentDao.getDepartmentByName( name );
             if( d != null && !d.getId().equals( id ) )
                 errors.rejectValue( "name", "error.department.name.taken" );
+        }
+
+        String fullName = department.getFullName();
+        if( !StringUtils.hasText( fullName ) )
+            errors.rejectValue( "fullName", "error.field.required" );
+        else
+        {
+            Department d = departmentDao.getDepartmentByFullName( fullName );
+            if( d != null && !d.getId().equals( id ) )
+                errors.rejectValue( "fullName", "error.department.name.taken" );
         }
 
         String abbreviation = department.getAbbreviation();

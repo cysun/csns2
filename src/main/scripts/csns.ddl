@@ -225,6 +225,7 @@
     create table departments (
         id int8 not null,
         abbreviation varchar(255) not null,
+        full_name varchar(255) not null,
         name varchar(255) not null,
         welcome_message varchar(255),
         primary key (id)
@@ -470,13 +471,13 @@
         id int8 not null,
         description varchar(255),
         point_value int4 not null,
+        max_rating int4,
+        min_rating int4,
         max_selections int4,
         min_selections int4,
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -829,6 +830,9 @@
 
     alter table departments 
         add constraint UK_q6v6nnrch3oi9l7t9on9ik3l8 unique (abbreviation);
+
+    alter table departments 
+        add constraint UK_tjdrq9iqk4unsx9c7od2ayrmv unique (full_name);
 
     alter table departments 
         add constraint UK_j6cwks7xecs5jov19ro8ge3qk unique (name);

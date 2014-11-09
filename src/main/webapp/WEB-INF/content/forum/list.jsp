@@ -29,7 +29,7 @@
 </div>
 </security:authorize>
 
-<h3>${department.name} Department Forums</h3>
+<h3>${department.fullName} Forums</h3>
 <table class="forums">
 <tr><th>Forum</th><th>Topics</th><th>Posts</th><th>Last Post</th></tr>
 <c:forEach items="${departmentForums}" var="forum" varStatus="status">
@@ -52,7 +52,7 @@
 </table>
 
 <c:if test="${fn:length(courseForums) > 0}">
-<h3>${department.name} Course Forums</h3>
+<h3>Course Forums</h3>
 <table class="forums">
 <tr><th>Forum</th><th>Topics</th><th>Posts</th><th>Last Post</th></tr>
 <c:forEach items="${courseForums}" var="forum" varStatus="status">

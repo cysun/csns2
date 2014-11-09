@@ -50,8 +50,12 @@ public class MyAntiSamy {
         {
             cleanResults = antiSamy.scan( html, policy );
             if( cleanResults.getNumberOfErrors() > 0 )
+            {
                 logger.warn( cleanResults.getNumberOfErrors()
                     + " violations found after scanning." );
+                for( String errorMessage : cleanResults.getErrorMessages() )
+                    logger.warn( errorMessage );
+            }
         }
         catch( ScanException | PolicyException e )
         {

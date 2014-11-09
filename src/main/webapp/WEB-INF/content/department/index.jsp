@@ -7,7 +7,7 @@
 
 <c:if test="${fn:length(newses) == 0}">
 <ul id="title" style="margin:0;">
-<li>Welcome to the Department of ${department.name}</li>
+<li>Welcome to the ${department.fullName}</li>
 </ul>
 </c:if>
 

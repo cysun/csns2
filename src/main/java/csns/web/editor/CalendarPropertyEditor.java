@@ -46,7 +46,11 @@ public class CalendarPropertyEditor extends PropertyEditorSupport {
 
     public void setAsText( String text ) throws IllegalArgumentException
     {
-        if( !StringUtils.hasText( text ) ) return;
+        if( !StringUtils.hasText( text ) )
+        {
+            setValue( null );
+            return;
+        }
 
         try
         {

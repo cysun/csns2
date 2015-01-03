@@ -32,9 +32,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import csns.model.core.User;
 
 /**
@@ -78,8 +75,6 @@ public class RubricSubmission implements Serializable {
     @Column(name = "external_evaluation_count", nullable = false)
     private int externalEvaluationCount;
 
-    private static final Logger logger = LoggerFactory.getLogger( RubricSubmission.class );
-
     public RubricSubmission()
     {
         evaluations = new ArrayList<RubricEvaluation>();
@@ -93,31 +88,6 @@ public class RubricSubmission implements Serializable {
         this();
         this.student = student;
         this.assignment = assignment;
-    }
-
-    public void addEvaluation( RubricEvaluation evaluation )
-    {
-        evaluations.add( evaluation );
-        switch( evaluation.getType() )
-        {
-            case INSTRUCTOR:
-                ++instructorEvaluationCount;
-                break;
-
-            case PEER:
-                ++peerEvaluationCount;
-                break;
-
-            case EXTERNAL:
-                ++externalEvaluationCount;
-                break;
-
-            default:
-                // We really shouldn't get here as there should have been an
-                // exception in the constructor of RubricEvaluation if the
-                // evaluation type cannot be determined.
-                logger.warn( "Invalid rubric evaluation type." );
-        }
     }
 
     public RubricEvaluation getEvaluation( User user )
@@ -153,6 +123,21 @@ public class RubricSubmission implements Serializable {
             if( evaluation.getType() == RubricEvaluation.Type.EXTERNAL )
                 externalEvaluations.add( evaluation );
         return externalEvaluations;
+    }
+
+    public int incrementInstructorEvaluationCount()
+    {
+        return ++instructorEvaluationCount;
+    }
+
+    public int incrementPeerEvaluationCount()
+    {
+        return ++peerEvaluationCount;
+    }
+
+    public int incrementExternalEvaluationCount()
+    {
+        return ++externalEvaluationCount;
     }
 
     public Long getId()

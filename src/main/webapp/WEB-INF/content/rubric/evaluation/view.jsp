@@ -62,8 +62,14 @@ $(function(){
 });
 </script>
 
+<c:choose>
+  <c:when test="${role == 'instructor'}"><c:set var="home" value="taught" /></c:when>
+  <c:when test="${role == 'evaluator'}"><c:set var="home" value="evaluated" /></c:when>
+  <c:otherwise><c:set var="home" value="taken" /></c:otherwise>
+</c:choose>
+
 <ul id="title">
-<li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code}
+<li><a class="bc" href="<c:url value='/section/${home}#section-${section.id}' />">${section.course.code}
    - ${section.number}</a></li>
 <li><a class="bc" href="../../submission/${role}/list?assignmentId=${assignment.id}"><csns:truncate
   value="${assignment.name}" length="50" /></a></li>

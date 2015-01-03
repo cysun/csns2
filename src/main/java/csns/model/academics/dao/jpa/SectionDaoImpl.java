@@ -212,6 +212,16 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     @Transactional
     @PreAuthorize("authenticated and (principal.admin or #section.isInstructor(principal))")
+    public Section deleteSection( Section section )
+    {
+        section.getInstructors().clear();
+        section.setDeleted( true );
+        return entityManager.merge( section );
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("authenticated and (principal.admin or #section.isInstructor(principal))")
     public Section saveSection( Section section )
     {
         return entityManager.merge( section );

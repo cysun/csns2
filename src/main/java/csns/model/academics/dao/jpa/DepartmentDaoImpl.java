@@ -76,7 +76,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Override
     public List<Department> getDepartments()
     {
-        return entityManager.createQuery( "from Department order by name asc",
+        return entityManager.createQuery( "from Department order by id asc",
             Department.class ).getResultList();
     }
 

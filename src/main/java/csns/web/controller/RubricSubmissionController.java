@@ -94,6 +94,7 @@ public class RubricSubmissionController {
             return "redirect:/rubric/evaluation/student/view?submissionId="
                 + id;
 
+        models.put( "user", SecurityUtils.getUser() );
         models.put( "submission", rubricSubmissionDao.getRubricSubmission( id ) );
         return "rubric/submission/view/" + role;
     }

@@ -121,10 +121,32 @@ public class RubricEvaluation implements Serializable {
 
     public void setCompleted()
     {
+        if( completed ) return;
         for( int rating : ratings )
             if( rating < 0 ) return;
 
         completed = true;
+
+        switch( type )
+        {
+            case INSTRUCTOR:
+                submission.incrementInstructorEvaluationCount();
+                break;
+
+            case PEER:
+                submission.incrementPeerEvaluationCount();
+                break;
+
+            case EXTERNAL:
+                submission.incrementExternalEvaluationCount();
+                break;
+
+            default:
+                // We really shouldn't get here as there should have been an
+                // exception in the constructor of RubricEvaluation if the
+                // evaluation type cannot be determined.
+                logger.warn( "Invalid rubric evaluation type." );
+        }
     }
 
     public Long getId()

@@ -198,27 +198,16 @@ public class SectionController {
     public String delete( @RequestParam Long id, ModelMap models )
     {
         Section section = sectionDao.getSection( id );
-        if( section.getEnrollments().size() > 0
-            && section.getInstructors().size() == 1 )
+        if( section.getEnrollments().size() > 0 )
         {
             models.put( "message", "error.section.nonempty" );
             models.put( "backUrl", "/section/taught#section-" + section.getId() );
             return "error";
         }
 
-        User user = SecurityUtils.getUser();
-        for( User instructor : section.getInstructors() )
-            if( instructor.getId().equals( user.getId() ) )
-            {
-                section.setDeleted( true );
-                section.getInstructors().remove( instructor );
-                sectionDao.saveSection( section );
-
-                logger.info( user.getUsername() + " deleted section "
-                    + section.getId() );
-
-                break;
-            }
+        section = sectionDao.deleteSection( section );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted section " + section.getId() );
 
         return "redirect:/section/taught";
     }

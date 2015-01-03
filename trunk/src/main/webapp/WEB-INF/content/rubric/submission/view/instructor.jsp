@@ -58,6 +58,7 @@ $(function(){
         class="evaluation-type">Instructor Evaluation</td>
   </tr>
   <c:forEach items="${submission.instructorEvaluations}" var="ievaluation">
+  <c:if test="${ievaluation.evaluator.id == user.id or ievaluation.completed}">
   <tr>
     <td class="nowrap">${ievaluation.evaluator.name}</td>
     <c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
@@ -68,6 +69,7 @@ $(function(){
       </td>
     </c:forEach>
   </tr>
+  </c:if>
   </c:forEach>
   <%-- External Evaluations --%>
   <c:if test="${submission.externalEvaluationCount > 0}">
@@ -76,6 +78,7 @@ $(function(){
         class="evaluation-type">External Evaluation</td>
   </tr>
   <c:forEach items="${submission.externalEvaluations}" var="eevaluation">
+  <c:if test="${eevaluation.completed}">
   <tr>
     <td class="nowrap">${eevaluation.evaluator.name}</td>
     <c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
@@ -86,6 +89,7 @@ $(function(){
       </td>
     </c:forEach>
   </tr>
+  </c:if>
   </c:forEach>
   </c:if>
   <%-- Peer Evaluations --%>
@@ -95,6 +99,7 @@ $(function(){
         class="evaluation-type">Peer Evaluation</td>
   </tr>
   <c:forEach items="${submission.peerEvaluations}" var="pevaluation">
+  <c:if test="${pevaluation.completed}">
   <tr>
     <td class="nowrap">${pevaluation.evaluator.name}</td>
     <c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
@@ -105,6 +110,7 @@ $(function(){
       </td>
     </c:forEach>
   </tr>
+  </c:if>
   </c:forEach>
   </c:if>
 </tbody>

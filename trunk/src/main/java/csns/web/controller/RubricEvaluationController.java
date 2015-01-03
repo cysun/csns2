@@ -65,7 +65,7 @@ public class RubricEvaluationController {
                 && !submission.getStudent().isSameUser( user ) )
             {
                 evaluation = new RubricEvaluation( submission, user );
-                submission.addEvaluation( evaluation );
+                submission.getEvaluations().add( evaluation );
                 submission = rubricSubmissionDao.saveRubricSubmission( submission );
             }
         }

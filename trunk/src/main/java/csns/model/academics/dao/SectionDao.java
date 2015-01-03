@@ -50,6 +50,8 @@ public interface SectionDao {
 
     Section addSection( Quarter quarter, Course course, User instructor );
 
+    Section deleteSection( Section section );
+
     Section saveSection( Section section );
 
 }

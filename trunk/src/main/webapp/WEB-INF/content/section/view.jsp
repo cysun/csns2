@@ -51,7 +51,8 @@ $(function(){
   <c:set var="enrollment" value="${studentGrade.key}" />
     <tr>
       <td class="center"><input type="checkbox" name="userId" value="${enrollment.student.id}" /></td>
-      <td>${enrollment.student.lastName}, ${enrollment.student.firstName}</td>
+      <td><a href="<c:url value='/section/grade?enrollmentId=${enrollment.id}' />">${enrollment.student.lastName},
+        ${enrollment.student.firstName}</a></td>
       <td class="center">${enrollment.grade.symbol}</td>
       <c:forEach items="${studentGrade.value}" var="grade">
         <td class="center">${grade}</td>

@@ -47,7 +47,14 @@ $(function(){
     ${section.course.code}
     <c:if test="${section.number != 1}">(${section.number})</c:if>
   </td>
-  <td>${section.course.name}</td>
+  <td>
+    <c:choose>
+      <c:when test="${empty section.site}">${section.course.name}</c:when>
+      <c:otherwise>
+        <a href="<c:url value='${section.siteUrl}' />">${section.course.name}</a>
+      </c:otherwise>
+    </c:choose>
+  </td>
   <td>
     <c:forEach items="${section.instructors}" var="instructor" varStatus="status">
       ${instructor.name}<c:if test="${not status.last}">, </c:if>

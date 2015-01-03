@@ -108,6 +108,10 @@ $(function(){
   <input type="checkbox" class="block-toggle" data-id="${block.id}"
    <c:if test="${not block.hidden}">checked="checked"</c:if> />
   ${block.name}
+  <div class="site-block-operations">
+    <a href="<c:url value='${section.siteUrl}/block/edit?id=${block.id}' />"><img
+       title="Edit Block" alt="[Edit Block]" src="<c:url value='/img/icons/brick_edit.png' />" /></a>
+  </div>
 </div>
 <div class="site-block-content">
   <ul>

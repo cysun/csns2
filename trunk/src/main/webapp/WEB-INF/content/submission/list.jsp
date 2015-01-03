@@ -7,7 +7,16 @@
 <script>
 $(function(){
    $("table").tablesorter({
-      sortList: [[0,0]]
+      sortList: [[1,0]]
+   });
+   $(".thumbnails").mouseover(function(){
+       $(".ui-dialog-content").dialog("close");
+       var downloadUrl = "<c:url value='/download.html?fileId=' />" + $(this).attr("name");
+       $("<div>").append("<img src='" + downloadUrl + "' alt='' />").dialog({
+           autoOpen:       true,
+           height:         400,
+           width:          350
+       });
    });
 });
 </script>
@@ -39,10 +48,17 @@ $(function(){
 </c:if>
 
 <table class="viewtable autowidth">
-<thead><tr><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
+<thead><tr><th></th><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr>
+    <td>
+      <c:if test="${not empty submission.student.profileThumbnail}">
+        <img src="<c:url value='/download.html?fileId=${submission.student.profileThumbnail.id}' />"
+             alt="[Profile Thumbnail]" class="thumbnails" name="${submission.student.profilePicture.id}"
+             width="24" height="24" />
+      </c:if>
+    </td>
     <td>
       <c:if test="${not empty submission.grade and not submission.gradeMailed}"><img
         src="<c:url value='/img/icons/email.png' />" alt="[Email]" /></c:if>

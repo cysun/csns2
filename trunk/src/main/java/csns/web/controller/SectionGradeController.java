@@ -123,6 +123,10 @@ public class SectionGradeController {
         enrollment.setGradeMailed( false );
         enrollmentDao.saveEnrollment( enrollment );
 
+        logger.info( SecurityUtils.getUser().getUsername() + " set enrollment "
+            + enrollment.getId() + " grade to "
+            + enrollment.getGrade().getSymbol() );
+
         response.setContentType( "text/plain" );
         String grade = enrollment.getGrade() == null ? ""
             : enrollment.getGrade().getSymbol();
@@ -138,6 +142,9 @@ public class SectionGradeController {
         Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
         enrollment.setComments( comments );
         enrollment = enrollmentDao.saveEnrollment( enrollment );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " changed enrollment " + enrollment.getId() + " comment " );
 
         response.setContentType( "text/plain" );
         response.getWriter().print( enrollment.getComments() );

@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -49,7 +50,9 @@ public class AnswerSheet implements Serializable {
     @JoinColumn(name = "question_sheet_id", nullable = false)
     private QuestionSheet questionSheet;
 
-    @OneToMany(mappedBy = "answerSheet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "answerSheet",
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER)
     @OrderColumn(name = "section_index")
     private List<AnswerSection> sections;
 

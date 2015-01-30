@@ -39,6 +39,8 @@ $(function(){
 <li class="align_right"><a href="<c:url value='/course/create' />"><img title="Create Course"
     alt="[Create Course]" src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </security:authorize>
+<li class="align_right"><a href="course/mapping/list"><img title="Course Mappings"
+    alt="[Course Mappings]" src="<c:url value='/img/icons/mapping.png' />" /></a></li>
 </ul>
 
 <div id="tabs">

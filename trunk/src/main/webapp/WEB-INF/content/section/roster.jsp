@@ -33,7 +33,7 @@ $(function(){
            if( confirm("Are you sure you want to drop these students from the class?") )
                $("#studentsForm").attr("action", "roster/drop").submit();
    });
-   $(".thumbnails").mouseover(function(){
+   $(".thumbnails").click(function(){
        $(".ui-dialog-content").dialog("close");
        var downloadUrl = "<c:url value='/download.html?fileId=' />" + $(this).attr("name");
        $("<div>").append("<img src='" + downloadUrl + "' alt='' />").dialog({

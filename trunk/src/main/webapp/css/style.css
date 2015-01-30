@@ -1168,6 +1168,14 @@ tr th.shrink, tr td.shrink {
     vertical-align: middle;
     margin: 5px;
 }
+
+/** Course Mapping **/
+.course-mapping-item {
+    margin: 5px 0 5px 0;
+}
+.course-mapping-item img {
+    vertical-align: middle;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

@@ -29,7 +29,7 @@ $(function(){
         else
             $("#usersForm").attr("action", "<c:url value='/email/compose' />").submit();
     });
-    $(".thumbnails").mouseover(function(){
+    $(".thumbnails").click(function(){
     	$(".ui-dialog-content").dialog("close");
         var downloadUrl = "<c:url value='/download.html?fileId=' />" + $(this).attr("name");
     	$("<div>").append("<img src='" + downloadUrl + "' alt='' />").dialog({

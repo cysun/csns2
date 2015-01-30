@@ -6,14 +6,28 @@
 <script>
 $(function(){
     $("table").tablesorter();
+    $("#selectAll").click(function(){
+        var checked = $("#selectAll").is(":checked");
+        $(":checkbox[name='userId']").prop("checked",checked);
+    });
+    $("#email").click(function(){
+        if( $(":checkbox[name='userId']:checked").length == 0 )
+            alert( "Please select the respondent(s) to contact." );
+        else
+            $("#respondentsForm").attr("action", "<c:url value='/email/compose' />").submit();
+    });
 });
 </script>
 
 <ul id="title">
 <li><a class="bc" href="../list">Surveys</a></li>
 <li><a class="bc" href="../results?id=${survey.id}"><csns:truncate
-  value="${survey.name}" length="65" /></a></li>
+  value="${survey.name}" length="55" /></a></li>
 <li>List of Responses</li>
+<c:if test="${survey.type == 'NAMED'}">
+<li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Respondents"
+    alt="[Email Respondents]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
+</c:if>
 </ul>
 
 <h3>Number of responses: ${fn:length(answerSheets)}</h3>
@@ -49,11 +63,12 @@ $(function(){
 
 
 <c:if test="${fn:length(answerSheets) > 0}">
+<form id="respondentsForm" method="post">
 <table class="viewtable autowidth">
 <thead>
   <tr>
 <c:if test="${survey.type == 'NAMED'}">
-    <th>CIN</th><th>Name</th>
+    <th><input id="selectAll" type="checkbox" /></th><th>CIN</th><th>Name</th>
 </c:if>
     <th>Response ID</th><th>Timestamp</th>
   </tr>
@@ -62,6 +77,7 @@ $(function(){
 <c:forEach items="${answerSheets}" var="answerSheet">
   <tr>
 <c:if test="${survey.type == 'NAMED'}">
+    <td class="center"><input type="checkbox" name="userId" value="${answerSheet.author.id}" /></td>
     <td>${answerSheet.author.cin}</td>
     <td>${answerSheet.author.name}</td>
 </c:if>
@@ -73,4 +89,6 @@ $(function(){
 </c:forEach>
 </tbody>
 </table>
+<input type="hidden" name="backUrl" value="/department/${dept}/survey/results?id=${survey.id}" />
+</form>
 </c:if>

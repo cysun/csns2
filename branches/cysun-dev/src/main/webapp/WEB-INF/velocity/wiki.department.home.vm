@@ -1,0 +1,13 @@
+<h2>$department.name Department Wiki</h2>
+
+<p>Just like any <a href="http://en.wikipedia.org/wiki/Wiki">Wiki</a>, you can
+create new pages under <tt>/wiki/content/</tt>, e.g. <tt>/wiki/content/mypage</tt>,
+or <tt>/wiki/content/some/path/to/mypage</tt>. Simply go to the URL where the
+page is supposed to be, and if the page does not exist, you will be given the
+choice to create it. Note that you must log onto CSNS before you can create
+any page.</p>
+
+<p>Pages that have the path prefix <tt>/wiki/content/department/{dept}/</tt>
+(e.g. <tt>/wiki/content/department/cs/</tt>) are considered part of a
+department wiki. The department administrators have special privileges over
+these pages.</p>

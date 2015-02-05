@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:annotation-config />
+
+    <tx:annotation-driven />
+
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+        <property name="initialSize" value="1" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="csns2" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService">
+            <security:password-encoder ref="passwordEncoder" />
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <security:http pattern="/favicon.ico" security="none" />
+    <security:http pattern="/img/**" security="none" />
+    <security:http pattern="/css/**" security="none" />
+    <security:http pattern="/js/**" security="none" />
+
+    <!-- web service security uses access key  -->
+    <security:http pattern="/service/**" security="none" />
+
+    <security:http use-expressions="true">
+        <security:form-login login-page="/login"
+            authentication-success-handler-ref="authenticationSuccessHandler"
+            authentication-failure-url="/401" />
+        <security:logout success-handler-ref="logoutRedirectHandler" />
+        <security:remember-me data-source-ref="dataSource"/>
+        <security:custom-filter ref="departmentFilter" before="LAST" />
+        <security:custom-filter ref="registrationFilter" position="LAST" />
+        <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+        <security:intercept-url pattern="/profile" access="authenticated" />
+        <security:intercept-url pattern="/profile/**" access="authenticated" />
+        <security:intercept-url pattern="/register" access="authenticated and principal.temporary" />
+        <security:intercept-url pattern="/autocomplete/user" access="authenticated and (principal.sysadmin or principal.instructor)" />
+        <security:intercept-url pattern="/autocomplete/**" access="authenticated" />
+        <security:intercept-url pattern="/user/**" access="authenticated and (principal.sysadmin or principal.faculty)" />
+        <security:intercept-url pattern="/course/add" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/course/edit" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/section/search" access="permitAll" />
+        <security:intercept-url pattern="/section/taken" access="authenticated" />
+        <security:intercept-url pattern="/section/evaluated" access="authenticated and principal.evaluator" />
+        <security:intercept-url pattern="/section/view" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/section/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/assignment/description" access="authenticated" />
+        <security:intercept-url pattern="/assignment/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/submission/view" access="authenticated" />
+        <security:intercept-url pattern="/submission/description" access="authenticated" />
+        <security:intercept-url pattern="/submission/upload" access="authenticated" />
+        <security:intercept-url pattern="/submission/remove" access="authenticated" />
+        <security:intercept-url pattern="/submission/online/edit" access="authenticated" />
+        <security:intercept-url pattern="/submission/online/view" access="authenticated" />
+        <security:intercept-url pattern="/submission/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/rubric/assignment/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/rubric/*/student/**" access="authenticated" />
+        <security:intercept-url pattern="/rubric/*/evaluator/**" access="authenticated and principal.evaluator" />
+        <security:intercept-url pattern="/rubric/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/department/*/people" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/section" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/section/import" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/user/import" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/project/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/project/add" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/project/delete" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/project/resource/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/project/**" access="authenticated" />
+        <security:intercept-url pattern="/department/*/course/mapping/list" access="permitAll" />
+        <security:intercept-url pattern="/department/*/course/mapping/**" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/survey/current" access="permitAll" />
+        <security:intercept-url pattern="/department/*/survey/response/edit" access="permitAll" />
+        <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/mft/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/department/*/rubric/promote" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/rubric/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/department/*/journal/**" access="authenticated and (principal.instructor or principal.reviewer)" />
+        <security:intercept-url pattern="/department/*/forum/list" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/create" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/forum/edit" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/forum/delete" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/forum/topic/list" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/view" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/search" access="permitAll" />
+        <security:intercept-url pattern="/department/*/forum/topic/**" access="authenticated" />
+        <security:intercept-url pattern="/wiki/edit" access="authenticated" />
+        <security:intercept-url pattern="/wiki/move" access="authenticated" />
+        <security:intercept-url pattern="/wiki/revert" access="authenticated" />
+        <security:intercept-url pattern="/wiki/discuss" access="authenticated" />
+        <security:intercept-url pattern="/department/*/news/current" access="permitAll" />
+        <security:intercept-url pattern="/department/*/news/**" access="authenticated and principal.faculty" />
+        <security:intercept-url pattern="/site/create" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/settings/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/syllabus/edit" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/info/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/block/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/site/*/*/files/**" access="authenticated and principal.instructor" />
+        <security:intercept-url pattern="/file/view" access="permitAll" />
+        <security:intercept-url pattern="/file/**" access="authenticated" />
+        <security:intercept-url pattern="/ckeditor/**" access="authenticated" />
+        <security:intercept-url pattern="/subscription/**" access="authenticated" />
+    </security:http>
+
+    <security:global-method-security pre-post-annotations="enabled" />
+
+    <bean id="antiSamy" class="csns.util.MyAntiSamy">
+        <constructor-arg index="0" value="antisamy.xml" />
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.smtp.server}" />
+        <property name="username" value="${mail.smtp.username}" />
+        <property name="password" value="${mail.smtp.password}" />
+    </bean>
+
+    <bean id="contentTypes" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:types.properties" />
+    </bean>
+
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="resourceLoaderPath" value="/WEB-INF/velocity" />
+    </bean>
+
+    <util:properties id="applicationProperties" location="classpath:application.properties" />
+    <util:properties id="contentTypes" location="classpath:types.properties" />
+
+    <task:scheduler id="scheduler" pool-size="3" />
+    <task:executor id="executor" pool-size="3" />
+    <task:annotation-driven scheduler="scheduler" executor="executor" />
+
+    <context:component-scan base-package="csns">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="regex" expression="^csns\.importer\.parser\.(?!${app.school})\..*$" />
+    </context:component-scan>
+
+</beans>

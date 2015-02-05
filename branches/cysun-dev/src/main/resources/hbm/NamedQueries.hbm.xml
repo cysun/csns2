@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- 
+ * This file is part of the CSNetwork Services (CSNS) project.
+ * 
+ * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * 
+ * CSNS is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * CSNS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
+ -->
+<hibernate-mapping>
+
+    <sql-query name="course.search">
+        <return class="csns.model.academics.Course" />
+<![CDATA[
+select * from courses where obsolete = 'f' and
+    (code like upper(:term) || '%' or plainto_tsquery(:term) @@ tsv)
+    order by code asc
+]]>
+    </sql-query>
+
+    <sql-query name="section.search">
+        <return class="csns.model.academics.Section" />
+<![CDATA[
+select * from sections where deleted = 'f' and plainto_tsquery(:term) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="assignment.search">
+        <return class="csns.model.academics.Assignment" />
+<![CDATA[
+select a.* from assignments a
+    inner join sections s on a.section_id = s.id
+    inner join section_instructors i on s.id = i.section_id
+    left join resources r on a.resource_id = r.id
+    where a.assignment_type = :type and a.deleted = 'f'
+    and (:type <> 'REGULAR' or a.resource_id is not null)
+    and i.instructor_id = :instructorId
+    and (plainto_tsquery(:term) @@ a.tsv or plainto_tsquery(:term) @@ r.tsv)
+    order by ts_rank(a.tsv || r.tsv, plainto_tsquery(:term), 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="project.search">
+        <return class="csns.model.academics.Project" />
+<![CDATA[
+select * from projects where published = 't' and deleted = 'f' and
+    plainto_tsquery(:term) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="subscribed.system.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.department_id is null and f.course_id is null
+    order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="subscribed.department.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.department_id is not null
+    order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="subscribed.course.forums">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from users u, subscriptions s, forums f
+    where u.id = :userId and u.id = s.subscriber_id
+    and s.subscribable_type = 'FM' and s.subscribable_id = f.id
+    and f.course_id is not null
+    order by f.name asc
+]]>
+    </sql-query>
+
+    <sql-query name="survey.search">
+        <return class="csns.model.survey.Survey" />
+<![CDATA[
+select s.* from surveys s, plainto_tsquery(:term) query
+    where s.department_id = :departmentId and deleted = 'f'
+    and query @@ s.tsv order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="forum.search">
+        <return class="csns.model.forum.Forum" />
+<![CDATA[
+select f.* from forums f, plainto_tsquery(:term) query
+    where query @@ f.tsv order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="forum.post.search">
+        <return class="csns.model.forum.Post" />
+<![CDATA[
+select p.id, p.date, p.author_id, p.topic_id, p.edited_by, p.edit_date,
+        ts_headline(p.subject, query) as subject,
+        ts_headline(p.content, query, 'MaxWords=200') as content
+    from forum_posts p, forum_topics t, plainto_tsquery(:term) query
+    where p.topic_id = t.id and t.deleted = 'f' and query @@ tsv and t.forum_id = :forumId
+    order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="wiki.page.search">
+        <return class="csns.helper.WikiSearchResult" />
+<![CDATA[
+select id, path,
+        ts_headline(ts_subject, query) as "subject",
+        ts_headline(ts_content, query, 'MaxWords=200') as "content"
+    from wiki_pages p, plainto_tsquery(:term) query
+    where query @@ tsv order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="mailinglist.message.search">
+        <return class="csns.model.mailinglist.Message" />
+<![CDATA[
+select id, date, author_id, mailinglist_id,
+        ts_headline( subject, query ) as subject,
+        ts_headline( content, query, 'MaxWords=25' ) as content
+    from mailinglist_messages, plainto_tsquery(:term) query
+    where mailinglist_id = :mailinglistId and query @@ tsv
+    order by ts_rank(tsv, query, 16|32) desc
+]]>
+    </sql-query>
+
+    <sql-query name="mft.median.scores">
+        <return class="csns.model.assessment.MFTScore" />
+<![CDATA[
+select min(id) as id, min(department_id) as department_id,
+        min(user_id) as user_id, median(value) as value,
+        to_date(to_char(extract(year from date), '9999'), 'YYYY') as date
+    from mft_scores
+    where department_id = :departmentId
+    and extract(year from date) >= :beginYear
+    and extract(year from date) <= :endYear
+    group by extract(year from date)
+    order by extract(year from date) asc
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.search">
+        <return class="csns.model.assessment.Rubric" />
+<![CDATA[
+select * from rubrics where deleted = 'f' and public = 't'
+    and plainto_tsquery(:term) @@ tsv
+    order by name asc
+]]>
+    </sql-query>
+
+    <sql-query name="user.search.by.standing">
+        <return class="csns.model.core.User" />
+<![CDATA[
+select u.* from users u
+    inner join current_standings c on c.student_id = u.id
+    inner join departments d on c.department_id = d.id
+    inner join academic_standings a on c.academic_standing_id = a.id
+    inner join standings s on a.standing_id = s.id
+    where d.abbreviation = :dept and s.symbol = :symbol
+    order by u.first_name, u.last_name
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.stats.by.section">
+        <return class="csns.helper.RubricEvaluationStats" />
+<![CDATA[
+( select nextval('result_sequence') as id, null as year, null as type,
+    0 as indicator, count(*) as count, avg(rating) as mean,
+    median(rating) as median, min(rating) as min, max(rating) as max
+    from
+    ( select e.id, avg(rating) as rating
+        from rubric_assignments a
+        inner join rubric_submissions s on a.id = s.assignment_id
+        inner join rubric_evaluations e on s.id = e.submission_id
+        inner join rubric_evaluation_ratings r on e.id = r.evaluation_id
+        where a.section_id = :sectionId and a.rubric_id = :rubricId
+        and e.type = :type and e.completed = 't' and e.deleted = 'f'
+        group by e.id
+    ) as t
+)
+union
+( select nextval('result_sequence') as id, null as year, null as type,
+    r.rating_order+1 as indicator, count(rating) as count, avg(rating) as mean,
+    median(rating) as median, min(rating) as min, max(rating) as max
+    from rubric_assignments a
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    inner join rubric_evaluation_ratings r on e.id = r.evaluation_id
+    where a.section_id = :sectionId and a.rubric_id = :rubricId
+    and e.type = :type and e.completed = 't' and e.deleted = 'f'
+    group by indicator
+    order by indicator
+)
+order by indicator
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.stats.by.course">
+        <return class="csns.helper.RubricEvaluationStats" />
+<![CDATA[
+( select nextval('result_sequence') as id, year(x.quarter) as year,
+    null as type, 0 as indicator, null as count,
+    avg(t.rating) as mean, null as median, null as min, null as max
+    from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
+    where r.id = :rubricId and c.id = :courseId and e.type = :type
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and e.deleted = 'f' and e.completed = 't'
+    group by year
+)
+union
+(
+select nextval('result_sequence') as id, year(x.quarter) as year,
+    null as type, t.rating_order+1 as indicator, null as count,
+    avg(t.rating) as mean, null as median, null as min, null as max
+    from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
+    where r.id = :rubricId and c.id = :courseId and e.type = :type
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear 
+    and e.deleted = 'f' and e.completed = 't'
+    group by year, indicator
+)
+order by year, indicator
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.years">
+        <return-scalar column="year" type="java.lang.Integer" />
+<![CDATA[
+select s.quarter/10 + 1900 as year from rubrics r
+    inner join rubric_assignments a on a.rubric_id = r.id
+    inner join sections s on s.id = a.section_id
+    inner join courses c on c.id = s.course_id
+    where r.id = :rubricId and c.id = :courseId
+    order by year desc
+]]>
+    </sql-query>
+
+    <sql-query name="rubric.evaluation.counts">
+        <return class="csns.helper.RubricEvaluationStats" />
+<![CDATA[
+select nextval('result_sequence') as id, year(x.quarter) as year, e.type,
+    0 as indicator, count(e.id) as count, null as mean, null as median,
+    null as min, null as max from rubrics r
+    inner join rubric_assignments a on r.id = a.rubric_id
+    inner join sections x on x.id = a.section_id
+    inner join courses c on c.id = x.course_id
+    inner join rubric_submissions s on a.id = s.assignment_id
+    inner join rubric_evaluations e on s.id = e.submission_id
+    where r.id = :rubricId and c.id = :courseId
+    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and e.deleted = 'f' and e.completed = 't'
+    group by year, e.type
+]]>
+    </sql-query>
+
+</hibernate-mapping>

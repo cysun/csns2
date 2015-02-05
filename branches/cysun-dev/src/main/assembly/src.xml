@@ -1,0 +1,31 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>src</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
+      <useDefaultExcludes>true</useDefaultExcludes>
+      <excludes>
+        <!-- excludes from the predefined project descriptor -->
+        <exclude>**/*.log</exclude>
+        <exclude>**/${project.build.directory}/**</exclude>
+        <!-- exclude Eclipse files and directories -->
+        <exclude>**/.*</exclude>
+        <exclude>**/.*/</exclude>
+        <!-- exclude TestNG's output directory -->
+        <exclude>test-output/</exclude>
+        <!-- exclude build.properties -->
+        <exclude>build.properties</exclude>
+        <!-- exclude JavaScript libraries -->
+        <exclude>**/ckeditor/</exclude>
+        <exclude>**/jquery/</exclude>
+        <exclude>**/jqueryui/</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

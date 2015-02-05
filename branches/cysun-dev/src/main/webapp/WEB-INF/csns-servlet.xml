@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <mvc:annotation-driven />
+
+    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" cache-period="31556926" />
+    <mvc:resources mapping="/img/**" location="/img/" cache-period="31556926" />
+    <mvc:resources mapping="/css/**" location="/css/" />
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/robots.txt" location="/robots.txt" cache-period="31556926" />
+
+    <mvc:view-controller path="/login" view-name="login" />
+    <mvc:view-controller path="/400" view-name="400" />
+    <mvc:view-controller path="/401" view-name="401" />
+    <mvc:view-controller path="/403" view-name="403" />
+    <mvc:view-controller path="/404" view-name="404" />
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"  />
+
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver">
+        <property name="exposePathVariables" value="true" />
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages" />
+    </bean>
+
+    <bean id="exceptionResolver" class="csns.web.resolver.ExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="AccessDeniedException">exception/access</prop>
+                <prop key="MailException">exception/email</prop>
+            </props>
+        </property>
+        <property name="defaultErrorView" value="exception/default" />
+    </bean>
+
+    <!-- See http://duckranger.com/2012/11/add-conversation-support-to-spring-mvc/ -->
+    <bean id="conversationalSessionAttributeStore" class="csns.web.support.ConversationalSessionAttributeStore" />
+    <bean name="requestDataValueProcessor" class="csns.web.support.ConversationIdRequestProcessor" />
+
+    <security:global-method-security pre-post-annotations="enabled" />
+
+    <context:component-scan base-package="csns" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+</beans>

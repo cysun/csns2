@@ -1,0 +1,17 @@
+CSNS Forum - $topic.forum.name has received a new reply to the topic
+"$topic.name" since your last visit. You can use the following link to see
+the reply. No more notifications will be sent until you visit the page.
+
+    Topic: $topic.name
+    URL: $appUrl/department/$dept/forum/topic/view?id=$topic.id
+
+****************************************************************************
+If you no longer wish to receive email notifications about this topic,
+please click the following link to unsubscribe:
+$appUrl/subscription/topic/unsubscribe?id=$topic.id
+Note that you will be asked for your username and password if you are not
+logged on to CSNS. If you forget or do not know your username or password,
+please follow the instructions at
+$appUrl/resetPassword
+and your account information will be emailed to you.
+****************************************************************************

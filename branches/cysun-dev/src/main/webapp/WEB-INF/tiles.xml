@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+    "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+    <definition name="layout.basic" template="/WEB-INF/layout/template.basic.jsp" />
+
+    <definition name="layout.bare" template="/WEB-INF/layout/template.basic.jsp">
+        <put-attribute name="header">
+            <definition template="/WEB-INF/layout/header.jsp">
+                <put-attribute name="lpanel" value="" />
+            </definition>
+        </put-attribute>
+        <put-attribute name="menu" value="" />
+    </definition>
+
+    <definition name="layout.alljs" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery.jeditable.js" />
+            <add-attribute value="${jquery.plugins}/jquery.maskedinput.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="layout.jqueryui" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery.jeditable.js" />
+            <add-attribute value="${jquery.plugins}/jquery.maskedinput.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
+            <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="layout.qa" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
+            <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="layout.editor" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${ckeditor.url}" />
+        </put-list-attribute>
+    </definition>
+
+    <definition name="layout.chart" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="cssUrls">
+            <add-attribute value="${jqueryui.css}" />
+        </put-list-attribute>
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${jqueryui.url}" />
+            <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
+            <add-attribute value="${highcharts}/highcharts.js" />
+            <add-attribute value="${highcharts}/exporting.js" />
+        </put-list-attribute>
+    </definition>
+
+    <!-- ======= -->
+    <!-- General -->
+    <!-- ======= -->
+
+    <definition name="400" extends="layout.bare">
+        <put-attribute name="title" value="Bad Request" />
+        <put-attribute name="content" value="/WEB-INF/content/400.jsp" />
+    </definition>
+
+    <definition name="401" extends="layout.bare">
+        <put-attribute name="title" value="Login Error" />
+        <put-attribute name="content" value="/WEB-INF/content/401.jsp" />
+    </definition>
+
+    <definition name="403" extends="layout.bare">
+        <put-attribute name="title" value="Access Denied" />
+        <put-attribute name="content" value="/WEB-INF/content/403.jsp" />
+    </definition>
+
+    <definition name="404" extends="layout.bare">
+        <put-attribute name="title" value="Page Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/404.jsp" />
+    </definition>
+
+    <definition name="index" extends="layout.bare">
+        <put-attribute name="title" value="CSNetwork Services" />
+        <put-attribute name="content" value="/WEB-INF/content/index.jsp" />
+    </definition>
+
+    <definition name="login" extends="layout.bare">
+        <put-attribute name="title" value="Login" />
+        <put-attribute name="content" value="/WEB-INF/content/login.jsp" />
+    </definition>
+
+    <definition name="error" extends="layout.basic">
+        <put-attribute name="title" value="Error" />
+        <put-attribute name="content" value="/WEB-INF/content/error.jsp" />
+    </definition>
+
+    <definition name="status" extends="layout.basic">
+        <put-attribute name="title" value="Status" />
+        <put-attribute name="content" value="/WEB-INF/content/status.jsp" />
+    </definition>
+
+    <definition name="exception/default" extends="layout.bare">
+        <put-attribute name="title" value="Runtime Error" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/default.jsp" />
+    </definition>
+
+    <definition name="exception/access" extends="layout.bare">
+        <put-attribute name="title" value="Access Denied" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/access.jsp" />
+    </definition>
+
+    <definition name="exception/email" extends="layout.bare">
+        <put-attribute name="title" value="Email Error" />
+        <put-attribute name="content" value="/WEB-INF/content/exception/email.jsp" />
+    </definition>
+
+    <!-- ======== -->
+    <!-- Resource -->
+    <!-- ======== -->
+
+    <definition name="resource/view" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/resource/view.jsp" />
+    </definition>
+
+    <definition name="resource/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/resource/edit.jsp" />
+    </definition>
+
+    <!-- ==== -->
+    <!-- User -->
+    <!-- ==== -->
+
+    <definition name="user/search" extends="layout.jqueryui">
+        <put-attribute name="title" value="Users" />
+        <put-attribute name="content" value="/WEB-INF/content/user/search.jsp" />
+    </definition>
+
+    <definition name="user/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/add.jsp" />
+    </definition>
+
+    <definition name="user/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/edit.jsp" />
+    </definition>
+
+    <definition name="register" extends="layout.jqueryui">
+        <put-attribute name="title" value="Register" />
+        <put-attribute name="content" value="/WEB-INF/content/register.jsp" />
+    </definition>
+
+    <definition name="resetPassword" extends="layout.basic">
+        <put-attribute name="title" value="Reset Password" />
+        <put-attribute name="content" value="/WEB-INF/content/resetPassword.jsp" />
+    </definition>
+
+    <definition name="user/view" extends="layout.alljs">
+        <put-attribute name="title" value="View User" />
+        <put-attribute name="content" value="/WEB-INF/content/user/view.jsp" />
+    </definition>
+
+    <definition name="user/standings" template="/WEB-INF/content/user/standings.jsp" />
+
+    <definition name="user/courses" template="/WEB-INF/content/user/courses.jsp" />
+
+    <definition name="user/advisement" template="/WEB-INF/content/user/advisement.jsp" />
+
+    <definition name="user/advisement/edit" extends="layout.alljs">
+        <put-attribute name="title" value="Edit Advisement Record" />
+        <put-attribute name="content" value="/WEB-INF/content/user/advisement/edit.jsp" />
+    </definition>
+
+    <definition name="user/advisement/email" extends="layout.editor">
+        <put-attribute name="title" value="Email Advisement Record" />
+        <put-attribute name="content" value="/WEB-INF/content/user/advisement/email.jsp" />
+    </definition>
+
+    <definition name="user/subscriptions" template="/WEB-INF/content/user/subscriptions.jsp" />
+
+    <!-- ======= -->
+    <!-- Profile -->
+    <!-- ======= -->
+
+    <definition name="profile/account" extends="layout.jqueryui">
+        <put-attribute name="title" value="User Profile" />
+        <put-attribute name="content" value="/WEB-INF/content/profile/account.jsp" />
+    </definition>
+
+    <definition name="profile/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Profile" />
+        <put-attribute name="content" value="/WEB-INF/content/profile/edit.jsp" />
+    </definition>
+
+    <definition name="profile/courses" template="/WEB-INF/content/profile/courses.jsp" />
+
+    <definition name="profile/advisement" template="/WEB-INF/content/profile/advisement.jsp" />
+
+    <definition name="profile/forums" template="/WEB-INF/content/profile/forums.jsp" />
+
+    <definition name="profile/mailinglists" template="/WEB-INF/content/profile/mailinglists.jsp" />
+
+    <!-- ====== -->
+    <!-- Course -->
+    <!-- ====== -->
+
+    <definition name="course/search" extends="layout.jqueryui">
+        <put-attribute name="title" value="Courses" />
+        <put-attribute name="content" value="/WEB-INF/content/course/search.jsp" />
+    </definition>
+
+    <definition name="course/view" extends="layout.basic">
+        <put-attribute name="title" value="View Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
+    </definition>
+
+    <definition name="course/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/create.jsp" />
+    </definition>
+
+    <definition name="course/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/edit.jsp" />
+    </definition>
+
+    <!-- ============== -->
+    <!-- Course Mapping -->
+    <!-- ============== -->
+
+    <definition name="course/mapping/list" extends="layout.basic">
+        <put-attribute name="title" value="Course Mappings" />
+        <put-attribute name="content" value="/WEB-INF/content/course/mapping/list.jsp" />
+    </definition>
+
+    <definition name="course/mapping/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Course Mapping" />
+        <put-attribute name="content" value="/WEB-INF/content/course/mapping/create.jsp" />
+    </definition>
+
+    <definition name="course/mapping/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Course Mapping" />
+        <put-attribute name="content" value="/WEB-INF/content/course/mapping/edit.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Department -->
+    <!-- ========== -->
+
+    <definition name="department/list" extends="layout.basic">
+        <put-attribute name="title" value="Departments" />
+        <put-attribute name="content" value="/WEB-INF/content/department/list.jsp" />
+    </definition>
+
+    <definition name="department/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Department" />
+        <put-attribute name="content" value="/WEB-INF/content/department/add.jsp" />
+    </definition>
+
+    <definition name="department/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Department" />
+        <put-attribute name="content" value="/WEB-INF/content/department/edit.jsp" />
+    </definition>
+
+    <definition name="department/index" extends="layout.basic">
+        <put-attribute name="title" value="Department Home" />
+        <put-attribute name="content" value="/WEB-INF/content/department/index.jsp" />
+    </definition>
+
+    <definition name="department/people" extends="layout.jqueryui">
+        <put-attribute name="title" value="People" />
+        <put-attribute name="content" value="/WEB-INF/content/department/people.jsp" />
+    </definition>
+
+    <definition name="department/courses" extends="layout.jqueryui">
+        <put-attribute name="title" value="Courses" />
+        <put-attribute name="content" value="/WEB-INF/content/department/courses.jsp" />
+    </definition>
+
+    <definition name="department/sections" extends="layout.jqueryui">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/department/sections.jsp" />
+    </definition>
+
+    <definition name="department/section/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import0.jsp" />
+    </definition>
+
+    <definition name="department/section/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import1.jsp" />
+    </definition>
+
+    <definition name="department/section/import2" extends="layout.basic">
+        <put-attribute name="title" value="Import Section" />
+        <put-attribute name="content" value="/WEB-INF/content/department/section/import2.jsp" />
+    </definition>
+
+    <definition name="department/user/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import Students" />
+        <put-attribute name="content" value="/WEB-INF/content/department/user/import0.jsp" />
+    </definition>
+
+    <definition name="department/user/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import Students" />
+        <put-attribute name="content" value="/WEB-INF/content/department/user/import1.jsp" />
+    </definition>
+
+    <definition name="department/projects" extends="layout.jqueryui">
+        <put-attribute name="title" value="Projects" />
+        <put-attribute name="content" value="/WEB-INF/content/department/projects.jsp" />
+    </definition>
+
+    <!-- ======= -->
+    <!-- Section -->
+    <!-- ======= -->
+
+    <definition name="section/taught" extends="layout.jqueryui">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/taught.jsp" />
+    </definition>
+
+    <definition name="section/taken" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/taken.jsp" />
+    </definition>
+
+    <definition name="section/evaluated" extends="layout.basic">
+        <put-attribute name="title" value="Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/evaluated.jsp" />
+    </definition>
+
+    <definition name="section/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Section" />
+        <put-attribute name="content" value="/WEB-INF/content/section/edit.jsp" />
+    </definition>
+
+    <definition name="section/roster" extends="layout.jqueryui">
+        <put-attribute name="title" value="Students" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster.jsp" />
+    </definition>
+
+    <definition name="section/roster/import0" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import0.jsp" />
+    </definition>
+
+    <definition name="section/roster/import1" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import1.jsp" />
+    </definition>
+
+    <definition name="section/roster/import2" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import Roster" />
+        <put-attribute name="content" value="/WEB-INF/content/section/roster/import2.jsp" />
+    </definition>
+
+    <definition name="section/roster/add" template="/WEB-INF/content/section/roster/add.jsp" />
+
+    <definition name="section/grade" extends="layout.jqueryui">
+        <put-attribute name="title" value="Grade Student" />
+        <put-attribute name="content" value="/WEB-INF/content/section/grade.jsp" />
+    </definition>
+
+    <definition name="section/search" extends="layout.jqueryui">
+        <put-attribute name="title" value="Search Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/section/search.jsp" />
+    </definition>
+
+    <!-- ============== -->
+    <!-- Course Journal -->
+    <!-- ============== -->
+
+    <definition name="journal/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Course Journals" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/list.jsp" />
+    </definition>
+
+    <definition name="journal/view" extends="layout.basic">
+        <put-attribute name="title" value="Course Journal" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/view.jsp" />
+    </definition>
+
+    <definition name="journal/viewOnlineAssignment" extends="layout.basic">
+        <put-attribute name="title" value="View Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/viewOnlineAssignment.jsp" />
+    </definition>
+
+    <definition name="journal/viewStudent" extends="layout.basic">
+        <put-attribute name="title" value="View Student" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/viewStudent.jsp" />
+    </definition>
+
+    <definition name="journal/viewSubmission" extends="layout.basic">
+        <put-attribute name="title" value="View Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/viewSubmission.jsp" />
+    </definition>
+
+    <definition name="section/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Section" />
+        <put-attribute name="content" value="/WEB-INF/content/section/view.jsp" />
+    </definition>
+
+    <definition name="section/journal/view" extends="layout.basic">
+        <put-attribute name="title" value="Course Journal" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/view.jsp" />
+    </definition>
+
+    <definition name="section/journal/handouts" extends="layout.jqueryui">
+        <put-attribute name="title" value="Handouts" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/handouts.jsp" />
+    </definition>
+
+    <definition name="section/journal/assignments" extends="layout.jqueryui">
+        <put-attribute name="title" value="Assignments" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/assignments.jsp" />
+    </definition>
+
+    <definition name="section/journal/samples" extends="layout.jqueryui">
+        <put-attribute name="title" value="Student Samples" />
+        <put-attribute name="content" value="/WEB-INF/content/section/journal/samples.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Assignment -->
+    <!-- ========== -->
+
+    <definition name="assignment/view" extends="layout.basic">
+        <put-attribute name="title" value="View Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/view.jsp" />
+    </definition>
+
+    <definition name="assignment/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/create.jsp" />
+    </definition>
+
+    <definition name="assignment/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/edit.jsp" />
+    </definition>
+
+    <definition name="assignment/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Regular Assignments" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/search.jsp" />
+    </definition>
+
+    <!-- ================== -->
+    <!-- Online Assignments -->
+    <!-- ================== -->
+
+    <definition name="assignment/online/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/create.jsp" />
+    </definition>
+
+    <definition name="assignment/online/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/edit.jsp" />
+    </definition>
+
+    <definition name="assignment/online/view" extends="layout.basic">
+        <put-attribute name="title" value="View Online Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/view.jsp" />
+    </definition>
+
+    <definition name="assignment/online/editQuestionSheet" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Questions" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestionSheet.jsp" />
+    </definition>
+
+    <definition name="assignment/online/editQuestionSection" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestionSection.jsp" />
+    </definition>
+
+    <definition name="assignment/online/addQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Add Question" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/addQuestion.jsp" />
+    </definition>
+
+    <definition name="assignment/online/editQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/editQuestion.jsp" />
+    </definition>
+
+    <definition name="assignment/online/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Online Assignments" />
+        <put-attribute name="content" value="/WEB-INF/content/assignment/online/search.jsp" />
+    </definition>
+
+    <!-- ========== -->
+    <!-- Submission -->
+    <!-- ========== -->
+
+    <definition name="submission/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/view.jsp" />
+    </definition>
+
+    <definition name="submission/description" extends="layout.basic">
+        <put-attribute name="title" value="View Assignment Description" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/description.jsp" />
+    </definition>
+
+    <definition name="submission/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/list.jsp" />
+    </definition>
+
+    <definition name="submission/grade" extends="layout.jqueryui">
+        <put-attribute name="title" value="Grade Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/grade.jsp" />
+    </definition>
+
+    <definition name="submission/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Submission Files" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/add.jsp" />
+    </definition>
+
+    <!-- ================= -->
+    <!-- Online Submission -->
+    <!-- ================= -->
+
+    <definition name="submission/online/view" extends="layout.basic">
+        <put-attribute name="title" value="View Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/view.jsp" />
+    </definition>
+
+    <definition name="submission/online/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/edit.jsp" />
+    </definition>
+
+    <definition name="submission/online/grade" extends="layout.jqueryui">
+        <put-attribute name="title" value="Grade Online Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/grade.jsp" />
+    </definition>
+
+    <definition name="submission/online/summary" extends="layout.basic">
+        <put-attribute name="title" value="Submission Summary" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/summary.jsp" />
+    </definition>
+
+    <definition name="submission/online/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List of Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/submission/online/list.jsp" />
+    </definition>
+
+    <!-- ====== -->
+    <!-- Survey -->
+    <!-- ====== -->
+
+    <definition name="survey/current" extends="layout.jqueryui">
+        <put-attribute name="title" value="Open Surveys" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/current.jsp" />
+    </definition>
+
+    <definition name="survey/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List Surveys" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/list.jsp" />
+    </definition>
+
+    <definition name="survey/closed" template="/WEB-INF/content/survey/closed.jsp" />
+
+    <definition name="survey/view" extends="layout.basic">
+        <put-attribute name="title" value="View Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/view.jsp" />
+    </definition>
+
+    <definition name="survey/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/create.jsp" />
+    </definition>
+
+    <definition name="survey/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/edit.jsp" />
+    </definition>
+
+    <definition name="survey/editQuestionSheet" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Questions" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editQuestionSheet.jsp" />
+    </definition>
+
+    <definition name="survey/editSection" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question Section" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editSection.jsp" />
+    </definition>
+
+    <definition name="survey/addQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Add Question" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/addQuestion.jsp" />
+    </definition>
+
+    <definition name="survey/editQuestion" extends="layout.qa">
+        <put-attribute name="title" value="Edit Question" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/editQuestion.jsp" />
+    </definition>
+
+    <definition name="survey/results" extends="layout.basic">
+        <put-attribute name="title" value="Survey Results" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/results.jsp" />
+    </definition>
+
+    <definition name="survey/response/edit" extends="layout.qa">
+        <put-attribute name="title" value="Take Survey" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/edit.jsp" />
+    </definition>
+
+    <definition name="survey/response/view" extends="layout.basic">
+        <put-attribute name="title" value="View Survey Response" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/view.jsp" />
+    </definition>
+
+    <definition name="survey/response/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List of Survey Responses" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/response/list.jsp" />
+    </definition>
+
+    <definition name="survey/chart/list" extends="layout.basic">
+        <put-attribute name="title" value="Survey Charts" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/list.jsp" />
+    </definition>
+
+    <definition name="survey/chart/view" extends="layout.chart">
+        <put-attribute name="title" value="Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/view.jsp" />
+    </definition>
+
+    <definition name="survey/chart/create" extends="layout.basic">
+        <put-attribute name="title" value="Create Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/create.jsp" />
+    </definition>
+
+    <definition name="survey/chart/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Survey Chart" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/edit.jsp" />
+    </definition>
+
+    <definition name="survey/chart/viewSeries" extends="layout.basic">
+        <put-attribute name="title" value="View Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/viewSeries.jsp" />
+    </definition>
+
+    <definition name="survey/chart/addSeries" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/addSeries.jsp" />
+    </definition>
+
+    <definition name="survey/chart/editSeries" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Series" />
+        <put-attribute name="content" value="/WEB-INF/content/survey/chart/editSeries.jsp" />
+    </definition>
+ 
+    <!-- ===== -->
+    <!-- Forum -->
+    <!-- ===== -->
+
+    <definition name="forum/list" extends="layout.basic">
+        <put-attribute name="title" value="Forums" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/list.jsp" />
+    </definition>
+
+    <definition name="forum/view" extends="layout.basic">
+        <put-attribute name="title" value="View Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/view.jsp" />
+    </definition>
+
+    <definition name="forum/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/create.jsp" />
+    </definition>
+
+    <definition name="forum/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Forum" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/edit.jsp" />
+    </definition>
+
+    <definition name="forum/topic/view" extends="layout.basic">
+        <put-attribute name="title" value="View Forum Topic" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />
+    </definition>
+
+    <definition name="forum/topic/create" extends="layout.editor">
+        <put-attribute name="title" value="Create Forum Topic" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/create.jsp" />
+    </definition>
+
+    <definition name="forum/topic/edit" extends="layout.editor">
+        <put-attribute name="title" value="Edit Forum Post" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/edit.jsp" />
+    </definition>
+
+    <definition name="forum/topic/reply" extends="layout.editor">
+        <put-attribute name="title" value="Reply to Forum Post" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/reply.jsp" />
+    </definition>
+
+    <definition name="forum/topic/search" extends="layout.basic">
+        <put-attribute name="title" value="Forum Search Results" />
+        <put-attribute name="content" value="/WEB-INF/content/forum/topic/search.jsp" />
+    </definition>
+
+    <!-- ==== -->
+    <!-- Wiki -->
+    <!-- ==== -->
+
+    <definition name="wiki/page" extends="layout.basic">
+        <put-attribute name="title" value="Wiki Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/page.jsp" />
+    </definition>
+
+    <definition name="wiki/nopage" extends="layout.basic">
+        <put-attribute name="title" value="Page Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/nopage.jsp" />
+    </definition>
+
+    <definition name="wiki/password" extends="layout.basic">
+        <put-attribute name="title" value="Enter Page Password" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/password.jsp" />
+    </definition>
+
+    <definition name="wiki/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/edit.jsp" />
+    </definition>
+
+    <definition name="wiki/move" extends="layout.basic">
+        <put-attribute name="title" value="Move Page" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/move.jsp" />
+    </definition>
+
+    <definition name="wiki/discussions" extends="layout.basic">
+        <put-attribute name="title" value="Page Discussions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/discussions.jsp" />
+    </definition>
+
+    <definition name="wiki/discuss" extends="layout.editor">
+        <put-attribute name="title" value="New Discussion" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/discuss.jsp" />
+    </definition>
+
+    <definition name="wiki/revisions" extends="layout.basic">
+        <put-attribute name="title" value="Page Revisions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/revisions.jsp" />
+    </definition>
+
+    <definition name="wiki/compare" extends="layout.basic">
+        <put-attribute name="title" value="Compare Revisions" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/compare.jsp" />
+    </definition>
+
+    <definition name="wiki/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Pages" />
+        <put-attribute name="content" value="/WEB-INF/content/wiki/search.jsp" />
+    </definition>
+
+    <!-- ==== -->
+    <!-- News -->
+    <!-- ==== -->
+
+    <definition name="news/current" extends="layout.basic">
+        <put-attribute name="title" value="News and Announcements" />
+        <put-attribute name="content" value="/WEB-INF/content/news/current.jsp" />
+    </definition>
+
+    <definition name="news/post" extends="layout.qa">
+        <put-attribute name="title" value="Post News" />
+        <put-attribute name="content" value="/WEB-INF/content/news/post.jsp" />
+    </definition>
+
+    <definition name="news/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit News" />
+        <put-attribute name="content" value="/WEB-INF/content/news/edit.jsp" />
+    </definition>
+
+    <!-- ============ -->
+    <!-- File Manager -->
+    <!-- ============ -->
+
+    <definition name="file/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Files" />
+        <put-attribute name="content" value="/WEB-INF/content/file/view.jsp" />
+    </definition>
+
+    <definition name="file/toggle" template="/WEB-INF/content/file/toggle.jsp" />
+
+    <definition name="file/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/edit.jsp" />
+    </definition>
+
+    <definition name="file/copy" extends="layout.basic">
+        <put-attribute name="title" value="Copy File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/copy.jsp" />
+    </definition>
+
+    <definition name="file/move" extends="layout.basic">
+        <put-attribute name="title" value="Move File" />
+        <put-attribute name="content" value="/WEB-INF/content/file/move.jsp" />
+    </definition>
+
+    <!-- ============ -->
+    <!-- Mailing List -->
+    <!-- ============ -->
+
+    <definition name="mailinglist/list" extends="layout.basic">
+        <put-attribute name="title" value="Mailing Lists" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/list.jsp" />
+    </definition>
+
+    <definition name="mailinglist/view" extends="layout.basic">
+        <put-attribute name="title" value="Mailing List" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/view.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/compose" extends="layout.basic">
+        <put-attribute name="title" value="Email to  Mailing List" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/compose.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/view" extends="layout.basic">
+        <put-attribute name="title" value="View Message" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/view.jsp" />
+    </definition>
+
+    <definition name="mailinglist/message/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Messages" />
+        <put-attribute name="content" value="/WEB-INF/content/mailinglist/message/search.jsp" />
+    </definition>
+
+    <!-- ======= -->
+    <!-- Project -->
+    <!-- ======= -->
+
+    <definition name="project/search" extends="layout.basic">
+        <put-attribute name="title" value="Search Projects" />
+        <put-attribute name="content" value="/WEB-INF/content/project/search.jsp" />
+    </definition>
+
+    <definition name="project/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/view.jsp" />
+    </definition>
+
+    <definition name="project/add" extends="layout.alljs">
+        <put-attribute name="title" value="Add Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/add.jsp" />
+    </definition>
+
+    <definition name="project/edit" extends="layout.alljs">
+        <put-attribute name="title" value="Edit Project" />
+        <put-attribute name="content" value="/WEB-INF/content/project/edit.jsp" />
+    </definition>
+
+    <definition name="project/resource/view" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/view.jsp" />
+    </definition>
+
+    <definition name="project/resource/add" extends="layout.qa">
+        <put-attribute name="title" value="Add Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/add.jsp" />
+    </definition>
+
+    <definition name="project/resource/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/project/resource/edit.jsp" />
+    </definition>
+
+    <!-- === -->
+    <!-- MFT -->
+    <!-- === -->
+
+    <definition name="mft/overview" extends="layout.basic">
+        <put-attribute name="title" value="MFT" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/overview.jsp" />
+    </definition>
+
+    <definition name="mft/score" extends="layout.chart">
+        <put-attribute name="title" value="MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/score.jsp" />
+    </definition>
+
+    <definition name="mft/import0" extends="layout.jqueryui">
+        <put-attribute name="title" value="Import MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/import0.jsp" />
+    </definition>
+
+    <definition name="mft/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import MFT Scores" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/import1.jsp" />
+    </definition>
+
+    <definition name="mft/ai" extends="layout.chart">
+        <put-attribute name="title" value="MFT Assessment Indicators" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/ai.jsp" />
+    </definition>
+
+    <definition name="mft/distribution" extends="layout.basic">
+        <put-attribute name="title" value="MFT Distributions" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution.jsp" />
+    </definition>
+
+    <definition name="mft/distribution/view" extends="layout.basic">
+        <put-attribute name="title" value="MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/view.jsp" />
+    </definition>
+
+    <definition name="mft/distribution/add" extends="layout.basic">
+        <put-attribute name="title" value="Add MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/add.jsp" />
+    </definition>
+
+    <definition name="mft/distribution/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit MFT Distribution" />
+        <put-attribute name="content" value="/WEB-INF/content/mft/distribution/edit.jsp" />
+    </definition>
+
+    <!-- ====== -->
+    <!-- Rubric -->
+    <!-- ====== -->
+
+    <definition name="rubric/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubrics" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/list.jsp" />
+    </definition>
+
+    <definition name="rubric/view" extends="layout.basic">
+        <put-attribute name="title" value="View Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/view.jsp" />
+    </definition>
+
+    <definition name="rubric/results" extends="layout.basic">
+        <put-attribute name="title" value="Rubric Results" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/results.jsp" />
+    </definition>
+
+    <definition name="rubric/result/section" extends="layout.chart">
+        <put-attribute name="title" value="Rubric Results" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/result/section.jsp" />
+    </definition>
+
+    <definition name="rubric/result/course" extends="layout.chart">
+        <put-attribute name="title" value="Rubric Results" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/result/course.jsp" />
+    </definition>
+
+    <definition name="rubric/result/stats" template="/WEB-INF/content/rubric/result/stats.jsp" />
+
+    <definition name="rubric/toggle" template="/WEB-INF/content/rubric/toggle.jsp" />
+
+    <definition name="rubric/create" extends="layout.qa">
+        <put-attribute name="title" value="Create Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/create.jsp" />
+    </definition>
+
+    <definition name="rubric/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/edit.jsp" />
+    </definition>
+
+    <definition name="rubric/addIndicator" extends="layout.qa">
+        <put-attribute name="title" value="Add Performance Indicator" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/addIndicator.jsp" />
+    </definition>
+
+    <definition name="rubric/editIndicator" extends="layout.qa">
+        <put-attribute name="title" value="Edit Performance Indicator" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/editIndicator.jsp" />
+    </definition>
+
+    <definition name="rubric/assignment/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Rubric Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/assignment/create.jsp" />
+    </definition>
+
+    <definition name="rubric/assignment/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Rubric Assignment" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/assignment/edit.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/list/instructor" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/instructor.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/list/evaluator" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/evaluator.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/list/student" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submissions" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/student.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view/instructor" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/instructor.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view/evaluator" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/evaluator.jsp" />
+    </definition>
+
+    <definition name="rubric/submission/view/student" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/student.jsp" />
+    </definition>
+
+    <definition name="rubric/evaluation/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="Rubric Evaluation" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/evaluation/view.jsp" />
+    </definition>
+
+    <!-- ======== -->
+    <!-- Syllabus -->
+    <!-- ======== -->
+
+    <definition name="syllabus/view" extends="layout.basic">
+        <put-attribute name="title" value="Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/syllabus/view.jsp" />
+    </definition>
+
+    <definition name="syllabus/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/syllabus/edit.jsp" />
+    </definition>
+
+    <!-- ==== -->
+    <!-- Site -->
+    <!-- ==== -->
+
+    <definition name="site/view" extends="layout.basic">
+        <put-attribute name="title" value="View Site" />
+        <put-attribute name="content" value="/WEB-INF/content/site/view.jsp" />
+    </definition>
+
+    <definition name="site/item" extends="layout.basic">
+        <put-attribute name="title" value="View Item" />
+        <put-attribute name="content" value="/WEB-INF/content/site/item.jsp" />
+    </definition>
+
+    <definition name="site/nosite" extends="layout.basic">
+        <put-attribute name="title" value="Site Not Found" />
+        <put-attribute name="content" value="/WEB-INF/content/site/nosite.jsp" />
+    </definition>
+
+    <definition name="site/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Site" />
+        <put-attribute name="content" value="/WEB-INF/content/site/create.jsp" />
+    </definition>
+
+    <definition name="site/settings" extends="layout.basic">
+        <put-attribute name="title" value="Settings" />
+        <put-attribute name="content" value="/WEB-INF/content/site/settings.jsp" />
+    </definition>
+
+    <definition name="site/syllabus/view" extends="layout.basic">
+        <put-attribute name="title" value="Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/site/syllabus/view.jsp" />
+    </definition>
+
+    <definition name="site/syllabus/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Syllabus" />
+        <put-attribute name="content" value="/WEB-INF/content/site/syllabus/edit.jsp" />
+    </definition>
+
+    <definition name="site/info/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Class Info" />
+        <put-attribute name="content" value="/WEB-INF/content/site/info/list.jsp" />
+    </definition>
+
+    <definition name="site/info/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Info Entry" />
+        <put-attribute name="content" value="/WEB-INF/content/site/info/edit.jsp" />
+    </definition>
+
+    <definition name="site/block/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Blocks" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/list.jsp" />
+    </definition>
+
+    <definition name="site/block/add" extends="layout.basic">
+        <put-attribute name="title" value="Add Block" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/add.jsp" />
+    </definition>
+
+    <definition name="site/block/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Block" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/edit.jsp" />
+    </definition>
+
+    <definition name="site/block/addItem" extends="layout.qa">
+        <put-attribute name="title" value="Add Item" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/addItem.jsp" />
+    </definition>
+
+    <definition name="site/block/editItem" extends="layout.qa">
+        <put-attribute name="title" value="Edit Item" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/editItem.jsp" />
+    </definition>
+
+    <definition name="site/block/addAnnouncement" extends="layout.qa">
+        <put-attribute name="title" value="Add Announcement" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/addAnnouncement.jsp" />
+    </definition>
+
+    <definition name="site/block/editAnnouncement" extends="layout.qa">
+        <put-attribute name="title" value="Edit Announcement" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/editAnnouncement.jsp" />
+    </definition>
+
+    <!-- ======== -->
+    <!-- CKEditor -->
+    <!-- ======== -->
+
+    <definition name="ckeditor/upload" template="/WEB-INF/content/ckeditor/upload.jsp" />
+
+    <!-- ===== -->
+    <!-- Email -->
+    <!-- ===== -->
+
+    <definition name="email/compose" extends="layout.jqueryui">
+        <put-attribute name="title" value="Compose Email" />
+        <put-attribute name="content" value="/WEB-INF/content/email/compose.jsp" />
+    </definition>
+
+</tiles-definitions>

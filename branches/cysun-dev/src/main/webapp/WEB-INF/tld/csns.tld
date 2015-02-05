@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+
+    <description>CSNS Tags</description>
+    <tlib-version>0.1</tlib-version>
+    <short-name>csns</short-name>
+    <uri>http://cs.calstatela.edu/csns</uri>
+
+    <tag>
+        <description>Output file size in B, KB, MB, or GB.</description>
+        <name>fileSize</name>
+        <tag-class>csns.web.tag.FileSizeTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>Format a number in Roman.</description>
+        <name>romanNumber</name>
+        <tag-class>csns.web.tag.RomanNumberTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+ 
+     <tag>
+        <description>Truncate a string to a specified length (default 80).</description>
+        <name>truncate</name>
+        <tag-class>csns.web.tag.TruncateTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>length</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag-file>
+        <name>help</name>
+        <path>/WEB-INF/tags/help.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>dueDate</name>
+        <path>/WEB-INF/tags/dueDate.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>publishDate</name>
+        <path>/WEB-INF/tags/publishDate.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>closeDate</name>
+        <path>/WEB-INF/tags/closeDate.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>displayQuestion</name>
+        <path>/WEB-INF/tags/displayQuestion.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>displayAnswer</name>
+        <path>/WEB-INF/tags/displayAnswer.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>wikiBreadcrumbs</name>
+        <path>/WEB-INF/tags/wikiBreadcrumbs.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>wikiSearchForm</name>
+        <path>/WEB-INF/tags/wikiSearchForm.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>fileBreadcrumbs</name>
+        <path>/WEB-INF/tags/fileBreadcrumbs.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>verify</name>
+        <path>/WEB-INF/tags/verify.tag</path>
+    </tag-file>
+
+    <function>
+        <name>isSelectionCorrect</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            boolean isSelectionCorrect( csns.model.qa.ChoiceQuestion, java.lang.Integer )
+        </function-signature>
+    </function>
+
+    <function>
+        <name>isChoiceSelected</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            boolean isChoiceSelected( csns.model.qa.ChoiceAnswer, java.lang.Integer )
+        </function-signature>
+    </function>
+
+    <function>
+        <name>endsWith</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            boolean endsWith( java.lang.String, java.lang.String )
+        </function-signature>
+    </function>
+
+    <function>
+        <name>text2html</name>
+        <function-class>csns.web.tag.Functions</function-class>
+        <function-signature>
+            java.lang.String textToHtml( java.lang.String )
+        </function-signature>
+    </function>
+
+</taglib>

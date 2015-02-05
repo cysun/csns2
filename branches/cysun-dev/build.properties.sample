@@ -1,0 +1,49 @@
+## app.school is the acronym of the school. It is used to include/exclude
+## some school-specific code.
+## app.url is the URL by which the application will be accessed.
+## app.email is used as the sender of the automated emails sent by the system.
+## Uploaded files are stored in app.dir.file, and the log files are kept under
+## app.dir.log.
+app.school=csula
+app.url=http://localhost:8080/csns2
+app.email=csns2@localhost.localdomain
+app.encoding=UTF-8
+app.file.dir=E:/Temp/csns2/files
+app.log.dir=E:/Temp/csns2/logs
+
+## set app.log.level to debug during development and info for production.
+## app.log.request controls whether HTTP requests should be logged.
+app.log.level=debug
+app.log.request=false
+
+## The database for operational use.
+db.url=jdbc:postgresql://localhost:5432/csns2
+db.username=cysun
+db.password=abcd
+
+## The database for automated testing.
+test.db.url=jdbc:postgresql://localhost:5432/csns2test
+test.db.username=cysun
+test.db.password=abcd
+
+## The SMTP server for outgoing emails.
+mail.smtp.server=localhost
+mail.smtp.username=cysun@localhost.localdomain
+mail.smtp.password=abcd
+
+## JavaScript libraries such as jQuery and CKEditor are hosted outside the
+## project. If you have internet connection during development, you may use
+## the ones hosted on csns.calstatela.edu; otherwise you can download the
+## libraries and place them under src/main/webapp/js.
+jquery.url=http://csns.calstatela.edu/static/jquery-1.11.1.min.js
+jqueryui.url=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.js
+jqueryui.css=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.css
+jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins2
+ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.2/ckeditor.js
+highcharts=http://csns.calstatela.edu/static/highcharts
+#jquery.url=/js/jquery/jquery-1.6.4.min.js
+#jqueryui.url=/js/jqueryui/js/jquery-ui-1.8.15.custom.min.js
+#jqueryui.css=/js/jqueryui/css/redmond/jquery-ui-1.8.15.custom.css
+#jquery.plugins=/js/jqueryplugins
+#ckeditor.url=/js/ckeditor/ckeditor.js
+#highcharts=/js/highcharts

@@ -128,21 +128,21 @@
         primary key (id)
     );
 
+    create table course_mapping_group1 (
+        mapping_id int8 not null,
+        course_id int8 not null
+    );
+
+    create table course_mapping_group2 (
+        mapping_id int8 not null,
+        course_id int8 not null
+    );
+
     create table course_mappings (
         id int8 not null,
         deleted boolean not null,
         department_id int8 not null,
         primary key (id)
-    );
-
-    create table course_mappings_group1 (
-        mapping_id int8 not null,
-        course_id int8 not null
-    );
-
-    create table course_mappings_group2 (
-        mapping_id int8 not null,
-        course_id int8 not null
     );
 
     create table course_substitutions (
@@ -420,6 +420,24 @@
         expire_date timestamp,
         department_id int8,
         topic_id int8 not null,
+        primary key (id)
+    );
+
+    create table program_elective_courses (
+        program_id int8 not null,
+        course_id int8 not null
+    );
+
+    create table program_required_courses (
+        program_id int8 not null,
+        course_id int8 not null
+    );
+
+    create table programs (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255) not null,
+        department_id int8,
         primary key (id)
     );
 
@@ -836,11 +854,11 @@
     alter table course_journal_student_samples 
         add constraint UK_p314skj0hft837qpu21d77dgj unique (course_journal_id, enrollment_id);
 
-    alter table course_mappings_group1 
-        add constraint UK_kuj86llqu2iiw1mu5l12hrack unique (mapping_id, course_id);
+    alter table course_mapping_group1 
+        add constraint UK_iedqsk6j6wo8mmuv8u9vjld8 unique (mapping_id, course_id);
 
-    alter table course_mappings_group2 
-        add constraint UK_iyn80pxjyfpj3yqenl1o6wk40 unique (mapping_id, course_id);
+    alter table course_mapping_group2 
+        add constraint UK_gtwgoyu288y5wwjs8f1ofl1jl unique (mapping_id, course_id);
 
     alter table courses 
         add constraint UK_61og8rbqdd2y28rx2et5fdnxd unique (code);
@@ -883,6 +901,12 @@
 
     alter table mft_scores 
         add constraint UK_cxmltfnit7bi608roobfafund unique (department_id, user_id, date);
+
+    alter table program_elective_courses 
+        add constraint UK_akda9dtkf03rx2p1iql5m38n3 unique (program_id, course_id);
+
+    alter table program_required_courses 
+        add constraint UK_9oju6q704367bp22axidu8ek8 unique (program_id, course_id);
 
     alter table sections 
         add constraint UK_i3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
@@ -1040,30 +1064,30 @@
         foreign key (course_journal_id) 
         references course_journals;
 
+    alter table course_mapping_group1 
+        add constraint FK_ieewf50yggd1sbmkxs09lvb4a 
+        foreign key (course_id) 
+        references courses;
+
+    alter table course_mapping_group1 
+        add constraint FK_p8gpo50bohrdmrw0dl65nd0h9 
+        foreign key (mapping_id) 
+        references course_mappings;
+
+    alter table course_mapping_group2 
+        add constraint FK_b1nwrxkdpr7d9u06vup6qnilk 
+        foreign key (course_id) 
+        references courses;
+
+    alter table course_mapping_group2 
+        add constraint FK_gcsxlaue65dlkbaib4dga3h7q 
+        foreign key (mapping_id) 
+        references course_mappings;
+
     alter table course_mappings 
         add constraint FK_5pd9d8eacjdm0ti185rem73fi 
         foreign key (department_id) 
         references departments;
-
-    alter table course_mappings_group1 
-        add constraint FK_sbkcnqfxm9lbjeqme4nambyou 
-        foreign key (course_id) 
-        references courses;
-
-    alter table course_mappings_group1 
-        add constraint FK_g9bb56l25xsempe13myx0nldv 
-        foreign key (mapping_id) 
-        references course_mappings;
-
-    alter table course_mappings_group2 
-        add constraint FK_79ch3wvn14xe2s5d28lpmp0ht 
-        foreign key (course_id) 
-        references courses;
-
-    alter table course_mappings_group2 
-        add constraint FK_gym8bu8g5s9ehirabpo4nybuh 
-        foreign key (mapping_id) 
-        references course_mappings;
 
     alter table course_substitutions 
         add constraint FK_4xv8mf3jidbdi508wufg15vv3 
@@ -1404,6 +1428,31 @@
         add constraint FK_nc0r2fhq6ur10q2rl7u98pltu 
         foreign key (topic_id) 
         references forum_topics;
+
+    alter table program_elective_courses 
+        add constraint FK_lwbjswib5grlmipbyv6fpkvb0 
+        foreign key (course_id) 
+        references courses;
+
+    alter table program_elective_courses 
+        add constraint FK_bim7nogd19wvopkubelxbgaou 
+        foreign key (program_id) 
+        references programs;
+
+    alter table program_required_courses 
+        add constraint FK_iwqhq7lxoyofyq9kyfam8yjw9 
+        foreign key (course_id) 
+        references courses;
+
+    alter table program_required_courses 
+        add constraint FK_brn2eaxo1l4toidbcrh7sc9gx 
+        foreign key (program_id) 
+        references programs;
+
+    alter table programs 
+        add constraint FK_t38cee5jtiwtw07papp2rjlca 
+        foreign key (department_id) 
+        references departments;
 
     alter table project_advisors 
         add constraint FK_n0ig0bjo0vq6lv5r5kgvyiwsg 

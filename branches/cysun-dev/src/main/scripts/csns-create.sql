@@ -550,6 +550,29 @@ create table department_options (
 alter table courses add constraint courses_department_fk
     foreign key (department_id) references departments(id);
 
+--------------
+-- programs --
+--------------
+
+create table programs (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    name            varchar(255) not null,
+    description     varchar(8000)
+);
+
+create table program_required_courses (
+    program_id  bigint not null references programs(id),
+    course_id   bigint not null references courses(id),
+  unique (program_id, course_id)
+);
+
+create table program_elective_courses (
+    program_id  bigint not null references programs(id),
+    course_id   bigint not null references courses(id),
+  unique (program_id, course_id)
+);
+
 ---------------------
 -- course mappings --
 ---------------------
@@ -560,13 +583,13 @@ create table course_mappings (
     deleted         boolean not null default 'f'
 );
 
-create table course_mappings_group1 (
+create table course_mapping_group1 (
     mapping_id  bigint not null references course_mappings(id),
     course_id   bigint not null references courses(id),
   unique (mapping_id, course_id)
 );
 
-create table course_mappings_group2 (
+create table course_mapping_group2 (
     mapping_id  bigint not null references course_mappings(id),
     course_id   bigint not null references courses(id),
   unique (mapping_id, course_id)

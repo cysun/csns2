@@ -104,9 +104,13 @@ drop table site_announcements;
 drop table site_class_info;
 drop table sites;
 
-drop table course_mappings_group2;
-drop table course_mappings_group1;
+drop table course_mapping_group2;
+drop table course_mapping_group1;
 drop table course_mappings;
+
+drop table program_elective_courses;
+drop table program_required_courses;
+drop table programs;
 
 alter table courses drop constraint courses_department_fk;
 drop table department_options;

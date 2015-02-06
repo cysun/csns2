@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -34,8 +35,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "course_mappings")
-public class CourseMapping implements Serializable {
+@Table(name = "programs")
+public class Program implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,69 +45,64 @@ public class CourseMapping implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @ManyToMany
-    @JoinTable(name = "course_mapping_group1",
-        joinColumns = @JoinColumn(name = "mapping_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"),
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "mapping_id",
-            "course_id" }) })
-    @OrderBy("code asc")
-    private List<Course> group1;
+    @Column(nullable = false)
+    private String name;
+
+    private String description;
 
     @ManyToMany
-    @JoinTable(name = "course_mapping_group2",
-        joinColumns = @JoinColumn(name = "mapping_id"),
+    @JoinTable(name = "program_required_courses",
+        joinColumns = @JoinColumn(name = "program_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id"),
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "mapping_id",
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "program_id",
             "course_id" }) })
     @OrderBy("code asc")
-    private List<Course> group2;
+    private List<Course> requiredCourses;
 
-    private boolean deleted;
+    @ManyToMany
+    @JoinTable(name = "program_elective_courses",
+        joinColumns = @JoinColumn(name = "program_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id"),
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "program_id",
+            "course_id" }) })
+    @OrderBy("code asc")
+    private List<Course> electiveCourses;
 
-    public CourseMapping()
+    public Program()
     {
-        group1 = new ArrayList<Course>();
-        group2 = new ArrayList<Course>();
-
-        deleted = false;
+        requiredCourses = new ArrayList<Course>();
+        electiveCourses = new ArrayList<Course>();
     }
 
-    public CourseMapping( Department department )
+    public Program( Department department )
     {
         this();
         this.department = department;
     }
 
+    public Program clone()
+    {
+        Program program = new Program( department );
+
+        program.name = "Copy of " + name;
+        program.description = description;
+        program.getRequiredCourses().addAll( requiredCourses );
+        program.getElectiveCourses().addAll( electiveCourses );
+
+        return program;
+    }
+
     public boolean contains( Course course )
     {
-        for( Course c : group1 )
+        for( Course c : requiredCourses )
             if( c.getId().equals( course.getId() ) ) return true;
 
-        for( Course c : group2 )
+        for( Course c : electiveCourses )
             if( c.getId().equals( course.getId() ) ) return true;
 
         return false;
-    }
-
-    public void removeCourse( Long courseId )
-    {
-        for( Course course : group1 )
-            if( course.getId().equals( courseId ) )
-            {
-                group1.remove( course );
-                break;
-            }
-
-        for( Course course : group2 )
-            if( course.getId().equals( courseId ) )
-            {
-                group2.remove( course );
-                break;
-            }
     }
 
     public Long getId()
@@ -129,34 +125,44 @@ public class CourseMapping implements Serializable {
         this.department = department;
     }
 
-    public List<Course> getGroup1()
+    public String getName()
     {
-        return group1;
+        return name;
     }
 
-    public void setGroup1( List<Course> group1 )
+    public void setName( String name )
     {
-        this.group1 = group1;
+        this.name = name;
     }
 
-    public List<Course> getGroup2()
+    public String getDescription()
     {
-        return group2;
+        return description;
     }
 
-    public void setGroup2( List<Course> group2 )
+    public void setDescription( String description )
     {
-        this.group2 = group2;
+        this.description = description;
     }
 
-    public boolean isDeleted()
+    public List<Course> getRequiredCourses()
     {
-        return deleted;
+        return requiredCourses;
     }
 
-    public void setDeleted( boolean deleted )
+    public void setRequiredCourses( List<Course> requiredCourses )
     {
-        this.deleted = deleted;
+        this.requiredCourses = requiredCourses;
+    }
+
+    public List<Course> getElectiveCourses()
+    {
+        return electiveCourses;
+    }
+
+    public void setElectiveCourses( List<Course> electiveCourses )
+    {
+        this.electiveCourses = electiveCourses;
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -55,6 +55,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import csns.model.academics.AcademicStanding;
 import csns.model.academics.Department;
+import csns.model.academics.Program;
 import csns.model.survey.Survey;
 
 @Entity
@@ -173,6 +174,16 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @JsonIgnore
     @Transient
     String password2;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "major_id")
+    private Department major;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "program_id")
+    private Program program;
 
     @JsonIgnore
     @OneToMany
@@ -697,6 +708,26 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public void setPassword2( String password2 )
     {
         this.password2 = password2;
+    }
+
+    public Department getMajor()
+    {
+        return major;
+    }
+
+    public void setMajor( Department major )
+    {
+        this.major = major;
+    }
+
+    public Program getProgram()
+    {
+        return program;
+    }
+
+    public void setProgram( Program program )
+    {
+        this.program = program;
     }
 
     public Map<Department, AcademicStanding> getCurrentStandings()

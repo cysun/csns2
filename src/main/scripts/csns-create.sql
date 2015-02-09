@@ -36,6 +36,8 @@ create table users (
     profile_thumbnail_id    bigint,
     enabled                 boolean not null default 't',
     temporary               boolean not null default 'f',
+    major_id                bigint,
+    program_id              bigint,
     num_of_forum_posts      integer not null default 0,
     disk_quota              integer not null default 200,
     access_key              varchar(255) unique
@@ -547,8 +549,36 @@ create table department_options (
   primary key (department_id, option)
 );
 
+alter table users add constraint users_major_fk
+    foreign key (major_id) references departments(id);
 alter table courses add constraint courses_department_fk
     foreign key (department_id) references departments(id);
+
+--------------
+-- programs --
+--------------
+
+create table programs (
+    id              bigint primary key,
+    department_id   bigint references departments(id),
+    name            varchar(255) not null,
+    description     varchar(8000)
+);
+
+create table program_required_courses (
+    program_id  bigint not null references programs(id),
+    course_id   bigint not null references courses(id),
+  unique (program_id, course_id)
+);
+
+create table program_elective_courses (
+    program_id  bigint not null references programs(id),
+    course_id   bigint not null references courses(id),
+  unique (program_id, course_id)
+);
+
+alter table users add constraint users_program_fk
+    foreign key (program_id) references programs(id);
 
 ---------------------
 -- course mappings --
@@ -560,13 +590,13 @@ create table course_mappings (
     deleted         boolean not null default 'f'
 );
 
-create table course_mappings_group1 (
+create table course_mapping_group1 (
     mapping_id  bigint not null references course_mappings(id),
     course_id   bigint not null references courses(id),
   unique (mapping_id, course_id)
 );
 
-create table course_mappings_group2 (
+create table course_mapping_group2 (
     mapping_id  bigint not null references course_mappings(id),
     course_id   bigint not null references courses(id),
   unique (mapping_id, course_id)

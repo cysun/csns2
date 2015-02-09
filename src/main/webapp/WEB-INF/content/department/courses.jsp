@@ -41,6 +41,10 @@ $(function(){
 </security:authorize>
 <li class="align_right"><a href="course/mapping/list"><img title="Course Mappings"
     alt="[Course Mappings]" src="<c:url value='/img/icons/mapping.png' />" /></a></li>
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
+<li class="align_right"><a href="course/program/list"><img title="Programs"
+    alt="[Programs]" src="<c:url value='/img/icons/reports.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <div id="tabs">

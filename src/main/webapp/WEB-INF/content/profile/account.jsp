@@ -8,6 +8,10 @@ $(function() {
             ui.ajaxSettings.cache = false;	
         }
     });
+    if( window.location.hash )
+        $("#tabs").tabs({
+            active : window.location.hash.substring(1)
+        });
     $("#birthday").datepicker({
         inline: true,
         changeMonth: true,
@@ -30,6 +34,9 @@ $(function() {
 <ul>
   <li><a href="#account">Account</a></li>
   <li><a href="<c:url value='/profile/courses' />">Course Work</a></li>
+<%--
+  <li><a href="<c:url value='/profile/program' />">Program</a></li>
+ --%>
   <li><a href="<c:url value='/profile/advisement' />">Advisement</a>
   <li><a href="<c:url value='/profile/forums' />">Forum Subscriptions</a></li>
   <li><a href="<c:url value='/profile/mailinglists' />">Mailing List Subscriptions</a></li>

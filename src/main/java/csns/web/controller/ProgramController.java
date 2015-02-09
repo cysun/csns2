@@ -27,41 +27,61 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.model.academics.CourseMapping;
 import csns.model.academics.Department;
-import csns.model.academics.dao.CourseMappingDao;
+import csns.model.academics.Program;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.dao.ProgramDao;
 import csns.security.SecurityUtils;
 
 @Controller
-public class CourseMappingController {
+public class ProgramController {
+
+    @Autowired
+    private ProgramDao programDao;
 
     @Autowired
     private DepartmentDao departmentDao;
 
-    @Autowired
-    private CourseMappingDao courseMappingDao;
+    private static final Logger logger = LoggerFactory.getLogger( ProgramController.class );
 
-    private static final Logger logger = LoggerFactory.getLogger( CourseMappingController.class );
-
-    @RequestMapping("/department/{dept}/course/mapping/list")
+    @RequestMapping("/department/{dept}/course/program/list")
     public String list( @PathVariable String dept, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
         models.put( "department", department );
-        models.put( "mappings", courseMappingDao.getCourseMappings( department ) );
-        return "course/mapping/list";
+        models.put( "programs", programDao.getPrograms( department ) );
+        return "course/program/list";
     }
 
-    @RequestMapping("/department/{dept}/course/mapping/delete")
-    public String delete( @RequestParam Long id )
+    @RequestMapping("/department/{dept}/course/program/view")
+    public String view( @RequestParam Long id, ModelMap models )
     {
-        CourseMapping mapping = courseMappingDao.getCourseMapping( id );
-        mapping.setDeleted( true );
-        mapping = courseMappingDao.saveCourseMapping( mapping );
+        models.put( "program", programDao.getProgram( id ) );
+        return "course/program/view";
+    }
+
+    @RequestMapping("/department/{dept}/course/program/clone")
+    public String clone( @RequestParam Long id, ModelMap models )
+    {
+        Program program = programDao.getProgram( id );
+        Program newProgram = programDao.saveProgram( program.clone() );
 
         logger.info( SecurityUtils.getUser().getUsername()
-            + " deleted course mapping " + mapping.getId() );
+            + " created program " + newProgram.getId() + " from "
+            + program.getId() );
+
+        return "redirect:edit?id=" + newProgram.getId();
+    }
+
+    @RequestMapping("/department/{dept}/course/program/remove")
+    public String remove( @RequestParam Long id )
+    {
+        Program program = programDao.getProgram( id );
+        program.setDepartment( null );
+        program = programDao.saveProgram( program );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " removed program " + program.getId() );
 
         return "redirect:list";
     }

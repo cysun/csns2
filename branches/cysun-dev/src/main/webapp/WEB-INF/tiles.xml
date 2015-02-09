@@ -216,6 +216,8 @@
 
     <definition name="profile/courses" template="/WEB-INF/content/profile/courses.jsp" />
 
+    <definition name="profile/program" template="/WEB-INF/content/profile/program.jsp" />
+
     <definition name="profile/advisement" template="/WEB-INF/content/profile/advisement.jsp" />
 
     <definition name="profile/forums" template="/WEB-INF/content/profile/forums.jsp" />

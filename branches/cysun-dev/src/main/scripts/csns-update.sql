@@ -1,3 +1,5 @@
+alter table users add column major_id bigint references departments(id);
+
 alter table course_mappings_group1 rename to course_mapping_group1;
 alter table course_mappings_group2 rename to course_mapping_group2;
 
@@ -19,3 +21,5 @@ create table program_elective_courses (
     course_id   bigint not null references courses(id),
   unique (program_id, course_id)
 );
+
+alter table users add column program_id bigint references programs(id);

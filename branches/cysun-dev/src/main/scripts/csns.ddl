@@ -808,9 +808,11 @@
         username varchar(255) not null,
         work_phone varchar(255),
         zip varchar(255),
+        major_id int8,
         original_picture_id int8,
         profile_picture_id int8,
         profile_thumbnail_id int8,
+        program_id int8,
         primary key (id)
     );
 
@@ -1750,6 +1752,11 @@
         references users;
 
     alter table users 
+        add constraint FK_q37jte7r1ptl16arimkk23y1h 
+        foreign key (major_id) 
+        references departments;
+
+    alter table users 
         add constraint FK_c5mga1l7ury0q5lit8j53d43r 
         foreign key (original_picture_id) 
         references files;
@@ -1763,6 +1770,11 @@
         add constraint FK_fx0l629tx63f2r40mn9qvxp3q 
         foreign key (profile_thumbnail_id) 
         references files;
+
+    alter table users 
+        add constraint FK_nup624f9nrfktc27evwuo1t0i 
+        foreign key (program_id) 
+        references programs;
 
     alter table wiki_discussions 
         add constraint FK_6yk6dpleuknebuqmajkjupxec 

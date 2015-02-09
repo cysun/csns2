@@ -108,11 +108,13 @@ drop table course_mapping_group2;
 drop table course_mapping_group1;
 drop table course_mappings;
 
+alter table users drop constraint users_program_fk;
 drop table program_elective_courses;
 drop table program_required_courses;
 drop table programs;
 
 alter table courses drop constraint courses_department_fk;
+alter table users drop constraint users_major_fk;
 drop table department_options;
 drop table department_additional_graduate_courses;
 drop table department_graduate_courses;

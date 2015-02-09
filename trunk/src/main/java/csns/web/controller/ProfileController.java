@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -21,12 +21,17 @@ package csns.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
+import csns.model.academics.dao.ProgramDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
@@ -43,6 +48,12 @@ public class ProfileController {
     private UserDao userDao;
 
     @Autowired
+    private DepartmentDao departmentDao;
+
+    @Autowired
+    private ProgramDao programDao;
+
+    @Autowired
     private EnrollmentDao enrollmentDao;
 
     @Autowired
@@ -50,6 +61,8 @@ public class ProfileController {
 
     @Autowired
     private SubscriptionDao subscriptionDao;
+
+    private static final Logger logger = LoggerFactory.getLogger( ProfileController.class );
 
     @RequestMapping("/profile")
     public String profile( ModelMap models )
@@ -65,6 +78,19 @@ public class ProfileController {
         User user = SecurityUtils.getUser();
         models.put( "coursesTaken", enrollmentDao.getEnrollments( user ) );
         return "profile/courses";
+    }
+
+    @RequestMapping("/profile/program")
+    public String program( ModelMap models )
+    {
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        models.put( "user", user );
+        models.put( "departments", departmentDao.getDepartments() );
+
+        if( user.getMajor() != null )
+            models.put( "programs", programDao.getPrograms( user.getMajor() ) );
+
+        return "profile/program";
     }
 
     @RequestMapping("/profile/advisement")
@@ -111,6 +137,43 @@ public class ProfileController {
 
         models.put( "subscriptions", subscriptions );
         return "profile/mailinglists";
+    }
+
+    @RequestMapping("/profile/setMajor")
+    public String setMajor( @RequestParam(required = false) Long majorId )
+    {
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        user.setMajor( majorId == null ? null
+            : departmentDao.getDepartment( majorId ) );
+        user.setProgram( null );
+        user = userDao.saveUser( user );
+
+        if( user.getMajor() == null )
+            logger.info( user.getUsername() + " removed major." );
+        else
+            logger.info( user.getUsername() + " set major to "
+                + user.getMajor().getAbbreviation() );
+
+        // Program is the 3rd tab in Profile
+        return "redirect:../profile#2";
+    }
+
+    @RequestMapping("/profile/setProgram")
+    public String setProgram( @RequestParam(required = false) Long programId )
+    {
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        user.setProgram( programId == null ? null
+            : programDao.getProgram( programId ) );
+        user = userDao.saveUser( user );
+
+        if( user.getProgram() == null )
+            logger.info( user.getUsername() + " removed program." );
+        else
+            logger.info( user.getUsername() + " set program to "
+                + user.getProgram().getName() );
+
+        // Program is the 3rd tab in Profile
+        return "redirect:../profile#2";
     }
 
 }

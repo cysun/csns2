@@ -86,12 +86,13 @@ public class UserAdvisementControllerS {
             + " edited advisment record " + record.getId() );
 
         sessionStatus.setComplete();
-        return "redirect:/user/view?id=" + student.getId() + "#ui-tabs-3";
+        // Advisement is the 5th tab
+        return "redirect:/user/view?id=" + student.getId() + "#4";
     }
 
     @RequestMapping("/user/advisement/deleteAttachment")
-    public @ResponseBody
-    String deleteAttachment( @ModelAttribute("record") AdvisementRecord record,
+    public @ResponseBody String deleteAttachment(
+        @ModelAttribute("record") AdvisementRecord record,
         @RequestParam Long fileId )
     {
         for( File attachment : record.getAttachments() )
@@ -139,7 +140,7 @@ public class UserAdvisementControllerS {
         sessionStatus.setComplete();
 
         models.put( "backUrl", "/user/view?id="
-            + email.getRecipients().get( 0 ).getId() + "#ui-tabs-3" );
+            + email.getRecipients().get( 0 ).getId() + "#4" );
         models.put( "message", "status.email.sent" );
         return "status";
     }

@@ -22,7 +22,8 @@ function help( name )
 
 <p><a id="addAdvisement" class="toggle" href="javascript:void(0)">Advise</a></p>
 
-<form id="addAdvisementForm" action="advisement/add" enctype="multipart/form-data" method="post">
+<form id="addAdvisementForm" class="default-hide" action="advisement/add"
+      enctype="multipart/form-data" method="post">
   <textarea id="t" name="comment" rows="5" cols="80"></textarea>
   <p><csns:help name="fao" img="false">For advisors only</csns:help>:
   <input type="checkbox" name="forAdvisorsOnly" value="true" /></p>

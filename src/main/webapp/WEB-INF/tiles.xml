@@ -186,6 +186,8 @@
 
     <definition name="user/courses" template="/WEB-INF/content/user/courses.jsp" />
 
+    <definition name="user/program" template="/WEB-INF/content/user/program.jsp" />
+
     <definition name="user/advisement" template="/WEB-INF/content/user/advisement.jsp" />
 
     <definition name="user/advisement/edit" extends="layout.alljs">

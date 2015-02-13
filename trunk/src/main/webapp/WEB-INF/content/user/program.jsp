@@ -4,10 +4,10 @@
  <script>
 $(function(){
     $("#major").change(function(){
-        window.location.href = "profile/setMajor?majorId=" + $(this).val();
+        window.location.href = "setMajor?userId=${user.id}&majorId=" + $(this).val();
     });
     $("#program").change(function(){
-        window.location.href = "profile/setProgram?programId=" + $(this).val();
+        window.location.href = "setProgram?userId=${user.id}&programId=" + $(this).val();
     });
     $("table").tablesorter({
         sortList: [[0,0]]

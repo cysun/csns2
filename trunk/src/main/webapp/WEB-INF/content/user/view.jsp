@@ -7,8 +7,9 @@ $(function(){
     $.ajaxSetup({ cache: false });
     $("#tabs").tabs({
         cache: false,
+        active: window.location.hash ? window.location.hash.substring(1) : 0,
         load: function( event, ui ){
-            $("form").hide();
+            $("form.default-hide").hide();
             $(".toggle").click(function(){
                $("#"+$(this).attr("id")+"Form").toggle();
             });
@@ -44,6 +45,7 @@ function email( address )
   <li><a href="#account">Account</a></li>
   <li><a href="standings?userId=${user.id}">Standings</a></li>
   <li><a href="courses?userId=${user.id}">Course Work</a></li>
+  <li><a href="program?userId=${user.id}">Program</a></li>
   <li><a href="advisement?userId=${user.id}">Advisement</a></li>
   <li><a href="subscriptions?userId=${user.id}">Subscriptions</a></li>
 </ul>

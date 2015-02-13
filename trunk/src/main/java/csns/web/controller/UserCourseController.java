@@ -101,7 +101,8 @@ public class UserCourseController {
         courseSubstitutionDao.saveCourseSubstitution( new CourseSubstitution(
             original, substitute, record ) );
 
-        return "redirect:/user/view?id=" + userId + "#ui-tabs-2";
+        // Course Work is the 3rd tab
+        return "redirect:/user/view?id=" + userId + "#2";
     }
 
     @RequestMapping("/user/course/transfer")
@@ -125,7 +126,8 @@ public class UserCourseController {
         courseTransferDao.saveCourseTransfer( new CourseTransfer( course,
             record ) );
 
-        return "redirect:/user/view?id=" + userId + "#ui-tabs-2";
+        // Course Work is the 3rd tab
+        return "redirect:/user/view?id=" + userId + "#2";
     }
 
     @RequestMapping("/user/course/waive")
@@ -148,7 +150,8 @@ public class UserCourseController {
 
         courseWaiverDao.saveCourseWaiver( new CourseWaiver( course, record ) );
 
-        return "redirect:/user/view?id=" + userId + "#ui-tabs-2";
+        // Course Work is the 3rd tab
+        return "redirect:/user/view?id=" + userId + "#2";
     }
 
 }

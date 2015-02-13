@@ -20,6 +20,7 @@ package csns.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import csns.helper.CourseMapper;
+import csns.helper.ProgramStatus;
+import csns.model.academics.Course;
+import csns.model.academics.Enrollment;
+import csns.model.academics.Program;
+import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
@@ -52,6 +59,9 @@ public class ProfileController {
 
     @Autowired
     private ProgramDao programDao;
+
+    @Autowired
+    private CourseMappingDao courseMappingDao;
 
     @Autowired
     private EnrollmentDao enrollmentDao;
@@ -89,6 +99,30 @@ public class ProfileController {
 
         if( user.getMajor() != null )
             models.put( "programs", programDao.getPrograms( user.getMajor() ) );
+
+        Program program = user.getProgram();
+        if( program != null )
+        {
+            ProgramStatus programStatus = new ProgramStatus( user.getProgram() );
+            CourseMapper courseMapper = new CourseMapper(
+                courseMappingDao.getCourseMappings( program.getDepartment() ) );
+            List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
+            for( Enrollment enrollment : enrollments )
+            {
+                boolean added = programStatus.addEnrollment( enrollment );
+                if( !added )
+                {
+                    Set<Course> mappedCourses = courseMapper.getMappedCourses( enrollment.getSection()
+                        .getCourse() );
+                    if( mappedCourses.size() == 1 )
+                        added = programStatus.addMappedEnrollment(
+                            mappedCourses.iterator().next(), enrollment );
+                    if( !added )
+                        programStatus.addOtherEnrollment( enrollment );
+                }
+            }
+            models.put( "programStatus", programStatus );
+        }
 
         return "profile/program";
     }
@@ -170,7 +204,7 @@ public class ProfileController {
             logger.info( user.getUsername() + " removed program." );
         else
             logger.info( user.getUsername() + " set program to "
-                + user.getProgram().getName() );
+                + user.getProgram().getId() );
 
         // Program is the 3rd tab in Profile
         return "redirect:../profile#2";

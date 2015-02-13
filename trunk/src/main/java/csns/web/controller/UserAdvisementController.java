@@ -81,7 +81,8 @@ public class UserAdvisementController {
         logger.info( SecurityUtils.getUser().getUsername()
             + " created advisement record " + record.getId() );
 
-        return "redirect:/user/view?id=" + userId + "#ui-tabs-3";
+        // Advisement is the 5th tab
+        return "redirect:/user/view?id=" + userId + "#4";
     }
 
 }

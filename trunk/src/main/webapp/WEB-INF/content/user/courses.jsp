@@ -72,7 +72,8 @@ $(function(){
 </c:if>
 
 <p><a class="toggle" id="addCourseSubstitution" href="javascript:void(0)">Add</a></p>
-<form id="addCourseSubstitutionForm" action="course/substitute" enctype="multipart/form-data" method="post">
+<form class="default-hide" id="addCourseSubstitutionForm" action="course/substitute"
+      enctype="multipart/form-data" method="post">
 <p>Substitute
 <input type="text" class="add center" name="original" size="15"/> with
 <input type="text" class="add center" name="substitute" size="15" />.</p>
@@ -102,7 +103,8 @@ $(function(){
 </c:if>
 
 <p><a class="toggle" id="addCourseTransfer" href="javascript:void(0)">Add</a></p>
-<form id="addCourseTransferForm" action="course/transfer" enctype="multipart/form-data" method="post">
+<form class="default-hide" id="addCourseTransferForm" action="course/transfer"
+      enctype="multipart/form-data" method="post">
 <p>Transfer credits for <input type="text" class="add center" name="course" size="15"/>.</p>
 <p>Additional Comment:</p>
 <textarea id="ta2" name="comment" rows="5" cols="80"></textarea>
@@ -130,7 +132,8 @@ $(function(){
 </c:if>
 
 <p><a class="toggle" id="addCourseWaiver" href="javascript:void(0)">Add</a></p>
-<form id="addCourseWaiverForm" action="course/waive" enctype="multipart/form-data" method="post">
+<form class="default-hide" id="addCourseWaiverForm" action="course/waive"
+      enctype="multipart/form-data" method="post">
 <p>Waive the requirement of <input type="text" class="add center" name="course" size="15" />.</p>
 <p>Additional Comment:</p>
 <textarea id="ta3" name="comment" rows="5" cols="80"></textarea>

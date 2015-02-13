@@ -120,7 +120,8 @@ public class UserStandingController {
             userDao.saveUser( student );
         }
 
-        return "redirect:/user/view?id=" + userId + "#ui-tabs-1";
+        // Standing is the 2nd tab
+        return "redirect:/user/view?id=" + userId + "#1";
     }
 
     @RequestMapping("/user/standing/delete")
@@ -149,7 +150,8 @@ public class UserStandingController {
             }
         }
 
-        return "redirect:/user/view?id=" + student.getId() + "#ui-tabs-1";
+        // Standing is the 2nd tab
+        return "redirect:/user/view?id=" + student.getId() + "#1";
     }
 
 }

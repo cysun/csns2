@@ -19,16 +19,11 @@
 package csns.helper;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Program;
-import csns.model.advisement.CourseSubstitution;
-import csns.model.advisement.CourseTransfer;
-import csns.model.advisement.CourseWaiver;
 
 public class ProgramStatus {
 
@@ -39,10 +34,6 @@ public class ProgramStatus {
     List<CourseStatus> electiveCourseStatuses;
 
     List<Enrollment> otherEnrollments;
-
-    Set<Course> requiredCourses;
-
-    Set<Course> electiveCourses;
 
     public ProgramStatus( Program program )
     {
@@ -56,45 +47,136 @@ public class ProgramStatus {
         for( Course course : program.getElectiveCourses() )
             electiveCourseStatuses.add( new CourseStatus( course ) );
 
-        requiredCourses = new HashSet<Course>();
-        requiredCourses.addAll( program.getRequiredCourses() );
-        electiveCourses = new HashSet<Course>();
-        electiveCourses.addAll( program.getElectiveCourses() );
+        otherEnrollments = new ArrayList<Enrollment>();
     }
 
-    public void addEnrollment( Enrollment enrollment )
+    public CourseStatus getCourseStatus( Course course )
     {
+        for( CourseStatus courseStatus : requiredCourseStatuses )
+            if( courseStatus.course.getId().equals( course.getId() ) )
+                return courseStatus;
 
+        for( CourseStatus courseStatus : electiveCourseStatuses )
+            if( courseStatus.course.getId().equals( course.getId() ) )
+                return courseStatus;
+
+        return null;
+    }
+
+    public boolean addEnrollment( Enrollment enrollment )
+    {
+        Course course = enrollment.getSection().getCourse();
+        CourseStatus courseStatus = getCourseStatus( course );
+        if( courseStatus != null )
+        {
+            courseStatus.addEnrollment( enrollment );
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean addMappedEnrollment( Course course, Enrollment enrollment )
+    {
+        CourseStatus courseStatus = getCourseStatus( course );
+        if( courseStatus != null )
+        {
+            courseStatus.addMappedEnrollment( enrollment );
+            return true;
+        }
+
+        return false;
+    }
+
+    public void addOtherEnrollment( Enrollment enrollment )
+    {
+        otherEnrollments.add( enrollment );
+    }
+
+    public Program getProgram()
+    {
+        return program;
+    }
+
+    public List<CourseStatus> getRequiredCourseStatuses()
+    {
+        return requiredCourseStatuses;
+    }
+
+    public List<CourseStatus> getElectiveCourseStatuses()
+    {
+        return electiveCourseStatuses;
+    }
+
+    public List<Enrollment> getOtherEnrollments()
+    {
+        return otherEnrollments;
     }
 
     public class CourseStatus {
 
-        /**
-         * Taken: the course was taken. Mapped: an equivalent course was taken.
-         * Substituted: the course was substituted by another course.
-         * Transferred: the course was transferred. Waived: the course was
-         * waived.
-         * 
-         */
         String status;
 
         Course course;
 
         Enrollment enrollment;
 
-        List<Enrollment> mappedEnrollments;
-
-        CourseSubstitution courseSubstituion;
-
-        CourseTransfer courseTransfer;
-
-        CourseWaiver courseWaiver;
+        Enrollment mappedEnrollment;
 
         public CourseStatus( Course course )
         {
             this.course = course;
-            this.mappedEnrollments = new ArrayList<Enrollment>();
         }
+
+        // Decide if e1 is better than e2
+        private boolean isBetterThan( Enrollment e1, Enrollment e2 )
+        {
+            return e2 == null
+                || e1.getGrade() != null
+                && (e2.getGrade() == null || e2.getSection()
+                    .getQuarter()
+                    .before( e1.getSection().getQuarter() ));
+        }
+
+        public void addEnrollment( Enrollment enrollment )
+        {
+            if( isBetterThan( enrollment, this.enrollment ) )
+            {
+                status = "Taken";
+                this.enrollment = enrollment;
+            }
+        }
+
+        public void addMappedEnrollment( Enrollment enrollment )
+        {
+            if( isBetterThan( enrollment, this.enrollment )
+                && isBetterThan( enrollment, this.mappedEnrollment ) )
+            {
+                status = "Mapped";
+                this.mappedEnrollment = enrollment;
+            }
+        }
+
+        public String getStatus()
+        {
+            return status;
+        }
+
+        public Course getCourse()
+        {
+            return course;
+        }
+
+        public Enrollment getEnrollment()
+        {
+            return enrollment;
+        }
+
+        public Enrollment getMappedEnrollment()
+        {
+            return mappedEnrollment;
+        }
+
     }
 
 }

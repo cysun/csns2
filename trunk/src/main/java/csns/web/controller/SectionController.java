@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -281,7 +281,7 @@ public class SectionController {
     {
         List<Section> sections = null;
         if( StringUtils.hasText( term ) )
-            sections = sectionDao.searchSections( term, 40 );
+            sections = sectionDao.searchSections( term, -1 );
         models.addAttribute( "sections", sections );
         return "section/search";
     }

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -111,6 +111,12 @@ public class DownloadController {
         {
             models.put( "message", "error.file.deleted" );
             return "error";
+        }
+
+        if( !fileIO.getDiskFile( file ).exists() )
+        {
+            response.sendError( HttpServletResponse.SC_NOT_FOUND );
+            return null;
         }
 
         String contentType = contentTypes.getProperty( file.getFileExtension()

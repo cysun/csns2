@@ -36,7 +36,17 @@ function removeItem( blockId, itemId )
 <table class="general">
   <tr>
     <th class="shrink">Block</th>
-    <td>${block.name}</td>
+    <td>
+      <select name="newBlockId">
+        <c:forEach items="${section.site.blocks}" var="siteBlock">
+          <c:if test="${siteBlock.type == 'REGULAR'}">
+          <option value="${siteBlock.id}" <c:if test="${siteBlock.id == block.id}">selected</c:if>>
+            ${siteBlock.name}
+          </option>
+          </c:if>
+        </c:forEach>
+      </select>
+    </td>
   </tr>
   
   <tr>

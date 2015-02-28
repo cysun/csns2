@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -213,10 +213,14 @@ public class SiteBlockControllerS {
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editItem",
         method = RequestMethod.POST)
-    public String editItem( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, @ModelAttribute Block block,
-        @ModelAttribute Item item, @RequestParam(value = "uploadedFile",
-            required = false) MultipartFile uploadedFile,
+    public String editItem(
+        @PathVariable String qtr,
+        @PathVariable String cc,
+        @PathVariable int sn,
+        @ModelAttribute Block block,
+        @RequestParam Long newBlockId,
+        @ModelAttribute Item item,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         itemValidator.validate( item, uploadedFile, bindingResult );
@@ -227,7 +231,17 @@ public class SiteBlockControllerS {
         if( resource.getType() == ResourceType.FILE && uploadedFile != null
             && !uploadedFile.isEmpty() )
             resource.setFile( fileIO.save( uploadedFile, user, true ) );
-        block = blockDao.saveBlock( block );
+
+        if( newBlockId.equals( block.getId() ) )
+            block = blockDao.saveBlock( block );
+        else
+        {
+            block.removeItem( item.getId() );
+            block = blockDao.saveBlock( block );
+            Block newBlock = blockDao.getBlock( newBlockId );
+            newBlock.getItems().add( item );
+            newBlock = blockDao.saveBlock( newBlock );
+        }
         sessionStatus.setComplete();
 
         logger.info( user.getUsername() + " edited item " + item.getId()

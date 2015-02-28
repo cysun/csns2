@@ -9,6 +9,17 @@
 <c:set var="questionSheet" value="${submission.answerSheet.questionSheet}" />
 
 <script>
+function testLocalStorage(){
+    try
+    {
+        localStorage.setItem("test", "test");
+        localStorage.removeItem("test");
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+}
 $(function(){
     $("#dueDate").datetimepicker({
         timeFormat: "HH:mm:ss"
@@ -51,6 +62,21 @@ $(function(){
     $("#ok").click(function(){
         window.location.href = "<c:url value='/submission/list?assignmentId=${assignment.id}' />"; 
     });
+    $(".prev,.next").hide();
+    if( testLocalStorage() && localStorage.getItem("submissionIds") != null
+            && localStorage.getItem("assignmentId") == "${assignment.id}" )
+    {
+        var submissionIds = localStorage.getItem("submissionIds").split(",");
+        var currentIndex = submissionIds.indexOf("${submission.id}");
+        if( currentIndex > 0 )
+          $(".prev").show().click(function(){
+              window.location.href = "grade?id=" + submissionIds[currentIndex-1];
+          });
+        if( currentIndex >=0 && currentIndex < submissionIds.length-1 )
+          $(".next").show().click(function(){
+              window.location.href = "grade?id=" + submissionIds[currentIndex+1];
+          });
+    }
 });
 function toggleFilePublic( fileId )
 {
@@ -78,7 +104,12 @@ function toggleFilePublic( fileId )
 </ul>
 
 <p><a id="dueDateLink" href="javascript:void(0)">Due Date: </a><csns:dueDate
-  date="${submission.effectiveDueDate.time}" datePast="${submission.pastDue}" /></p>
+  date="${submission.effectiveDueDate.time}" datePast="${submission.pastDue}" />
+<span style="float: right; margin-bottom: 5px;">
+<button class="prev subbutton">Prev</button>
+<button class="next subbutton">Next</button>
+</span> 
+</p>
 <form id="dueDateForm" action="<c:url value='/submission/edit' />" method="post">
 <p><input id="dueDate" name="dueDate" class="leftinput" size="20" maxlength="20"
   value="<fmt:formatDate value="${submission.effectiveDueDate.time}" pattern="MM/dd/yyyy HH:mm:ss" />" />
@@ -117,6 +148,10 @@ ${questionSheet.sections[sectionIndex].description}
 <c:if test="${sectionIndex == answerSheet.numOfSections-1}">
   <button id="ok" type="button" class="subbutton">OK</button>
 </c:if>
+<span style="float: right;">
+<button class="prev subbutton">Prev</button>
+<button class="next subbutton">Next</button>
+</span> 
 </p>
 </div>
 </c:if>

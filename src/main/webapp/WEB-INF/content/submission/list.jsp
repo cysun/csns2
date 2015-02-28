@@ -5,9 +5,33 @@
 <c:set var="section" value="${assignment.section}" />
 
 <script>
+function testLocalStorage(){
+    try
+    {
+        localStorage.setItem("test", "test");
+        localStorage.removeItem("test");
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+}
+function saveSubmissionIds(){
+    if( ! testLocalStorage() ) return;
+
+    var submissionIds = [];
+    $(".submission").each(function(){
+        submissionIds.push($(this).attr("data-submission-id"));
+    });
+    localStorage.setItem( "assignmentId", "${assignment.id}" );
+    localStorage.setItem( "submissionIds", submissionIds.join() );
+}
 $(function(){
    $("table").tablesorter({
-      sortList: [[1,0]]
+       sortList: [[1,0]]
+   });
+   $("table").bind("sortEnd", function(){
+       saveSubmissionIds();
    });
    $(".thumbnails").click(function(){
        $(".ui-dialog-content").dialog("close");
@@ -18,6 +42,7 @@ $(function(){
            width:          350
        });
    });
+   saveSubmissionIds();
 });
 </script>
 
@@ -59,7 +84,7 @@ $(function(){
              width="24" height="24" />
       </c:if>
     </td>
-    <td>
+    <td class="submission" data-submission-id="${submission.id}">
       <c:if test="${not empty submission.grade and not submission.gradeMailed}"><img
         src="<c:url value='/img/icons/email.png' />" alt="[Email]" /></c:if>
       <c:if test="${not assignment.online}">

@@ -25,6 +25,7 @@
     </td>
   </tr>
   <tr>
+    <th></th>
     <td><input class="subbutton" type="submit" name="add" value="Add" /></td>
   </tr>
 </table>

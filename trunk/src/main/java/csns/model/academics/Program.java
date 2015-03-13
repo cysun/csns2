@@ -45,6 +45,7 @@ public class Program implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @Column(nullable = false)

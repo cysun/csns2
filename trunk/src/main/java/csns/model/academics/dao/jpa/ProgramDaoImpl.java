@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,15 @@ public class ProgramDaoImpl implements ProgramDao {
         return entityManager.createQuery( query, Program.class )
             .setParameter( "department", department )
             .getResultList();
+    }
+
+    @Override
+    public List<Program> searchPrograms( String term, int maxResults )
+    {
+        TypedQuery<Program> query = entityManager.createNamedQuery(
+            "program.search", Program.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "term", term ).getResultList();
     }
 
     @Override

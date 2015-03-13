@@ -226,30 +226,6 @@
 
     <definition name="profile/mailinglists" template="/WEB-INF/content/profile/mailinglists.jsp" />
 
-    <!-- ====== -->
-    <!-- Course -->
-    <!-- ====== -->
-
-    <definition name="course/search" extends="layout.jqueryui">
-        <put-attribute name="title" value="Courses" />
-        <put-attribute name="content" value="/WEB-INF/content/course/search.jsp" />
-    </definition>
-
-    <definition name="course/view" extends="layout.basic">
-        <put-attribute name="title" value="View Course" />
-        <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
-    </definition>
-
-    <definition name="course/create" extends="layout.jqueryui">
-        <put-attribute name="title" value="Create Course" />
-        <put-attribute name="content" value="/WEB-INF/content/course/create.jsp" />
-    </definition>
-
-    <definition name="course/edit" extends="layout.jqueryui">
-        <put-attribute name="title" value="Edit Course" />
-        <put-attribute name="content" value="/WEB-INF/content/course/edit.jsp" />
-    </definition>
-
     <!-- ========== -->
     <!-- Department -->
     <!-- ========== -->
@@ -277,6 +253,11 @@
     <definition name="department/people" extends="layout.jqueryui">
         <put-attribute name="title" value="People" />
         <put-attribute name="content" value="/WEB-INF/content/department/people.jsp" />
+    </definition>
+
+    <definition name="department/programs" extends="layout.basic">
+        <put-attribute name="title" value="Programs" />
+        <put-attribute name="content" value="/WEB-INF/content/department/programs.jsp" />
     </definition>
 
     <definition name="department/courses" extends="layout.jqueryui">
@@ -323,24 +304,48 @@
     <!-- Program -->
     <!-- ======= -->
 
-    <definition name="course/program/list" extends="layout.basic">
+    <definition name="program/search" extends="layout.basic">
         <put-attribute name="title" value="Programs" />
-        <put-attribute name="content" value="/WEB-INF/content/course/program/list.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/program/search.jsp" />
     </definition>
 
-    <definition name="course/program/view" extends="layout.basic">
+    <definition name="program/view" extends="layout.basic">
         <put-attribute name="title" value="View Program" />
-        <put-attribute name="content" value="/WEB-INF/content/course/program/view.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/program/view.jsp" />
     </definition>
 
-    <definition name="course/program/create" extends="layout.qa">
+    <definition name="program/create" extends="layout.qa">
         <put-attribute name="title" value="Create Program" />
-        <put-attribute name="content" value="/WEB-INF/content/course/program/create.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/program/create.jsp" />
     </definition>
 
-    <definition name="course/program/edit" extends="layout.qa">
+    <definition name="program/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Program" />
-        <put-attribute name="content" value="/WEB-INF/content/course/program/edit.jsp" />
+        <put-attribute name="content" value="/WEB-INF/content/program/edit.jsp" />
+    </definition>
+
+    <!-- ====== -->
+    <!-- Course -->
+    <!-- ====== -->
+
+    <definition name="course/search" extends="layout.jqueryui">
+        <put-attribute name="title" value="Courses" />
+        <put-attribute name="content" value="/WEB-INF/content/course/search.jsp" />
+    </definition>
+
+    <definition name="course/view" extends="layout.basic">
+        <put-attribute name="title" value="View Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
+    </definition>
+
+    <definition name="course/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/create.jsp" />
+    </definition>
+
+    <definition name="course/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Course" />
+        <put-attribute name="content" value="/WEB-INF/content/course/edit.jsp" />
     </definition>
 
     <!-- ============== -->

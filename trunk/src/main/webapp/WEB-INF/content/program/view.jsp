@@ -3,10 +3,9 @@
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
-<li><a class="bc" href="../../courses">${program.department.name}</a></li>
-<li><a class="bc" href="list">Programs</a></li>
-<li><csns:truncate value="${program.name}" length="45" /></li>
+<li><a class="bc" href="<c:url value='/program/search' />">Programs</a></li>
+<li><a class="bc" href="../programs">${program.department.name}</a></li>
+<li><csns:truncate value="${program.name}" length="55" /></li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <li class="align_right"><a href="edit?id=${program.id}"><img alt="[Edit Program]"
   title="Edit Program" src="<c:url value='/img/icons/report_edit.png' />" /></a></li>

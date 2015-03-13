@@ -23,11 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.model.academics.Department;
 import csns.model.academics.Program;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProgramDao;
@@ -44,23 +43,25 @@ public class ProgramController {
 
     private static final Logger logger = LoggerFactory.getLogger( ProgramController.class );
 
-    @RequestMapping("/department/{dept}/course/program/list")
-    public String list( @PathVariable String dept, ModelMap models )
+    @RequestMapping("/program/search")
+    public String search( @RequestParam(required = false) String term,
+        ModelMap models )
     {
-        Department department = departmentDao.getDepartment( dept );
-        models.put( "department", department );
-        models.put( "programs", programDao.getPrograms( department ) );
-        return "course/program/list";
+        if( StringUtils.hasText( term ) )
+            models.addAttribute( "programs",
+                programDao.searchPrograms( term, -1 ) );
+
+        return "program/search";
     }
 
-    @RequestMapping("/department/{dept}/course/program/view")
+    @RequestMapping("/department/{dept}/program/view")
     public String view( @RequestParam Long id, ModelMap models )
     {
         models.put( "program", programDao.getProgram( id ) );
-        return "course/program/view";
+        return "program/view";
     }
 
-    @RequestMapping("/department/{dept}/course/program/clone")
+    @RequestMapping("/department/{dept}/program/clone")
     public String clone( @RequestParam Long id, ModelMap models )
     {
         Program program = programDao.getProgram( id );
@@ -73,7 +74,7 @@ public class ProgramController {
         return "redirect:edit?id=" + newProgram.getId();
     }
 
-    @RequestMapping("/department/{dept}/course/program/remove")
+    @RequestMapping("/department/{dept}/program/remove")
     public String remove( @RequestParam Long id )
     {
         Program program = programDao.getProgram( id );
@@ -83,7 +84,7 @@ public class ProgramController {
         logger.info( SecurityUtils.getUser().getUsername()
             + " removed program " + program.getId() );
 
-        return "redirect:list";
+        return "redirect:../programs";
     }
 
 }

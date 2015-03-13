@@ -53,6 +53,8 @@ $(function(){
     <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
            src="<c:url value='/img/icons/group.png' />" />People</a></li>
 </security:authorize>
+    <li><a href="<c:url value='/department/${dept}/programs' />"><img alt=""
+           src="<c:url value='/img/icons/reports.png' />" />Programs</a></li>
     <li><a href="<c:url value='/department/${dept}/courses' />"><img alt=""
            src="<c:url value='/img/icons/books.png' />" />Courses</a></li>
     <li><a href="<c:url value='/department/${dept}/sections' />"><img alt=""

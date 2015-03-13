@@ -58,9 +58,8 @@ function removeCourse( courseId, courseType )
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
-<li><a class="bc" href="../../courses">${program.department.name}</a></li>
-<li><a class="bc" href="list">Programs</a></li>
+<li><a class="bc" href="<c:url value='/program/search' />">Programs</a></li>
+<li><a class="bc" href="../programs">${program.department.name}</a></li>
 <li>Create Program</li>
 </ul>
 

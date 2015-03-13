@@ -64,10 +64,10 @@ function removeProgram()
 </script>
 
 <ul id="title">
-<li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
-<li><a class="bc" href="../../courses">${program.department.name}</a></li>
-<li><a class="bc" href="list">Programs</a></li>
-<li>Edit Program</li>
+<li><a class="bc" href="<c:url value='/program/search' />">Programs</a></li>
+<li><a class="bc" href="../programs">${program.department.name}</a></li>
+<li><a class="bc" href="view?id=${program.id}"><csns:truncate value="${program.name}" length="50" /></a></li>
+<li>Edit</li>
 <li class="align_right"><a href="javascript:removeProgram()"><img alt="[Remove Program]"
   title="Remove Program" src="<c:url value='/img/icons/report_delete.png' />" /></a></li>
 </ul>

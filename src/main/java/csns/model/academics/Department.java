@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -172,6 +172,11 @@ public class Department implements Serializable {
     private List<Course> additionalGraduateCourses;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "department")
+    @OrderBy("name asc")
+    private List<Program> programs;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
         CascadeType.MERGE })
     @OrderBy("id asc")
@@ -203,6 +208,7 @@ public class Department implements Serializable {
         graduateCourses = new ArrayList<Course>();
         additionalGraduateCourses = new ArrayList<Course>();
 
+        programs = new ArrayList<Program>();
         forums = new ArrayList<Forum>();
         mailinglists = new ArrayList<Mailinglist>();
     }
@@ -347,6 +353,16 @@ public class Department implements Serializable {
         List<Course> additionalGraduateCourses )
     {
         this.additionalGraduateCourses = additionalGraduateCourses;
+    }
+
+    public List<Program> getPrograms()
+    {
+        return programs;
+    }
+
+    public void setPrograms( List<Program> programs )
+    {
+        this.programs = programs;
     }
 
     public List<Forum> getForums()

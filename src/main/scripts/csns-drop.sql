@@ -108,6 +108,8 @@ drop table course_mapping_group2;
 drop table course_mapping_group1;
 drop table course_mappings;
 
+drop trigger programs_ts_trigger on programs;
+drop function programs_ts_trigger_function();
 alter table users drop constraint users_program_fk;
 drop table program_elective_courses;
 drop table program_required_courses;

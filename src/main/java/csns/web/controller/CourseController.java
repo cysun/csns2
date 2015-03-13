@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,8 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +25,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.model.academics.Course;
 import csns.model.academics.dao.CourseDao;
 
 @Controller
@@ -40,11 +37,9 @@ public class CourseController {
     public String search( @RequestParam(required = false) String term,
         ModelMap models )
     {
-        List<Course> courses = null;
         if( StringUtils.hasText( term ) )
-            courses = courseDao.searchCourses( term, -1 );
+            models.addAttribute( "courses", courseDao.searchCourses( term, -1 ) );
 
-        models.addAttribute( "courses", courses );
         return "course/search";
     }
 

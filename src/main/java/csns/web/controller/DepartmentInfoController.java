@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -34,6 +34,7 @@ import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.dao.ProgramDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -46,6 +47,9 @@ public class DepartmentInfoController {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private ProgramDao programDao;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -127,6 +131,13 @@ public class DepartmentInfoController {
         departmentDao.saveDepartment( department );
 
         return "redirect:/department/" + dept + "/people#" + personnel;
+    }
+
+    @RequestMapping(value = "/department/{dept}/programs")
+    public String programs( @PathVariable String dept, ModelMap models )
+    {
+        models.put( "department", departmentDao.getDepartment( dept ) );
+        return "department/programs";
     }
 
     @RequestMapping(value = "/department/{dept}/courses")

@@ -65,7 +65,7 @@ public class ProgramControllerS {
 
     private static final Logger logger = LoggerFactory.getLogger( ProgramControllerS.class );
 
-    @RequestMapping("/department/{dept}/course/program/addCourse")
+    @RequestMapping("/department/{dept}/program/addCourse")
     @ResponseBody
     public ResponseEntity<String> addCourse(
         @ModelAttribute("program") Program program,
@@ -87,7 +87,7 @@ public class ProgramControllerS {
         return new ResponseEntity<String>( HttpStatus.OK );
     }
 
-    @RequestMapping("/department/{dept}/course/program/removeCourse")
+    @RequestMapping("/department/{dept}/program/removeCourse")
     @ResponseStatus(HttpStatus.OK)
     public void removeCourse( @ModelAttribute("program") Program program,
         @RequestParam Long courseId, @RequestParam String courseType )
@@ -106,16 +106,16 @@ public class ProgramControllerS {
             + program.getId() );
     }
 
-    @RequestMapping(value = "/department/{dept}/course/program/create",
+    @RequestMapping(value = "/department/{dept}/program/create",
         method = RequestMethod.GET)
     public String create( @PathVariable String dept, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
         models.put( "program", new Program( department ) );
-        return "course/program/create";
+        return "program/create";
     }
 
-    @RequestMapping(value = "/department/{dept}/course/program/create",
+    @RequestMapping(value = "/department/{dept}/program/create",
         method = RequestMethod.POST)
     public String create( @ModelAttribute("program") Program program,
         BindingResult result, SessionStatus sessionStatus )
@@ -131,15 +131,15 @@ public class ProgramControllerS {
         return "redirect:view?id=" + program.getId();
     }
 
-    @RequestMapping(value = "/department/{dept}/course/program/edit",
+    @RequestMapping(value = "/department/{dept}/program/edit",
         method = RequestMethod.GET)
     public String edit( @RequestParam Long id, ModelMap models )
     {
         models.put( "program", programDao.getProgram( id ) );
-        return "course/program/edit";
+        return "program/edit";
     }
 
-    @RequestMapping(value = "/department/{dept}/course/program/edit",
+    @RequestMapping(value = "/department/{dept}/program/edit",
         method = RequestMethod.POST)
     public String edit( @ModelAttribute("program") Program program,
         BindingResult result, SessionStatus sessionStatus )

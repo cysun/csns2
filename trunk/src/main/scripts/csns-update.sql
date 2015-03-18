@@ -24,3 +24,9 @@ create trigger programs_ts_trigger
 create index programs_ts_index on programs using gin(tsv);
 
 update programs set tsv = to_tsvector('');
+
+update users set first_name = btrim(first_name)
+    where first_name like ' %' or first_name like '% ';
+
+update users set last_name = btrim(last_name)
+    where last_name like ' %' or last_name like '% ';

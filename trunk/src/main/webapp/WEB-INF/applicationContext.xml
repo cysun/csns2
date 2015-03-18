@@ -58,10 +58,14 @@
     <!-- web service security uses access key  -->
     <security:http pattern="/service/**" security="none" />
 
+    <bean id="authenticationFailureHandler" class="csns.security.AuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/401" />
+    </bean>
+
     <security:http use-expressions="true">
         <security:form-login login-page="/login"
             authentication-success-handler-ref="authenticationSuccessHandler"
-            authentication-failure-url="/401" />
+            authentication-failure-handler-ref="authenticationFailureHandler" />
         <security:logout success-handler-ref="logoutRedirectHandler" />
         <security:remember-me data-source-ref="dataSource"/>
         <security:custom-filter ref="departmentFilter" before="LAST" />

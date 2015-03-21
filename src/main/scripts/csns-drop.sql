@@ -142,6 +142,9 @@ drop trigger assignments_ts_trigger on assignments;
 drop function assignments_ts_trigger_function();
 drop table assignments;
 
+drop table section_attendance_events;
+drop table attendance_records;
+drop table attendance_events;
 drop table enrollments;
 drop trigger section_instructors_ts_trigger on section_instructors;
 drop function section_instructors_ts_trigger_function();

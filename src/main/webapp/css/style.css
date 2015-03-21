@@ -1176,6 +1176,14 @@ tr th.shrink, tr td.shrink {
 .course-mapping-item img {
     vertical-align: middle;
 }
+
+/** Attendance **/
+.attended {
+    background-color: #00ff00;
+}
+.absent {
+    background-color: #ff0000;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

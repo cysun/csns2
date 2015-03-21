@@ -30,3 +30,23 @@ update users set first_name = btrim(first_name)
 
 update users set last_name = btrim(last_name)
     where last_name like ' %' or last_name like '% ';
+
+create table attendance_events (
+    id      bigint primary key,
+    name    varchar(255)
+);
+
+create table attendance_records (
+    id          bigint primary key,
+    event_id    bigint not null references attendance_events(id),
+    user_id     bigint not null references users(id),
+    attended    boolean,
+  unique (event_id, user_id)
+);
+
+create table section_attendance_events (
+    section_id  bigint not null references sections(id),
+    event_id    bigint not null references attendance_events(id),
+    event_order integer not null,
+  primary key (section_id, event_order)
+);

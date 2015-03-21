@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -105,6 +105,13 @@ public class Section implements Serializable, Comparable<Section> {
     @JoinColumn(name = "journal_id", unique = true)
     private CourseJournal journal;
 
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinTable(name = "section_attendance_events",
+        joinColumns = @JoinColumn(name = "section_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @OrderColumn(name = "event_order")
+    private List<AttendanceEvent> attendanceEvents;
+
     @Column(nullable = false)
     private boolean deleted;
 
@@ -171,6 +178,18 @@ public class Section implements Serializable, Comparable<Section> {
     {
         return "/site/" + quarter.getShortString().toLowerCase() + "/"
             + course.getCode().toLowerCase() + "-" + number;
+    }
+
+    public boolean removeAttendanceEvent( Long eventId )
+    {
+        for( AttendanceEvent event : attendanceEvents )
+            if( event.getId().equals( eventId ) )
+            {
+                attendanceEvents.remove( event );
+                return true;
+            }
+
+        return false;
     }
 
     public Long getId()
@@ -281,6 +300,16 @@ public class Section implements Serializable, Comparable<Section> {
     public void setJournal( CourseJournal journal )
     {
         this.journal = journal;
+    }
+
+    public List<AttendanceEvent> getAttendanceEvents()
+    {
+        return attendanceEvents;
+    }
+
+    public void setAttendanceEvents( List<AttendanceEvent> attendanceEvents )
+    {
+        this.attendanceEvents = attendanceEvents;
     }
 
     public boolean isDeleted()

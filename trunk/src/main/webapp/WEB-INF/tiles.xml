@@ -418,6 +418,11 @@
         <put-attribute name="content" value="/WEB-INF/content/section/grade.jsp" />
     </definition>
 
+    <definition name="section/attendance" extends="layout.jqueryui">
+        <put-attribute name="title" value="Attendance" />
+        <put-attribute name="content" value="/WEB-INF/content/section/attendance.jsp" />
+    </definition>
+
     <definition name="section/search" extends="layout.jqueryui">
         <put-attribute name="title" value="Search Sections" />
         <put-attribute name="content" value="/WEB-INF/content/section/search.jsp" />

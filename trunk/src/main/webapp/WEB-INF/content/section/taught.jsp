@@ -140,7 +140,8 @@ function createJournal( sectionId )
     <td colspan="2">
       <a href="<c:url value='/assignment/create?sectionId=${section.id}' />">Create Assignment</a> |
       <a href="roster?id=${section.id}">View Students</a> |
-      <a href="roster/import?sectionId=${section.id}">Enroll Students</a>
+      <a href="roster/import?sectionId=${section.id}">Enroll Students</a> |
+      <a href="attendance?sectionId=${section.id}">Take Attendance</a>
     </td>
   </tr>
 </table>

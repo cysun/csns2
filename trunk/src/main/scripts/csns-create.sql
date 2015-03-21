@@ -285,9 +285,9 @@ insert into grades (id, symbol, description) values
 insert into grades (id, symbol, value, description) values
     (2038, 'WU', 0.0, 'Withdraw Unauthorized');
 
-----------------------------------------
--- courses, sections, and enrollments --
-----------------------------------------
+----------------------------------------------------
+-- courses, sections, enrollments, and attendance --
+----------------------------------------------------
 
 create table courses (
     id              bigint primary key,
@@ -382,6 +382,26 @@ create table enrollments (
     comments        text,
     grade_mailed    boolean not null default 'f',
   unique (section_id, student_id)
+);
+
+create table attendance_events (
+    id      bigint primary key,
+    name    varchar(255)
+);
+
+create table attendance_records (
+    id          bigint primary key,
+    event_id    bigint not null references attendance_events(id),
+    user_id     bigint not null references users(id),
+    attended    boolean,
+  unique (event_id, user_id)
+);
+
+create table section_attendance_events (
+    section_id  bigint not null references sections(id),
+    event_id    bigint not null references attendance_events(id),
+    event_order integer not null,
+  primary key (section_id, event_order)
 );
 
 --------------------------------

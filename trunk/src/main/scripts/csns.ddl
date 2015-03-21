@@ -97,6 +97,20 @@
         primary key (id)
     );
 
+    create table attendance_events (
+        id int8 not null,
+        name varchar(255),
+        primary key (id)
+    );
+
+    create table attendance_records (
+        id int8 not null,
+        attended boolean,
+        event_id int8 not null,
+        user_id int8 not null,
+        primary key (id)
+    );
+
     create table authorities (
         user_id int8 not null,
         role varchar(255)
@@ -509,10 +523,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_selections int4,
-        min_selections int4,
         max_rating int4,
         min_rating int4,
+        max_selections int4,
+        min_selections int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -602,6 +616,13 @@
         creator_id int8,
         department_id int8,
         primary key (id)
+    );
+
+    create table section_attendance_events (
+        section_id int8 not null,
+        event_id int8 not null,
+        event_order int4 not null,
+        primary key (section_id, event_order)
     );
 
     create table section_instructors (
@@ -853,6 +874,9 @@
     alter table assignments 
         add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
 
+    alter table attendance_records 
+        add constraint UK_d9cnf76j2ah0h6ww2pgi86391 unique (event_id, user_id);
+
     alter table course_journal_student_samples 
         add constraint UK_p314skj0hft837qpu21d77dgj unique (course_journal_id, enrollment_id);
 
@@ -1030,6 +1054,16 @@
         add constraint FK_7ed6gywfn7fll8aklgvqwxnlr 
         foreign key (question_sheet_id) 
         references question_sheets;
+
+    alter table attendance_records 
+        add constraint FK_iv5bph2mia8yuhuw4yv0fr3l2 
+        foreign key (event_id) 
+        references attendance_events;
+
+    alter table attendance_records 
+        add constraint FK_hj12ee25vjlqkullvl3y80g22 
+        foreign key (user_id) 
+        references users;
 
     alter table authorities 
         add constraint FK_s21btj9mlob1djhm3amivbe5e 
@@ -1590,6 +1624,16 @@
         add constraint FK_9hma4j4gpkpjluxyq40rrvb48 
         foreign key (department_id) 
         references departments;
+
+    alter table section_attendance_events 
+        add constraint FK_74ywrsixd3geat7kdu24w0yjh 
+        foreign key (event_id) 
+        references attendance_events;
+
+    alter table section_attendance_events 
+        add constraint FK_hc50fqaagjbndfmfjx7yahu29 
+        foreign key (section_id) 
+        references sections;
 
     alter table section_instructors 
         add constraint FK_bdnw2i9gn4dyut8n2m2o8is14 

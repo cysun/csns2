@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
  <script>
 $(function(){
@@ -39,34 +40,49 @@ $(function(){
 </form:form>
 
 <c:if test="${not empty programStatus}">
-${programStatus.program.description}
-
 <h4>Required Courses</h4>
 <table class="viewtable autowidth">
 <thead>
-<tr><th>Code</th><th>Name</th><th>Status</th><th colspan="3">Information</th></tr>
+<tr><th>Course</th><th>Status</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${programStatus.requiredCourseStatuses}" var="courseStatus">
 <tr>
-  <td>${courseStatus.course.code}</td>
-  <td>${courseStatus.course.name}</td>
-  <td>${courseStatus.status}</td>
-  <c:choose>
-    <c:when test="${courseStatus.status == 'Taken'}">
-    <td>${courseStatus.enrollment.section.course.code}</td>
-    <td>${courseStatus.enrollment.section.quarter.shortString}</td>
-    <td>${courseStatus.enrollment.grade.symbol}</td>
-    </c:when>
-    <c:when test="${courseStatus.status == 'Mapped'}">
-    <td>${courseStatus.mappedEnrollment.section.course.code}</td>
-    <td>${courseStatus.mappedEnrollment.section.quarter.shortString}</td>
-    <td>${courseStatus.mappedEnrollment.grade.symbol}</td>
-    </c:when>
-    <c:otherwise>
-      <td colspan="3"></td>
-    </c:otherwise>
-  </c:choose>
+  <td>
+    <c:forEach items="${courseStatus.courses}" var="course">
+    <div class="pstat">
+      <div class="pstat-course-code">${course.code}</div>
+      <div><csns:truncate value="${course.name}" length="55" /></div>
+    </div>
+    </c:forEach>
+  </td>
+  <td class="nowrap">
+    <c:forEach items="${courseStatus.enrollments}" var="enrollment">
+    <div class="pstat">
+      <div class="pstat-course-code">${enrollment.section.course.code}</div>
+      <div class="pstat-quarter">${enrollment.section.quarter.shortString}</div>
+      <div>${enrollment.grade.symbol}</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseSubstitutions}" var="substitution">
+    <div class="pstat">
+      <div class="pstat-course-code">${substitution.original.code}</div>
+      <div>Substituted by ${substitution.substitute.code}</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseTransfers}" var="transfer">
+    <div class="pstat">
+      <div class="pstat-course-code">${transfer.course.code}</div>
+      <div>Transferred</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseWaivers}" var="waiver">
+    <div class="pstat">
+      <div class="pstat-course-code">${waiver.course.code}</div>
+      <div>Waived</div>
+    </div>
+    </c:forEach>
+  </td>
 </tr>
 </c:forEach>
 </tbody>
@@ -75,33 +91,51 @@ ${programStatus.program.description}
 <h4>Elective Courses</h4>
 <table class="viewtable autowidth">
 <thead>
-<tr><th>Code</th><th>Name</th><th>Status</th><th colspan="3">Information</th></tr>
+<tr><th>Course</th><th>Status</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${programStatus.electiveCourseStatuses}" var="courseStatus">
 <tr>
-  <c:if test="${not empty courseStatus.status}">
-    <td>${courseStatus.course.code}</td>
-    <td>${courseStatus.course.name}</td>
-    <td>${courseStatus.status}</td>
-  </c:if>
-  <c:choose>
-    <c:when test="${courseStatus.status == 'Taken'}">
-    <td>${courseStatus.enrollment.section.course.code}</td>
-    <td>${courseStatus.enrollment.section.quarter.shortString}</td>
-    <td>${courseStatus.enrollment.grade.symbol}</td>
-    </c:when>
-    <c:when test="${courseStatus.status == 'Mapped'}">
-    <td>${courseStatus.mappedEnrollment.section.course.code}</td>
-    <td>${courseStatus.mappedEnrollment.section.quarter.shortString}</td>
-    <td>${courseStatus.mappedEnrollment.grade.symbol}</td>
-    </c:when>
-  </c:choose>
+  <td>
+    <c:forEach items="${courseStatus.courses}" var="course">
+    <div class="pstat">
+      <div class="pstat-course-code">${course.code}</div>
+      <div><csns:truncate value="${course.name}" length="55" /></div>
+    </div>
+    </c:forEach>
+  </td>
+  <td class="nowrap">
+    <c:forEach items="${courseStatus.enrollments}" var="enrollment">
+    <div class="pstat">
+      <div class="pstat-course-code">${enrollment.section.course.code}</div>
+      <div class="pstat-quarter">${enrollment.section.quarter.shortString}</div>
+      <div>${enrollment.grade.symbol}</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseSubstitutions}" var="substitution">
+    <div class="pstat">
+      <div class="pstat-course-code">${substitution.original.code}</div>
+      <div>Substituted by ${substitution.substitute.code}</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseTransfers}" var="transfer">
+    <div class="pstat">
+      <div class="pstat-course-code">${transfer.course.code}</div>
+      <div>Transferred</div>
+    </div>
+    </c:forEach>
+    <c:forEach items="${courseStatus.courseWaivers}" var="waiver">
+    <div class="pstat">
+      <div class="pstat-course-code">${waiver.course.code}</div>
+      <div>Waived</div>
+    </div>
+    </c:forEach>
+  </td>
 </tr>
 </c:forEach>
 </tbody>
 </table>
-
+ 
 <h4>Other Courses</h4>
 <table class="viewtable autowidth">
 <thead>

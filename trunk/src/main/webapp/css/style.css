@@ -1184,6 +1184,21 @@ tr th.shrink, tr td.shrink {
 .absent {
     background-color: #ff0000;
 }
+
+/** Program Status **/
+.pstat div {
+    display: inline-block;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+.pstat-course-code {
+    width: 4em;
+    border-right:1px solid #dddddd;
+}
+.pstat-quarter {
+    width: 2em;
+    border-right:1px solid #dddddd;
+}
 /************* Editor Border Fix *****************/
 .assignment_date td th,
 .assignment_date td td,

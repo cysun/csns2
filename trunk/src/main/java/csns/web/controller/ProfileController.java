@@ -20,7 +20,6 @@ package csns.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +29,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.helper.CourseMapper;
 import csns.helper.ProgramStatus;
-import csns.model.academics.Course;
-import csns.model.academics.Enrollment;
 import csns.model.academics.Program;
 import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
+import csns.model.advisement.dao.CourseSubstitutionDao;
+import csns.model.advisement.dao.CourseTransferDao;
+import csns.model.advisement.dao.CourseWaiverDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
@@ -65,6 +64,15 @@ public class ProfileController {
 
     @Autowired
     private EnrollmentDao enrollmentDao;
+
+    @Autowired
+    private CourseSubstitutionDao courseSubstitutionDao;
+
+    @Autowired
+    private CourseTransferDao courseTransferDao;
+
+    @Autowired
+    private CourseWaiverDao courseWaiverDao;
 
     @Autowired
     private AdvisementRecordDao advisementRecordDao;
@@ -104,23 +112,12 @@ public class ProfileController {
         if( program != null )
         {
             ProgramStatus programStatus = new ProgramStatus( user.getProgram() );
-            CourseMapper courseMapper = new CourseMapper(
-                courseMappingDao.getCourseMappings( program.getDepartment() ) );
-            List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
-            for( Enrollment enrollment : enrollments )
-            {
-                boolean added = programStatus.addEnrollment( enrollment );
-                if( !added )
-                {
-                    Set<Course> mappedCourses = courseMapper.getMappedCourses( enrollment.getSection()
-                        .getCourse() );
-                    if( mappedCourses.size() == 1 )
-                        added = programStatus.addMappedEnrollment(
-                            mappedCourses.iterator().next(), enrollment );
-                    if( !added )
-                        programStatus.addOtherEnrollment( enrollment );
-                }
-            }
+            programStatus.addCourseMappings( courseMappingDao.getCourseMappings( program.getDepartment() ) );
+            programStatus.addEnrollments( enrollmentDao.getEnrollments( user ) );
+            programStatus.addCourseSubstitutions( courseSubstitutionDao.getCourseSubstitutions( user ) );
+            programStatus.addCourseTransfers( courseTransferDao.getCourseTransfers( user ) );
+            programStatus.addCourseWaivers( courseWaiverDao.getCourseWaivers( user ) );
+            programStatus.sort();
             models.put( "programStatus", programStatus );
         }
 

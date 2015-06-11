@@ -70,6 +70,12 @@ public class DownloadController {
     @Resource(name = "contentTypes")
     private Properties contentTypes;
 
+    // Regex used to replace special characters in filenames when setting the
+    // Content-Disposition header; without this it's difficult to get download
+    // to work properly as different browsers seem to handle special characters
+    // differently.
+    private String replaceRegex = " |,|;";
+
     private static Logger logger = LoggerFactory.getLogger( DownloadController.class );
 
     private Collection<File> removeDuplicates( Collection<File> files )
@@ -126,7 +132,7 @@ public class DownloadController {
         response.setContentType( contentType );
         response.setHeader( "Content-Length", file.getSize().toString() );
         response.setHeader( "Content-Disposition", "inline; filename="
-            + file.getName().replace( ' ', '_' ) );
+            + file.getName().replaceAll( replaceRegex, "_" ) );
 
         fileIO.copy( file, response.getOutputStream() );
 
@@ -142,7 +148,9 @@ public class DownloadController {
         HttpServletResponse response, ModelMap models ) throws IOException
     {
         Submission submission = submissionDao.getSubmission( submissionId );
-        String name = submission.getAssignment().getAlias().replace( ' ', '_' );
+        String name = submission.getAssignment()
+            .getAlias()
+            .replace( replaceRegex, "_" );
 
         response.setContentType( "application/zip" );
         response.setHeader( "Content-Disposition", "attachment; filename="
@@ -159,7 +167,7 @@ public class DownloadController {
         HttpServletResponse response, ModelMap models ) throws IOException
     {
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
-        String name = assignment.getAlias().replace( ' ', '_' );
+        String name = assignment.getAlias().replaceAll( replaceRegex, "_" );
 
         response.setContentType( "application/zip" );
         response.setHeader( "Content-Disposition", "attachment; filename="

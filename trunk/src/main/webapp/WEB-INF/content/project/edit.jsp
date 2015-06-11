@@ -38,19 +38,49 @@ function deletestudents( memberId )
 {
     var msg = "Are you sure you want to remove this student?";
     if( confirm(msg) )
-      $("#students-"+memberId).remove();
+        $.ajax({
+            url: "removeStudent",
+            data: {
+                "studentId" : memberId,
+                "_cid": "${_cid}"
+            },
+            cache: false,
+            success: function(data){
+                $("#students-"+memberId).remove();
+            }
+        });
 }
 function deleteadvisors( memberId )
 {
     var msg = "Are you sure you want to remove this advisor?";
     if( confirm(msg) )
-      $("#advisors-"+memberId).remove();
+        $.ajax({
+            url: "removeAdvisor",
+            data: {
+                "advisorId" : memberId,
+                "_cid": "${_cid}"
+            },
+            cache: false,
+            success: function(data){
+                $("#advisors-"+memberId).remove();
+            }
+        });
 }
 function deleteliaisons( memberId )
 {
     var msg = "Are you sure you want to remove this liaison?";
     if( confirm(msg) )
-      $("#liaisons-"+memberId).remove();
+        $.ajax({
+            url: "removeLiaison",
+            data: {
+                "liaisonId" : memberId,
+                "_cid": "${_cid}"
+            },
+            cache: false,
+            success: function(data){
+                $("#liaisons-"+memberId).remove();
+            }
+        });
 }
 function deleteProject()
 {

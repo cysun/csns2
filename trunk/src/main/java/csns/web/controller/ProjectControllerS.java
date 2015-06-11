@@ -21,6 +21,7 @@ package csns.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
@@ -125,6 +127,39 @@ public class ProjectControllerS {
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/project/view?id="
             + project.getId();
+    }
+
+    @RequestMapping("/department/{dept}/project/removeStudent")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeStudent( @ModelAttribute Project project,
+        @RequestParam Long studentId )
+    {
+        project.removeStudent( studentId );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " removed student " + studentId + " from project "
+            + project.getId() );
+    }
+
+    @RequestMapping("/department/{dept}/project/removeAdvisor")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeAdvisor( @ModelAttribute Project project,
+        @RequestParam Long advisorId )
+    {
+        project.removeAdvisor( advisorId );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " removed advisor " + advisorId + " from project "
+            + project.getId() );
+    }
+
+    @RequestMapping("/department/{dept}/project/removeLiaison")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeLiaison( @ModelAttribute Project project,
+        @RequestParam Long liaisonId )
+    {
+        project.removeLiaison( liaisonId );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " removed liaison " + liaisonId + " from project "
+            + project.getId() );
     }
 
 }

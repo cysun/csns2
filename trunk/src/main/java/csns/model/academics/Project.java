@@ -123,6 +123,16 @@ public class Project implements Serializable {
         return false;
     }
 
+    public void removeStudent( Long studentId )
+    {
+        for( User student : students )
+            if( student.getId().equals( studentId ) )
+            {
+                students.remove( student );
+                break;
+            }
+    }
+
     public boolean isAdvisor( User user )
     {
         if( user == null ) return false;
@@ -133,6 +143,16 @@ public class Project implements Serializable {
         return false;
     }
 
+    public void removeAdvisor( Long advisorId )
+    {
+        for( User advisor : advisors )
+            if( advisor.getId().equals( advisorId ) )
+            {
+                advisors.remove( advisor );
+                break;
+            }
+    }
+
     public boolean isLiaison( User user )
     {
         if( user == null ) return false;
@@ -141,6 +161,16 @@ public class Project implements Serializable {
             if( liaison.getId().equals( user.getId() ) ) return true;
 
         return false;
+    }
+
+    public void removeLiaison( Long liaisonId )
+    {
+        for( User liaison : liaisons )
+            if( liaison.getId().equals( liaisonId ) )
+            {
+                liaisons.remove( liaison );
+                break;
+            }
     }
 
     public Resource getResource( Long resourceId )

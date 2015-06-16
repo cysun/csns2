@@ -1100,9 +1100,9 @@
         <put-attribute name="content" value="/WEB-INF/content/site/view.jsp" />
     </definition>
 
-    <definition name="site/item" extends="layout.basic">
-        <put-attribute name="title" value="View Item" />
-        <put-attribute name="content" value="/WEB-INF/content/site/item.jsp" />
+    <definition name="site/resource" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/site/resource.jsp" />
     </definition>
 
     <definition name="site/nosite" extends="layout.basic">
@@ -1163,6 +1163,16 @@
     <definition name="site/block/editItem" extends="layout.qa">
         <put-attribute name="title" value="Edit Item" />
         <put-attribute name="content" value="/WEB-INF/content/site/block/editItem.jsp" />
+    </definition>
+
+    <definition name="site/block/addResource" extends="layout.qa">
+        <put-attribute name="title" value="Add Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/addResource.jsp" />
+    </definition>
+
+    <definition name="site/block/editResource" extends="layout.qa">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/site/block/editResource.jsp" />
     </definition>
 
     <definition name="site/block/addAnnouncement" extends="layout.qa">

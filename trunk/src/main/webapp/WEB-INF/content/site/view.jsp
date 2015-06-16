@@ -80,7 +80,11 @@ $(function(){
   <ul>
     <c:forEach items="${block.items}" var="item">
       <c:if test="${not item.hidden}">
-      <li><a href="<c:url value='${section.siteUrl}/item/${item.id}' />">${item.name}</a></li>
+      <li><a href="<c:url value='${section.siteUrl}/item/${item.id}' />">${item.name}</a>
+        <c:forEach items="${item.additionalResources}" var="resource">
+          <a href="<c:url value='${section.siteUrl}/resource/${resource.id}' />">${resource.name}</a>
+        </c:forEach>
+      </li>
       </c:if>
     </c:forEach>
   </ul>

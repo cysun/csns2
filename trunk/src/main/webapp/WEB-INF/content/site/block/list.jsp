@@ -90,6 +90,9 @@ $(function(){
       <input type="checkbox" class="item-toggle" data-block-id="${block.id}" data-item-id="${item.id}"
          <c:if test="${not item.hidden}">checked="checked"</c:if> />
       <a href="../item/${item.id}">${item.name}</a>
+        <c:forEach items="${item.additionalResources}" var="resource">
+          <a href="../resource/${resource.id}">${resource.name}</a>
+        </c:forEach>
     </td>
     <td><a href="editItem?blockId=${block.id}&amp;itemId=${item.id}"><img title="Edit Item"
            alt="[Edit Item]" src="<c:url value='/img/icons/plugin_edit.png' />" /></a></td>

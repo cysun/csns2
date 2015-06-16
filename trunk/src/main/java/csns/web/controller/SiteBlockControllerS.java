@@ -47,15 +47,17 @@ import csns.model.site.Item;
 import csns.model.site.Site;
 import csns.model.site.dao.AnnouncementDao;
 import csns.model.site.dao.BlockDao;
+import csns.model.site.dao.ItemDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 import csns.web.validator.AnnouncementValidator;
 import csns.web.validator.BlockValidator;
 import csns.web.validator.ItemValidator;
+import csns.web.validator.ResourceValidator;
 
 @Controller
-@SessionAttributes({ "section", "block", "item", "announcement" })
+@SessionAttributes({ "section", "block", "item", "resource", "announcement" })
 public class SiteBlockControllerS {
 
     @Autowired
@@ -71,6 +73,9 @@ public class SiteBlockControllerS {
     private BlockDao blockDao;
 
     @Autowired
+    private ItemDao itemDao;
+
+    @Autowired
     private AnnouncementDao announcementDao;
 
     @Autowired
@@ -78,6 +83,9 @@ public class SiteBlockControllerS {
 
     @Autowired
     private ItemValidator itemValidator;
+
+    @Autowired
+    private ResourceValidator resourceValidator;
 
     @Autowired
     private AnnouncementValidator announcementValidator;
@@ -248,6 +256,96 @@ public class SiteBlockControllerS {
             + " in block " + block.getId() );
 
         return "redirect:list";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addResource",
+        method = RequestMethod.GET)
+    public String addResource( ModelMap models )
+    {
+        models.put( "resource", new Resource() );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "site/block/addResource";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addResource",
+        method = RequestMethod.POST)
+    public String addResource(
+        @ModelAttribute Item item,
+        @ModelAttribute Resource resource,
+        @RequestParam Long blockId,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus )
+    {
+        resourceValidator.validate( resource, uploadedFile, bindingResult );
+        if( bindingResult.hasErrors() ) return "site/block/addResource";
+
+        User user = SecurityUtils.getUser();
+        if( resource.getType() != ResourceType.NONE )
+        {
+            if( resource.getType() == ResourceType.FILE && uploadedFile != null
+                && !uploadedFile.isEmpty() )
+                resource.setFile( fileIO.save( uploadedFile, user, true ) );
+            item.getAdditionalResources().add( resource );
+            item = itemDao.saveItem( item );
+            logger.info( user.getUsername() + " added a resource to item "
+                + item.getId() + " in block " + blockId );
+        }
+        sessionStatus.setComplete();
+
+        return "redirect:editItem?blockId=" + blockId + "&itemId="
+            + item.getId();
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editResource",
+        method = RequestMethod.GET)
+    public String editResource( @ModelAttribute Item item,
+        @RequestParam int resourceIndex, ModelMap models )
+    {
+        models.put( "resource",
+            item.getAdditionalResources().get( resourceIndex ) );
+        models.put( "resourceTypes", ResourceType.values() );
+        return "site/block/editResource";
+    }
+
+    @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editResource",
+        method = RequestMethod.POST)
+    public String editResource(
+        @ModelAttribute Item item,
+        @ModelAttribute Resource resource,
+        @RequestParam Long blockId,
+        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+        BindingResult bindingResult, SessionStatus sessionStatus )
+    {
+        resourceValidator.validate( resource, uploadedFile, bindingResult );
+        if( bindingResult.hasErrors() ) return "site/block/editResource";
+
+        User user = SecurityUtils.getUser();
+        if( resource.getType() == ResourceType.FILE && uploadedFile != null
+            && !uploadedFile.isEmpty() )
+            resource.setFile( fileIO.save( uploadedFile, user, true ) );
+        item = itemDao.saveItem( item );
+        logger.info( user.getUsername() + " edited a resource of item "
+            + item.getId() + " in block " + blockId );
+        sessionStatus.setComplete();
+
+        return "redirect:editItem?blockId=" + blockId + "&itemId="
+            + item.getId();
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/block/removeResource")
+    public String removeResource( @ModelAttribute Item item,
+        @ModelAttribute Block block, @RequestParam int resourceIndex,
+        SessionStatus sessionStatus )
+    {
+        User user = SecurityUtils.getUser();
+        item.getAdditionalResources().remove( resourceIndex );
+        item = itemDao.saveItem( item );
+        logger.info( user.getUsername() + " removed resource " + resourceIndex
+            + " of item " + item.getId() + " in block " + block.getId() );
+        sessionStatus.setComplete();
+
+        return "redirect:editItem?blockId=" + block.getId() + "&itemId="
+            + item.getId();
     }
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addAnnouncement",

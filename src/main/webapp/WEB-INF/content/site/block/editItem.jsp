@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <script>
 $(function(){
@@ -30,6 +31,9 @@ function removeItem( blockId, itemId )
 <li>Edit Item</li>
 <li class="align_right"><a href="javascript:removeItem()"><img title="Remove Item"
   alt="[Remove Item]" src="<c:url value='/img/icons/plugin_delete.png' />" /></a></li>
+<li class="align_right"><a href="addResource.html?_cid=${_cid}"><img
+  title="Add Additional Resource" alt="[Add Additional Resource]"
+  src="<c:url value='/img/icons/page_add.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="item" enctype="multipart/form-data">
@@ -93,6 +97,25 @@ function removeItem( blockId, itemId )
       <div class="error"><form:errors path="resource.url" /></div>
     </td>
   </tr>
+
+<c:if test="${fn:length(item.additionalResources) > 0}">
+  <tr>
+    <th>Additional Resources</th>
+    <td>
+      <table class="viewtable autowidth">
+        <tbody>
+        <c:forEach items="${item.additionalResources}" var="resource" varStatus="status">
+        <tr data-block-id="${block.id}" data-item-id="${item.id}" data-resource-index="${status.index}">
+          <td><a href="../resource/${resource.id}">${resource.name}</a></td>
+          <td><a href="editResource?_cid=${_cid}&amp;resourceIndex=${status.index}"><img
+            title="Edit Resource" alt="[Edit Resource]" src="<c:url value='/img/icons/page_edit.png' />" /></a></td>
+        </tr>
+        </c:forEach>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</c:if>
 
   <tr>
     <th></th>

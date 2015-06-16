@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -43,7 +43,7 @@ import csns.model.core.File;
 import csns.model.core.Resource;
 import csns.model.core.User;
 import csns.model.core.dao.FileDao;
-import csns.model.site.Item;
+import csns.model.core.dao.ResourceDao;
 import csns.model.site.Site;
 import csns.model.site.dao.ItemDao;
 import csns.model.site.dao.SiteDao;
@@ -58,6 +58,9 @@ public class SiteController {
 
     @Autowired
     private ItemDao itemDao;
+
+    @Autowired
+    private ResourceDao resourceDao;
 
     @Autowired
     private CourseDao courseDao;
@@ -175,18 +178,14 @@ public class SiteController {
             + " to " + result + " for site " + site.getId() );
     }
 
-    @RequestMapping("/site/{qtr}/{cc}-{sn}/item/{itemId}")
-    public String item( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, @PathVariable Long itemId, ModelMap models,
-        HttpServletResponse response )
+    private String resource( String qtr, String cc, int sn, Resource resource,
+        ModelMap models, HttpServletResponse response )
     {
-        Item item = itemDao.getItem( itemId );
-        Resource resource = item.getResource();
         switch( resource.getType() )
         {
             case TEXT:
-                models.put( "item", item );
-                return "site/item";
+                models.put( "resource", resource );
+                return "site/resource";
 
             case FILE:
                 fileIO.write( resource.getFile(), response );
@@ -199,6 +198,24 @@ public class SiteController {
                 logger.warn( "Invalid resource type: " + resource.getType() );
                 return "redirect:" + getSection( qtr, cc, sn ).getSiteUrl();
         }
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/resource/{id}")
+    public String resource( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @PathVariable Long id, ModelMap models,
+        HttpServletResponse response )
+    {
+        return resource( qtr, cc, sn, resourceDao.getResource( id ), models,
+            response );
+    }
+
+    @RequestMapping("/site/{qtr}/{cc}-{sn}/item/{id}")
+    public String item( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @PathVariable Long id, ModelMap models,
+        HttpServletResponse response )
+    {
+        return resource( qtr, cc, sn, itemDao.getItem( id ).getResource(),
+            models, response );
     }
 
     private File getFolder( File parent, String name )

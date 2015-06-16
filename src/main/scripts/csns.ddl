@@ -671,7 +671,9 @@
 
     create table site_item_additional_resources (
         item_id int8 not null,
-        resource_id int8 not null
+        resource_id int8 not null,
+        resource_order int4 not null,
+        primary key (item_id, resource_order)
     );
 
     create table site_items (

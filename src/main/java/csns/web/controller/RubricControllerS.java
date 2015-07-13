@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import csns.model.academics.dao.DepartmentDao;
 import csns.model.assessment.Rubric;
 import csns.model.assessment.RubricIndicator;
 import csns.model.assessment.dao.RubricDao;
@@ -47,15 +46,13 @@ public class RubricControllerS {
     private RubricDao rubricDao;
 
     @Autowired
-    private DepartmentDao departmentDao;
-
-    @Autowired
     private RubricValidator rubricValidator;
 
     @Autowired
     private RubricIndicatorValidator rubricIndicatorValidator;
 
-    private static final Logger logger = LoggerFactory.getLogger( RubricControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( RubricControllerS.class );
 
     @RequestMapping(value = "/department/{dept}/rubric/create",
         method = RequestMethod.GET)
@@ -94,8 +91,8 @@ public class RubricControllerS {
     @RequestMapping(value = "/department/{dept}/rubric/edit",
         method = RequestMethod.POST)
     public String edit( @ModelAttribute Rubric rubric,
-        @RequestParam(value = "next", required = false) String next,
-        BindingResult result, SessionStatus sessionStatus )
+        @RequestParam(value = "next", required = false ) String next,
+        BindingResult result, SessionStatus sessionStatus)
     {
         rubricValidator.validate( rubric, result );
         if( result.hasErrors() ) return "rubric/edit";
@@ -121,9 +118,9 @@ public class RubricControllerS {
     @RequestMapping(value = "/department/{dept}/rubric/addIndicator",
         method = RequestMethod.POST)
     public String addIndicator(
-        @ModelAttribute("indicator") RubricIndicator indicator,
+        @ModelAttribute("indicator" ) RubricIndicator indicator,
         @RequestParam Long rubricId, BindingResult result,
-        SessionStatus sessionStatus )
+        SessionStatus sessionStatus)
     {
         rubricIndicatorValidator.validate( indicator, result );
         if( result.hasErrors() ) return "rubric/addIndicator";
@@ -155,9 +152,9 @@ public class RubricControllerS {
     @RequestMapping(value = "/department/{dept}/rubric/editIndicator",
         method = RequestMethod.POST)
     public String editIndicator(
-        @ModelAttribute("indicator") RubricIndicator indicator,
+        @ModelAttribute("indicator" ) RubricIndicator indicator,
         @RequestParam Long rubricId, @RequestParam Integer indicatorIndex,
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult result, SessionStatus sessionStatus)
     {
         rubricIndicatorValidator.validate( indicator, result );
         if( result.hasErrors() ) return "rubric/editIndicator";
@@ -179,9 +176,9 @@ public class RubricControllerS {
         Rubric rubric = rubricDao.getRubric( rubricId );
         rubric.getIndicators().remove( indicatorIndex );
         rubric = rubricDao.saveRubric( rubric );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " remove indicator #" + indicatorIndex + " from rubric "
-            + rubricId );
+        logger
+            .info( SecurityUtils.getUser().getUsername() + " remove indicator #"
+                + indicatorIndex + " from rubric " + rubricId );
 
         return "redirect:view?id=" + rubricId;
     }

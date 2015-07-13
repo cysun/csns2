@@ -34,7 +34,6 @@ import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
-import csns.model.academics.dao.ProgramDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -49,23 +48,22 @@ public class DepartmentInfoController {
     private CourseDao courseDao;
 
     @Autowired
-    private ProgramDao programDao;
-
-    @Autowired
     private DepartmentDao departmentDao;
 
-    private final static Logger logger = LoggerFactory.getLogger( DepartmentInfoController.class );
+    private final static Logger logger = LoggerFactory
+        .getLogger( DepartmentInfoController.class );
 
     @RequestMapping(value = "/department/{dept}/people")
     public String people( @PathVariable String dept,
-        @RequestParam(required = false) String term, ModelMap models )
+        @RequestParam(required = false ) String term, ModelMap models)
     {
         models.put( "department", departmentDao.getDepartment( dept ) );
         return "department/people";
     }
 
     @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
-    @RequestMapping(value = "/department/{dept}/personnel/{personnel}/{operation}")
+    @RequestMapping(
+        value = "/department/{dept}/personnel/{personnel}/{operation}")
     public String people( @PathVariable String dept,
         @PathVariable String personnel, @PathVariable String operation,
         @RequestParam Long userId )

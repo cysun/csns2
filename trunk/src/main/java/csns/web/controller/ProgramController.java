@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.academics.Program;
-import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProgramDao;
 import csns.security.SecurityUtils;
 
@@ -38,18 +37,15 @@ public class ProgramController {
     @Autowired
     private ProgramDao programDao;
 
-    @Autowired
-    private DepartmentDao departmentDao;
-
-    private static final Logger logger = LoggerFactory.getLogger( ProgramController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ProgramController.class );
 
     @RequestMapping("/program/search")
-    public String search( @RequestParam(required = false) String term,
-        ModelMap models )
+    public String search( @RequestParam(required = false ) String term,
+        ModelMap models)
     {
-        if( StringUtils.hasText( term ) )
-            models.addAttribute( "programs",
-                programDao.searchPrograms( term, -1 ) );
+        if( StringUtils.hasText( term ) ) models.addAttribute( "programs",
+            programDao.searchPrograms( term, -1 ) );
 
         return "program/search";
     }
@@ -67,9 +63,8 @@ public class ProgramController {
         Program program = programDao.getProgram( id );
         Program newProgram = programDao.saveProgram( program.clone() );
 
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " created program " + newProgram.getId() + " from "
-            + program.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " created program "
+            + newProgram.getId() + " from " + program.getId() );
 
         return "redirect:edit?id=" + newProgram.getId();
     }
@@ -81,8 +76,8 @@ public class ProgramController {
         program.setDepartment( null );
         program = programDao.saveProgram( program );
 
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " removed program " + program.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " removed program "
+            + program.getId() );
 
         return "redirect:../programs";
     }

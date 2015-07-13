@@ -37,7 +37,6 @@ import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
-import csns.model.academics.dao.SectionDao;
 import csns.model.academics.dao.SubmissionDao;
 import csns.model.assessment.CourseJournal;
 import csns.model.assessment.dao.CourseJournalDao;
@@ -45,9 +44,6 @@ import csns.security.SecurityUtils;
 
 @Controller
 public class CourseJournalController {
-
-    @Autowired
-    private SectionDao sectionDao;
 
     @Autowired
     private CourseDao courseDao;
@@ -67,7 +63,8 @@ public class CourseJournalController {
     @Autowired
     private CourseJournalDao courseJournalDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( CourseJournalController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( CourseJournalController.class );
 
     @RequestMapping("/department/{dept}/journal/list")
     public String list( @PathVariable String dept, ModelMap models )
@@ -88,7 +85,7 @@ public class CourseJournalController {
 
     @RequestMapping("/department/{dept}/journal/viewOnlineAssignment")
     public String viewOnlineAssignment( @RequestParam Long assignmentId,
-        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
     {
         models.put( "assignment", assignmentDao.getAssignment( assignmentId ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -96,14 +93,13 @@ public class CourseJournalController {
     }
 
     @RequestMapping("/department/{dept}/journal/viewStudent")
-    public String viewStudent( @RequestParam Long enrollmentId, ModelMap models )
+    public String viewStudent( @RequestParam Long enrollmentId,
+        ModelMap models )
     {
         Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
         models.put( "enrollment", enrollment );
-        models.put(
-            "submissions",
-            submissionDao.getSubmissions( enrollment.getStudent(),
-                enrollment.getSection() ) );
+        models.put( "submissions", submissionDao.getSubmissions(
+            enrollment.getStudent(), enrollment.getSection() ) );
         return "journal/viewStudent";
     }
 

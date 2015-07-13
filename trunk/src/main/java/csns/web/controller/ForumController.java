@@ -40,7 +40,6 @@ import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
-import csns.model.forum.dao.TopicDao;
 import csns.security.SecurityUtils;
 
 @Controller
@@ -53,20 +52,18 @@ public class ForumController {
     private ForumDao forumDao;
 
     @Autowired
-    private TopicDao topicDao;
-
-    @Autowired
     private DepartmentDao departmentDao;
 
     @Autowired
     private SubscriptionDao subscriptionDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( ForumController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ForumController.class );
 
     @RequestMapping("/department/{dept}/forum/list")
     public String list( @PathVariable String dept,
-        @RequestParam(required = false) Boolean showAll, HttpSession session,
-        ModelMap models )
+        @RequestParam(required = false ) Boolean showAll, HttpSession session,
+        ModelMap models)
     {
         Department department = departmentDao.getDepartment( dept );
         models.put( "department", department );
@@ -96,8 +93,8 @@ public class ForumController {
         }
         else
         {
-            List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
-                SecurityUtils.getUser(), Forum.class );
+            List<Subscription> subscriptions = subscriptionDao
+                .getSubscriptions( SecurityUtils.getUser(), Forum.class );
             for( Subscription subscription : subscriptions )
             {
                 Forum forum = (Forum) subscription.getSubscribable();

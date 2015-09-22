@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -31,6 +32,10 @@ $(function(){
           toolbar : "Default"
         });
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
 function deletestudents( memberId )
 {
@@ -49,6 +54,10 @@ function deleteliaisons( memberId )
     var msg = "Are you sure you want to remove this liaison?";
     if( confirm(msg) )
       $("#liaisons-"+memberId).remove();
+}
+function help( name )
+{
+    $("#help-"+name).dialog("open");
 }
 </script>
 
@@ -100,6 +109,15 @@ function deleteliaisons( memberId )
     <td><form:input path="year" cssClass="smallerinput" /></td>
   </tr>
 
+  <tr>
+    <th><csns:help name="private">Private</csns:help></th>
+    <td><form:checkbox path="private" /></td>
+  </tr>
+
   <tr><th></th><td><input class="subbutton" type="submit" value="Add" /></td></tr>
 </table>
 </form:form>
+
+<div id="help-private" class="help">
+A <em>private</em> project can only be accessed by the people who are involved
+in the project, i.e. the students, advisors, and project liaisons.</div>

@@ -1310,6 +1310,7 @@ create table projects (
     department_id   bigint references departments(id),
     year            integer not null,
     published       boolean not null default 'f',
+    private         boolean not null default 'f',
     deleted         boolean not null default 'f'
 );
 

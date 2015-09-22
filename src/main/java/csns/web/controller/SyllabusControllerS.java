@@ -120,10 +120,7 @@ public class SyllabusControllerS {
             return "syllabus/edit";
         }
 
-        if( syllabus.getType() == ResourceType.NONE )
-            section.setSyllabus( null );
-        else
-            section.setSyllabus( syllabus );
+        section.setSyllabus( syllabus );
 
         // This is a workaround for a rather weird behavior in Hibernate: when
         // FileDao.saveFile() is called, the syllabus Resource object is

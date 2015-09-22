@@ -59,29 +59,29 @@ public class Project implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "project_students",
-        joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "student_id"))
+        joinColumns = @JoinColumn(name = "project_id") ,
+        inverseJoinColumns = @JoinColumn(name = "student_id") )
     @OrderBy("lastName asc")
     private List<User> students;
 
     @ManyToMany
     @JoinTable(name = "project_advisors",
-        joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "advisor_id"))
+        joinColumns = @JoinColumn(name = "project_id") ,
+        inverseJoinColumns = @JoinColumn(name = "advisor_id") )
     @OrderBy("lastName asc")
     private List<User> advisors;
 
     @ManyToMany
     @JoinTable(name = "project_liaisons",
-        joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "liaison_id"))
+        joinColumns = @JoinColumn(name = "project_id") ,
+        inverseJoinColumns = @JoinColumn(name = "liaison_id") )
     @OrderBy("lastName asc")
     private List<User> liaisons;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "project_resources",
-        joinColumns = @JoinColumn(name = "project_id"),
-        inverseJoinColumns = @JoinColumn(name = "resource_id"))
+        joinColumns = @JoinColumn(name = "project_id") ,
+        inverseJoinColumns = @JoinColumn(name = "resource_id") )
     @OrderColumn(name = "resource_order")
     private List<Resource> resources;
 
@@ -93,6 +93,9 @@ public class Project implements Serializable {
 
     @Column(nullable = false)
     private boolean published;
+
+    @Column(name = "private", nullable = false)
+    private boolean isPrivate;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -110,7 +113,8 @@ public class Project implements Serializable {
 
     public boolean isMember( User user )
     {
-        return isStudent( user ) || isAdvisor( user ) || isLiaison( user );
+        return user != null
+            && (isStudent( user ) || isAdvisor( user ) || isLiaison( user ));
     }
 
     public boolean isStudent( User user )
@@ -315,6 +319,16 @@ public class Project implements Serializable {
     public void setPublished( boolean published )
     {
         this.published = published;
+    }
+
+    public boolean isPrivate()
+    {
+        return isPrivate;
+    }
+
+    public void setPrivate( boolean isPrivate )
+    {
+        this.isPrivate = isPrivate;
     }
 
     public boolean isDeleted()

@@ -37,7 +37,7 @@ $(function(){
 <!-- sidebar -->
 <td id="site-sidebar" colspan="1" rowspan="2" class="shrink">
 <ul>
-  <c:if test="${not empty section.syllabus}">
+  <c:if test="${not empty section.syllabus and section.syllabus.type != 'NONE'}">
   <li><a href="<c:url value='${section.siteUrl}/syllabus' />">Syllabus</a></li>
   </c:if>
   <c:if test="${not empty dept}">

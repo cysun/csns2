@@ -33,6 +33,10 @@ $(function(){
           toolbar : "Default"
         });
     });
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
 function deletestudents( memberId )
 {
@@ -87,6 +91,10 @@ function deleteProject()
     var msg = "Are you sure you want to delete this project?";
     if( confirm(msg) )
         window.location.href = "delete?id=${project.id}";
+}
+function help( name )
+{
+    $("#help-"+name).dialog("open");
 }
 </script>
 
@@ -194,6 +202,15 @@ function deleteProject()
     <td><form:input path="year" cssClass="smallerinput" /></td>
   </tr>
 
+  <tr>
+    <th><csns:help name="private">Private</csns:help></th>
+    <td><form:checkbox path="private" /></td>
+  </tr>
+
   <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
 </table>
 </form:form>
+
+<div id="help-private" class="help">
+A <em>private</em> project can only be accessed by the people who are involved
+in the project, i.e. the students, advisors, and project liaisons.</div>

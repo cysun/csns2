@@ -35,6 +35,7 @@ import csns.model.academics.Department;
 import csns.model.academics.Project;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
+import csns.model.core.User;
 import csns.security.SecurityUtils;
 
 @Controller
@@ -46,11 +47,12 @@ public class ProjectController {
     @Autowired
     private DepartmentDao departmentDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( ProjectController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ProjectController.class );
 
     @RequestMapping("/department/{dept}/projects")
     public String projects( @PathVariable String dept,
-        @RequestParam(required = false) Integer year, ModelMap models )
+        @RequestParam(required = false ) Integer year, ModelMap models)
     {
         Department department = departmentDao.getDepartment( dept );
 
@@ -73,9 +75,20 @@ public class ProjectController {
     public String view( @PathVariable String dept, @RequestParam Long id,
         ModelMap models )
     {
+        User user = SecurityUtils.getUser();
+        Project project = projectDao.getProject( id );
+        if( project.isPrivate() && !project.isMember( user ) )
+        {
+            String backUrl = "/department/" + dept + "/projects?year="
+                + project.getYear();
+            models.put( "backUrl", backUrl );
+            models.put( "message", "error.project.private" );
+            return "error";
+        }
+
+        models.put( "user", user );
+        models.put( "project", project );
         models.put( "department", departmentDao.getDepartment( dept ) );
-        models.put( "project", projectDao.getProject( id ) );
-        models.put( "user", SecurityUtils.getUser() );
         return "project/view";
     }
 
@@ -99,15 +112,15 @@ public class ProjectController {
         project.setDeleted( true );
         project = projectDao.saveProject( project );
 
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " deleted project " + project.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " deleted project "
+            + project.getId() );
 
         return "redirect:/department/" + dept + "/projects";
     }
 
     @RequestMapping(value = "/project/search")
-    public String search( @RequestParam(required = false) String term,
-        ModelMap models )
+    public String search( @RequestParam(required = false ) String term,
+        ModelMap models)
     {
         List<Project> projects = null;
         if( StringUtils.hasText( term ) )

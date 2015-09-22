@@ -54,14 +54,19 @@ public class ProjectResourceControllerS {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( ProjectResourceControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ProjectResourceControllerS.class );
 
     @RequestMapping(value = "/department/{dept}/project/resource/add",
         method = RequestMethod.GET)
     public String add( @RequestParam Long projectId, ModelMap models )
     {
-        models.put( "project", projectDao.getProject( projectId ) );
-        models.put( "resource", new Resource() );
+        Project project = projectDao.getProject( projectId );
+        Resource resource = new Resource();
+        resource.setPrivate( project.isPrivate() );
+
+        models.put( "project", project );
+        models.put( "resource", resource );
         return "project/resource/add";
     }
 
@@ -69,15 +74,14 @@ public class ProjectResourceControllerS {
         method = RequestMethod.POST)
     public String add( @ModelAttribute Resource resource,
         @PathVariable String dept, @RequestParam Long projectId,
-        @RequestParam(required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
+        @RequestParam(required = false ) MultipartFile uploadedFile,
+        BindingResult result, SessionStatus sessionStatus)
     {
         resourceValidator.validate( resource, uploadedFile, result );
         if( result.hasErrors() ) return "project/resource/add";
 
-        if( resource.getType() == ResourceType.FILE )
-            resource.setFile( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), false ) );
+        if( resource.getType() == ResourceType.FILE ) resource.setFile(
+            fileIO.save( uploadedFile, SecurityUtils.getUser(), false ) );
 
         Project project = projectDao.getProject( projectId );
         if( resource.getType() != ResourceType.NONE )
@@ -110,24 +114,23 @@ public class ProjectResourceControllerS {
         method = RequestMethod.POST)
     public String edit( @ModelAttribute Resource resource,
         @PathVariable String dept, @RequestParam Long projectId,
-        @RequestParam(required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus )
+        @RequestParam(required = false ) MultipartFile uploadedFile,
+        BindingResult result, SessionStatus sessionStatus)
     {
         resourceValidator.validate( resource, uploadedFile, result );
         if( result.hasErrors() ) return "project/resource/edit";
 
         if( resource.getType() == ResourceType.FILE && uploadedFile != null
             && !uploadedFile.isEmpty() )
-            resource.setFile( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), false ) );
+            resource.setFile(
+                fileIO.save( uploadedFile, SecurityUtils.getUser(), false ) );
 
         Project project = projectDao.getProject( projectId );
         project.replaceResource( resource );
         projectDao.saveProject( project );
 
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " edited resource " + resource.getId() + " of project "
-            + project.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " edited resource "
+            + resource.getId() + " of project " + project.getId() );
 
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/project/view?id=" + projectId;

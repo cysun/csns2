@@ -54,6 +54,9 @@ public class Program implements Serializable {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
+    @Column(nullable = false)
+    private String name;
+
     private String vision;
 
     private String mission;
@@ -76,6 +79,12 @@ public class Program implements Serializable {
         deleted = false;
     }
 
+    public Program( Department department )
+    {
+        this();
+        this.department = department;
+    }
+
     public Long getId()
     {
         return id;
@@ -94,6 +103,16 @@ public class Program implements Serializable {
     public void setDepartment( Department department )
     {
         this.department = department;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName( String name )
+    {
+        this.name = name;
     }
 
     public String getVision()

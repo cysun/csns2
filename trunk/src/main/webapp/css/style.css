@@ -55,6 +55,9 @@ pre {
 .tt {
     font-family: monospace;
 }
+.big {
+	font-size: 120%;
+}
 
 img {
     border: 0px;

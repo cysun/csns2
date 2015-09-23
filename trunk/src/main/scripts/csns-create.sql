@@ -1509,6 +1509,7 @@ create table rubric_evaluation_ratings (
 create table assessment_programs (
     id              bigint primary key,
     department_id   bigint not null references departments(id),
+    name            varchar(255) not null,
     vision          varchar(8000),
     mission         varchar(8000),
     deleted         boolean not null default 'f'

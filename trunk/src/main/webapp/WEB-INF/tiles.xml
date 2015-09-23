@@ -1185,6 +1185,30 @@
         <put-attribute name="content" value="/WEB-INF/content/site/block/editAnnouncement.jsp" />
     </definition>
 
+    <!-- ==================== -->
+    <!-- Assessment - Program -->
+    <!-- ==================== -->
+
+    <definition name="assessment/program/list" extends="layout.basic">
+        <put-attribute name="title" value="List Programs" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/list.jsp" />
+    </definition>
+
+    <definition name="assessment/program/view" extends="layout.basic">
+        <put-attribute name="title" value="View Program" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/view.jsp" />
+    </definition>
+
+    <definition name="assessment/program/add" extends="layout.editor">
+        <put-attribute name="title" value="Add Program" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit" extends="layout.editor">
+        <put-attribute name="title" value="Edit Program" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

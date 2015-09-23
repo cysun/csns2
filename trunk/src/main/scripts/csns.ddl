@@ -109,6 +109,7 @@
         id int8 not null,
         deleted boolean not null,
         mission varchar(255),
+        name varchar(255) not null,
         vision varchar(255),
         department_id int8 not null,
         primary key (id)

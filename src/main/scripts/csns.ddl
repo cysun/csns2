@@ -71,11 +71,46 @@
         answer_type varchar(31) not null,
         id int8 not null,
         answer_index int4,
-        rating int4,
         text varchar(255),
+        rating int4,
         question_id int8,
         answer_section_id int8 not null,
         attachment_id int8,
+        primary key (id)
+    );
+
+    create table assessment_objective_outcomes (
+        objective_id int8 not null,
+        outcome_id int8 not null
+    );
+
+    create table assessment_objectives (
+        id int8 not null,
+        objective_index int4 not null,
+        text varchar(255),
+        program_id int8,
+        primary key (id)
+    );
+
+    create table assessment_outcome_courses (
+        outcome_id int8 not null,
+        course_id int8 not null
+    );
+
+    create table assessment_outcomes (
+        id int8 not null,
+        outcome_index int4 not null,
+        text varchar(255),
+        program_id int8,
+        primary key (id)
+    );
+
+    create table assessment_programs (
+        id int8 not null,
+        deleted boolean not null,
+        mission varchar(255),
+        vision varchar(255),
+        department_id int8 not null,
         primary key (id)
     );
 
@@ -481,6 +516,7 @@
         id int8 not null,
         deleted boolean not null,
         description varchar(255),
+        private boolean not null,
         published boolean not null,
         sponsor varchar(255),
         title varchar(255) not null,
@@ -523,10 +559,10 @@
         attachment_allowed boolean not null,
         correct_answer varchar(255),
         text_length int4,
-        max_rating int4,
-        min_rating int4,
         max_selections int4,
         min_selections int4,
+        max_rating int4,
+        min_rating int4,
         question_section_id int8,
         question_index int4,
         primary key (id)
@@ -873,6 +909,12 @@
     alter table academic_standings 
         add constraint UK_7hsf5t3wd3nfdl4ckq4tgtjx unique (student_id, department_id, standing_id);
 
+    alter table assessment_objective_outcomes 
+        add constraint UK_n5m8patdl62ikhs3g6rpyvtvp unique (objective_id, outcome_id);
+
+    alter table assessment_outcome_courses 
+        add constraint UK_if9sa65md71dl2ys9grcxpibm unique (outcome_id, course_id);
+
     alter table assignments 
         add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
 
@@ -1041,6 +1083,41 @@
         add constraint FK_i8agbaeksrmm44c8l31gqdtnp 
         foreign key (attachment_id) 
         references files;
+
+    alter table assessment_objective_outcomes 
+        add constraint FK_s9vk6hahkhj8bi7dnwy0f3vn5 
+        foreign key (outcome_id) 
+        references assessment_outcomes;
+
+    alter table assessment_objective_outcomes 
+        add constraint FK_8gm4demha1re8620oyh02dr5l 
+        foreign key (objective_id) 
+        references assessment_objectives;
+
+    alter table assessment_objectives 
+        add constraint FK_haol9jivb5v8r4hawy9efoios 
+        foreign key (program_id) 
+        references assessment_programs;
+
+    alter table assessment_outcome_courses 
+        add constraint FK_dgwl5l628hpo9j1m33gwfy1oc 
+        foreign key (course_id) 
+        references courses;
+
+    alter table assessment_outcome_courses 
+        add constraint FK_d27a4x2c8chgau4u45eq9we21 
+        foreign key (outcome_id) 
+        references assessment_outcomes;
+
+    alter table assessment_outcomes 
+        add constraint FK_dj6lonlpfgnuf8kx9ht4e51a6 
+        foreign key (program_id) 
+        references assessment_programs;
+
+    alter table assessment_programs 
+        add constraint FK_neas05uk8ptp2vl74amam0mt7 
+        foreign key (department_id) 
+        references departments;
 
     alter table assignments 
         add constraint FK_3npt5rig34lv4oy0gystus2ed 

@@ -13,6 +13,12 @@ drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
 
+drop table assessment_outcome_courses;
+drop table assessment_objective_outcomes;
+drop table assessment_outcomes;
+drop table assessment_objectives;
+drop table assessment_programs;
+
 drop table rubric_evaluation_ratings;
 drop table rubric_evaluations;
 drop table rubric_external_evaluators;

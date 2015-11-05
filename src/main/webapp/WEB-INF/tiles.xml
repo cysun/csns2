@@ -1209,6 +1209,16 @@
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit.jsp" />
     </definition>
 
+    <definition name="assessment/program/objectives" extends="layout.basic">
+        <put-attribute name="title" value="Educational Objectives" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/objectives.jsp" />
+    </definition>
+
+    <definition name="assessment/program/addObjective" extends="layout.editor">
+        <put-attribute name="title" value="Add Objective" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/addObjective.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

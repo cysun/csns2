@@ -67,8 +67,10 @@ $(function(){
 <security:authorize access="authenticated and principal.isInstructor('${dept}')">
 <li><a id="assessment-menu" href="#">Assessment</a>
   <div><ul>
+<%--
     <li><a href="<c:url value='/department/${dept}/assessment/program/list' />"><img alt=""
            src="<c:url value='/img/icons/reports.png' />" />Programs</a></li>
+ --%>
     <li id="rubrics-menu-item"><a href="<c:url value='/department/${dept}/rubric/list' />"><img
         alt="" src="<c:url value='/img/icons/table_heatmap2.png' />" />Rubrics</a></li>
     <li id="rubrics-menu-item"><a href="<c:url value='/department/${dept}/journal/list' />"><img

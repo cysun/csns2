@@ -21,7 +21,12 @@
 </div>
 
 <div class="site-block">
-<div class="site-block-title">Educational Objectives</div>
+<div class="site-block-title">Educational Objectives
+  <div class="site-block-operations">
+    <a href="objectives?programId=${program.id}"><img title="Edit Objectives"
+       alt="[Edit Objectives]" src="<c:url value='/img/icons/page_edit.png' />" /></a>
+  </div>
+</div>
 <div class="site-block-content">
 <table class="viewtable autowidth">
   <c:forEach items="${program.objectives}" var="objective" varStatus="status">
@@ -35,13 +40,18 @@
 </div>
 
 <div class="site-block">
-<div class="site-block-title">Student Outcomes</div>
+<div class="site-block-title">Student Outcomes
+  <div class="site-block-operations">
+    <a href="outcomes?programId=${program.id}"><img title="Edit Outcomes"
+       alt="[Edit Outcomes]" src="<c:url value='/img/icons/page_edit.png' />" /></a>
+  </div>
+</div>
 <div class="site-block-content">
 <table class="viewtable autowidth">
-  <c:forEach items="${program.objectives}" var="objective" varStatus="status">
+  <c:forEach items="${program.outcomes}" var="outcome" varStatus="status">
   <tr>
     <td>${status.index+1}</td>
-    <td>${objective.text}</td>
+    <td>${outcome.text}</td>
   </tr>
   </c:forEach>
 </table>

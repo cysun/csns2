@@ -67,14 +67,14 @@ public class Objective implements Serializable {
 
     public Objective()
     {
-        this( null, 0 );
+        outcomes = new ArrayList<Outcome>();
     }
 
     public Objective( Program program, int index )
     {
+        this();
         this.program = program;
         this.index = index;
-        this.outcomes = new ArrayList<Outcome>();
     }
 
     public Long getId()

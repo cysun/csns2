@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,13 +35,14 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import csns.model.academics.Department;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.assessment.Objective;
 import csns.model.assessment.Program;
 import csns.model.assessment.dao.ProgramDao;
 import csns.security.SecurityUtils;
 import csns.web.validator.AssessmentProgramValidator;
 
 @Controller
-@SessionAttributes("program")
+@SessionAttributes({ "program", "objective" })
 public class AssessmentProgramControllerS {
 
     @Autowired
@@ -102,6 +104,37 @@ public class AssessmentProgramControllerS {
 
         sessionStatus.setComplete();
         return "redirect:view?id=" + program.getId();
+    }
+
+    @RequestMapping(
+        value = "/department/{dept}/assessment/program/addObjective",
+        method = RequestMethod.GET)
+    public String addObjective( @RequestParam Long programId, ModelMap models )
+    {
+        models.put( "program", programDao.getProgram( programId ) );
+        models.put( "objective", new Objective() );
+        return "assessment/program/addObjective";
+    }
+
+    @RequestMapping(
+        value = "/department/{dept}/assessment/program/addObjective",
+        method = RequestMethod.POST)
+    public String addObjective( @ModelAttribute Objective objective,
+        @RequestParam Long programId )
+    {
+        if( StringUtils.hasText( objective.getText() ) )
+        {
+            Program program = programDao.getProgram( programId );
+            objective.setProgram( program );
+            objective.setIndex( program.getObjectives().size() );
+            program.getObjectives().add( objective );
+            program = programDao.saveProgram( program );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " added an objective to assessment program " + programId );
+        }
+
+        return "redirect:objectives?programId=" + programId;
     }
 
 }

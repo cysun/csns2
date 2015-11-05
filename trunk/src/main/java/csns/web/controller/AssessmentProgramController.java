@@ -73,4 +73,11 @@ public class AssessmentProgramController {
         return "redirect:list";
     }
 
+    @RequestMapping("/department/{dept}/assessment/program/objectives")
+    public String objectives( @RequestParam Long programId, ModelMap models )
+    {
+        models.put( "program", programDao.getProgram( programId ) );
+        return "assessment/program/objectives";
+    }
+
 }

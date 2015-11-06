@@ -115,7 +115,7 @@ $(function(){
         </c:forEach>
         <c:forEach items="${section.rubricAssignments}" var="assignment">
           <c:if test="${assignment.evaluatedByStudents and assignment.published}">
-          <li><a href="<c:url value='/section/taught#section-${section.id}' />">${assignment.name}</a>,
+          <li><a href="<c:url value='/section/taken#section-${section.id}' />">${assignment.name}</a>,
             Due: <csns:dueDate date="${assignment.dueDate.time}" datePast="${assignment.pastDue}"
             datePattern="EEEE, MMMM dd" /></li>
           </c:if>

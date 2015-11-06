@@ -81,7 +81,8 @@ public class ForumTopicControllerS {
     @Autowired
     private NotificationService notificationService;
 
-    private Logger logger = LoggerFactory.getLogger( ForumTopicControllerS.class );
+    private Logger logger = LoggerFactory
+        .getLogger( ForumTopicControllerS.class );
 
     @RequestMapping(value = "/department/{dept}/forum/topic/create",
         method = RequestMethod.GET)
@@ -94,19 +95,17 @@ public class ForumTopicControllerS {
 
     @RequestMapping(value = "/department/{dept}/forum/topic/create",
         method = RequestMethod.POST)
-    public String create(
-        @ModelAttribute Post post,
-        @PathVariable String dept,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus )
+    public String create( @ModelAttribute Post post, @PathVariable String dept,
+        @RequestParam(value = "file",
+            required = false ) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus)
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/create";
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
 
         post.setAuthor( user );
         post.setDate( new Date() );
@@ -121,12 +120,14 @@ public class ForumTopicControllerS {
 
         subscriptionDao.subscribe( topic, user );
 
-        String subject = "New Topic in CSNS Forum - " + forum.getShortName();
+        String subject = "New Topic in CSNS Forum - " + forum.getShortName()
+            + ": " + topic.getName();
         String vTemplate = "notification.new.forum.topic.vm";
         Map<String, Object> vModels = new HashMap<String, Object>();
         vModels.put( "topic", topic );
         vModels.put( "dept", dept );
-        notificationService.notifiy( forum, subject, vTemplate, vModels, false );
+        notificationService.notifiy( forum, subject, vTemplate, vModels,
+            false );
 
         logger.info( user.getUsername() + " created topic " + topic.getId() );
 
@@ -145,11 +146,10 @@ public class ForumTopicControllerS {
 
     @RequestMapping(value = "/department/{dept}/forum/topic/edit",
         method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute Post post,
-        @PathVariable String dept,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus )
+    public String edit( @ModelAttribute Post post, @PathVariable String dept,
+        @RequestParam(value = "file",
+            required = false ) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus)
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/edit";
@@ -157,9 +157,8 @@ public class ForumTopicControllerS {
         User user = SecurityUtils.getUser();
         post.setEditedBy( user );
         post.setEditDate( new Date() );
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
         post = postDao.savePost( post );
 
         logger.info( user.getUsername() + " edited post " + post.getId() );
@@ -172,7 +171,7 @@ public class ForumTopicControllerS {
     @RequestMapping(value = "/department/{dept}/forum/topic/reply",
         method = RequestMethod.GET)
     public String reply( @RequestParam Long id,
-        @RequestParam(required = false) Long postId, ModelMap models )
+        @RequestParam(required = false ) Long postId, ModelMap models)
     {
         Topic topic = topicDao.getTopic( id );
         Post post = new Post();
@@ -199,19 +198,17 @@ public class ForumTopicControllerS {
 
     @RequestMapping(value = "/department/{dept}/forum/topic/reply",
         method = RequestMethod.POST)
-    public String reply(
-        @ModelAttribute Post post,
-        @PathVariable String dept,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus )
+    public String reply( @ModelAttribute Post post, @PathVariable String dept,
+        @RequestParam(value = "file",
+            required = false ) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus)
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/reply";
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
 
         user.incrementNumOfForumPosts();
         post.setAuthor( user );
@@ -225,14 +222,16 @@ public class ForumTopicControllerS {
 
         subscriptionDao.subscribe( topic, user );
 
-        String subject = "New Reply in CSNS Forum - " + forum.getShortName();
+        String subject = "New Reply in CSNS Forum - " + forum.getShortName()
+            + ": " + topic.getName();
         String vTemplate = "notification.new.forum.reply.vm";
         Map<String, Object> vModels = new HashMap<String, Object>();
         vModels.put( "topic", topic );
         vModels.put( "dept", dept );
         notificationService.notifiy( topic, subject, vTemplate, vModels, true );
 
-        logger.info( user.getUsername() + " replied to topic " + topic.getId() );
+        logger
+            .info( user.getUsername() + " replied to topic " + topic.getId() );
 
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/forum/topic/view?id="
@@ -240,8 +239,7 @@ public class ForumTopicControllerS {
     }
 
     @RequestMapping("/department/{dept}/forum/topic/deleteAttachment")
-    public @ResponseBody
-    String deleteAttachment( @ModelAttribute Post post,
+    public @ResponseBody String deleteAttachment( @ModelAttribute Post post,
         @RequestParam Long fileId )
     {
         for( File attachment : post.getAttachments() )

@@ -81,9 +81,13 @@ body {
 }
 #csns_content #content {
     margin: 0 auto;
-    width: 950px;
-    background: url(../img/layout/content_shadow.gif) repeat-y top center;
-    padding:25px 35px;
+    width: 92%;
+    background-image: url(../img/layout/content_shadow_left.gif),
+                      url(../img/layout/content_shadow_right.gif),
+                      url(../img/layout/content_shadow_center.gif);
+    background-repeat: repeat-y, repeat-y, repeat;
+    background-position: left top, right top, center top;
+    padding:25px 25px;
     min-height:450px;
 }
 

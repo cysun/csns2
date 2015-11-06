@@ -13,6 +13,16 @@ $(function(){
     <c:if test="${empty subscription}">
     $("#unsubscribe").hide();
     </c:if>
+
+    // for each <audio> tag, add a play button
+    $("audio").each(function(index,audio){
+    	var btn = $("<img>", {
+    		src: "<c:url value='/img/icons/control_play_blue.png' />"
+    	}).click(function(){
+    	    audio.play();
+    	});
+    	$(this).after(btn);
+    });
 });
 
 function revert()

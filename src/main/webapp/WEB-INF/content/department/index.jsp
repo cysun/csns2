@@ -3,6 +3,12 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+<script type="text/javascript">
+$(function(){
+    $("#content").css("width", "950px")
+});
+</script>
+
 <img id="welcome" src="<c:url value='/img/style/welcome_banner.jpg' />" alt="welcome" />
 
 <c:if test="${fn:length(newses) == 0}">

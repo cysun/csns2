@@ -1145,7 +1145,31 @@ http://www.w3.org/TR/html401/struct/global.html
 				</literal-list>
 			</attribute>
 		</tag>
-		
+
+        <tag name="audio" action="validate">
+            <attribute name="src">
+                <regexp-list>
+                    <regexp name="onsiteURL"/>
+                    <regexp name="offsiteURL"/>
+                </regexp-list>
+            </attribute> 
+            <attribute name="controls">
+                <regexp-list>
+                    <regexp name="anything" />
+                </regexp-list>
+            </attribute>
+            <attribute name="autoplay">
+                <regexp-list>
+                    <regexp name="anything" />
+                </regexp-list>
+            </attribute>
+            <attribute name="loop">
+                <regexp-list>
+                    <regexp name="anything" />
+                </regexp-list>
+            </attribute>
+        </tag>
+
 	</tag-rules>
 
 

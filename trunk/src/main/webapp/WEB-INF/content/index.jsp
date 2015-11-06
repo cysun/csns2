@@ -7,6 +7,7 @@ $(function(){
     $("button").click(function(){
     	window.location.href = $("select").val();
     });
+    $("#content").css("width", "950px")
 });
 </script>
 

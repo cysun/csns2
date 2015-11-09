@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,11 +18,16 @@
  */
 package csns.model.assessment.dao;
 
+import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricSubmission;
+import csns.model.core.User;
 
 public interface RubricSubmissionDao {
 
     RubricSubmission getRubricSubmission( Long id );
+
+    RubricSubmission getRubricSubmission( User student,
+        RubricAssignment assignment );
 
     RubricSubmission saveRubricSubmission( RubricSubmission submission );
 

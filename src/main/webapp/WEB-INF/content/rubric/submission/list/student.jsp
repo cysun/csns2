@@ -9,6 +9,9 @@ $(function(){
    $("table").tablesorter({
       sortList: [[0,0]]
    });
+   <c:if test="${assignment.pastDue}">
+   $(".no-eval").hide();
+   </c:if>
 });
 </script>
 
@@ -30,8 +33,8 @@ $(function(){
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <c:if test="${submission.student.id != user.id}">
-  <tr>
-    <td><a href="view?id=${submission.id}">${submission.student.lastName},
+  <tr <c:if test="${submission.totalEvaluationCount == 0}">class="no-eval"</c:if>>
+    <td><a href="<c:url value='/rubric/evaluation/student/view?submissionId=${submission.id}' />">${submission.student.lastName},
         ${submission.student.firstName}</a></td>
     <td class="center">${submission.instructorEvaluationCount}</td>
     <c:if test="${assignment.evaluatedByExternal}">

@@ -58,11 +58,20 @@ $(function(){
 </c:forEach>
         <c:forEach items="${section.rubricAssignments}" var="assignment">
         <c:if test="${assignment.evaluatedByStudents and assignment.published}">
-        <tr>
-          <td><a href="<c:url value='/rubric/submission/student/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
-          <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
-              datePast="${assignment.pastDue}" /></td>
-        </tr>
+          <c:if test="${not assignment.pastDue}">
+          <tr>
+            <td><a href="<c:url value='/rubric/submission/student/list?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
+            <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
+                datePast="${assignment.pastDue}" /></td>
+          </tr>
+          </c:if>
+          <c:if test="${assignment.pastDue}">
+          <tr>
+            <td><a href="<c:url value='/rubric/submission/student/view?assignmentId=${assignment.id}' />">${assignment.name}</a></td>
+            <td class="datetime"><csns:dueDate date="${assignment.dueDate.time}"
+                datePast="${assignment.pastDue}" /></td>
+          </tr>
+          </c:if>
         </c:if>
         </c:forEach>
       </table>

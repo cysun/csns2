@@ -1057,17 +1057,17 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/submission/list/student.jsp" />
     </definition>
 
-    <definition name="rubric/submission/view/instructor" extends="layout.jqueryui">
+    <definition name="rubric/submission/view/instructor" extends="layout.chart">
         <put-attribute name="title" value="Rubric Submission" />
         <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/instructor.jsp" />
     </definition>
 
-    <definition name="rubric/submission/view/evaluator" extends="layout.jqueryui">
+    <definition name="rubric/submission/view/evaluator" extends="layout.chart">
         <put-attribute name="title" value="Rubric Submission" />
         <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/evaluator.jsp" />
     </definition>
 
-    <definition name="rubric/submission/view/student" extends="layout.jqueryui">
+    <definition name="rubric/submission/view/student" extends="layout.chart">
         <put-attribute name="title" value="Rubric Submission" />
         <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/student.jsp" />
     </definition>

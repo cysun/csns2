@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="assignment" value="${submission.assignment}" />
 <c:set var="section" value="${assignment.section}" />
@@ -71,11 +70,9 @@ $(function(){
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/${home}#section-${section.id}' />">${section.course.code}
    - ${section.number}</a></li>
-<li><a class="bc" href="../../submission/${role}/list?assignmentId=${assignment.id}"><csns:truncate
-  value="${assignment.name}" length="50" /></a></li>
+<li><a class="bc" href="../../submission/${role}/list?assignmentId=${assignment.id}">${assignment.name}</a></li>
 <c:if test="${role == 'instructor' or role == 'evaluator'}">
-<li><a class="bc" href="../../submission/${role}/view?id=${submission.id}"><csns:truncate
-  value="${submission.student.name}" length="25" /></a></li>
+<li><a class="bc" href="../../submission/${role}/view?id=${submission.id}">${submission.student.name}</a></li>
 <li>Evaluate</li>
 </c:if>
 <c:if test="${role == 'student'}">

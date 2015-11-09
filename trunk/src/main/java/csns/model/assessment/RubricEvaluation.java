@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -70,7 +70,7 @@ public class RubricEvaluation implements Serializable {
 
     @ElementCollection
     @CollectionTable(name = "rubric_evaluation_ratings",
-        joinColumns = @JoinColumn(name = "evaluation_id"))
+        joinColumns = @JoinColumn(name = "evaluation_id") )
     @Column(name = "rating")
     @OrderColumn(name = "rating_order")
     private List<Integer> ratings;
@@ -83,7 +83,8 @@ public class RubricEvaluation implements Serializable {
 
     private boolean deleted;
 
-    private static final Logger logger = LoggerFactory.getLogger( RubricEvaluation.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( RubricEvaluation.class );
 
     public RubricEvaluation()
     {
@@ -117,6 +118,18 @@ public class RubricEvaluation implements Serializable {
                 + evaluator.getUsername() );
             throw new RuntimeException( "Invalid Rubric Evaluaton" );
         }
+    }
+
+    public Double getOverallRating()
+    {
+        if( !completed ) return null;
+
+        Double overallRating = 0.0;
+        for( Integer rating : ratings )
+            overallRating += rating;
+        overallRating /= ratings.size();
+
+        return overallRating;
     }
 
     public void setCompleted()

@@ -18,6 +18,13 @@ $(function(){
            width:          350
        });
    });
+   <c:if test="${assignment.pastDue}">
+   $(".no-eval").hide();
+   $("#no-eval-count").html($(".no-eval").length);
+   $("#no-eval-count").click(function(){
+	  $(".no-eval").toggle(); 
+   });
+   </c:if>
 });
 </script>
 
@@ -38,7 +45,7 @@ $(function(){
 </tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
-  <tr>
+  <tr <c:if test="${submission.totalEvaluationCount == 0}">class="no-eval"</c:if>>
     <td>
       <c:if test="${not empty submission.student.profileThumbnail}">
         <img src="<c:url value='/download.html?fileId=${submission.student.profileThumbnail.id}' />"
@@ -59,3 +66,8 @@ $(function(){
   </c:forEach>
 </tbody>
 </table>
+
+<c:if test="${assignment.pastDue}">
+<p><span id="no-eval-count">n</span>
+students did not receive any evaluation.</p>
+</c:if>

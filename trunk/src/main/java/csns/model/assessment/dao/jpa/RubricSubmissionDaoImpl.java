@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,14 +18,18 @@
  */
 package csns.model.assessment.dao.jpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricSubmission;
 import csns.model.assessment.dao.RubricSubmissionDao;
+import csns.model.core.User;
 
 @Repository
 public class RubricSubmissionDaoImpl implements RubricSubmissionDao {
@@ -37,6 +41,21 @@ public class RubricSubmissionDaoImpl implements RubricSubmissionDao {
     public RubricSubmission getRubricSubmission( Long id )
     {
         return entityManager.find( RubricSubmission.class, id );
+    }
+
+    @Override
+    public RubricSubmission getRubricSubmission( User student,
+        RubricAssignment assignment )
+    {
+        String query = "from RubricSubmission where student = :student "
+            + "and assignment = :assignment";
+
+        List<RubricSubmission> results = entityManager
+            .createQuery( query, RubricSubmission.class )
+            .setParameter( "student", student )
+            .setParameter( "assignment", assignment )
+            .getResultList();
+        return results.size() == 0 ? null : results.get( 0 );
     }
 
     @Override

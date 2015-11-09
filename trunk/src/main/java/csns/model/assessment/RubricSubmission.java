@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -56,8 +56,8 @@ public class RubricSubmission implements Serializable {
     @JoinColumn(name = "assignment_id", nullable = false)
     private RubricAssignment assignment;
 
-    @OneToMany(mappedBy = "submission", cascade = { CascadeType.MERGE,
-        CascadeType.PERSIST })
+    @OneToMany(mappedBy = "submission",
+        cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private List<RubricEvaluation> evaluations;
 
     // Although the following counts can be calculated from evaluations, it's
@@ -123,6 +123,12 @@ public class RubricSubmission implements Serializable {
             if( evaluation.getType() == RubricEvaluation.Type.EXTERNAL )
                 externalEvaluations.add( evaluation );
         return externalEvaluations;
+    }
+
+    public int getTotalEvaluationCount()
+    {
+        return instructorEvaluationCount + externalEvaluationCount
+            + peerEvaluationCount;
     }
 
     public int incrementInstructorEvaluationCount()

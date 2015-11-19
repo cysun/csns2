@@ -101,7 +101,7 @@ public class RubricEvaluationStats {
             stats.setMax( allRatings[i][n - 1] );
             if( n % 2 == 0 )
                 stats.setMedian(
-                    (allRatings[i][n / 2] + allRatings[i][n / 2 + 1]) / 2 );
+                    (allRatings[i][n / 2 - 1] + allRatings[i][n / 2]) / 2 );
             else
                 stats.setMedian( allRatings[i][n / 2] );
             double sum = 0;

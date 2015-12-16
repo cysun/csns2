@@ -1,0 +1,12 @@
+# Directories for generated files
+/target/
+/test-ouput/
+
+# Eclipse files and directories
+.project
+.classpath
+.settings/
+
+# build.properties
+build.properties
+

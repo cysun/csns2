@@ -1,7 +1,7 @@
 <%--
   - This file is part of the CSNetwork Services (CSNS) project.
   -
-  - Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+  - Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
   -
   - CSNS is free software: you can redistribute it and/or modify it under the
   - terms of the GNU Affero General Public License as published by the Free
@@ -17,20 +17,21 @@
   - along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="tilesx" uri="http://tiles.apache.org/tags-tiles-extras" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title><tiles:insertAttribute name="title" defaultValue="CSNS" defaultValueType="string" /></title>
-  <link href="<c:url value='/favicon.ico' />" type="image/x-icon" rel="shortcut icon" /><tiles:useAttribute
+  <link href="<c:url value='/favicon.ico' />" type="image/x-icon" rel="shortcut icon" /><tilesx:useAttribute
     id="cssUrls" name="cssUrls" ignore="true" /><c:forEach items="${cssUrls}" var="cssUrl">
   <link rel="stylesheet" href="<c:url value='${cssUrl}' />" /></c:forEach>
   <link rel="stylesheet" href="<c:url value='/css/layout.css' />">
   <link rel="stylesheet" href="<c:url value='/css/style.css' />">
   <link rel="stylesheet" href="<c:url value='/css/menu.css' />">
   <link rel="stylesheet" href="<c:url value='/css/diff.css' />">
-  <script src="<c:url value='${jquery.url}' />"></script><tiles:useAttribute
+  <script src="<c:url value='${jquery.url}' />"></script><tilesx:useAttribute
     id="jsUrls" name="jsUrls" ignore="true" /><c:forEach items="${jsUrls}" var="jsUrl">
   <script src="<c:url value='${jsUrl}' />"></script></c:forEach>
 <script>

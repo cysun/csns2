@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -66,7 +66,6 @@ public class Setup extends AbstractTransactionalTestNGSpringContextTests {
      * we have to read the file into a string and pass the whole thing to the
      * JDBC driver.
      */
-    @SuppressWarnings("deprecation")
     private void executeSqlScript( String path )
     {
         try
@@ -80,7 +79,7 @@ public class Setup extends AbstractTransactionalTestNGSpringContextTests {
                 sb.append( "\n" );
             }
             in.close();
-            simpleJdbcTemplate.update( sb.toString() );
+            jdbcTemplate.update( sb.toString() );
         }
         catch( Exception e )
         {

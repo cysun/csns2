@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,20 +18,18 @@
  */
 package csns.util;
 
-import java.util.HashMap;
+import java.util.Map;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.ejb.Ejb3Configuration;
+import javax.persistence.Persistence;
+
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.spi.MetadataImplementor;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
+import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
-/**
- * According to Hibernate documentation, both Configuration and
- * Ejb3Configuration are deprecated and will be removed in Hibernate 5.
- * Hopefully by then SchemaExport can be initialized from persistence.xml
- * instead of hibernate.cfg.xml or hibernate.properties, and if so, we can
- * remove this class and run SchemaExport directly.
- */
-@SuppressWarnings("deprecation")
 public class Hbm2ddl {
 
     public static void main( String args[] )
@@ -44,10 +42,22 @@ public class Hbm2ddl {
 
         System.out.print( "Export DDL to " + args[0] + " ... " );
 
-        Configuration cfg = (new Ejb3Configuration()).configure( "csns2",
-            new HashMap<String, Object>() ).getHibernateConfiguration();
+        EntityManagerFactoryImpl entityManagerFactory = (EntityManagerFactoryImpl) Persistence
+            .createEntityManagerFactory( "csns2" );
+        SessionFactoryImpl sessionFactory = (SessionFactoryImpl) entityManagerFactory
+            .getSessionFactory();
+        MetadataSources metadataSources = new MetadataSources(
+            new StandardServiceRegistryBuilder()
+                .applySetting( "hibernate.dialect",
+                    sessionFactory.getDialect().toString() )
+                .build() );
+        Map<String, ClassMetadata> allClassMetadata = sessionFactory
+            .getAllClassMetadata();
+        for( String className : allClassMetadata.keySet() )
+            metadataSources.addAnnotatedClassName( className );
 
-        SchemaExport schemaExport = new SchemaExport( cfg );
+        SchemaExport schemaExport = new SchemaExport(
+            (MetadataImplementor) metadataSources.buildMetadata() );
         schemaExport.setOutputFile( args[0] )
             .setDelimiter( ";" )
             .setFormat( true )

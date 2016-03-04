@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Stack;
 
 import org.springframework.stereotype.Component;
 
@@ -65,18 +64,19 @@ public class RosterParserImpl implements RosterParser {
     {
         Scanner scanner = new Scanner( text );
         scanner.useDelimiter( "\\s+|\\r\\n|\\r|\\n" );
-        String first = scanner.next();
+        scanner.next();
+        String second = scanner.next();
         scanner.close();
 
-        return first.equals( "1" ) ? parse1( text ) : parse2( text );
+        return isCin( second ) ? parse1( text ) : parse2( text );
     }
 
     /**
      * This parser handles the format under CSULA Baseline -> CSULA Student
      * Records -> Class Roster on GET. A sample record is as follows:
-     * "1 123456789 Doe,John M 3.00 ETG CS MS G1". Note that some fields like
-     * middle name and units may not be present, and some people's last name has
-     * space in it.
+     * "1 123456789 Doe,John M 3.00 A- ETG CS MS G1". Note that some fields like
+     * middle name, units, and grade may not be present, and some people's last
+     * name has space in it.
      */
     private List<ImportedUser> parse1( String text )
     {
@@ -156,48 +156,43 @@ public class RosterParserImpl implements RosterParser {
     /**
      * This parser handles the format under Self Service -> Faculty Center -> My
      * Schedule on GET. A sample record is as follows:
-     * "Doe,John M 302043188 3.00 Engr, Comp Sci, & Tech  CS MS". Again, not all
-     * fields may be present.
+     * "1 Photo 123456789 Doe,John M 4.00 Engr, Comp Sci, & Tech G2 01/05/2015".
+     * Again, not all fields may be present.
      */
     private List<ImportedUser> parse2( String text )
     {
         List<ImportedUser> students = new ArrayList<ImportedUser>();
-        Stack<String> stack = new Stack<String>();
 
         Scanner scanner = new Scanner( text );
         scanner.useDelimiter( "\\s+|\\r\\n|\\r|\\n" );
         while( scanner.hasNext() )
         {
-            String name = "";
-            do
-            {
-                String token = scanner.next();
-                if( !isName( token ) )
-                    stack.push( token );
-                else
-                {
-                    name = token;
-                    while( !stack.isEmpty() && !isDegree( stack.peek() ) )
-                        name = stack.pop() + " " + name;
-                    break;
-                }
-            } while( scanner.hasNext() );
+            String cin = scanner.next();
+            if( !isCin( cin ) ) continue;
 
-            String cin = "";
-            boolean cinFound = false;
+            String name = "";
+            boolean nameFound = false;
             while( scanner.hasNext() )
             {
-                cin = scanner.next();
-                if( isCin( cin ) )
+                String token = scanner.next();
+                name += token + " ";
+                if( token.matches( ".+,.*" ) )
                 {
-                    cinFound = true;
+                    if( token.endsWith( "," ) && scanner.hasNext() )
+                        name += scanner.next();
+                    nameFound = true;
                     break;
                 }
-                else
-                    name += " " + cin;
             }
 
-            if( cinFound )
+            while( nameFound && scanner.hasNext() )
+            {
+                String token = scanner.next();
+                if( isUnits( token ) ) break;
+                name += token + " ";
+            }
+
+            if( nameFound )
             {
                 ImportedUser student = new ImportedUser();
                 student.setCin( cin );

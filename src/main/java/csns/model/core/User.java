@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,11 +19,9 @@
 package csns.model.core;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,8 +58,8 @@ import csns.model.survey.Survey;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable, Cloneable, Comparable<User>,
-    UserDetails {
+public class User
+    implements Serializable, Cloneable, Comparable<User>, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -85,7 +83,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "authorities",
-        joinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "user_id") )
     @Column(name = "role")
     private Set<String> roles;
 
@@ -188,8 +186,8 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @JsonIgnore
     @OneToMany
     @JoinTable(name = "current_standings",
-        joinColumns = @JoinColumn(name = "student_id"),
-        inverseJoinColumns = @JoinColumn(name = "academic_standing_id"))
+        joinColumns = @JoinColumn(name = "student_id") ,
+        inverseJoinColumns = @JoinColumn(name = "academic_standing_id") )
     @MapKeyJoinColumn(name = "department_id")
     private Map<Department, AcademicStanding> currentStandings;
 
@@ -197,7 +195,8 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     @ManyToMany
     @JoinTable(name = "surveys_taken",
         joinColumns = { @JoinColumn(name = "user_id", nullable = false) },
-        inverseJoinColumns = { @JoinColumn(name = "survey_id", nullable = false) })
+        inverseJoinColumns = {
+            @JoinColumn(name = "survey_id", nullable = false) })
     private Set<Survey> surveysTaken;
 
     @JsonIgnore
@@ -260,8 +259,8 @@ public class User implements Serializable, Cloneable, Comparable<User>,
             throw new IllegalArgumentException( "Cannot compare to NULL user" );
 
         int comparison = getLastName().compareTo( user.getLastName() );
-        return comparison != 0 ? comparison : getFirstName().compareTo(
-            user.getFirstName() );
+        return comparison != 0 ? comparison
+            : getFirstName().compareTo( user.getFirstName() );
     }
 
     public boolean isSameUser( User user )
@@ -279,21 +278,21 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isAdmin()
     {
         for( String role : roles )
-            if( role.startsWith( "DEPT_ROLE_ADMIN_" ) ) return true;
+            if( role.startsWith( "ROLE_DEPT_ADMIN_" ) ) return true;
 
         return false;
     }
 
     public boolean isAdmin( String dept )
     {
-        return roles.contains( "DEPT_ROLE_ADMIN_" + dept );
+        return roles.contains( "ROLE_DEPT_ADMIN_" + dept );
     }
 
     @JsonIgnore
     public boolean isFaculty()
     {
         for( String role : roles )
-            if( role.startsWith( "DEPT_ROLE_FACULTY_" ) ) return true;
+            if( role.startsWith( "ROLE_DEPT_FACULTY_" ) ) return true;
 
         return isAdmin();
     }
@@ -301,14 +300,14 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isFaculty( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_FACULTY_" + dept ) || isAdmin( dept );
+            && roles.contains( "ROLE_DEPT_FACULTY_" + dept ) || isAdmin( dept );
     }
 
     @JsonIgnore
     public boolean isInstructor()
     {
         for( String role : roles )
-            if( role.startsWith( "DEPT_ROLE_INSTRUCTOR_" ) ) return true;
+            if( role.startsWith( "ROLE_DEPT_INSTRUCTOR_" ) ) return true;
 
         return isFaculty();
     }
@@ -316,7 +315,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isInstructor( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_INSTRUCTOR_" + dept )
+            && roles.contains( "ROLE_DEPT_INSTRUCTOR_" + dept )
             || isFaculty( dept );
     }
 
@@ -324,7 +323,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isEvaluator()
     {
         for( String role : roles )
-            if( role.startsWith( "DEPT_ROLE_EVALUATOR_" ) ) return true;
+            if( role.startsWith( "ROLE_DEPT_EVALUATOR_" ) ) return true;
 
         return false;
     }
@@ -332,14 +331,14 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isEvaluator( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_EVALUATOR_" + dept );
+            && roles.contains( "ROLE_DEPT_EVALUATOR_" + dept );
     }
 
     @JsonIgnore
     public boolean isReviewer()
     {
         for( String role : roles )
-            if( role.startsWith( "DEPT_ROLE_REVIEWER_" ) ) return true;
+            if( role.startsWith( "ROLE_DEPT_REVIEWER_" ) ) return true;
 
         return false;
     }
@@ -347,19 +346,7 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isReviewer( String dept )
     {
         return StringUtils.hasText( dept )
-            && roles.contains( "DEPT_ROLE_IREVIEWER_" + dept );
-    }
-
-    public List<String> getDepartments( String roleName )
-    {
-        String departmentRole = "DEPT_" + roleName + "_";
-
-        List<String> departments = new ArrayList<String>();
-        for( String role : roles )
-            if( role.startsWith( departmentRole ) )
-                departments.add( role.substring( departmentRole.length() ) );
-
-        return departments;
+            && roles.contains( "ROLE_DEPT_REVIEWER_" + dept );
     }
 
     @JsonIgnore
@@ -437,11 +424,6 @@ public class User implements Serializable, Cloneable, Comparable<User>,
     public boolean isCredentialsNonExpired()
     {
         return true;
-    }
-
-    public boolean hasRole( String role )
-    {
-        return roles.contains( role );
     }
 
     public int incrementNumOfForumPosts()

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -61,7 +61,7 @@ public class DepartmentInfoController {
         return "department/people";
     }
 
-    @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
+    @PreAuthorize("hasRole('ROLE_DEPT_ADMIN_' + #dept)")
     @RequestMapping(
         value = "/department/{dept}/personnel/{personnel}/{operation}")
     public String people( @PathVariable String dept,
@@ -145,7 +145,7 @@ public class DepartmentInfoController {
         return "department/courses";
     }
 
-    @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
+    @PreAuthorize("hasRole('ROLE_DEPT_ADMIN_' + #dept)")
     @RequestMapping(value = "/department/{dept}/course/{level}/{operation}")
     public String courses( @PathVariable String dept,
         @PathVariable String level, @PathVariable String operation,

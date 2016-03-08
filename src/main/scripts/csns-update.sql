@@ -1,1 +1,2 @@
-alter table assessment_programs add column name varchar(255) not null;
+update authorities set role = 'ROLE_DEPT' || substring(role from 10)
+	where left(role,9) = 'DEPT_ROLE';

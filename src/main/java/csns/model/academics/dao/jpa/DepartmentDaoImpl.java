@@ -82,7 +82,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('DEPT_ROLE_ADMIN_' + #department.abbreviation)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DEPT_ADMIN_' + #department.abbreviation)")
     public Department saveDepartment( Department department )
     {
         return entityManager.merge( department );

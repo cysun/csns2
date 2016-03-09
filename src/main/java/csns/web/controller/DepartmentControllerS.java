@@ -108,7 +108,7 @@ public class DepartmentControllerS {
         logger.info( SecurityUtils.getUser().getUsername()
             + " added department " + department.getAbbreviation() );
 
-        String adminRole = "DEPT_ROLE_ADMIN_" + department.getAbbreviation();
+        String adminRole = "ROLE_DEPT_ADMIN_" + department.getAbbreviation();
         for( User user : department.getAdministrators() )
         {
             user.getRoles().add( adminRole );

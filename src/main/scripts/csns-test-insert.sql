@@ -15,11 +15,11 @@ insert into users (id, cin, username, password, last_name, first_name, primary_e
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
     (1000005, '1000005', 'ttrejo', md5('abcd'), 'Trejo', 'Tricia', 'ttrejo@localhost.localdomain');
 
-insert into authorities values (1000005, 'DEPT_ROLE_ADMIN_cs');
-insert into authorities values (1000004, 'DEPT_ROLE_ADMIN_cs');
-insert into authorities values (1000004, 'DEPT_ROLE_FACULTY_cs');
-insert into authorities values (1000001, 'DEPT_ROLE_FACULTY_cs');
-insert into authorities values (1000002, 'DEPT_ROLE_INSTRUCTOR_cs');
+insert into authorities values (1000005, 'ROLE_DEPT_ADMIN_cs');
+insert into authorities values (1000004, 'ROLE_DEPT_ADMIN_cs');
+insert into authorities values (1000004, 'ROLE_DEPT_FACULTY_cs');
+insert into authorities values (1000001, 'ROLE_DEPT_FACULTY_cs');
+insert into authorities values (1000002, 'ROLE_DEPT_INSTRUCTOR_cs');
 
 insert into departments (id, name, full_name, abbreviation)
     values (1000100, 'Computer Science', 'Computer Science Department', 'cs');

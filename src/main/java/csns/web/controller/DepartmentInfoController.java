@@ -75,23 +75,23 @@ public class DepartmentInfoController {
         switch( personnel )
         {
             case "admin":
-                role = "DEPT_ROLE_ADMIN_" + dept;
+                role = "ROLE_DEPT_ADMIN_" + dept;
                 users = department.getAdministrators();
                 break;
             case "faculty":
-                role = "DEPT_ROLE_FACULTY_" + dept;
+                role = "ROLE_DEPT_FACULTY_" + dept;
                 users = department.getFaculty();
                 break;
             case "instructor":
-                role = "DEPT_ROLE_INSTRUCTOR_" + dept;
+                role = "ROLE_DEPT_INSTRUCTOR_" + dept;
                 users = department.getInstructors();
                 break;
             case "evaluator":
-                role = "DEPT_ROLE_EVALUATOR_" + dept;
+                role = "ROLE_DEPT_EVALUATOR_" + dept;
                 users = department.getEvaluators();
                 break;
             case "reviewer":
-                role = "DEPT_ROLE_REVIEWER_" + dept;
+                role = "ROLE_DEPT_REVIEWER_" + dept;
                 users = department.getReviewers();
                 break;
             default:

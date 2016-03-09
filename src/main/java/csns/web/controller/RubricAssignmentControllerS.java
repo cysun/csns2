@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,8 +19,11 @@
 package csns.web.controller;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +76,8 @@ public class RubricAssignmentControllerS {
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( RubricAssignmentControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( RubricAssignmentControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -84,6 +88,20 @@ public class RubricAssignmentControllerS {
             new CalendarPropertyEditor() );
     }
 
+    private JSONArray toJSONArray( List<User> users )
+    {
+        JSONArray jsonArray = new JSONArray();
+        for( User user : users )
+        {
+            Map<String, String> json = new HashMap<String, String>();
+            json.put( "id", user.getId().toString() );
+            json.put( "value", user.getName() );
+            json.put( "label", user.getCin() + " " + user.getName() );
+            jsonArray.put( json );
+        }
+        return jsonArray;
+    }
+
     @RequestMapping(value = "/rubric/assignment/create",
         method = RequestMethod.GET)
     public String create( @RequestParam Long sectionId, ModelMap models )
@@ -92,7 +110,8 @@ public class RubricAssignmentControllerS {
         Section section = sectionDao.getSection( sectionId );
         Department department = section.getCourse().getDepartment();
 
-        List<Rubric> rubrics = rubricDao.getPublishedDepartmentRubrics( department );
+        List<Rubric> rubrics = rubricDao
+            .getPublishedDepartmentRubrics( department );
         rubrics.addAll( rubricDao.getPublishedPersonalRubrics( user ) );
         if( rubrics.size() == 0 )
         {
@@ -106,17 +125,21 @@ public class RubricAssignmentControllerS {
         assignment.setRubric( rubrics.get( 0 ) );
         assignment.setName( "Rubric: " + rubrics.get( 0 ).getName() );
 
+        List<User> evaluators = department.getEvaluators();
+        evaluators.removeAll( section.getInstructors() );
+
         models.put( "rubrics", rubrics );
         models.put( "assignment", assignment );
+        models.put( "evaluators", toJSONArray( evaluators ) );
         return "rubric/assignment/create";
     }
 
     @RequestMapping(value = "/rubric/assignment/create",
         method = RequestMethod.POST)
     public String create(
-        @ModelAttribute("assignment") RubricAssignment assignment,
+        @ModelAttribute("assignment" ) RubricAssignment assignment,
         @RequestParam(value = "userId", required = false) Long ids[],
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult result, SessionStatus sessionStatus)
     {
         rubricAssignmentValidator.validate( assignment, result );
         if( result.hasErrors() ) return "rubric/assignment/create";
@@ -136,13 +159,15 @@ public class RubricAssignmentControllerS {
         method = RequestMethod.GET)
     public String edit( @RequestParam Long id, ModelMap models )
     {
-        RubricAssignment assignment = rubricAssignmentDao.getRubricAssignment( id );
+        RubricAssignment assignment = rubricAssignmentDao
+            .getRubricAssignment( id );
 
         User user = SecurityUtils.getUser();
         Department department = assignment.getSection()
             .getCourse()
             .getDepartment();
-        List<Rubric> rubrics = rubricDao.getPublishedDepartmentRubrics( department );
+        List<Rubric> rubrics = rubricDao
+            .getPublishedDepartmentRubrics( department );
         rubrics.addAll( rubricDao.getPublishedPersonalRubrics( user ) );
         if( rubrics.size() == 0 )
         {
@@ -151,17 +176,22 @@ public class RubricAssignmentControllerS {
             return "error";
         }
 
+        List<User> evaluators = department.getEvaluators();
+        evaluators.removeAll( assignment.getSection().getInstructors() );
+        evaluators.removeAll( assignment.getExternalEvaluators() );
+
         models.put( "rubrics", rubrics );
         models.put( "assignment", assignment );
+        models.put( "evaluators", toJSONArray( evaluators ) );
         return "rubric/assignment/edit";
     }
 
     @RequestMapping(value = "/rubric/assignment/edit",
         method = RequestMethod.POST)
     public String edit(
-        @ModelAttribute("assignment") RubricAssignment assignment,
+        @ModelAttribute("assignment" ) RubricAssignment assignment,
         @RequestParam(value = "userId", required = false) Long ids[],
-        BindingResult result, SessionStatus sessionStatus )
+        BindingResult result, SessionStatus sessionStatus)
     {
         rubricAssignmentValidator.validate( assignment, result );
         if( result.hasErrors() ) return "rubric/assignment/edit";

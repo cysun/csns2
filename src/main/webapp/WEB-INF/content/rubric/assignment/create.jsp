@@ -6,8 +6,9 @@
 
 <script>
 $(function(){
+    var evaluators = ${evaluators};
     $(".add").autocomplete({
-        source: "<c:url value='/autocomplete/user' />",
+        source: evaluators,
         select: function(event, ui) {
             if( ui.item )
             {

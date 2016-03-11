@@ -26,64 +26,64 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
-import csns.model.academics.dao.QuarterDao;
+import csns.model.academics.Term;
+import csns.model.academics.dao.TermDao;
 import csns.model.core.User;
 
 @Repository
-public class QuarterDaoImpl implements QuarterDao {
+public class TermDaoImpl implements TermDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<Quarter> getQuartersByInstructor( User instructor )
+    public List<Term> getTermsByInstructor( User instructor )
     {
-        String query = "select distinct section.quarter from Section section "
+        String query = "select distinct section.term from Section section "
             + "join section.instructors instructor "
             + "where instructor = :instructor "
-            + "order by section.quarter desc";
+            + "order by section.term desc";
 
-        return entityManager.createQuery( query, Quarter.class )
+        return entityManager.createQuery( query, Term.class )
             .setParameter( "instructor", instructor )
             .getResultList();
     }
 
     @Override
-    public List<Quarter> getQuartersByStudent( User student )
+    public List<Term> getTermsByStudent( User student )
     {
-        String query = "select distinct section.quarter from Section section "
+        String query = "select distinct section.term from Section section "
             + "join section.enrollments enrollment "
             + "where enrollment.student = :student "
-            + "order by section.quarter desc";
+            + "order by section.term desc";
 
-        return entityManager.createQuery( query, Quarter.class )
+        return entityManager.createQuery( query, Term.class )
             .setParameter( "student", student )
             .getResultList();
     }
 
     @Override
-    public List<Quarter> getQuartersByEvaluator( User evaluator )
+    public List<Term> getTermsByEvaluator( User evaluator )
     {
-        String query = "select distinct section.quarter from Section section "
+        String query = "select distinct section.term from Section section "
             + "join section.rubricAssignments assignment "
             + "join assignment.externalEvaluators evaluator "
-            + "where evaluator = :evaluator order by section.quarter desc";
+            + "where evaluator = :evaluator order by section.term desc";
 
-        return entityManager.createQuery( query, Quarter.class )
+        return entityManager.createQuery( query, Term.class )
             .setParameter( "evaluator", evaluator )
             .getResultList();
     }
 
     @Override
-    public List<Quarter> getSectionQuarters( Department department )
+    public List<Term> getSectionTerms( Department department )
     {
-        String query = "select distinct s.quarter from Section s, "
+        String query = "select distinct s.term from Section s, "
             + "Department d join d.undergraduateCourses c1 join d.graduateCourses c2 "
             + "where d = :department and (s.course = c1 or s.course = c2) "
-            + "order by s.quarter desc";
+            + "order by s.term desc";
 
-        return entityManager.createQuery( query, Quarter.class )
+        return entityManager.createQuery( query, Term.class )
             .setParameter( "department", department )
             .getResultList();
     }

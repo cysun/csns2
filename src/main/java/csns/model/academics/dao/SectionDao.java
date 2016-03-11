@@ -22,7 +22,7 @@ import java.util.List;
 
 import csns.model.academics.Course;
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.assessment.Rubric;
 import csns.model.core.User;
@@ -31,24 +31,24 @@ public interface SectionDao {
 
     Section getSection( Long id );
 
-    Section getSection( Quarter quarter, Course course, int number );
+    Section getSection( Term term, Course course, int number );
 
-    List<Section> getSections( Department department, Quarter quarter );
+    List<Section> getSections( Department department, Term term );
 
-    List<Section> getSectionsByInstructor( User instructor, Quarter quarter );
+    List<Section> getSectionsByInstructor( User instructor, Term term );
 
-    List<Section> getSectionsByInstructor( User instructor, Quarter quarter,
+    List<Section> getSectionsByInstructor( User instructor, Term term,
         Course course );
 
-    List<Section> getSectionsByStudent( User student, Quarter quarter );
+    List<Section> getSectionsByStudent( User student, Term term );
 
-    List<Section> getSectionsByEvaluator( User evaluator, Quarter quarter );
+    List<Section> getSectionsByEvaluator( User evaluator, Term term );
 
     List<Section> getSectionsByRubric( Rubric rubric );
 
-    List<Section> searchSections( String term, int maxResults );
+    List<Section> searchSections( String text, int maxResults );
 
-    Section addSection( Quarter quarter, Course course, User instructor );
+    Section addSection( Term term, Course course, User instructor );
 
     Section deleteSection( Section section );
 

@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import csns.model.academics.Course;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
@@ -78,10 +78,10 @@ public class SiteController {
 
     private Section getSection( String qtr, String cc, int sn )
     {
-        Quarter quarter = new Quarter();
-        quarter.setShortString( qtr );
+        Term term = new Term();
+        term.setShortString( qtr );
         Course course = courseDao.getCourse( cc );
-        return sectionDao.getSection( quarter, course, sn );
+        return sectionDao.getSection( term, course, sn );
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}")
@@ -113,7 +113,7 @@ public class SiteController {
             return "error";
         }
 
-        if( site.isLimited() && section.getQuarter().before( new Date() )
+        if( site.isLimited() && section.getTerm().before( new Date() )
             && !isInstructor && !isAdmin )
         {
             models.put( "message", "error.site.limited" );

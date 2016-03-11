@@ -35,7 +35,7 @@ GET roster. Please first use the search function to check if the student
 already has an account on CSNS.</p>
 
 <p>
-<input id="search" name="term" type="text" class="forminput" size="40" />
+<input id="search" name="text" type="text" class="forminput" size="40" />
 <button class="subbutton">Search</button>
 </p>
 

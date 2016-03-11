@@ -98,12 +98,12 @@ public class RubricDaoImpl implements RubricDao {
     }
 
     @Override
-    public List<Rubric> searchRubrics( String term, int maxResults )
+    public List<Rubric> searchRubrics( String text, int maxResults )
     {
         TypedQuery<Rubric> query = entityManager.createNamedQuery(
             "rubric.search", Rubric.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

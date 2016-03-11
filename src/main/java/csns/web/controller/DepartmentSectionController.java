@@ -40,14 +40,14 @@ import csns.helper.GradeSheet;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.Enrollment;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.DepartmentDao;
-import csns.model.academics.dao.QuarterDao;
+import csns.model.academics.dao.TermDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.web.editor.CoursePropertyEditor;
-import csns.web.editor.QuarterPropertyEditor;
+import csns.web.editor.TermPropertyEditor;
 
 @Controller
 @SessionAttributes("importer")
@@ -57,7 +57,7 @@ public class DepartmentSectionController {
     private SectionDao sectionDao;
 
     @Autowired
-    private QuarterDao quarterDao;
+    private TermDao termDao;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -68,30 +68,30 @@ public class DepartmentSectionController {
     @InitBinder
     public void initBinder( WebDataBinder binder )
     {
-        binder.registerCustomEditor( Quarter.class,
-            (QuarterPropertyEditor) context.getBean( "quarterPropertyEditor" ) );
+        binder.registerCustomEditor( Term.class,
+            (TermPropertyEditor) context.getBean( "termPropertyEditor" ) );
         binder.registerCustomEditor( Course.class,
             (CoursePropertyEditor) context.getBean( "coursePropertyEditor" ) );
     }
 
     @RequestMapping("/department/{dept}/sections")
     public String sections( @PathVariable String dept,
-        @RequestParam(required = false) Quarter quarter, ModelMap models )
+        @RequestParam(required = false) Term term, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
-        List<Quarter> quarters = quarterDao.getSectionQuarters( department );
+        List<Term> terms = termDao.getSectionTerms( department );
 
-        Quarter currentQuarter = new Quarter();
-        if( quarter == null ) quarter = currentQuarter;
-        if( !quarters.contains( currentQuarter ) )
-            quarters.add( 0, currentQuarter );
-        Quarter nextQuarter = currentQuarter.next();
-        if( !quarters.contains( nextQuarter ) ) quarters.add( 0, nextQuarter );
+        Term currentTerm = new Term();
+        if( term == null ) term = currentTerm;
+        if( !terms.contains( currentTerm ) )
+            terms.add( 0, currentTerm );
+        Term nextTerm = currentTerm.next();
+        if( !terms.contains( nextTerm ) ) terms.add( 0, nextTerm );
 
         models.put( "department", department );
-        models.put( "quarter", quarter );
-        models.put( "quarters", quarters );
-        models.put( "sections", sectionDao.getSections( department, quarter ) );
+        models.put( "term", term );
+        models.put( "terms", terms );
+        models.put( "sections", sectionDao.getSections( department, term ) );
         return "department/sections";
     }
 
@@ -106,11 +106,11 @@ public class DepartmentSectionController {
     }
 
     @RequestMapping("/department/{dept}/section/grades")
-    public String grades( @RequestParam Quarter quarter,
+    public String grades( @RequestParam Term term,
         @RequestParam Course course, @RequestParam int number,
         HttpServletResponse response ) throws IOException
     {
-        Section section = sectionDao.getSection( quarter, course, number );
+        Section section = sectionDao.getSection( term, course, number );
         if( section != null )
         {
             List<Enrollment> enrollments = section.getEnrollments();

@@ -50,7 +50,7 @@ public class SiteDaoImpl implements SiteDao {
     {
         String query = "select s from Site s join s.section.instructors i "
             + "where s.section.course = :course and (s.shared = true or i = :instructor) "
-            + "order by s.section.quarter desc, s.section.number asc";
+            + "order by s.section.term desc, s.section.number asc";
 
         TypedQuery<Site> typedQuery = entityManager.createQuery( query,
             Site.class )

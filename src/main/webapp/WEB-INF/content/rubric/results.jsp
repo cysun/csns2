@@ -23,7 +23,7 @@
   </td>
   <td>
   <c:forEach items="${mappedSection.value}" var="section">
-    <a href="results.html?rubricId=${rubric.id}&amp;sectionId=${section.id}">${section.quarter.shortString}</a>
+    <a href="results.html?rubricId=${rubric.id}&amp;sectionId=${section.id}">${section.term.shortString}</a>
   </c:forEach>
   </td>
 </tr>

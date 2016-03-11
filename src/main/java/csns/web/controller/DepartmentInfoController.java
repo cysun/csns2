@@ -54,8 +54,7 @@ public class DepartmentInfoController {
         .getLogger( DepartmentInfoController.class );
 
     @RequestMapping(value = "/department/{dept}/people")
-    public String people( @PathVariable String dept,
-        @RequestParam(required = false ) String term, ModelMap models)
+    public String people( @PathVariable String dept, ModelMap models)
     {
         models.put( "department", departmentDao.getDepartment( dept ) );
         return "department/people";

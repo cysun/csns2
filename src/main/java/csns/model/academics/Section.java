@@ -52,7 +52,7 @@ import csns.model.site.Site;
 
 @Entity
 @Table(name = "sections", uniqueConstraints = @UniqueConstraint(columnNames = {
-    "quarter", "course_id", "number" }))
+    "term", "course_id", "number" }))
 public class Section implements Serializable, Comparable<Section> {
 
     private static final long serialVersionUID = 1L;
@@ -63,8 +63,8 @@ public class Section implements Serializable, Comparable<Section> {
 
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "code",
-        column = @Column(name = "quarter", nullable = false)) })
-    private Quarter quarter;
+        column = @Column(name = "term", nullable = false)) })
+    private Term term;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
@@ -131,7 +131,7 @@ public class Section implements Serializable, Comparable<Section> {
 
         if( id.equals( section.id ) ) return 0;
 
-        int cmp = getQuarter().getCode() - section.getQuarter().getCode();
+        int cmp = getTerm().getCode() - section.getTerm().getCode();
         if( cmp != 0 ) return cmp;
 
         cmp = getCourse().getCode().compareTo( section.getCourse().getCode() );
@@ -176,7 +176,7 @@ public class Section implements Serializable, Comparable<Section> {
 
     public String getSiteUrl()
     {
-        return "/site/" + quarter.getShortString().toLowerCase() + "/"
+        return "/site/" + term.getShortString().toLowerCase() + "/"
             + course.getCode().toLowerCase() + "-" + number;
     }
 
@@ -202,14 +202,14 @@ public class Section implements Serializable, Comparable<Section> {
         this.id = id;
     }
 
-    public Quarter getQuarter()
+    public Term getTerm()
     {
-        return quarter;
+        return term;
     }
 
-    public void setQuarter( Quarter quarter )
+    public void setTerm( Term term )
     {
-        this.quarter = quarter;
+        this.term = term;
     }
 
     public Course getCourse()

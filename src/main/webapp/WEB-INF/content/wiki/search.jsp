@@ -12,7 +12,7 @@
   <h4>No pages found.</h4>
 </c:if>
 <c:if test="${not empty results}">
-  <h4>Found ${fn:length(results)} page(s) that match <i>${param.term}</i>.</h4>
+  <h4>Found ${fn:length(results)} page(s) that match <i>${param.text}</i>.</h4>
   <c:forEach items="${results}" var="result" varStatus="status">
   <p>${status.count}.
     <a href="<c:url value='${result.path}' />"><b>${result.subject}</b></a></p>

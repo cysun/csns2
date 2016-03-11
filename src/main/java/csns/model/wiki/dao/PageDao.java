@@ -29,7 +29,7 @@ public interface PageDao {
 
     Page getPage( String path );
 
-    List<WikiSearchResult> searchPages( String term, int maxResults );
+    List<WikiSearchResult> searchPages( String text, int maxResults );
 
     Page savePage( Page page );
 

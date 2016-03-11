@@ -41,11 +41,11 @@ public class ProgramController {
         .getLogger( ProgramController.class );
 
     @RequestMapping("/program/search")
-    public String search( @RequestParam(required = false ) String term,
+    public String search( @RequestParam(required = false ) String text,
         ModelMap models)
     {
-        if( StringUtils.hasText( term ) ) models.addAttribute( "programs",
-            programDao.searchPrograms( term, -1 ) );
+        if( StringUtils.hasText( text ) ) models.addAttribute( "programs",
+            programDao.searchPrograms( text, -1 ) );
 
         return "program/search";
     }

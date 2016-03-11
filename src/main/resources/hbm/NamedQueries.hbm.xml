@@ -26,7 +26,7 @@
         <return class="csns.model.academics.Course" />
 <![CDATA[
 select * from courses where obsolete = 'f' and
-    (code like upper(:term) || '%' or plainto_tsquery(:term) @@ tsv)
+    (code like upper(:text) || '%' or plainto_tsquery(:text) @@ tsv)
     order by code asc
 ]]>
     </sql-query>
@@ -34,8 +34,8 @@ select * from courses where obsolete = 'f' and
     <sql-query name="section.search">
         <return class="csns.model.academics.Section" />
 <![CDATA[
-select * from sections where deleted = 'f' and plainto_tsquery(:term) @@ tsv
-    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+select * from sections where deleted = 'f' and plainto_tsquery(:text) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:text), 16|32) desc
 ]]>
     </sql-query>
 
@@ -45,7 +45,7 @@ select * from sections where deleted = 'f' and plainto_tsquery(:term) @@ tsv
 select a.* from assignments a
     inner join sections s on a.section_id = s.id
     inner join section_instructors i on s.id = i.section_id
-    left join resources r on a.resource_id = r.id, plainto_tsquery(:term) q
+    left join resources r on a.resource_id = r.id, plainto_tsquery(:text) q
     where a.assignment_type = :type and a.deleted = 'f'
     and (:type <> 'REGULAR' or a.resource_id is not null)
     and i.instructor_id = :instructorId
@@ -57,7 +57,7 @@ select a.* from assignments a
     <sql-query name="program.search">
         <return class="csns.model.academics.Program" />
 <![CDATA[
-select p.* from programs p, plainto_tsquery(:term) q
+select p.* from programs p, plainto_tsquery(:text) q
     where p.department_id is not null
     and q @@ tsv order by ts_rank(tsv, q, 16|32) desc
 ]]>
@@ -67,8 +67,8 @@ select p.* from programs p, plainto_tsquery(:term) q
         <return class="csns.model.academics.Project" />
 <![CDATA[
 select * from projects where published = 't' and deleted = 'f' and
-    plainto_tsquery(:term) @@ tsv
-    order by ts_rank(tsv, plainto_tsquery(:term), 16|32) desc
+    plainto_tsquery(:text) @@ tsv
+    order by ts_rank(tsv, plainto_tsquery(:text), 16|32) desc
 ]]>
     </sql-query>
 
@@ -108,7 +108,7 @@ select f.* from users u, subscriptions s, forums f
     <sql-query name="survey.search">
         <return class="csns.model.survey.Survey" />
 <![CDATA[
-select s.* from surveys s, plainto_tsquery(:term) query
+select s.* from surveys s, plainto_tsquery(:text) query
     where s.department_id = :departmentId and deleted = 'f'
     and query @@ s.tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
@@ -117,7 +117,7 @@ select s.* from surveys s, plainto_tsquery(:term) query
     <sql-query name="forum.search">
         <return class="csns.model.forum.Forum" />
 <![CDATA[
-select f.* from forums f, plainto_tsquery(:term) query
+select f.* from forums f, plainto_tsquery(:text) query
     where query @@ f.tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
@@ -128,7 +128,7 @@ select f.* from forums f, plainto_tsquery(:term) query
 select p.id, p.date, p.author_id, p.topic_id, p.edited_by, p.edit_date,
         ts_headline(p.subject, query) as subject,
         ts_headline(p.content, query, 'MaxWords=200') as content
-    from forum_posts p, forum_topics t, plainto_tsquery(:term) query
+    from forum_posts p, forum_topics t, plainto_tsquery(:text) query
     where p.topic_id = t.id and t.deleted = 'f' and query @@ tsv and t.forum_id = :forumId
     order by ts_rank(tsv, query, 16|32) desc
 ]]>
@@ -140,7 +140,7 @@ select p.id, p.date, p.author_id, p.topic_id, p.edited_by, p.edit_date,
 select id, path,
         ts_headline(ts_subject, query) as "subject",
         ts_headline(ts_content, query, 'MaxWords=200') as "content"
-    from wiki_pages p, plainto_tsquery(:term) query
+    from wiki_pages p, plainto_tsquery(:text) query
     where query @@ tsv order by ts_rank(tsv, query, 16|32) desc
 ]]>
     </sql-query>
@@ -151,7 +151,7 @@ select id, path,
 select id, date, author_id, mailinglist_id,
         ts_headline( subject, query ) as subject,
         ts_headline( content, query, 'MaxWords=25' ) as content
-    from mailinglist_messages, plainto_tsquery(:term) query
+    from mailinglist_messages, plainto_tsquery(:text) query
     where mailinglist_id = :mailinglistId and query @@ tsv
     order by ts_rank(tsv, query, 16|32) desc
 ]]>
@@ -176,7 +176,7 @@ select min(id) as id, min(department_id) as department_id,
         <return class="csns.model.assessment.Rubric" />
 <![CDATA[
 select * from rubrics where deleted = 'f' and public = 't'
-    and plainto_tsquery(:term) @@ tsv
+    and plainto_tsquery(:text) @@ tsv
     order by name asc
 ]]>
     </sql-query>
@@ -231,7 +231,7 @@ order by indicator
     <sql-query name="rubric.evaluation.stats.by.course">
         <return class="csns.helper.RubricEvaluationStats" />
 <![CDATA[
-( select nextval('result_sequence') as id, year(x.quarter) as year,
+( select nextval('result_sequence') as id, year(x.term) as year,
     null as type, 0 as indicator, null as count,
     avg(t.rating) as mean, null as median, null as min, null as max
     from rubrics r
@@ -242,13 +242,13 @@ order by indicator
     inner join rubric_evaluations e on s.id = e.submission_id
     inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
     where r.id = :rubricId and c.id = :courseId and e.type = :type
-    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and :beginYear <= year(x.term) and year(x.term) <= :endYear
     and e.deleted = 'f' and e.completed = 't'
     group by year
 )
 union
 (
-select nextval('result_sequence') as id, year(x.quarter) as year,
+select nextval('result_sequence') as id, year(x.term) as year,
     null as type, t.rating_order+1 as indicator, null as count,
     avg(t.rating) as mean, null as median, null as min, null as max
     from rubrics r
@@ -259,7 +259,7 @@ select nextval('result_sequence') as id, year(x.quarter) as year,
     inner join rubric_evaluations e on s.id = e.submission_id
     inner join rubric_evaluation_ratings t on e.id = t.evaluation_id
     where r.id = :rubricId and c.id = :courseId and e.type = :type
-    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear 
+    and :beginYear <= year(x.term) and year(x.term) <= :endYear 
     and e.deleted = 'f' and e.completed = 't'
     group by year, indicator
 )
@@ -270,7 +270,7 @@ order by year, indicator
     <sql-query name="rubric.evaluation.years">
         <return-scalar column="year" type="java.lang.Integer" />
 <![CDATA[
-select s.quarter/10 + 1900 as year from rubrics r
+select s.term/10 + 1900 as year from rubrics r
     inner join rubric_assignments a on a.rubric_id = r.id
     inner join sections s on s.id = a.section_id
     inner join courses c on c.id = s.course_id
@@ -282,7 +282,7 @@ select s.quarter/10 + 1900 as year from rubrics r
     <sql-query name="rubric.evaluation.counts">
         <return class="csns.helper.RubricEvaluationStats" />
 <![CDATA[
-select nextval('result_sequence') as id, year(x.quarter) as year, e.type,
+select nextval('result_sequence') as id, year(x.term) as year, e.type,
     0 as indicator, count(e.id) as count, null as mean, null as median,
     null as min, null as max from rubrics r
     inner join rubric_assignments a on r.id = a.rubric_id
@@ -291,7 +291,7 @@ select nextval('result_sequence') as id, year(x.quarter) as year, e.type,
     inner join rubric_submissions s on a.id = s.assignment_id
     inner join rubric_evaluations e on s.id = e.submission_id
     where r.id = :rubricId and c.id = :courseId
-    and :beginYear <= year(x.quarter) and year(x.quarter) <= :endYear
+    and :beginYear <= year(x.term) and year(x.term) <= :endYear
     and e.deleted = 'f' and e.completed = 't'
     group by year, e.type
 ]]>

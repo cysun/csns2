@@ -52,7 +52,7 @@ $(function() {
 </ul>
 
 <table class="general">
-  <tr><th>Quarter</th><td>${section.quarter}</td>
+  <tr><th>Term</th><td>${section.term}</td>
   <tr><th>Section</th><td>${section.course.code} ${section.course.name} - ${section.number}</td></tr>
   <tr>
     <th rowspan="2" style="vertical-align: top;">Instructor(s)</th>

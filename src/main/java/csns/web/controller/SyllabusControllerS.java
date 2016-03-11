@@ -34,7 +34,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import csns.model.academics.Course;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.SectionDao;
@@ -67,10 +67,10 @@ public class SyllabusControllerS {
 
     private Section getSection( String qtr, String cc, int sn )
     {
-        Quarter quarter = new Quarter();
-        quarter.setShortString( qtr );
+        Term term = new Term();
+        term.setShortString( qtr );
         Course course = courseDao.getCourse( cc );
-        return sectionDao.getSection( quarter, course, sn );
+        return sectionDao.getSection( term, course, sn );
     }
 
     private String edit( Section section, ModelMap models )
@@ -80,7 +80,7 @@ public class SyllabusControllerS {
         {
             syllabus = new Resource(
                 section.getCourse().getCode() + "-" + section.getNumber() + " "
-                    + section.getQuarter() + " Syllabus" );
+                    + section.getTerm() + " Syllabus" );
             syllabus.setType( ResourceType.TEXT );
         }
 

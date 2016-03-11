@@ -16,12 +16,12 @@ looks fine, click the Import button to import the data.</p>
 
 <table class="viewtable autowidth">
   <tr>
-    <th></th><th>Quarter</th><th>CIN</th><th>First Name</th><th>Last Name</th><th>New Account</th>
+    <th></th><th>Term</th><th>CIN</th><th>First Name</th><th>Last Name</th><th>New Account</th>
   </tr>
   <c:forEach items="${importer.importedStudents}" var="student" varStatus="status">
   <tr>
     <td>${status.index+1}</td>
-    <td>${student.quarter}</td>
+    <td>${student.term}</td>
     <td>${student.cin}</td>
     <td>${student.firstName}</td>
     <td>${student.lastName}</td>

@@ -262,9 +262,9 @@ public class WikiController {
     }
 
     @RequestMapping("/wiki/search")
-    public String search( @RequestParam String term, ModelMap models )
+    public String search( @RequestParam String text, ModelMap models )
     {
-        models.put( "results", pageDao.searchPages( term, 40 ) );
+        models.put( "results", pageDao.searchPages( text, 40 ) );
         return "wiki/search";
     }
 

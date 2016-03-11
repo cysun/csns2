@@ -372,7 +372,7 @@ public class ProgramStatus {
             Section s2 = e2.getSection();
 
             int cmp = s1.getCourse().compareTo( s2.getCourse() );
-            if( cmp == 0 ) cmp = s1.getQuarter().compareTo( s2.getQuarter() );
+            if( cmp == 0 ) cmp = s1.getTerm().compareTo( s2.getTerm() );
 
             return cmp;
         }

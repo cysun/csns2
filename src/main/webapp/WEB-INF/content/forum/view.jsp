@@ -66,7 +66,7 @@ function unsubscribe()
 </security:authorize>
 
 <form action="topic/search" method="get">
-<input class="input_search" type="text" name="term" />
+<input class="input_search" type="text" name="text" />
 <input type="hidden" name="forumId" value="${forum.id}" />
 <input class="subbutton" type="submit" name="search" value="Search" />
 </form>

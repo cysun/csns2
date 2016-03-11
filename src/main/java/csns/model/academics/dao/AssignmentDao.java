@@ -29,7 +29,7 @@ public interface AssignmentDao {
 
     Assignment getAssignment( Long id );
 
-    List<Assignment> searchAssignments( String term, String type,
+    List<Assignment> searchAssignments( String text, String type,
         User instructor, int maxResults );
 
     List<OnlineAssignment> getOnlineAssignments( Section section );

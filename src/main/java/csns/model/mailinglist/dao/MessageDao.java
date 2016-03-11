@@ -29,7 +29,7 @@ public interface MessageDao {
 
     List<Message> getMessagess( Mailinglist mailinglist, int maxResults );
 
-    List<Message> searchMessages( Mailinglist mailinglist, String term,
+    List<Message> searchMessages( Mailinglist mailinglist, String text,
         int maxResults );
 
     Message saveMessage( Message message );

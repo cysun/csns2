@@ -129,7 +129,7 @@ public class RubricResultsController {
 
         Chart chart = new Chart( rubric.getName() + ", "
             + section.getCourse().getCode() + " "
-            + section.getQuarter().getShortString(), "Indicator", "Mean Rating" );
+            + section.getTerm().getShortString(), "Indicator", "Mean Rating" );
 
         List<String> xLabels = new ArrayList<String>();
         for( RubricIndicator indicator : rubric.getIndicators() )

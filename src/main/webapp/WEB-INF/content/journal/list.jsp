@@ -29,7 +29,7 @@ $(function(){
 <c:if test="${fn:length(department.undergraduateCourses) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Code</th><th>Name</th><th>Quarter</th><th>Instructor</th></tr>
+  <tr><th>Code</th><th>Name</th><th>Term</th><th>Instructor</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${department.undergraduateCourses}" var="course">
@@ -38,7 +38,7 @@ $(function(){
   <c:choose>
   <c:when test="${not empty course.journal}">
     <td><a href="view?id=${course.journal.id}">${course.name}</a></td>
-    <td>${course.journal.section.quarter}</td>
+    <td>${course.journal.section.term}</td>
     <td>${course.journal.section.instructors[0].name}</td>
   </c:when>
   <c:otherwise>
@@ -58,7 +58,7 @@ $(function(){
 <c:if test="${fn:length(department.graduateCourses) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Code</th><th>Name</th><th>Quarter</th><th>Instructor</th></tr>
+  <tr><th>Code</th><th>Name</th><th>Term</th><th>Instructor</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${department.graduateCourses}" var="course">
@@ -67,7 +67,7 @@ $(function(){
   <c:choose>
   <c:when test="${not empty course.journal}">
     <td><a href="view?id=${course.journal.id}">${course.name}</a></td>
-    <td>${course.journal.section.quarter}</td>
+    <td>${course.journal.section.term}</td>
     <td>${course.journal.section.instructors[0].name}</td>
   </c:when>
   <c:otherwise>
@@ -88,14 +88,14 @@ $(function(){
 <c:if test="${fn:length(submittedJournals) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Code</th><th>Name</th><th>Quarter</th><th>Instructor</th><th>Submitted</th></tr>
+  <tr><th>Code</th><th>Name</th><th>Term</th><th>Instructor</th><th>Submitted</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${submittedJournals}" var="journal">
 <tr>
   <td>${journal.section.course.code}</td>
   <td><a href="view?id=${journal.id}">${journal.section.course.name}</a></td>
-  <td class="nowrap">${journal.section.quarter}</td>
+  <td class="nowrap">${journal.section.term}</td>
   <td class="nowrap">${journal.section.instructors[0].name}</td>
   <td><fmt:formatDate value="${journal.submitDate}" pattern="M/d/yyyy" /></td>
 </tr>

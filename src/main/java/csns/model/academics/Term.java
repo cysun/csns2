@@ -28,52 +28,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Embeddable
-public class Quarter implements Serializable, Comparable<Quarter> {
+public class Term implements Serializable, Comparable<Term> {
 
     private static final long serialVersionUID = 1L;
 
     private int code;
 
-    private static final Logger logger = LoggerFactory.getLogger( Quarter.class );
+    private static final Logger logger = LoggerFactory.getLogger( Term.class );
 
-    public Quarter()
+    public Term()
     {
         setCode( Calendar.getInstance() );
     }
 
-    public Quarter( int code )
+    public Term( int code )
     {
         this.code = code;
     }
 
-    public Quarter( Calendar calendar )
+    public Term( Calendar calendar )
     {
         setCode( calendar );
     }
 
-    public Quarter( Date date )
+    public Term( Date date )
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime( date );
         setCode( calendar );
     }
 
-    public Quarter( int year, String term )
+    public Term( int year, String season )
     {
         code = (year - 1900) * 10;
 
-        term = term.toUpperCase();
-        if( term.equals( "WINTER" ) || term.equals( "W" ) )
+        season = season.toUpperCase();
+        if( season.equals( "WINTER" ) || season.equals( "W" ) )
             code += 1;
-        else if( term.equals( "SPRING" ) || term.equals( "S" ) )
+        else if( season.equals( "SPRING" ) || season.equals( "S" ) )
             code += 3;
-        else if( term.equals( "SUMMER" ) || term.equals( "X" ) )
+        else if( season.equals( "SUMMER" ) || season.equals( "X" ) )
             code += 6;
-        else if( term.equals( "FALL" ) || term.equals( "F" ) )
+        else if( season.equals( "FALL" ) || season.equals( "F" ) )
             code += 9;
         else
         {
-            logger.warn( term + " is not a valid quarter." );
+            logger.warn( season + " is not a valid season." );
             code += 9;
         }
     }
@@ -81,8 +81,8 @@ public class Quarter implements Serializable, Comparable<Quarter> {
     @Override
     public boolean equals( Object other )
     {
-        return this == other || other instanceof Quarter
-            && ((Quarter) other).code == code;
+        return this == other || other instanceof Term
+            && ((Term) other).code == code;
     }
 
     @Override
@@ -92,12 +92,12 @@ public class Quarter implements Serializable, Comparable<Quarter> {
     }
 
     @Override
-    public int compareTo( Quarter quarter )
+    public int compareTo( Term term )
     {
-        if( quarter == null )
+        if( term == null )
             throw new IllegalArgumentException( "Cannot compare to NULL." );
 
-        return code - quarter.code;
+        return code - term.code;
     }
 
     public boolean isValid()
@@ -111,61 +111,61 @@ public class Quarter implements Serializable, Comparable<Quarter> {
 
         int week = calendar.get( Calendar.WEEK_OF_YEAR );
         if( week < 13 )
-            code += 1; // Winter quarter: week 1-12
+            code += 1; // Winter term: week 1-12
         else if( week < 25 )
-            code += 3; // Spring quarter: week 13-24
+            code += 3; // Spring term: week 13-24
         else if( week < 38 )
-            code += 6; // Summer quarter: week 25-37
+            code += 6; // Summer term: week 25-37
         else
-            code += 9; // Fall quarter: week 38-
+            code += 9; // Fall term: week 38-
     }
 
-    public Quarter next()
+    public Term next()
     {
         int yearCode = code / 10;
-        int quarterSuffix = code % 10;
+        int termSuffix = code % 10;
 
-        switch( quarterSuffix )
+        switch( termSuffix )
         {
             case 1:
-                quarterSuffix = 3;
+                termSuffix = 3;
                 break;
             case 3:
-                quarterSuffix = 6;
+                termSuffix = 6;
                 break;
             case 6:
-                quarterSuffix = 9;
+                termSuffix = 9;
                 break;
             default:
                 ++yearCode;
-                quarterSuffix = 1;
+                termSuffix = 1;
         }
 
-        return new Quarter( yearCode * 10 + quarterSuffix );
+        return new Term( yearCode * 10 + termSuffix );
     }
 
-    public Quarter previous()
+    public Term previous()
     {
         int yearCode = code / 10;
-        int quarterSuffix = code % 10;
+        int termSuffix = code % 10;
 
-        switch( quarterSuffix )
+        switch( termSuffix )
         {
             case 9:
-                quarterSuffix = 6;
+                termSuffix = 6;
                 break;
             case 6:
-                quarterSuffix = 3;
+                termSuffix = 3;
                 break;
             case 3:
-                quarterSuffix = 1;
+                termSuffix = 1;
                 break;
             default:
                 --yearCode;
-                quarterSuffix = 9;
+                termSuffix = 9;
         }
 
-        return new Quarter( yearCode * 10 + quarterSuffix );
+        return new Term( yearCode * 10 + termSuffix );
     }
 
     @Override
@@ -239,7 +239,7 @@ public class Quarter implements Serializable, Comparable<Quarter> {
                 break;
             default:
                 newCode = -1;
-                logger.warn( "Invalid quarter short string: " + s );
+                logger.warn( "Invalid term short string: " + s );
         }
 
         code = newCode;
@@ -250,7 +250,7 @@ public class Quarter implements Serializable, Comparable<Quarter> {
         return code / 10 + 1900;
     }
 
-    public String getQuarterName()
+    public String getTermName()
     {
         String s;
         switch( code % 10 )
@@ -274,32 +274,32 @@ public class Quarter implements Serializable, Comparable<Quarter> {
         return s;
     }
 
-    public boolean equals( Quarter quarter )
+    public boolean equals( Term term )
     {
-        return quarter == null ? false : code == quarter.code;
+        return term == null ? false : code == term.code;
     }
 
-    public boolean before( Quarter quarter )
+    public boolean before( Term term )
     {
-        return quarter == null ? false : code < quarter.code;
+        return term == null ? false : code < term.code;
     }
 
-    public boolean after( Quarter quarter )
+    public boolean after( Term term )
     {
-        return quarter == null ? false : code > quarter.code;
+        return term == null ? false : code > term.code;
     }
 
     public boolean before( Date date )
     {
-        return before( new Quarter( date ) );
+        return before( new Term( date ) );
     }
 
     public boolean after( Date date )
     {
-        return after( new Quarter( date ) );
+        return after( new Term( date ) );
     }
 
-    public int getQuarterSuffix()
+    public int getTermSuffix()
     {
         return code % 10;
     }

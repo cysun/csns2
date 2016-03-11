@@ -63,7 +63,7 @@ ${programStatus.program.description}
     <c:forEach items="${courseStatus.enrollments}" var="enrollment">
     <div class="pstat">
       <div class="pstat-course-code">${enrollment.section.course.code}</div>
-      <div class="pstat-quarter">${enrollment.section.quarter.shortString}</div>
+      <div class="pstat-term">${enrollment.section.term.shortString}</div>
       <div>${enrollment.grade.symbol}</div>
     </div>
     </c:forEach>
@@ -111,7 +111,7 @@ ${programStatus.program.description}
     <c:forEach items="${courseStatus.enrollments}" var="enrollment">
     <div class="pstat">
       <div class="pstat-course-code">${enrollment.section.course.code}</div>
-      <div class="pstat-quarter">${enrollment.section.quarter.shortString}</div>
+      <div class="pstat-term">${enrollment.section.term.shortString}</div>
       <div>${enrollment.grade.symbol}</div>
     </div>
     </c:forEach>
@@ -149,7 +149,7 @@ ${programStatus.program.description}
   <tr>
     <td>${enrollment.section.course.code}</td>
     <td>${enrollment.section.course.name}</td>
-    <td>${enrollment.section.quarter.shortString}</td>
+    <td>${enrollment.section.term.shortString}</td>
     <td>${enrollment.grade.symbol}</td>
   </tr>
   </c:forEach>

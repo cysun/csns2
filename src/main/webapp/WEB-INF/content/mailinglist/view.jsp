@@ -63,7 +63,7 @@ No messages were sent to this mailing list.
 
 <c:if test="${fn:length(messages) > 0}">
 <form action="message/search" method="get">
-<p class="right"><input  name="term" type="text" class="leftinput" style="width: 15em;" />
+<p class="right"><input name="text" type="text" class="leftinput" style="width: 15em;" />
 <input name="listId" type="hidden" value="${mailinglist.id}" />
 <input name="search" type="submit" value="Search" class="subbutton" /></p>
 </form>

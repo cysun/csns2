@@ -55,13 +55,13 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> searchMessages( Mailinglist mailinglist, String term,
+    public List<Message> searchMessages( Mailinglist mailinglist, String text,
         int maxResults )
     {
         return entityManager.createNamedQuery( "mailinglist.message.search",
             Message.class )
             .setParameter( "mailinglistId", mailinglist.getId() )
-            .setParameter( "term", term )
+            .setParameter( "text", text )
             .setMaxResults( maxResults )
             .getResultList();
     }

@@ -145,7 +145,7 @@ create table subscriptions (
     subscribable_id     bigint not null,
     subscriber_id       bigint not null references users(id),
     date                timestamp not null default current_timestamp,
-    quarter             integer,
+    term                integer,
     notification_sent   boolean not null default 'f',
     auto_subscribed     boolean not null default 'f',
   unique(subscribable_type, subscribable_id, subscriber_id)
@@ -320,13 +320,13 @@ create index courses_ts_index on courses using gin(tsv);
 
 create table sections (
     id          bigint primary key,
-    quarter     integer not null,
+    term        integer not null,
     course_id   bigint not null references courses(id),
     number      integer not null default 1,
     syllabus_id bigint references resources(id),
     journal_id  bigint unique,
     deleted     boolean not null default 'f',
-  unique (quarter, course_id, number)
+  unique (term, course_id, number)
 );
 
 alter table sections add column tsv tsvector;
@@ -338,7 +338,7 @@ begin
 	select * into l_course from courses where id = new.course_id;
     new.tsv := setweight(to_tsvector(l_course.code), 'A') ||
                setweight(to_tsvector(l_course.name), 'B') ||
-               setweight(to_tsvector(quarter(new.quarter)), 'A');
+               setweight(to_tsvector(term(new.term)), 'A');
     return new;
 end
 $$ language plpgsql;
@@ -429,16 +429,16 @@ alter table assignments add column tsv tsvector;
 
 create function assignments_ts_trigger_function() returns trigger as $$
 declare
-    l_quarter       varchar;
+    l_term          varchar;
     l_course_code   varchar;
 begin
     if new.section_id is not null then
-        select quarter(quarter) into l_quarter from sections
+        select term(term) into l_term from sections
             where id = new.section_id;
         select c.code into l_course_code from sections s, courses c
             where s.id = new.section_id and c.id = s.course_id;
     end if;
-    new.tsv := setweight(to_tsvector(l_quarter), 'A') ||
+    new.tsv := setweight(to_tsvector(l_term), 'A') ||
                setweight(to_tsvector(l_course_code), 'A') ||
                setweight(to_tsvector(new.name), 'A');
     return new;
@@ -910,20 +910,20 @@ create index forum_posts_ts_index on forum_posts using gin(tsv);
 create function subscribe_to_course_forum( p_user_id bigint, p_section_id bigint)
     returns void as $$
 declare
-    l_current_quarter   integer default quarter();
-    l_section_quarter   integer;
-    l_course_id         courses.id%type;
-    l_forum_id          forums.id%type;
+    l_current_term  integer default term();
+    l_section_term  integer;
+    l_course_id     courses.id%type;
+    l_forum_id      forums.id%type;
 begin
     select course_id into l_course_id from sections where id = p_section_id;
     select id into l_forum_id from forums where course_id = l_course_id;
     if not exists (select * from subscriptions where subscribable_type = 'FM'
             and subscribable_id = l_forum_id and subscriber_id = p_user_id) then
-        select quarter into l_section_quarter from sections where id = p_section_id;
+        select term into l_section_term from sections where id = p_section_id;
         insert into subscriptions (id, subscribable_type, subscribable_id,
-            subscriber_id, quarter, auto_subscribed) values
+            subscriber_id, term, auto_subscribed) values
             (nextval('hibernate_sequence'), 'FM', l_forum_id, p_user_id,
-            l_section_quarter, 't');
+            l_section_term, 't');
     end if;
 end;
 $$ language plpgsql;
@@ -931,10 +931,10 @@ $$ language plpgsql;
 create function unsubscribe_from_course_forum(p_user_id bigint, p_section_id bigint)
     returns void as $$
 declare
-    l_current_quarter   integer default quarter();
-    l_section_quarter   integer;
-    l_course_id         courses.id%type;
-    l_forum_id          forums.id%type;
+    l_current_term  integer default term();
+    l_section_term  integer;
+    l_course_id     courses.id%type;
+    l_forum_id      forums.id%type;
 begin
     select course_id into l_course_id from sections where id = p_section_id;
     select id into l_forum_id from forums where course_id = l_course_id;
@@ -1193,7 +1193,7 @@ create table academic_standings (
     student_id      bigint references users(id),
     department_id   bigint references departments(id),
     standing_id     bigint references standings(id),
-    quarter         integer,
+    term            integer,
   unique (student_id, department_id, standing_id)
 );
 
@@ -1546,9 +1546,9 @@ create table assessment_outcome_courses (
 ------------------------------
 
 --
--- Given a date, returns the quarter.
+-- Given a date, returns the term.
 --
-create or replace function quarter( p_date date ) returns integer as $$
+create or replace function term( p_date date ) returns integer as $$
 declare
     l_code integer := (extract(year from p_date) - 1900) * 10;
     l_week integer := extract(week from p_date);
@@ -1567,41 +1567,41 @@ end;
 $$ language plpgsql;
 
 --
--- Returns the current quarter.
+-- Returns the current term.
 --
-create or replace function quarter() returns integer as $$
+create or replace function term() returns integer as $$
 begin
-    return quarter(current_date);
+    return term(current_date);
 end;
 $$ language plpgsql;
 
 --
--- Given a quarter code, returns the quarter name (e.g. Fall 2012).
+-- Given a term code, returns the term name (e.g. Fall 2012).
 --
-create or replace function quarter( p_code integer ) returns varchar as $$
+create or replace function term( p_code integer ) returns varchar as $$
 declare
-    l_year      varchar;
-    l_quarter   varchar;
+    l_year  varchar;
+    l_term  varchar;
 begin
     l_year := cast( p_code/10+1900 as varchar );
 
     case p_code % 10
         when 1 then
-            l_quarter = 'Winter';
+            l_term = 'Winter';
         when 3 then
-            l_quarter = 'Spring';
+            l_term = 'Spring';
         when 6 then
-            l_quarter = 'Summer';
+            l_term = 'Summer';
         else
-            l_quarter = 'Fall';
+            l_term = 'Fall';
     end case;
 
-    return l_quarter || ' ' || l_year;
+    return l_term || ' ' || l_year;
 end;
 $$ language plpgsql;
 
 --
--- Given a quarter code, returns the year of the quarter.
+-- Given a term code, returns the year of the term.
 --
 create or replace function year( p_code integer ) returns integer as $$
 begin

@@ -109,27 +109,27 @@ public class SurveyDaoImpl implements SurveyDao {
 
     @Override
     @PreAuthorize("principal.isFaculty(#department.abbreviation)")
-    public List<Survey> searchSurveys( Department department, String term,
+    public List<Survey> searchSurveys( Department department, String text,
         int maxResults )
     {
         TypedQuery<Survey> query = entityManager.createNamedQuery(
             "survey.search", Survey.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
         return query.setParameter( "departmentId", department.getId() )
-            .setParameter( "term", term )
+            .setParameter( "text", text )
             .getResultList();
     }
 
     @Override
     @PreAuthorize("principal.isFaculty(#department.abbreviation)")
     public List<Survey> searchSurveysByPrefix( Department department,
-        String term, int maxResults )
+        String text, int maxResults )
     {
-        String query = "from Survey where lower(name) like :term || '%' "
+        String query = "from Survey where lower(name) like :text || '%' "
             + "and deleted = false order by name asc";
 
         return entityManager.createQuery( query, Survey.class )
-            .setParameter( "term", term.toLowerCase() )
+            .setParameter( "text", text.toLowerCase() )
             .setMaxResults( maxResults )
             .getResultList();
     }

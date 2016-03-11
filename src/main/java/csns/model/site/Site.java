@@ -76,7 +76,7 @@ public class Site implements Serializable {
     @Column(nullable = false)
     private boolean restricted;
 
-    /** Whether the site is available after the quarter ends. */
+    /** Whether the site is available after the term ends. */
     @Column(nullable = false)
     private boolean limited;
 

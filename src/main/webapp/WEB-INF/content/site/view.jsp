@@ -8,7 +8,7 @@
 
 <script>
 $(function(){
-    document.title = "${section.course.code}-${section.number} ${section.quarter.shortString}";
+    document.title = "${section.course.code}-${section.number} ${section.term.shortString}";
 });
 </script>
 
@@ -30,7 +30,7 @@ $(function(){
 </c:if>
 
 <div class="site-title">${section.course.code} ${section.course.name}</div>
-<div class="site-quarter">${section.quarter}</div>
+<div class="site-term">${section.term}</div>
 
 <table id="site" style="width: 100%;">
 <tr>

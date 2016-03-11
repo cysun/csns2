@@ -11,12 +11,12 @@ $(function(){
 <c:if test="${fn:length(coursesTaken) > 0}">
 <table class="viewtable autowidth">
 <thead>
-  <tr><th>Quarter</th><th>Course</th><th>Instructor</th><th>Grade</th></tr>
+  <tr><th>Term</th><th>Course</th><th>Instructor</th><th>Grade</th></tr>
 </thead>
 <tbody>
   <c:forEach items="${coursesTaken}" var="courseTaken">
   <tr>
-    <td>${courseTaken.section.quarter}</td>
+    <td>${courseTaken.section.term}</td>
     <td>${courseTaken.section.course.code}</td>
     <td>${courseTaken.section.instructors[0].name}</td>
     <td><span style="margin-left: 1em;">${courseTaken.grade.symbol}</span></td>

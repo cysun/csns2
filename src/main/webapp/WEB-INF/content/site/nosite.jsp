@@ -18,7 +18,7 @@ is correct.</p>
 
 <c:if test="${not empty section}">
 <p>The class website for <em>${section.course.code} Section ${section.number},
-${section.quarter}</em> does not exist.</p>
+${section.term}</em> does not exist.</p>
 <c:if test="${isInstructor}">
 <p>Do you want to create this site?</p>
 <ul>
@@ -35,7 +35,7 @@ ${section.quarter}</em> does not exist.</p>
   <c:forEach items="${sites}" var="site">
   <tr>
     <td><a href="<c:url value='${site.section.siteUrl}' />">${site.section.course.code}-${site.section.number},
-      ${site.section.quarter}</a></td>
+      ${site.section.term}</a></td>
     <td><a href="javascript:clone(${site.id})"><img alt="[Clone Site]" 
       title="Clone Site" src="<c:url value='/img/icons/table_code.png'/>" /></a></td>
   </tr>

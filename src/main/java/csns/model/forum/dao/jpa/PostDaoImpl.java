@@ -43,11 +43,11 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public List<Post> searchPosts( Forum forum, String term, int maxResults )
+    public List<Post> searchPosts( Forum forum, String text, int maxResults )
     {
         return entityManager.createNamedQuery( "forum.post.search", Post.class )
             .setParameter( "forumId", forum.getId() )
-            .setParameter( "term", term )
+            .setParameter( "text", text )
             .setMaxResults( maxResults )
             .getResultList();
     }

@@ -85,12 +85,12 @@ public class ForumDaoImpl implements ForumDao {
     }
 
     @Override
-    public List<Forum> searchForums( String term, int maxResults )
+    public List<Forum> searchForums( String text, int maxResults )
     {
         TypedQuery<Forum> query = entityManager.createNamedQuery(
             "forum.search", Forum.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

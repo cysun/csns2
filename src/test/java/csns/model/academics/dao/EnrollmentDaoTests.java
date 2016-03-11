@@ -45,7 +45,7 @@ public class EnrollmentDaoTests extends AbstractTestNGSpringContextTests {
         User jdoe1 = userDao.getUserByUsername( "jdoe1" );
         List<Enrollment> enrollments = enrollmentDao.getEnrollments( jdoe1 );
         assert enrollments.size() == 2;
-        assert enrollments.get( 1 ).getSection().getQuarter().getCode() == 1109;
+        assert enrollments.get( 1 ).getSection().getTerm().getCode() == 1109;
     }
 
 }

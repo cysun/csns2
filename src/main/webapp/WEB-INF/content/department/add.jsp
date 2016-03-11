@@ -51,7 +51,7 @@ $(function(){
   <tr>
     <th>Administrator</th>
     <td>
-      <input id="admin" type="text" class="forminput" name="term" size="40"
+      <input id="admin" type="text" class="forminput" name="text" size="40"
         value="${department.administrators[0].name}" />
       <div class="error"><form:errors path="administrators" /></div>
     </td>

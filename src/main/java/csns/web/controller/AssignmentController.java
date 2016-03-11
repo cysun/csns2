@@ -137,15 +137,15 @@ public class AssignmentController {
 
     @RequestMapping("/assignment/search")
     public String search( @RequestParam Long sectionId,
-        @RequestParam(required = false) String term, ModelMap models )
+        @RequestParam(required = false) String text, ModelMap models )
     {
         Section section = sectionDao.getSection( sectionId );
         models.put( "section", section );
 
-        if( StringUtils.hasText( term ) )
+        if( StringUtils.hasText( text ) )
             models.put(
                 "results",
-                assignmentDao.searchAssignments( term, "REGULAR",
+                assignmentDao.searchAssignments( text, "REGULAR",
                     SecurityUtils.getUser(), 20 ) );
 
         return "assignment/search";

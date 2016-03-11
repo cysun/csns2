@@ -20,7 +20,7 @@ function deleteEntry()
 </ul>
 
 <div class="site-title">${site.section.course.code} ${site.section.course.name}</div>
-<div class="site-quarter">${site.section.quarter}</div>
+<div class="site-term">${site.section.term}</div>
 
 <form:form modelAttribute="infoEntry">
 <table class="general autowidth" style="margin-left: 10px">

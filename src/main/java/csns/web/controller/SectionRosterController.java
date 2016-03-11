@@ -167,7 +167,7 @@ public class SectionRosterController {
         response.setContentType( contentTypes.getProperty( "xlsx" ) );
         response.setHeader( "Content-Disposition", "attachment; filename="
             + section.getCourse().getCode() + "-"
-            + section.getQuarter().getShortString() + ".xlsx" );
+            + section.getTerm().getShortString() + ".xlsx" );
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet( "Grades" );

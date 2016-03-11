@@ -29,7 +29,7 @@ public interface ProgramDao {
 
     List<Program> getPrograms( Department department );
 
-    List<Program> searchPrograms( String term, int maxResults );
+    List<Program> searchPrograms( String text, int maxResults );
 
     Program saveProgram( Program program );
 

@@ -5,13 +5,13 @@
 <script>
 $(function(){
     $("table").tablesorter();
-    $("select[name='quarter'] option").each(function(){
-       if( $(this).val() == ${quarter.code}) 
+    $("select[name='term'] option").each(function(){
+       if( $(this).val() == ${term.code}) 
            $(this).attr('selected', true);
     });
-    $("select[name='quarter']").change(function(){
-        var quarter = $("select[name='quarter'] option:selected").val();
-        window.location.href = "sections?quarter=" + quarter;
+    $("select[name='term']").change(function(){
+        var term = $("select[name='term'] option:selected").val();
+        window.location.href = "sections?term=" + term;
     });
 });
 </script>
@@ -20,12 +20,12 @@ $(function(){
 <li><a class="bc" href="<c:url value='/section/search' />">Sections</a></li>
 <li>${department.name}</li>
 <li class="align_right">
-  <select class="formselect" name="quarter">
-    <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>
+  <select class="formselect" name="term">
+    <c:forEach var="q" items="${terms}"><option value="${q.code}">${q}</option></c:forEach>
   </select>
 </li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-<li class="align_right"><a href="section/import?quarter=${quarter.code}"><img alt="[Import Section]"
+<li class="align_right"><a href="section/import?term=${term.code}"><img alt="[Import Section]"
   title="Import Section" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </security:authorize>
 </ul>

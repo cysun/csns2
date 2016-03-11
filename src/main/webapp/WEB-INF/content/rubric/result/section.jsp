@@ -19,7 +19,7 @@ $(function(){
 <li><a class="bc" href="list">Rubrics</a></li>
 <li><a class="bc" href="results?id=${rubric.id}"><csns:truncate
   value="${rubric.name}" length="50" /></a></li>
-<li>${section.course.code}, ${section.quarter}</li>
+<li>${section.course.code}, ${section.term}</li>
 </ul>
 
 <div id="tabs">

@@ -64,7 +64,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     public List<Enrollment> getEnrollments( User student )
     {
         String query = "from Enrollment where student = :student "
-            + "order by section.quarter desc";
+            + "order by section.term desc";
 
         return entityManager.createQuery( query, Enrollment.class )
             .setParameter( "student", student )

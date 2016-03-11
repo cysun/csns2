@@ -12,12 +12,12 @@ $(function(){
 
 <table class="viewtable">
 <thead>
-  <tr><th>Quarter</th><th>Course</th><th>Section</th><th></th></tr>
+  <tr><th>Term</th><th>Course</th><th>Section</th><th></th></tr>
 </thead>
 <tbody>
 <c:forEach items="${sites}" var="site">
   <tr>
-    <td>${site.section.quarter}</td>
+    <td>${site.section.term}</td>
     <td>${site.section.course.code}</td>
     <td>${site.section.number}</td>
     <td>

@@ -5,7 +5,7 @@
 </ul>
 
 <form action="search" method="get">
-<p><input id="search" name="term" type="text" class="forminput" size="40" />
+<p><input id="search" name="text" type="text" class="forminput" size="40" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>
 

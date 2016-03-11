@@ -54,12 +54,12 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<Course> searchCourses( String term, int maxResults )
+    public List<Course> searchCourses( String text, int maxResults )
     {
         TypedQuery<Course> query = entityManager.createNamedQuery(
             "course.search", Course.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

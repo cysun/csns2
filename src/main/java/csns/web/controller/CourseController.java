@@ -34,11 +34,11 @@ public class CourseController {
     private CourseDao courseDao;
 
     @RequestMapping("/course/search")
-    public String search( @RequestParam(required = false) String term,
+    public String search( @RequestParam(required = false) String text,
         ModelMap models )
     {
-        if( StringUtils.hasText( term ) )
-            models.addAttribute( "courses", courseDao.searchCourses( term, -1 ) );
+        if( StringUtils.hasText( text ) )
+            models.addAttribute( "courses", courseDao.searchCourses( text, -1 ) );
 
         return "course/search";
     }

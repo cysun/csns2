@@ -44,17 +44,17 @@ import org.springframework.web.context.WebApplicationContext;
 import csns.helper.GradeSheet;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.CourseDao;
-import csns.model.academics.dao.QuarterDao;
+import csns.model.academics.dao.TermDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.security.SecurityUtils;
-import csns.web.editor.QuarterPropertyEditor;
+import csns.web.editor.TermPropertyEditor;
 
 @Controller
 public class SectionController {
@@ -66,7 +66,7 @@ public class SectionController {
     private CourseDao courseDao;
 
     @Autowired
-    private QuarterDao quarterDao;
+    private TermDao termDao;
 
     @Autowired
     private SectionDao sectionDao;
@@ -82,41 +82,41 @@ public class SectionController {
     @InitBinder
     public void initBinder( WebDataBinder binder )
     {
-        binder.registerCustomEditor( Quarter.class,
-            (QuarterPropertyEditor) context.getBean( "quarterPropertyEditor" ) );
+        binder.registerCustomEditor( Term.class,
+            (TermPropertyEditor) context.getBean( "termPropertyEditor" ) );
     }
 
-    private String list( String type, Quarter quarter, ModelMap models,
+    private String list( String type, Term term, ModelMap models,
         HttpSession session )
     {
-        if( quarter != null )
-            session.setAttribute( "quarter", quarter );
-        else if( session.getAttribute( "quarter" ) != null )
-            quarter = (Quarter) session.getAttribute( "quarter" );
+        if( term != null )
+            session.setAttribute( "term", term );
+        else if( session.getAttribute( "term" ) != null )
+            term = (Term) session.getAttribute( "term" );
         else
-            quarter = new Quarter();
+            term = new Term();
 
         User user = SecurityUtils.getUser();
-        List<Quarter> quarters = null;
+        List<Term> terms = null;
         List<Section> sections = null;
         String view = "error";
         switch( type )
         {
             case "taught":
-                quarters = quarterDao.getQuartersByInstructor( user );
-                sections = sectionDao.getSectionsByInstructor( user, quarter );
+                terms = termDao.getTermsByInstructor( user );
+                sections = sectionDao.getSectionsByInstructor( user, term );
                 view = "section/taught";
                 break;
 
             case "taken":
-                quarters = quarterDao.getQuartersByStudent( user );
-                sections = sectionDao.getSectionsByStudent( user, quarter );
+                terms = termDao.getTermsByStudent( user );
+                sections = sectionDao.getSectionsByStudent( user, term );
                 view = "section/taken";
                 break;
 
             case "evaluated":
-                quarters = quarterDao.getQuartersByEvaluator( user );
-                sections = sectionDao.getSectionsByEvaluator( user, quarter );
+                terms = termDao.getTermsByEvaluator( user );
+                sections = sectionDao.getSectionsByEvaluator( user, term );
                 view = "section/evaluated";
                 break;
 
@@ -124,21 +124,21 @@ public class SectionController {
                 logger.warn( "Invalid section type: " + type );
         }
 
-        Quarter currentQuarter = new Quarter();
-        if( !quarters.contains( currentQuarter ) )
-            quarters.add( 0, currentQuarter );
-        Quarter nextQuarter = currentQuarter.next();
-        if( !quarters.contains( nextQuarter ) ) quarters.add( 0, nextQuarter );
+        Term currentTerm = new Term();
+        if( !terms.contains( currentTerm ) )
+            terms.add( 0, currentTerm );
+        Term nextTerm = currentTerm.next();
+        if( !terms.contains( nextTerm ) ) terms.add( 0, nextTerm );
 
         models.put( "user", user );
-        models.put( "quarter", quarter );
-        models.put( "quarters", quarters );
+        models.put( "term", term );
+        models.put( "terms", terms );
         models.put( "sections", sections );
         return view;
     }
 
     @RequestMapping("/section/taught")
-    public String taught( @RequestParam(required = false) Quarter quarter,
+    public String taught( @RequestParam(required = false) Term term,
         ModelMap models, HttpSession session, HttpServletResponse response )
     {
         Cookie cookie = new Cookie( "default-home", "/section/taught" );
@@ -146,11 +146,11 @@ public class SectionController {
         cookie.setMaxAge( 100000000 );
         response.addCookie( cookie );
 
-        return list( "taught", quarter, models, session );
+        return list( "taught", term, models, session );
     }
 
     @RequestMapping("/section/taken")
-    public String taken( @RequestParam(required = false) Quarter quarter,
+    public String taken( @RequestParam(required = false) Term term,
         ModelMap models, HttpSession session, HttpServletResponse response )
     {
         Cookie cookie = new Cookie( "default-home", "/section/taken" );
@@ -158,11 +158,11 @@ public class SectionController {
         cookie.setMaxAge( 100000000 );
         response.addCookie( cookie );
 
-        return list( "taken", quarter, models, session );
+        return list( "taken", term, models, session );
     }
 
     @RequestMapping("/section/evaluated")
-    public String evaluated( @RequestParam(required = false) Quarter quarter,
+    public String evaluated( @RequestParam(required = false) Term term,
         ModelMap models, HttpSession session, HttpServletResponse response )
     {
         Cookie cookie = new Cookie( "default-home", "/section/evaluated" );
@@ -170,17 +170,17 @@ public class SectionController {
         cookie.setMaxAge( 100000000 );
         response.addCookie( cookie );
 
-        return list( "evaluated", quarter, models, session );
+        return list( "evaluated", term, models, session );
     }
 
     @RequestMapping("/section/add")
     public String add( @RequestParam Long courseId,
-        @RequestParam Integer quarterCode )
+        @RequestParam Integer termCode )
     {
-        Quarter quarter = new Quarter( quarterCode );
+        Term term = new Term( termCode );
         Course course = courseDao.getCourse( courseId );
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        Section section = sectionDao.addSection( quarter, course, user );
+        Section section = sectionDao.addSection( term, course, user );
 
         Forum forum = forumDao.getForum( course );
         if( !forum.isModerator( user ) )
@@ -276,12 +276,12 @@ public class SectionController {
     }
 
     @RequestMapping(value = "/section/search")
-    public String search( @RequestParam(required = false) String term,
+    public String search( @RequestParam(required = false) String text,
         ModelMap models )
     {
         List<Section> sections = null;
-        if( StringUtils.hasText( term ) )
-            sections = sectionDao.searchSections( term, -1 );
+        if( StringUtils.hasText( text ) )
+            sections = sectionDao.searchSections( text, -1 );
         models.addAttribute( "sections", sections );
         return "section/search";
     }

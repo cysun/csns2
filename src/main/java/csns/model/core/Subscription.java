@@ -37,7 +37,7 @@ import org.hibernate.annotations.Any;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.MetaValue;
 
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.forum.Forum;
 import csns.model.forum.Topic;
 import csns.model.mailinglist.Mailinglist;
@@ -72,8 +72,8 @@ public class Subscription implements Serializable {
 
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "code",
-        column = @Column(name = "quarter")) })
-    private Quarter quarter;
+        column = @Column(name = "term")) })
+    private Term term;
 
     /**
      * notificationSent is used as a flag to avoid repeated notifications. Some
@@ -146,14 +146,14 @@ public class Subscription implements Serializable {
         this.date = date;
     }
 
-    public Quarter getQuarter()
+    public Term getTerm()
     {
-        return quarter;
+        return term;
     }
 
-    public void setQuarter( Quarter quarter )
+    public void setTerm( Term term )
     {
-        this.quarter = quarter;
+        this.term = term;
     }
 
     public boolean isNotificationSent()

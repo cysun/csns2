@@ -24,24 +24,24 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 
 @Component
 @Scope("prototype")
-public class QuarterPropertyEditor extends PropertyEditorSupport {
+public class TermPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public void setAsText( String text ) throws IllegalArgumentException
     {
         if( StringUtils.hasText( text ) )
-            setValue( new Quarter( Integer.valueOf( text ) ) );
+            setValue( new Term( Integer.valueOf( text ) ) );
     }
 
     @Override
     public String getAsText()
     {
-        Quarter quarter = (Quarter) getValue();
-        return quarter != null ? "" + quarter.getCode() : "";
+        Term term = (Term) getValue();
+        return term != null ? "" + term.getCode() : "";
     }
 
 }

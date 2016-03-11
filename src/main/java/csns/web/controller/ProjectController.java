@@ -119,12 +119,12 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/project/search")
-    public String search( @RequestParam(required = false ) String term,
+    public String search( @RequestParam(required = false ) String text,
         ModelMap models)
     {
         List<Project> projects = null;
-        if( StringUtils.hasText( term ) )
-            projects = projectDao.searchProjects( term, 30 );
+        if( StringUtils.hasText( text ) )
+            projects = projectDao.searchProjects( text, 30 );
         models.addAttribute( "projects", projects );
         return "project/search";
     }

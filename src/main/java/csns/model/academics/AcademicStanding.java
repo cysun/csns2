@@ -61,20 +61,20 @@ public class AcademicStanding implements Serializable,
 
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "code",
-        column = @Column(name = "quarter")) })
-    private Quarter quarter;
+        column = @Column(name = "term")) })
+    private Term term;
 
     public AcademicStanding()
     {
     }
 
     public AcademicStanding( User student, Department department,
-        Standing standing, Quarter quarter )
+        Standing standing, Term term )
     {
         this.student = student;
         this.department = department;
         this.standing = standing;
-        this.quarter = quarter;
+        this.term = term;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class AcademicStanding implements Serializable,
 
         int cmp = department.getName().compareTo(
             academicStanding.department.getName() );
-        if( cmp == 0 ) cmp = quarter.compareTo( academicStanding.quarter );
+        if( cmp == 0 ) cmp = term.compareTo( academicStanding.term );
         if( cmp == 0 ) cmp = standing.compareTo( academicStanding.standing );
 
         return cmp;
@@ -95,7 +95,7 @@ public class AcademicStanding implements Serializable,
     public String toString()
     {
         return "[" + student.getCin() + ", " + department.getAbbreviation()
-            + ", " + standing.getSymbol() + ", " + quarter.getShortString()
+            + ", " + standing.getSymbol() + ", " + term.getShortString()
             + "]";
     }
 
@@ -139,14 +139,14 @@ public class AcademicStanding implements Serializable,
         this.standing = standing;
     }
 
-    public Quarter getQuarter()
+    public Term getTerm()
     {
-        return quarter;
+        return term;
     }
 
-    public void setQuarter( Quarter quarter )
+    public void setTerm( Term term )
     {
-        this.quarter = quarter;
+        this.term = term;
     }
 
 }

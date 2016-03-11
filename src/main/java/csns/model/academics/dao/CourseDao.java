@@ -28,7 +28,7 @@ public interface CourseDao {
 
     Course getCourse( String code );
 
-    List<Course> searchCourses( String term, int maxResults );
+    List<Course> searchCourses( String text, int maxResults );
 
     Course saveCourse( Course course );
 

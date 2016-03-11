@@ -62,7 +62,7 @@ $(function(){
 </ul>
 
 <div class="site-title">${section.course.code} ${section.course.name}</div>
-<div class="site-quarter">${section.quarter}</div>
+<div class="site-term">${section.term}</div>
 
 <div id="sortableBlocks">
 <c:forEach items="${section.site.blocks}" var="block">

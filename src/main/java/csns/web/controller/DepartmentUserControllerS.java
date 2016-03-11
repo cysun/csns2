@@ -150,16 +150,16 @@ public class DepartmentUserControllerS {
                 logger.debug( "New standing " + standing.getSymbol()
                     + " for student " + student.getName() );
                 academicStanding = new AcademicStanding( student, department,
-                    standing, importedStudent.getQuarter() );
+                    standing, importedStudent.getTerm() );
             }
             else
             {
                 logger.debug( "Standing updated for student "
                     + student.getName() + ": "
                     + academicStanding.getStanding().getSymbol() + " "
-                    + academicStanding.getQuarter().getShortString() + " -> "
-                    + importedStudent.getQuarter().getShortString() );
-                academicStanding.setQuarter( importedStudent.getQuarter() );
+                    + academicStanding.getTerm().getShortString() + " -> "
+                    + importedStudent.getTerm().getShortString() );
+                academicStanding.setTerm( importedStudent.getTerm() );
             }
             academicStanding = academicStandingDao.saveAcademicStanding( academicStanding );
 

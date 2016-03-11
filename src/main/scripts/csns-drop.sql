@@ -9,9 +9,9 @@ drop aggregate median( numeric );
 drop function _final_median( numeric[] );
 
 drop function year(integer);
-drop function quarter(integer);
-drop function quarter();
-drop function quarter(date);
+drop function term(integer);
+drop function term();
+drop function term(date);
 
 drop table assessment_outcome_courses;
 drop table assessment_objective_outcomes;

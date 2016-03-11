@@ -3,7 +3,7 @@
 
     create table academic_standings (
         id int8 not null,
-        quarter int4,
+        term int4,
         department_id int8,
         standing_id int8,
         student_id int8,
@@ -667,7 +667,7 @@
         id int8 not null,
         deleted boolean not null,
         number int4 not null,
-        quarter int4 not null,
+        term int4 not null,
         course_id int8 not null,
         journal_id int8,
         syllabus_id int8,
@@ -760,9 +760,9 @@
         auto_subscribed boolean not null,
         date timestamp not null,
         notification_sent boolean not null,
-        quarter int4,
         subscribable_type varchar(255),
         subscribable_id int8,
+        term int4,
         subscriber_id int8 not null,
         primary key (id)
     );
@@ -982,7 +982,7 @@
         add constraint UK9oju6q704367bp22axidu8ek8 unique (program_id, course_id);
 
     alter table sections 
-        add constraint UKi3480gt0sgeo3myuiwmipxnah unique (quarter, course_id, number);
+        add constraint UK8lwvm8unsny9kwm5dtk81ssot unique (term, course_id, number);
 
     alter table sections 
         add constraint UK_2ei8itlc2p5gvjggaooay98tu unique (journal_id);

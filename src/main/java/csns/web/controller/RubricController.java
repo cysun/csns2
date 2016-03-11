@@ -152,22 +152,22 @@ public class RubricController {
         return "redirect:view?id=" + rubric.getId();
     }
 
-    public String search( @RequestParam(required = false) String term,
+    public String search( @RequestParam(required = false) String text,
         ModelMap models )
     {
         List<Rubric> rubrics = null;
-        if( StringUtils.hasText( term ) )
-            rubrics = rubricDao.searchRubrics( term, -1 );
+        if( StringUtils.hasText( text ) )
+            rubrics = rubricDao.searchRubrics( text, -1 );
 
         models.addAttribute( "searchResults", rubrics );
         return "rubric/search";
     }
 
     @RequestMapping("/department/{dept}/rubric/search")
-    public String search( @RequestParam String term, HttpSession session )
+    public String search( @RequestParam String text, HttpSession session )
     {
-        List<Rubric> rubrics = rubricDao.searchRubrics( term, -1 );
-        session.setAttribute( "rubricSearchTerm", term );
+        List<Rubric> rubrics = rubricDao.searchRubrics( text, -1 );
+        session.setAttribute( "rubricSearchTerm", text );
         session.setAttribute( "rubricSearchResults", rubrics );
         return "redirect:list#search";
     }

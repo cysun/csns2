@@ -98,7 +98,7 @@ function email( userId )
 
 <div id="all">
 <form action="<c:url value='/user/search' />" method="get">
-<p><input id="search" name="term" type="text" class="forminput" size="40" />
+<p><input id="search" name="text" type="text" class="forminput" size="40" />
 <input name="dept" type="hidden" value="${dept}" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>

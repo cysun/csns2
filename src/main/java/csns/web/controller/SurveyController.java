@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -23,9 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -36,8 +34,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,30 +66,8 @@ public class SurveyController {
     @Resource(name = "contentTypes")
     private Properties contentTypes;
 
-    private static final Logger logger = LoggerFactory.getLogger( SurveyController.class );
-
-    @RequestMapping(value = "/department/{dept}/survey/autocomplete")
-    public String autocomplete( @PathVariable String dept,
-        @RequestParam String term, HttpServletResponse response )
-        throws JSONException, IOException
-    {
-        Department department = departmentDao.getDepartment( dept );
-        JSONArray jsonArray = new JSONArray();
-        List<Survey> surveys = surveyDao.searchSurveysByPrefix( department,
-            term, 20 );
-        for( Survey survey : surveys )
-        {
-            Map<String, String> json = new HashMap<String, String>();
-            json.put( "id", survey.getId().toString() );
-            json.put( "value", survey.getName() );
-            json.put( "label", survey.getName() );
-            jsonArray.put( json );
-        }
-
-        response.setContentType( "application/json" );
-        jsonArray.write( response.getWriter() );
-        return null;
-    }
+    private static final Logger logger = LoggerFactory
+        .getLogger( SurveyController.class );
 
     @RequestMapping("/department/{dept}/survey/current")
     public String current( @PathVariable String dept, ModelMap models )
@@ -124,19 +98,19 @@ public class SurveyController {
     }
 
     @RequestMapping("/department/{dept}/survey/search")
-    public String search( @PathVariable String dept, @RequestParam String term,
+    public String search( @PathVariable String dept, @RequestParam String text,
         HttpSession session )
     {
         Department department = departmentDao.getDepartment( dept );
-        List<Survey> surveys = surveyDao.searchSurveys( department, term, 20 );
-        session.setAttribute( "surveySearchTerm", term );
+        List<Survey> surveys = surveyDao.searchSurveys( department, text, 20 );
+        session.setAttribute( "surveySearchTerm", text );
         session.setAttribute( "surveySearchResults", surveys );
         return "redirect:/department/" + dept + "/survey/list#search";
     }
 
     @RequestMapping("/department/{dept}/survey/view")
     public String view( @RequestParam Long id,
-        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
     {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -145,7 +119,7 @@ public class SurveyController {
 
     @RequestMapping("/department/{dept}/survey/editQuestionSheet")
     public String editQuestions( @RequestParam Long surveyId,
-        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
     {
         models.put( "survey", surveyDao.getSurvey( surveyId ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -178,9 +152,9 @@ public class SurveyController {
             survey.getQuestionSheet().getSections().remove( sectionIndex );
             surveyDao.saveSurvey( survey );
 
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " deleted section " + sectionIndex + " from survey "
-                + surveyId );
+            logger.info(
+                SecurityUtils.getUser().getUsername() + " deleted section "
+                    + sectionIndex + " from survey " + surveyId );
         }
 
         return "redirect:editQuestionSheet?surveyId=" + surveyId;
@@ -190,7 +164,7 @@ public class SurveyController {
     public String reorderQuestion( @RequestParam Long surveyId,
         @RequestParam int sectionIndex, @RequestParam Long questionId,
         @RequestParam int newIndex, HttpServletResponse response )
-        throws IOException
+            throws IOException
     {
         Survey survey = surveyDao.getSurvey( surveyId );
         if( !survey.isPublished() )
@@ -206,8 +180,8 @@ public class SurveyController {
             }
 
             logger.info( SecurityUtils.getUser().getUsername()
-                + " reordered question " + questionId + " in survey "
-                + surveyId + " to index " + newIndex );
+                + " reordered question " + questionId + " in survey " + surveyId
+                + " to index " + newIndex );
         }
 
         response.setContentType( "text/plain" );
@@ -229,8 +203,9 @@ public class SurveyController {
                 .removeQuestion( questionId );
             surveyDao.saveSurvey( survey );
 
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " deleted question " + questionId + " in survey " + surveyId );
+            logger.info(
+                SecurityUtils.getUser().getUsername() + " deleted question "
+                    + questionId + " in survey " + surveyId );
         }
 
         return "redirect:editQuestionSheet?surveyId=" + surveyId
@@ -244,8 +219,8 @@ public class SurveyController {
         survey.setDeleted( true );
         surveyDao.saveSurvey( survey );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " removed survey "
-            + id );
+        logger.info(
+            SecurityUtils.getUser().getUsername() + " removed survey " + id );
 
         return "redirect:list";
     }
@@ -265,8 +240,8 @@ public class SurveyController {
 
         DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
         response.setContentType( "text/plain" );
-        response.getWriter().print(
-            dateFormat.format( survey.getPublishDate().getTime() ) );
+        response.getWriter()
+            .print( dateFormat.format( survey.getPublishDate().getTime() ) );
 
         return null;
     }
@@ -286,8 +261,8 @@ public class SurveyController {
 
         DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
         response.setContentType( "text/plain" );
-        response.getWriter().print(
-            dateFormat.format( survey.getCloseDate().getTime() ) );
+        response.getWriter()
+            .print( dateFormat.format( survey.getCloseDate().getTime() ) );
 
         return null;
     }
@@ -295,7 +270,7 @@ public class SurveyController {
     @RequestMapping("/department/{dept}/survey/results")
     @PreAuthorize("principal.isFaculty(#dept)")
     public String results( @PathVariable String dept, @RequestParam Long id,
-        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
+        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
     {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
@@ -337,11 +312,10 @@ public class SurveyController {
         for( int i = 0; i < numOfResponses; ++i )
             sheet.createRow( 1 + i )
                 .createCell( 0 )
-                .setCellValue(
-                    dateFormat.format( survey.getResponses()
-                        .get( i )
-                        .getAnswerSheet()
-                        .getDate() ) );
+                .setCellValue( dateFormat.format( survey.getResponses()
+                    .get( i )
+                    .getAnswerSheet()
+                    .getDate() ) );
 
         // If the survey is NAMED, the next two columns are the CIN and name
         // of the respondent.
@@ -359,10 +333,8 @@ public class SurveyController {
                     .getAuthor();
                 row = sheet.getRow( 1 + i );
                 row.createCell( 1 ).setCellValue( respondent.getCin() );
-                row.createCell( 2 )
-                    .setCellValue(
-                        respondent.getLastName() + ", "
-                            + respondent.getFirstName() );
+                row.createCell( 2 ).setCellValue( respondent.getLastName()
+                    + ", " + respondent.getFirstName() );
             }
             startColumnIndex = 3;
         }
@@ -374,21 +346,19 @@ public class SurveyController {
             .size();
         for( int i = 0; i < numOfQuestions; ++i )
         {
-            sheet.getRow( 0 )
-                .createCell( startColumnIndex + i )
-                .setCellValue( "Q" + (i + 1) );
+            sheet.getRow( 0 ).createCell( startColumnIndex + i ).setCellValue(
+                "Q" + (i + 1) );
             for( int j = 0; j < numOfResponses; ++j )
                 sheet.getRow( 1 + j )
                     .createCell( startColumnIndex + i )
-                    .setCellValue(
-                        survey.getResponses()
-                            .get( j )
-                            .getAnswerSheet()
-                            .getSections()
-                            .get( sectionIndex )
-                            .getAnswers()
-                            .get( i )
-                            .toString() );
+                    .setCellValue( survey.getResponses()
+                        .get( j )
+                        .getAnswerSheet()
+                        .getSections()
+                        .get( sectionIndex )
+                        .getAnswers()
+                        .get( i )
+                        .toString() );
         }
     }
 

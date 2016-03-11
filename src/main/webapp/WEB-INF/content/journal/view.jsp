@@ -33,7 +33,7 @@ function removeJournal()
 </ul>
 
 <div class="journal-title">${course.code} ${course.name}</div>
-<div class="journal-quarter">${section.quarter}</div>
+<div class="journal-term">${section.term}</div>
 <div class="journal-instructor">${section.instructors[0].name}</div>
 
 <a id="description"></a>

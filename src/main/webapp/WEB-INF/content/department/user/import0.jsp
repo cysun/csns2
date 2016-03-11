@@ -13,11 +13,11 @@
 the list of students to the text area below, or enter the information of each
 student manually, one on each line, in the following format:</p>
 <p style="text-align: center; font-family: monospace;">
-quarter cin first_name last_name</p>
+term cin first_name last_name</p>
 <p>Note that</p>
 <ul>
   <li>Fields must be separated by tabs.</li>
-  <li>Quarter must be a 4-digit code, e.g. 2111.</li>
+  <li>Term must be a 4-digit code, e.g. 2111.</li>
   <li>There could be additional fields after last name, though currently they
       are not processed.</li>
 </ul>

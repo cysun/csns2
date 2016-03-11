@@ -14,8 +14,8 @@ $(function(){
 </ul>
 
 <form action="search" method="get">
-<p><input id="search" name="term" type="text" class="forminput" size="40"
-  value="${param.term}" />
+<p><input id="search" name="text" type="text" class="forminput" size="40"
+  value="${param.text}" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>
 
@@ -23,7 +23,7 @@ $(function(){
 <table class="viewtable">
 <thead>
 <tr>
-  <th>Year</th><th>Quarter</th><th>Code</th><th>Name</th><th>Instructor</th>
+  <th>Year</th><th>Term</th><th>Code</th><th>Name</th><th>Instructor</th>
   <security:authorize access="authenticated and principal.admin">
     <th></th>
   </security:authorize>
@@ -32,8 +32,8 @@ $(function(){
 <tbody>
 <c:forEach items="${sections}" var="section">
 <tr>
-  <td>${section.quarter.year}</td>
-  <td>${section.quarter.quarterName}</td>
+  <td>${section.term.year}</td>
+  <td>${section.term.termName}</td>
   <td class="nowrap">
     ${section.course.code}
     <c:if test="${section.number != 1}">(${section.number})</c:if>

@@ -3,13 +3,13 @@
 
 <script>
 $(function(){
-    $("select[name='quarter'] option").each(function(){
-       if( $(this).val() == ${quarter.code}) 
+    $("select[name='term'] option").each(function(){
+       if( $(this).val() == ${term.code}) 
            $(this).attr('selected', true);
     });
-    $("select[name='quarter']").change(function(){
-        var quarter = $("select[name='quarter'] option:selected").val();
-        window.location.href = "taught?quarter=" + quarter;
+    $("select[name='term']").change(function(){
+        var term = $("select[name='term'] option:selected").val();
+        window.location.href = "taught?term=" + term;
     });
     $("#addSectionForm").hide();
     $("#addSectionLink").click(function(){
@@ -58,8 +58,8 @@ function createJournal( sectionId )
 <ul id="title">
   <li>Instructor's Home</li>
   <li class="align_right">
-    <select class="formselect" name="quarter">
-      <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>
+    <select class="formselect" name="term">
+      <c:forEach var="q" items="${terms}"><option value="${q.code}">${q}</option></c:forEach>
     </select>
   </li>
 </ul>
@@ -152,7 +152,7 @@ function createJournal( sectionId )
 <form id="addSectionForm" action="add" method="post">
 <input type="text" class="forminput add" name="name" size="40"
     placeholder="Search for courses to add" />
-<input type="hidden" name="quarterCode" value="${quarter.code}" />
+<input type="hidden" name="termCode" value="${term.code}" />
 <input type="submit" class="subbutton" name="add" value="Add" />
 <button class="subbutton clear">Clear</button>
 </form>

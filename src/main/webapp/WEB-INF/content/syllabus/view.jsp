@@ -15,7 +15,7 @@
 <%-- view syllabus in course journal as instructor --%>
 <c:when test="${view == 'journal1'}">
 <ul id="title">
-<li><a href="<c:url value='/section/taught?quarter=${section.quarter.code}#section-${section.id}' />"
+<li><a href="<c:url value='/section/taught?term=${section.term.code}#section-${section.id}' />"
        class="bc" >${section.course.code} - ${section.number}</a></li>
 <li><a href="<c:url value='/section/journal/view?sectionId=${section.id}' />"
       class="bc">Course Journal</a></li>

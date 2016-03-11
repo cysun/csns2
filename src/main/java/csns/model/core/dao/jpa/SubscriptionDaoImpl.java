@@ -26,7 +26,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.core.Subscribable;
 import csns.model.core.Subscription;
 import csns.model.core.User;
@@ -125,11 +125,11 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
     public int autoUnsubscribe()
     {
         String query = "delete from Subscription where subscribable.class = :clazz "
-            + "and quarter < :quarter and autoSubscribed = true";
+            + "and term < :term and autoSubscribed = true";
 
         return entityManager.createQuery( query )
             .setParameter( "clazz", Forum.class.getCanonicalName() )
-            .setParameter( "quarter", new Quarter() )
+            .setParameter( "term", new Term() )
             .executeUpdate();
     }
 

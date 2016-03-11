@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 import csns.model.academics.Assignment;
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
@@ -57,13 +57,13 @@ public class SectionDaoTests extends
     public void getSections()
     {
         Department department = departmentDao.getDepartment( "cs" );
-        assert sectionDao.getSections( department, new Quarter() ).size() == 2;
+        assert sectionDao.getSections( department, new Term() ).size() == 2;
     }
 
     @Test
     public void getSectionsByInstructor()
     {
-        Quarter f10 = new Quarter( 1109 );
+        Term f10 = new Term( 1109 );
         User cysun = userDao.getUserByUsername( "cysun" );
         assert sectionDao.getSectionsByInstructor( cysun, f10 ).size() == 1;
     }
@@ -71,7 +71,7 @@ public class SectionDaoTests extends
     @Test
     public void getSectionsByStudent()
     {
-        Quarter f10 = new Quarter( 1109 );
+        Term f10 = new Term( 1109 );
         User jdoe1 = userDao.getUserByUsername( "jdoe1" );
 
         assert sectionDao.getSectionsByStudent( jdoe1, f10 ).size() == 1;

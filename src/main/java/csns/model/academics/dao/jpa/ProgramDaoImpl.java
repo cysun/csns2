@@ -55,12 +55,12 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     @Override
-    public List<Program> searchPrograms( String term, int maxResults )
+    public List<Program> searchPrograms( String text, int maxResults )
     {
         TypedQuery<Program> query = entityManager.createNamedQuery(
             "program.search", Program.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

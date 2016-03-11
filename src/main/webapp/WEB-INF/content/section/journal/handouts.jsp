@@ -11,7 +11,7 @@ function removeHandout( resourceId )
 </script>
 
 <ul id="title">
-<li><a href="<c:url value='/section/taught?quarter=${section.quarter.code}#section-${section.id}' />"
+<li><a href="<c:url value='/section/taught?term=${section.term.code}#section-${section.id}' />"
        class="bc" >${section.course.code} - ${section.number}</a></li>
 <li><a href="view?sectionId=${section.id}" class="bc">Course Journal</a></li>
 <li>Handouts</li>

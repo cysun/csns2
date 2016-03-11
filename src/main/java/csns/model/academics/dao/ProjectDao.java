@@ -31,7 +31,7 @@ public interface ProjectDao {
 
     List<Integer> getProjectYears( Department department );
 
-    List<Project> searchProjects( String term, int maxResults );
+    List<Project> searchProjects( String text, int maxResults );
 
     Project saveProject( Project project );
 

@@ -49,14 +49,14 @@ public class AssignmentDaoImpl implements AssignmentDao {
     }
 
     @Override
-    public List<Assignment> searchAssignments( String term, String type,
+    public List<Assignment> searchAssignments( String text, String type,
         User instructor, int maxResults )
     {
         TypedQuery<Assignment> query = entityManager.createNamedQuery(
             "assignment.search", Assignment.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
 
-        return query.setParameter( "term", term )
+        return query.setParameter( "text", text )
             .setParameter( "type", type )
             .setParameter( "instructorId", instructor.getId() )
             .getResultList();

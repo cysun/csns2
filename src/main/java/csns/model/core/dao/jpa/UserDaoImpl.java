@@ -117,33 +117,33 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> searchUsers( String term )
+    public List<User> searchUsers( String text )
     {
-        term = term.toLowerCase();
-        String query = "from User where cin = :term or lower(username) = :term "
-            + "or lower(firstName) = :term or lower(lastName) = :term "
-            + "or lower(firstName || ' ' || lastName) = :term "
-            + "or lower(primaryEmail) = :term order by firstName asc";
+        text = text.toLowerCase();
+        String query = "from User where cin = :text or lower(username) = :text "
+            + "or lower(firstName) = :text or lower(lastName) = :text "
+            + "or lower(firstName || ' ' || lastName) = :text "
+            + "or lower(primaryEmail) = :text order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
-            .setParameter( "term", term )
+            .setParameter( "text", text )
             .getResultList();
     }
 
     @Override
-    public List<User> searchUsersByPrefix( String term, int maxResults )
+    public List<User> searchUsersByPrefix( String text, int maxResults )
     {
-        term = term.toLowerCase();
-        String query = "from User where cin like :term || '%' "
-            + "or lower(username) like :term || '%' "
-            + "or lower(firstName) like :term || '%' "
-            + "or lower(lastName) like :term || '%' "
-            + "or lower(firstName || ' ' || lastName) like :term || '%' "
-            + "or lower(primaryEmail) like :term || '%' "
+        text = text.toLowerCase();
+        String query = "from User where cin like :text || '%' "
+            + "or lower(username) like :text || '%' "
+            + "or lower(firstName) like :text || '%' "
+            + "or lower(lastName) like :text || '%' "
+            + "or lower(firstName || ' ' || lastName) like :text || '%' "
+            + "or lower(primaryEmail) like :text || '%' "
             + "order by firstName asc";
 
         return entityManager.createQuery( query, User.class )
-            .setParameter( "term", term )
+            .setParameter( "text", text )
             .setMaxResults( maxResults )
             .getResultList();
     }

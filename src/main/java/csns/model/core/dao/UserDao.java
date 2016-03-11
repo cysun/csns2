@@ -36,9 +36,9 @@ public interface UserDao {
 
     List<User> getUsers( String lastName, String firstName );
 
-    List<User> searchUsers( String term );
+    List<User> searchUsers( String text );
 
-    List<User> searchUsersByPrefix( String term, int maxResults );
+    List<User> searchUsersByPrefix( String text, int maxResults );
 
     List<User> searchUsersByStanding( String dept, String sybmol );
 

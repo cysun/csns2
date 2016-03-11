@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Course;
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.Rubric;
@@ -52,14 +52,14 @@ public class SectionDaoImpl implements SectionDao {
     }
 
     @Override
-    public Section getSection( Quarter quarter, Course course, int number )
+    public Section getSection( Term term, Course course, int number )
     {
-        String query = "from Section where quarter = :quarter "
+        String query = "from Section where term = :term "
             + "and course = :course and number = :number";
 
         List<Section> sections = entityManager.createQuery( query,
             Section.class )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .setParameter( "course", course )
             .setParameter( "number", number )
             .getResultList();
@@ -67,102 +67,102 @@ public class SectionDaoImpl implements SectionDao {
     }
 
     public List<Section> getUndergraduateSections( Department department,
-        Quarter quarter )
+        Term term )
     {
         String query = "select s from Section s, "
             + "Department d join d.undergraduateCourses c "
-            + "where d = :department and s.quarter = :quarter and s.course = c "
+            + "where d = :department and s.term = :term and s.course = c "
             + "and s.instructors is not empty "
             + "order by c.code asc, s.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "department", department )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .getResultList();
     }
 
     public List<Section> getGraduateSections( Department department,
-        Quarter quarter )
+        Term term )
     {
         String query = "select s from Section s, "
             + "Department d join d.graduateCourses c "
-            + "where d = :department and s.quarter = :quarter and s.course = c "
+            + "where d = :department and s.term = :term and s.course = c "
             + "and s.instructors is not empty "
             + "order by c.code asc, s.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "department", department )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .getResultList();
     }
 
     @Override
-    public List<Section> getSections( Department department, Quarter quarter )
+    public List<Section> getSections( Department department, Term term )
     {
         List<Section> sections = new ArrayList<Section>();
-        sections.addAll( getUndergraduateSections( department, quarter ) );
-        sections.addAll( getGraduateSections( department, quarter ) );
+        sections.addAll( getUndergraduateSections( department, term ) );
+        sections.addAll( getGraduateSections( department, term ) );
         return sections;
     }
 
     @Override
     public List<Section> getSectionsByInstructor( User instructor,
-        Quarter quarter )
+        Term term )
     {
         String query = "select section from Section section "
             + "join section.instructors instructor "
-            + "where instructor = :instructor and section.quarter = :quarter "
+            + "where instructor = :instructor and section.term = :term "
             + "order by section.course.code asc, section.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "instructor", instructor )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .getResultList();
     }
 
     @Override
     public List<Section> getSectionsByInstructor( User instructor,
-        Quarter quarter, Course course )
+        Term term, Course course )
     {
         String query = "select section from Section section "
             + "join section.instructors instructor "
-            + "where instructor = :instructor and section.quarter = :quarter "
+            + "where instructor = :instructor and section.term = :term "
             + "and section.course = :course "
             + "order by section.course.code asc, section.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "instructor", instructor )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .setParameter( "course", course )
             .getResultList();
     }
 
     @Override
-    public List<Section> getSectionsByStudent( User student, Quarter quarter )
+    public List<Section> getSectionsByStudent( User student, Term term )
     {
         String query = "select section from Section section "
             + "join section.enrollments enrollment "
-            + "where enrollment.student = :student and section.quarter = :quarter "
+            + "where enrollment.student = :student and section.term = :term "
             + "order by section.course.code asc, section.number asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "student", student )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .getResultList();
     }
 
     @Override
-    public List<Section> getSectionsByEvaluator( User evaluator, Quarter quarter )
+    public List<Section> getSectionsByEvaluator( User evaluator, Term term )
     {
         String query = "select distinct section from Section section "
             + "join section.rubricAssignments assignment "
             + "join assignment.externalEvaluators evaluator "
-            + "where evaluator = :evaluator and section.quarter = :quarter "
+            + "where evaluator = :evaluator and section.term = :term "
             + "order by section.id asc";
 
         return entityManager.createQuery( query, Section.class )
             .setParameter( "evaluator", evaluator )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .getResultList();
     }
 
@@ -179,29 +179,29 @@ public class SectionDaoImpl implements SectionDao {
     }
 
     @Override
-    public List<Section> searchSections( String term, int maxResults )
+    public List<Section> searchSections( String text, int maxResults )
     {
         TypedQuery<Section> query = entityManager.createNamedQuery(
             "section.search", Section.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override
     @Transactional
-    public Section addSection( Quarter quarter, Course course, User instructor )
+    public Section addSection( Term term, Course course, User instructor )
     {
         String query = "select max(number) from Section "
-            + "where quarter = :quarter and course = :course";
+            + "where term = :term and course = :course";
 
         Integer result = entityManager.createQuery( query, Integer.class )
-            .setParameter( "quarter", quarter )
+            .setParameter( "term", term )
             .setParameter( "course", course )
             .getSingleResult();
         Integer currentNum = result == null ? 0 : result;
 
         Section section = new Section();
-        section.setQuarter( quarter );
+        section.setTerm( term );
         section.setCourse( course );
         section.getInstructors().add( instructor );
         section.setNumber( currentNum + 1 );

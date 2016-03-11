@@ -66,7 +66,7 @@ public class AcademicStandingDaoImpl implements AcademicStandingDao {
     {
         String query = "from AcademicStanding where student = :student "
             + "and department = :department "
-            + "order by quarter.code desc, standing.id desc";
+            + "order by term.code desc, standing.id desc";
 
         List<AcademicStanding> results = entityManager.createQuery( query,
             AcademicStanding.class )

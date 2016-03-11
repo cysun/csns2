@@ -18,7 +18,7 @@
  */
 package csns.importer;
 
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 
 /**
  * This class holds all the fields that could potentially be imported. Note that
@@ -32,7 +32,7 @@ public class ImportedUser {
 
     String grade, oldGrade;
 
-    Quarter quarter;
+    Term term;
 
     boolean isNewAccount;
 
@@ -123,14 +123,14 @@ public class ImportedUser {
         this.oldGrade = oldGrade;
     }
 
-    public Quarter getQuarter()
+    public Term getTerm()
     {
-        return quarter;
+        return term;
     }
 
-    public void setQuarter( Quarter quarter )
+    public void setTerm( Term term )
     {
-        this.quarter = quarter;
+        this.term = term;
     }
 
     public boolean isNewAccount()

@@ -68,12 +68,12 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public List<Project> searchProjects( String term, int maxResults )
+    public List<Project> searchProjects( String text, int maxResults )
     {
         TypedQuery<Project> query = entityManager.createNamedQuery(
             "project.search", Project.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "term", term ).getResultList();
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

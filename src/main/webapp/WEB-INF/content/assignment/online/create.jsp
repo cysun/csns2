@@ -45,7 +45,7 @@ function help( name )
 </li>
 <li class="align_right">
   <form action="search" method="get">
-    <input name="term" type="text" size="40" />
+    <input name="text" type="text" size="40" />
     <input name="sectionId" type="hidden" value="${param.sectionId}" />
     <input name="search" type="submit" value="Search" class="subbutton" />
   </form>

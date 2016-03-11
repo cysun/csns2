@@ -13,15 +13,15 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/search' />">Sections</a></li>
-<li><a class="bc" href="<c:url value='/department/${dept}/sections?quarter=${section.quarter.code}' />">${department.name}</a></li>
+<li><a class="bc" href="<c:url value='/department/${dept}/sections?term=${section.term.code}' />">${department.name}</a></li>
 <li>Import Section</li>
 </ul>
 
 <form:form modelAttribute="importer">
 <table class="viewtable autowidth">
-<tr><th>Quarter</th><th>Course</th><th>Instructor</th></tr>
+<tr><th>Term</th><th>Course</th><th>Instructor</th></tr>
 <tr>
-  <td>${section.quarter}</td>
+  <td>${section.term}</td>
   <td>
     <form:select path="section.course" items="${importer.courses}"
       itemLabel="code" itemValue="id" />

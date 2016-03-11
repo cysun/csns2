@@ -45,13 +45,13 @@ public class MailinglistMessageController {
     }
 
     @RequestMapping("/department/{dept}/mailinglist/message/search")
-    public String search( @RequestParam Long listId, @RequestParam String term,
+    public String search( @RequestParam Long listId, @RequestParam String text,
         ModelMap models )
     {
         Mailinglist mailinglist = mailinglistDao.getMailinglist( listId );
         models.put( "mailinglist", mailinglist );
         models.put( "messages",
-            messageDao.searchMessages( mailinglist, term, 40 ) );
+            messageDao.searchMessages( mailinglist, text, 40 ) );
         return "mailinglist/message/search";
     }
 

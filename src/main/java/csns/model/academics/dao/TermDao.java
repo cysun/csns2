@@ -21,30 +21,30 @@ package csns.model.academics.dao;
 import java.util.List;
 
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.core.User;
 
-public interface QuarterDao {
+public interface TermDao {
 
     /**
-     * Returns the quarters in which the instructor taught any class.
+     * Returns the terms in which the instructor taught any class.
      */
-    List<Quarter> getQuartersByInstructor( User instructor );
+    List<Term> getTermsByInstructor( User instructor );
 
     /**
-     * Returns the quarters in which the student took any class.
+     * Returns the terms in which the student took any class.
      */
-    List<Quarter> getQuartersByStudent( User student );
+    List<Term> getTermsByStudent( User student );
 
     /**
-     * Returns the quarter in which the user evaluated any rubric as an external
+     * Returns the term in which the user evaluated any rubric as an external
      * evaluator.
      */
-    List<Quarter> getQuartersByEvaluator( User evaluator );
+    List<Term> getTermsByEvaluator( User evaluator );
 
     /**
-     * Returns the quarters in which there were any sections for the department.
+     * Returns the terms in which there were any sections for the department.
      */
-    List<Quarter> getSectionQuarters( Department department );
+    List<Term> getSectionTerms( Department department );
 
 }

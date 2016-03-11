@@ -44,7 +44,7 @@ import csns.importer.GradesImporter;
 import csns.importer.ImportedUser;
 import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Section;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
@@ -54,7 +54,7 @@ import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.CoursePropertyEditor;
-import csns.web.editor.QuarterPropertyEditor;
+import csns.web.editor.TermPropertyEditor;
 import csns.web.editor.UserPropertyEditor;
 
 @Controller
@@ -88,8 +88,8 @@ public class DepartmentSectionControllerS {
     @InitBinder
     public void initBinder( WebDataBinder binder )
     {
-        binder.registerCustomEditor( Quarter.class,
-            (QuarterPropertyEditor) context.getBean( "quarterPropertyEditor" ) );
+        binder.registerCustomEditor( Term.class,
+            (TermPropertyEditor) context.getBean( "termPropertyEditor" ) );
         binder.registerCustomEditor( User.class,
             (UserPropertyEditor) context.getBean( "userPropertyEditor" ) );
         binder.registerCustomEditor( Course.class,
@@ -99,12 +99,12 @@ public class DepartmentSectionControllerS {
     @RequestMapping(value = "/department/{dept}/section/import",
         method = RequestMethod.GET)
     public String importSection( @PathVariable String dept,
-        @RequestParam Quarter quarter, ModelMap models )
+        @RequestParam Term term, ModelMap models )
     {
         GradesImporter importer = (GradesImporter) context.getBean( "gradesImporter" );
         importer.setDepartment( departmentDao.getDepartment( dept ) );
         importer.setSection( new Section() );
-        importer.getSection().setQuarter( quarter );
+        importer.getSection().setTerm( term );
         models.put( "importer", importer );
         return "department/section/import0";
     }
@@ -126,7 +126,7 @@ public class DepartmentSectionControllerS {
                 importer.clear();
                 Section section = importer.getSection();
                 List<Section> sections = sectionDao.getSectionsByInstructor(
-                    section.getInstructors().get( 0 ), section.getQuarter(),
+                    section.getInstructors().get( 0 ), section.getTerm(),
                     section.getCourse() );
                 for( Section s : sections )
                     importer.getSectionNumbers().add( s.getNumber() );
@@ -139,9 +139,9 @@ public class DepartmentSectionControllerS {
                 int number = importer.getSection().getNumber();
                 if( number > 0 )
                 {
-                    Quarter quarter = importer.getSection().getQuarter();
+                    Term term = importer.getSection().getTerm();
                     Course course = importer.getSection().getCourse();
-                    Section section = sectionDao.getSection( quarter, course,
+                    Section section = sectionDao.getSection( term, course,
                         number );
                     for( ImportedUser student : importer.getImportedStudents() )
                     {
@@ -168,11 +168,11 @@ public class DepartmentSectionControllerS {
         }
 
         // received _finish, so do the import.
-        Quarter quarter = importer.getSection().getQuarter();
+        Term term = importer.getSection().getTerm();
         Course course = importer.getSection().getCourse();
         int number = importer.getSection().getNumber();
-        Section section = number > 0 ? sectionDao.getSection( quarter, course,
-            number ) : sectionDao.addSection( quarter, course,
+        Section section = number > 0 ? sectionDao.getSection( term, course,
+            number ) : sectionDao.addSection( term, course,
             importer.getSection().getInstructors().get( 0 ) );
 
         for( ImportedUser importedStudent : importer.getImportedStudents() )
@@ -207,7 +207,7 @@ public class DepartmentSectionControllerS {
         }
 
         logger.info( SecurityUtils.getUser().getUsername()
-            + " imported section " + section.getQuarter().getShortString()
+            + " imported section " + section.getTerm().getShortString()
             + " " + section.getCourse().getCode() + "-" + section.getNumber() );
 
         sessionStatus.setComplete();

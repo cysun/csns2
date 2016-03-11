@@ -40,14 +40,14 @@ function deleteStanding( id )
 <h4>Standing History</h4>
 <table class="viewtable autowidth">
   <tr>
-    <th>Department</th><th>Standing</th><th>Quarter</th>
+    <th>Department</th><th>Standing</th><th>Term</th>
     <c:if test="${isFaculty}"><th></th></c:if>
   </tr>
   <c:forEach items="${academicStandings}" var="academicStanding">
   <tr id="standing-${academicStanding.id}">
     <td>${academicStanding.department.name}</td>
     <td>${academicStanding.standing.symbol}</td>
-    <td>${academicStanding.quarter}</td>
+    <td>${academicStanding.term}</td>
     <c:if test="${isFaculty}">
     <td class="center">
       <security:authorize access="principal.isFaculty('${academicStanding.department.abbreviation}')">
@@ -72,7 +72,7 @@ function deleteStanding( id )
   </c:forEach>
   </select>
   <select name="year"></select>
-  <select name="quarterSuffix">
+  <select name="termSuffix">
     <option value="9">Fall</option>
     <option value="1">Winter</option>
     <option value="3">Spring</option>

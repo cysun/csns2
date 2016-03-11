@@ -35,10 +35,10 @@ public interface SurveyDao {
 
     List<Survey> getSurveys( Department department );
 
-    List<Survey> searchSurveys( Department department, String term,
+    List<Survey> searchSurveys( Department department, String text,
         int maxResults );
 
-    List<Survey> searchSurveysByPrefix( Department department, String term,
+    List<Survey> searchSurveysByPrefix( Department department, String text,
         int maxResults );
 
     Survey saveSurvey( Survey survey );

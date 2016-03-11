@@ -3,13 +3,13 @@
 
 <script>
 $(function(){
-    $("select[name='quarter'] option").each(function(){
-       if( $(this).val() == ${quarter.code}) 
+    $("select[name='term'] option").each(function(){
+       if( $(this).val() == ${term.code}) 
            $(this).attr('selected', true);
     });
-    $("select[name='quarter']").change(function(){
-        var quarter = $("select[name='quarter'] option:selected").val();
-        window.location.href = "evaluated?quarter=" + quarter;
+    $("select[name='term']").change(function(){
+        var term = $("select[name='term'] option:selected").val();
+        window.location.href = "evaluated?term=" + term;
     });
     $(".viewtable").tablesorter({
         headers: { 3: {sorter: false} }
@@ -20,8 +20,8 @@ $(function(){
 <ul id="title">
   <li>Evaluator's Home</li>
   <li class="align_right">
-    <select class="formselect" name="quarter">
-      <c:forEach var="q" items="${quarters}"><option value="${q.code}">${q}</option></c:forEach>
+    <select class="formselect" name="term">
+      <c:forEach var="q" items="${terms}"><option value="${q.code}">${q}</option></c:forEach>
     </select>
   </li>
 </ul>

@@ -20,7 +20,7 @@ $(function(){
 </c:if>
 
 <c:if test="${fn:length(messages) > 0}">
-<p>Found ${fn:length(messages)} message(s) that match <i>${param.term}</i>.</p>
+<p>Found ${fn:length(messages)} message(s) that match <i>${param.text}</i>.</p>
 
 <table class="general">
 <c:forEach items="${messages}" var="message" varStatus="status">

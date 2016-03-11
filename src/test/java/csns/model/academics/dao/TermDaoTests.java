@@ -25,36 +25,36 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
-@Test(groups = "QuarterDaoTests", dependsOnGroups = "UserDaoTests")
+@Test(groups = "TermDaoTests", dependsOnGroups = "UserDaoTests")
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
-public class QuarterDaoTests extends AbstractTestNGSpringContextTests {
+public class TermDaoTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
     UserDao userDao;
 
     @Autowired
-    QuarterDao quarterDao;
+    TermDao termDao;
 
     @Test
-    public void getQuartersByInstructor()
+    public void getTermsByInstructor()
     {
         User cysun = userDao.getUserByUsername( "cysun" );
-        List<Quarter> quarters = quarterDao.getQuartersByInstructor( cysun );
-        assert quarters.size() == 2;
-        assert quarters.get( 1 ).getCode() == 1109;
+        List<Term> terms = termDao.getTermsByInstructor( cysun );
+        assert terms.size() == 2;
+        assert terms.get( 1 ).getCode() == 1109;
     }
 
     @Test
-    public void getQuartersByStudent()
+    public void getTermsByStudent()
     {
         User jdoe1 = userDao.getUserByUsername( "jdoe1" );
-        List<Quarter> quarters = quarterDao.getQuartersByStudent( jdoe1 );
-        assert quarters.size() == 2;
-        assert quarters.get( 1 ).getCode() == 1109;
+        List<Term> terms = termDao.getTermsByStudent( jdoe1 );
+        assert terms.size() == 2;
+        assert terms.get( 1 ).getCode() == 1109;
     }
 
 }

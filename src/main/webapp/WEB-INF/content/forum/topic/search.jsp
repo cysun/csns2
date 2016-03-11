@@ -9,7 +9,7 @@
 
 <div id="forums_menu"> 
 <form action="search" method="get">
-  <input type="text" class="input_search" name="term" value="${param.term}" />
+  <input type="text" class="input_search" name="text" value="${param.text}" />
   <input type="hidden" name="forumId" value="${forum.id}" />
   <input type="submit" class="subbutton" name="search" value="Search" />
 </form>
@@ -21,7 +21,7 @@
 
 <c:if test="${fn:length(posts) > 0}">
 <table class="forums">
-<tr><th colspan="2">Found ${fn:length(posts)} post(s) that match <i>${param.term}</i>.</th></tr>
+<tr><th colspan="2">Found ${fn:length(posts)} post(s) that match <i>${param.text}</i>.</th></tr>
 <c:forEach items="${posts}" var="post" varStatus="status">
 <tr<c:if test="${(status.index+1)%2 eq 0}"> class="even"</c:if>>
   <td class="count center">${status.index+1}</td>

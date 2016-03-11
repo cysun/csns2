@@ -26,15 +26,15 @@ import org.springframework.stereotype.Component;
 
 import csns.importer.ImportedUser;
 import csns.importer.parser.StudentsParser;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 
 @Component
 public class StudentsParserImpl implements StudentsParser {
 
     /**
      * This parser handles data copy&pasted from an Excel file produced from GET
-     * data. The format is expected to be <quarter cin first_name last_name ...>
-     * where quarter is a 4-digit code. Currently we only process the first four
+     * data. The format is expected to be <term cin first_name last_name ...>
+     * where term is a 4-digit code. Currently we only process the first four
      * fields.
      */
     @Override
@@ -58,11 +58,11 @@ public class StudentsParserImpl implements StudentsParser {
         ImportedUser student = null;
 
         String tokens[] = line.trim().split( "\t" );
-        if( tokens.length >= 4 && isQuarter( tokens[0] ) && isCin( tokens[1] ) )
+        if( tokens.length >= 4 && isTerm( tokens[0] ) && isCin( tokens[1] ) )
         {
             student = new ImportedUser();
-            // GET quarter code is different from CSNS quarter code
-            student.setQuarter( new Quarter(
+            // GET term code is different from CSNS term code
+            student.setTerm( new Term(
                 Integer.parseInt( tokens[0] ) - 1000 ) );
             student.setCin( tokens[1] );
             student.setFirstName( tokens[2] );
@@ -72,7 +72,7 @@ public class StudentsParserImpl implements StudentsParser {
         return student;
     }
 
-    private boolean isQuarter( String s )
+    private boolean isTerm( String s )
     {
         return s.matches( "\\d{4}" );
     }

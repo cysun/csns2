@@ -73,21 +73,21 @@ public class UserController {
     private final static Logger logger = LoggerFactory.getLogger( UserController.class );
 
     @RequestMapping(value = "/user/search")
-    public String search( @RequestParam(required = false) String term,
+    public String search( @RequestParam(required = false) String text,
         @RequestParam(required = false) String dept, ModelMap models )
     {
         List<User> users = null;
-        if( StringUtils.hasText( term ) )
+        if( StringUtils.hasText( text ) )
         {
-            if( term.toLowerCase().contains( "standing:" ) )
+            if( text.toLowerCase().contains( "standing:" ) )
             {
-                String words[] = term.split( ":" );
+                String words[] = text.split( ":" );
                 if( words.length > 1 )
                     users = userDao.searchUsersByStanding( dept,
                         words[1].trim() );
             }
             else
-                users = userDao.searchUsers( term );
+                users = userDao.searchUsers( text );
         }
         models.addAttribute( "users", users );
         return "user/search";

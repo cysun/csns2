@@ -1049,7 +1049,7 @@ tr th.shrink, tr td.shrink {
     text-align: center;
     margin: 5px 0;
 }
-.journal-quarter {
+.journal-term {
     font: 18px 'Trebuchet MS', Arial;
     text-align: center;
     margin: 10px 0 10px;
@@ -1096,7 +1096,7 @@ tr th.shrink, tr td.shrink {
     text-align: center;
     margin: 5px 0;
 }
-.site-quarter {
+.site-term {
     color: #164FA6;
     font: 18px 'Trebuchet MS', Arial;
     text-align: center;
@@ -1198,7 +1198,7 @@ tr th.shrink, tr td.shrink {
     width: 4em;
     border-right:1px solid #dddddd;
 }
-.pstat-quarter {
+.pstat-term {
     width: 2em;
     border-right:1px solid #dddddd;
 }

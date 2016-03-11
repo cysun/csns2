@@ -53,8 +53,8 @@ insert into department_undergraduate_courses values (1000101, 1000204);
 insert into department_undergraduate_courses values (1000101, 1000205);
 
 insert into sections values (1000300, 1109, 1000204, 1);
-insert into sections values (1000301, quarter(), 1000201, 1);
-insert into sections values (1000302, quarter(), 1000202, 1);
+insert into sections values (1000301, term(), 1000201, 1);
+insert into sections values (1000302, term(), 1000202, 1);
 
 insert into forums (id, name, course_id) values
     (1000700, 'CS101 Introduction to Computer Science', 1000200);

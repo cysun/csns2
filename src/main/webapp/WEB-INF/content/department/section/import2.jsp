@@ -6,7 +6,7 @@
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/search' />">Sections</a></li>
-<li><a class="bc" href="<c:url value='/department/${dept}/sections?quarter=${section.quarter.code}' />">${department.name}</a></li>
+<li><a class="bc" href="<c:url value='/department/${dept}/sections?term=${section.term.code}' />">${department.name}</a></li>
 <li>Import Section</li>
 </ul>
 
@@ -14,9 +14,9 @@
 looks fine, click the Import button to import the data.</p>
 
 <table class="viewtable autowidth">
-  <tr><th>Quarter</th><th>Course</th><th>Instructor</th><th>Section</th></tr>
+  <tr><th>Term</th><th>Course</th><th>Instructor</th><th>Section</th></tr>
   <tr>
-    <td>${section.quarter}</td>
+    <td>${section.term}</td>
     <td>${section.course.code}</td>
     <td>${section.instructors[0].name}</td>
     <td>

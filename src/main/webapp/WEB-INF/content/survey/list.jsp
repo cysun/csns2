@@ -110,7 +110,7 @@ function clone( id )
 
 <div id="search">
 <form action="search" method="post">
-<p><input  name="term" type="text" class="leftinput" style="width: 15em;" value="${surveySearchTerm}"/>
+<p><input name="text" type="text" class="leftinput" style="width: 15em;" value="${surveySearchTerm}"/>
 <input name="search" type="submit" value="Search" class="subbutton" /></p>
 </form>
 

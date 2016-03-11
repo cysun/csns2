@@ -14,7 +14,7 @@ function submitJournal()
 </script>
 
 <ul id="title">
-<li><a href="../taught?quarter=${section.quarter.code}#section-${section.id}"
+<li><a href="../taught?term=${section.term.code}#section-${section.id}"
        class="bc" >${section.course.code} - ${section.number}</a></li>
 <li>Course Journal</li>
 <c:if test="${not journal.submitted}">
@@ -24,7 +24,7 @@ function submitJournal()
 </ul>
 
 <div class="journal-title">${course.code} ${course.name}</div>
-<div class="journal-quarter">${section.quarter}</div>
+<div class="journal-term">${section.term}</div>
 <div class="journal-instructor">${section.instructors[0].name}</div>
 
 <div class="journal-section-title">1.

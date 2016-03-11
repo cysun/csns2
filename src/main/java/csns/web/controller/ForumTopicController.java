@@ -117,11 +117,11 @@ public class ForumTopicController {
 
     @RequestMapping("/department/{dept}/forum/topic/search")
     public String search( @RequestParam Long forumId,
-        @RequestParam String term, ModelMap models )
+        @RequestParam String text, ModelMap models )
     {
         Forum forum = forumDao.getForum( forumId );
         models.put( "forum", forum );
-        models.put( "posts", postDao.searchPosts( forum, term, 40 ) );
+        models.put( "posts", postDao.searchPosts( forum, text, 40 ) );
         return "forum/topic/search";
     }
 

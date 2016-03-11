@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.academics.AcademicStanding;
 import csns.model.academics.Department;
-import csns.model.academics.Quarter;
+import csns.model.academics.Term;
 import csns.model.academics.Standing;
 import csns.model.academics.dao.AcademicStandingDao;
 import csns.model.academics.dao.DepartmentDao;
@@ -96,20 +96,20 @@ public class UserStandingController {
     @RequestMapping("/user/standing/edit")
     public String edit( @RequestParam Long userId,
         @RequestParam Long departmentId, @RequestParam Long standingId,
-        @RequestParam int year, @RequestParam int quarterSuffix )
+        @RequestParam int year, @RequestParam int termSuffix )
     {
         User student = userDao.getUser( userId );
         Department department = departmentDao.getDepartment( departmentId );
         Standing standing = standingDao.getStanding( standingId );
         AcademicStanding academicStanding = academicStandingDao.getAcademicStanding(
             student, department, standing );
-        Quarter quarter = new Quarter( (year - 1900) * 10 + quarterSuffix );
+        Term term = new Term( (year - 1900) * 10 + termSuffix );
 
         if( academicStanding == null )
             academicStanding = new AcademicStanding( student, department,
-                standing, quarter );
+                standing, term );
         else
-            academicStanding.setQuarter( quarter );
+            academicStanding.setTerm( term );
         academicStanding = academicStandingDao.saveAcademicStanding( academicStanding );
 
         AcademicStanding currentStanding = student.getCurrentStanding( department );

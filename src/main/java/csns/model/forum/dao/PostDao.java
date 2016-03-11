@@ -27,7 +27,7 @@ public interface PostDao {
 
     Post getPost( Long id );
 
-    List<Post> searchPosts( Forum forum, String term, int maxResults );
+    List<Post> searchPosts( Forum forum, String text, int maxResults );
 
     Post savePost( Post post );
 

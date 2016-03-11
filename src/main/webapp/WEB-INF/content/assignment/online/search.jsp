@@ -19,21 +19,21 @@ function clone( id )
 </ul>
 
 <form method="get">
-<p><input name="term" type="text" value="${param.term}" class="forminput" size="40" />
+<p><input name="text" type="text" value="${param.text}" class="forminput" size="40" />
 <input name="sectionId" type="hidden" value="${param.sectionId}" />
 <input name="search" type="submit" value="Search" class="subbutton" /></p>
 </form>
 
-<c:if test="${not empty param.term and fn:length(results) == 0}">
+<c:if test="${not empty param.text and fn:length(results) == 0}">
 <p>No assignments found.</p>
 </c:if>
 
 <c:if test="${fn:length(results) > 0}">
 <table class="viewtable">
-  <tr><th>Quarter</th><th>Section</th><th>Assignment</th><th></th></tr>
+  <tr><th>Term</th><th>Section</th><th>Assignment</th><th></th></tr>
   <c:forEach items="${results}" var="assignment">
   <tr>
-    <td>${assignment.section.quarter}</td>
+    <td>${assignment.section.term}</td>
     <td>
       ${assignment.section.course.code}
       <c:if test="${assignment.section.number != 1}">(${assignment.section.number})</c:if>

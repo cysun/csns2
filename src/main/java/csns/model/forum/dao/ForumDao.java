@@ -41,7 +41,7 @@ public interface ForumDao {
 
     List<Forum> getCourseForums( Department department );
 
-    List<Forum> searchForums( String term, int maxResults );
+    List<Forum> searchForums( String text, int maxResults );
 
     Forum saveForum( Forum forum );
 

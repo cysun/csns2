@@ -11,8 +11,19 @@
 <script>
 $(function(){
     $("#tabs").tabs();
-    $("select[name='beginYear']").val("${beginYear}");
-    $("select[name='endYear']").val("${endYear}");
+    $("#beginYear").val("${beginYear}").change(function(){
+    	if( $("#endYear").val() < $("#beginYear").val() )
+    	    $("#endYear").val($("#beginYear").val());
+    });
+    $("#endYear").val("${endYear}").change(function(){
+        if( $("#endYear").val() < $("#beginYear").val() )
+            $("#beginYear").val($("#endYear").val());
+    });
+    $("#select").click(function(){
+        window.location.href = "?rubricId=${rubric.id}&courseId=${course.id}"
+            + "&beginYear=" + $("#beginYear").val()
+            + "&endYear=" + $("#endYear").val();
+    });
 });
 function showStats( evalType )
 { 
@@ -46,13 +57,13 @@ function showStats( evalType )
 
 <div style="padding: 10px; margin-bottom: 1em;" class="ui-widget-content ui-corner-all">
 From:
-  <select name="beginYear">
+  <select id="beginYear" name="beginYear">
     <c:forEach items="${years}" var="year">
       <option value="${year}">${year}</option>
     </c:forEach>    
   </select>
 <span style="margin-left: 10px;">To:</span>
-  <select name="endYear">
+  <select id="endYear" name="endYear">
     <c:forEach items="${years}" var="year" varStatus="status">
       <option value="${year}">${year}</option>
     </c:forEach>    

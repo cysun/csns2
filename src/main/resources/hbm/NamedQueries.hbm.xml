@@ -270,7 +270,7 @@ order by year, indicator
     <sql-query name="rubric.evaluation.years">
         <return-scalar column="year" type="java.lang.Integer" />
 <![CDATA[
-select s.term/10 + 1900 as year from rubrics r
+select distinct (s.term/10 + 1900) as year from rubrics r
     inner join rubric_assignments a on a.rubric_id = r.id
     inner join sections s on s.id = a.section_id
     inner join courses c on c.id = s.course_id

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -34,6 +34,7 @@ import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.dao.GroupDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -49,18 +50,24 @@ public class DepartmentInfoController {
 
     @Autowired
     private DepartmentDao departmentDao;
+    
+    @Autowired
+    GroupDao groupDao;
 
     private final static Logger logger = LoggerFactory
         .getLogger( DepartmentInfoController.class );
 
     @RequestMapping(value = "/department/{dept}/people")
-    public String people( @PathVariable String dept, ModelMap models)
+    public String people( @PathVariable String dept,
+        @RequestParam(required = false ) String term, ModelMap models)
     {
-        models.put( "department", departmentDao.getDepartment( dept ) );
+    	Department department = departmentDao.getDepartment( dept );
+        models.put( "department", department );
+        models.put("groups", groupDao.getGroups(department));
         return "department/people";
     }
 
-    @PreAuthorize("hasRole('ROLE_DEPT_ADMIN_' + #dept)")
+    @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
     @RequestMapping(
         value = "/department/{dept}/personnel/{personnel}/{operation}")
     public String people( @PathVariable String dept,
@@ -74,23 +81,23 @@ public class DepartmentInfoController {
         switch( personnel )
         {
             case "admin":
-                role = "ROLE_DEPT_ADMIN_" + dept;
+                role = "DEPT_ROLE_ADMIN_" + dept;
                 users = department.getAdministrators();
                 break;
             case "faculty":
-                role = "ROLE_DEPT_FACULTY_" + dept;
+                role = "DEPT_ROLE_FACULTY_" + dept;
                 users = department.getFaculty();
                 break;
             case "instructor":
-                role = "ROLE_DEPT_INSTRUCTOR_" + dept;
+                role = "DEPT_ROLE_INSTRUCTOR_" + dept;
                 users = department.getInstructors();
                 break;
             case "evaluator":
-                role = "ROLE_DEPT_EVALUATOR_" + dept;
+                role = "DEPT_ROLE_EVALUATOR_" + dept;
                 users = department.getEvaluators();
                 break;
             case "reviewer":
-                role = "ROLE_DEPT_REVIEWER_" + dept;
+                role = "DEPT_ROLE_REVIEWER_" + dept;
                 users = department.getReviewers();
                 break;
             default:
@@ -144,7 +151,7 @@ public class DepartmentInfoController {
         return "department/courses";
     }
 
-    @PreAuthorize("hasRole('ROLE_DEPT_ADMIN_' + #dept)")
+    @PreAuthorize("hasRole('DEPT_ROLE_ADMIN_' + #dept)")
     @RequestMapping(value = "/department/{dept}/course/{level}/{operation}")
     public String courses( @PathVariable String dept,
         @PathVariable String level, @PathVariable String operation,

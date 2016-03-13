@@ -134,6 +134,34 @@
         <put-attribute name="content" value="/WEB-INF/content/exception/email.jsp" />
     </definition>
 
+	<!-- ==== -->
+    <!-- Group -->
+    <!-- ==== -->
+    <definition name="group/view" extends="layout.basic">
+        <put-attribute name="title" value="View Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/view.jsp" />
+    </definition>
+    
+    <definition name="group/add" extends="layout.alljs">
+        <put-attribute name="title" value="Add Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/add.jsp" />
+    </definition>
+    
+    <definition name="group/edit" extends="layout.alljs">
+        <put-attribute name="title" value="Edit Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/edit.jsp" />
+    </definition>
+    
+    <definition name="group/user/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import User" />
+        <put-attribute name="content" value="/WEB-INF/content/group/user/import0.jsp" />
+    </definition>
+
+    <definition name="group/user/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import User" />
+        <put-attribute name="content" value="/WEB-INF/content/group/user/import1.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- Resource -->
     <!-- ======== -->

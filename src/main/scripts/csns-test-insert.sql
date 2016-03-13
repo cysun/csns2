@@ -5,15 +5,15 @@
 -- and the data inserted later (id > 2,000,000).
 
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
-    (1000001, '1000001', 'cysun', md5('abcd'), 'Sun', 'Chengyu', 'cysun@localhost.localdomain');
+    (1000001, '100000111', 'cysun', md5('abcd'), 'Sun', 'Chengyu', 'cysun@localhost.localdomain');
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
-    (1000002, '1000002', 'jdoe1', md5('abcd'), 'Doe', 'John', 'jdoe1@localhost.localdomain');
+    (1000002, '100000222', 'jdoe1', md5('abcd'), 'Doe', 'John', 'jdoe1@localhost.localdomain');
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
-    (1000003, '1000003', 'jdoe2', md5('abcd'), 'Doe', 'Jane', 'jdoe2@localhost.localdomain');
+    (1000003, '100000333', 'jdoe2', md5('abcd'), 'Doe', 'Jane', 'jdoe2@localhost.localdomain');
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
-    (1000004, '1000004', 'rpamula', md5('abcd'), 'Pamula', 'Raj', 'rpamula@localhost.localdomain');
+    (1000004, '100000444', 'rpamula', md5('abcd'), 'Pamula', 'Raj', 'rpamula@localhost.localdomain');
 insert into users (id, cin, username, password, last_name, first_name, primary_email) values
-    (1000005, '1000005', 'ttrejo', md5('abcd'), 'Trejo', 'Tricia', 'ttrejo@localhost.localdomain');
+    (1000005, '100000555', 'ttrejo', md5('abcd'), 'Trejo', 'Tricia', 'ttrejo@localhost.localdomain');
 
 insert into authorities values (1000005, 'ROLE_DEPT_ADMIN_cs');
 insert into authorities values (1000004, 'ROLE_DEPT_ADMIN_cs');

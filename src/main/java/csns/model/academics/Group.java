@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,14 +31,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import csns.model.core.User;
 
 @Entity
-@Table(name="groups", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
+@Table(name="groups")
 public class Group implements Serializable, Comparable<Group>{
 
 	private static final long serialVersionUID = 1L;
@@ -47,9 +47,11 @@ public class Group implements Serializable, Comparable<Group>{
 	private Long id;
 	
 	@JsonIgnore
+	@Column(nullable = false, unique = true)
 	private String name;
 	
 	@JsonIgnore
+	@Column(nullable = false)
 	private String description;
 	
 	@JsonIgnore

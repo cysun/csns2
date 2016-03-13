@@ -1541,6 +1541,25 @@ create table assessment_outcome_courses (
   unique (outcome_id, course_id)
 );
 
+
+------------------------
+------ groups-----------
+------------------------
+create table group_users (
+    group_id int8 not null,
+    user_id int8 not null,
+    primary key (group_id, user_id)
+);
+
+create table groups (
+    id int8 not null,
+    deleted boolean not null,
+    name varchar(255) not null unique,
+    description varchar(255)not null,
+    department_id int8,
+    primary key (id)
+);
+
 ------------------------------
 -- functions and procedures --
 ------------------------------

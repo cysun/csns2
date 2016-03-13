@@ -94,11 +94,12 @@ function email( userId )
   <li><a href="#instructor">Instructors</a></li>
   <li><a href="#evaluator">Rubric Evaluators</a></li>
   <li><a href="#reviewer">Program Reviewers</a></li>
+  <li><a href="#group">User Groups</a></li>
 </ul>
 
 <div id="all">
 <form action="<c:url value='/user/search' />" method="get">
-<p><input id="search" name="text" type="text" class="forminput" size="40" />
+<p><input id="search" name="term" type="text" class="forminput" size="40" />
 <input name="dept" type="hidden" value="${dept}" />
 <input name="search" type="submit" class="subbutton" value="Search" /></p>
 </form>
@@ -293,5 +294,50 @@ function email( userId )
 </p></form>
 </security:authorize>
 </div> <!-- end of reviewers -->
+
+
+<!-- added by mjamali -->
+<div id="group">
+<c:choose>
+<c:when test="${fn:length(groups) > 0}">
+	<form id="groupForm" method="post">
+	<table class="viewtable">
+	<tr>
+	  <th>Name</th><th>Description</th>
+	  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+	  <th class="center"></th>
+	  <th class="center"></th>
+	  <th class="center"></th>
+	  </security:authorize>
+	</tr>
+	<c:forEach items="${groups}" var="group">
+	<tr>
+	  <td><a href="<c:url value='/department/${dept}/group/view?id=${group.id}' />">${group.name}</a></td>
+	  <td>${group.description}</td>
+	  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+	  <td class="center"><a href="<c:url value='/department/${dept}/group/delete?id=${group.id}' />"><img
+	    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
+	  <td class="center"><a href="<c:url value='/department/${dept}/group/edit?id=${group.id}' />"><img alt="[Edit]"
+	  title="Edit" src="<c:url value='/img/icons/page_edit.png' />" /></a></td>
+	  <td class="center"><a href="<c:url value='/department/${dept}/group/user/import?id=${group.id}' />"><img alt="[Import Students]"
+	  title="Import Students" src="<c:url value='/img/icons/table_import.png' />" /></a></td>
+	  </security:authorize>
+	</tr>
+	</c:forEach>
+	</table>
+	<input type="hidden" name="backUrl" value="/department/${dept}/people#group" />
+	</form>
+</c:when>
+<c:otherwise>
+	<p><span>No groups yet.</span></p>
+</c:otherwise>
+</c:choose>
+<div style="margin-top:20px">
+	<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+	<a href="group/add" class="button-link subbutton">Add A New Group</a>
+	</security:authorize>
+</div>
+</div> <!-- end of groups -->
+
 
 </div> <!-- tabs -->

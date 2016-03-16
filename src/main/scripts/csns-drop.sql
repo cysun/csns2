@@ -122,6 +122,7 @@ drop table program_required_courses;
 drop table programs;
 
 alter table courses drop constraint courses_department_fk;
+alter table groups drop constraint groups_department_fk;
 alter table users drop constraint users_major_fk;
 drop table department_options;
 drop table department_additional_graduate_courses;
@@ -185,6 +186,8 @@ alter table users drop constraint profile_picture_id_fkey;
 alter table users drop constraint profile_thumbnail_id_fkey;
 drop table files;
 
+drop table members;
+drop table groups;
 drop table persistent_logins;
 drop table authorities;
 drop table users;

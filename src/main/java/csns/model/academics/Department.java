@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -39,6 +39,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import csns.model.core.Group;
 import csns.model.core.User;
 import csns.model.forum.Forum;
 import csns.model.mailinglist.Mailinglist;
@@ -80,24 +81,24 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_administrators",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "user_id") )
     @OrderBy("firstName asc")
     private List<User> administrators;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_faculty",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "user_id") )
     @OrderBy("firstName asc")
     private List<User> faculty;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_instructors",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "user_id") )
     @OrderBy("firstName asc")
     private List<User> instructors;
 
@@ -107,8 +108,8 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_evaluators",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "user_id") )
     @OrderBy("firstName asc")
     private List<User> evaluators;
 
@@ -118,10 +119,18 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_reviewers",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "user_id") )
     @OrderBy("firstName asc")
     private List<User> reviewers;
+
+    /**
+     * User groups of the department.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "department")
+    @OrderBy("date asc")
+    private List<Group> groups;
 
     /**
      * Department courses are courses offered by the department. For example,
@@ -130,8 +139,8 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_undergraduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "course_id") )
     @OrderBy("code asc")
     private List<Course> undergraduateCourses;
 
@@ -144,16 +153,16 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_additional_undergraduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "course_id") )
     @OrderBy("code asc")
     private List<Course> additionalUndergraduateCourses;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_graduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "course_id") )
     @OrderBy("code asc")
     private List<Course> graduateCourses;
 
@@ -166,8 +175,8 @@ public class Department implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_additional_graduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
+        joinColumns = @JoinColumn(name = "department_id") ,
+        inverseJoinColumns = @JoinColumn(name = "course_id") )
     @OrderBy("code asc")
     private List<Course> additionalGraduateCourses;
 
@@ -177,21 +186,21 @@ public class Department implements Serializable {
     private List<Program> programs;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
-        CascadeType.MERGE })
+    @OneToMany(mappedBy = "department",
+        cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @OrderBy("id asc")
     private List<Forum> forums;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = { CascadeType.PERSIST,
-        CascadeType.MERGE })
+    @OneToMany(mappedBy = "department",
+        cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @OrderBy("id asc")
     private List<Mailinglist> mailinglists;
 
     @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "department_options",
-        joinColumns = @JoinColumn(name = "department_id"))
+        joinColumns = @JoinColumn(name = "department_id") )
     @Column(name = "option", nullable = false)
     private Set<String> options;
 
@@ -202,6 +211,7 @@ public class Department implements Serializable {
         instructors = new ArrayList<User>();
         evaluators = new ArrayList<User>();
         reviewers = new ArrayList<User>();
+        groups = new ArrayList<Group>();
 
         undergraduateCourses = new ArrayList<Course>();
         additionalUndergraduateCourses = new ArrayList<Course>();
@@ -311,6 +321,16 @@ public class Department implements Serializable {
     public void setReviewers( List<User> reviewers )
     {
         this.reviewers = reviewers;
+    }
+
+    public List<Group> getGroups()
+    {
+        return groups;
+    }
+
+    public void setGroups( List<Group> groups )
+    {
+        this.groups = groups;
     }
 
     public List<Course> getUndergraduateCourses()

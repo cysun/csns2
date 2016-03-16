@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -26,53 +26,45 @@ import org.springframework.stereotype.Component;
 
 import csns.importer.ImportedUser;
 import csns.importer.parser.UserListParser;
-import csns.model.academics.Term;
 
 /**
- * This parser handles data copy&pasted from an Excel file produced from GET
- * data. The format is expected to be "term cin first_name last_name ..." where
- * term is a 4-digit code. Currently we only process the first four fields.
+ * This parser handles data copy&pasted from an Excel file produced from some
+ * data source. The format is expected to be "cin first_name last_name ...".
+ * Currently we only process the first three fields.
  */
-@Component("studentsParser")
-public class StudentsParserImpl implements UserListParser {
+@Component("usersParser")
+public class UsersParserImpl implements UserListParser {
 
     @Override
     public List<ImportedUser> parse( String text )
     {
-        List<ImportedUser> students = new ArrayList<ImportedUser>();
+        List<ImportedUser> importedUsers = new ArrayList<ImportedUser>();
 
         Scanner scanner = new Scanner( text );
         while( scanner.hasNextLine() )
         {
-            ImportedUser student = parseLine( scanner.nextLine() );
-            if( student != null ) students.add( student );
+            ImportedUser user = parseLine( scanner.nextLine() );
+            if( user != null ) importedUsers.add( user );
         }
         scanner.close();
 
-        return students;
+        return importedUsers;
     }
 
     public ImportedUser parseLine( String line )
     {
-        ImportedUser student = null;
+        ImportedUser user = null;
 
         String tokens[] = line.trim().split( "\t" );
-        if( tokens.length >= 4 && isTerm( tokens[0] ) && isCin( tokens[1] ) )
+        if( tokens.length >= 3 && isCin( tokens[0] ) )
         {
-            student = new ImportedUser();
-            // GET term code is different from CSNS term code
-            student.setTerm( new Term( Integer.parseInt( tokens[0] ) - 1000 ) );
-            student.setCin( tokens[1] );
-            student.setFirstName( tokens[2] );
-            student.setLastName( tokens[3] );
+            user = new ImportedUser();
+            user.setCin( tokens[0] );
+            user.setFirstName( tokens[1] );
+            user.setLastName( tokens[2] );
         }
 
-        return student;
-    }
-
-    public boolean isTerm( String s )
-    {
-        return s.matches( "\\d{4}" );
+        return user;
     }
 
     public boolean isCin( String s )

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,7 +19,9 @@
 package csns.importer;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,48 +30,49 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import csns.importer.parser.UserListParser;
-import csns.model.academics.Department;
-import csns.model.academics.Standing;
+import csns.model.core.Group;
+import csns.model.core.Member;
+import csns.model.core.User;
+import csns.model.core.dao.UserDao;
 
 @Component
 @Scope("prototype")
-public class StudentsImporter {
+public class UsersImporter {
 
     @Autowired
-    @Qualifier("studentsParser")
+    UserDao userDao;
+
+    @Autowired
+    @Qualifier("usersParser")
     UserListParser usersParser;
-
-    Department department;
-
-    Standing standing;
 
     String text;
 
-    List<ImportedUser> importedStudents;
+    List<ImportedUser> importedUsers;
 
-    public StudentsImporter()
+    public UsersImporter()
     {
-        importedStudents = new ArrayList<ImportedUser>();
+        importedUsers = new ArrayList<ImportedUser>();
     }
 
-    public Department getDepartment()
+    public void checkAccountStatus()
     {
-        return department;
+        for( ImportedUser importedUser : importedUsers )
+        {
+            User user = userDao.getUserByCin( importedUser.getCin() );
+            importedUser.setNewAccount( user == null );
+        }
     }
 
-    public void setDepartment( Department department )
+    public void checkMemberStatus( Group group )
     {
-        this.department = department;
-    }
+        Set<String> cins = new HashSet<String>();
+        for( Member member : group.getMembers() )
+            cins.add( member.getUser().getCin() );
 
-    public Standing getStanding()
-    {
-        return standing;
-    }
-
-    public void setStanding( Standing standing )
-    {
-        this.standing = standing;
+        for( ImportedUser importedUser : importedUsers )
+            importedUser
+                .setNewMember( !cins.contains( importedUser.getCin() ) );
     }
 
     public String getText()
@@ -82,18 +85,18 @@ public class StudentsImporter {
         if( StringUtils.hasText( text ) )
         {
             this.text = text;
-            importedStudents = usersParser.parse( text );
+            importedUsers = usersParser.parse( text );
         }
     }
 
-    public List<ImportedUser> getImportedStudents()
+    public List<ImportedUser> getImportedUsers()
     {
-        return importedStudents;
+        return importedUsers;
     }
 
-    public void setImportedStudents( List<ImportedUser> importedStudents )
+    public void setImportedUsers( List<ImportedUser> importedUsers )
     {
-        this.importedStudents = importedStudents;
+        this.importedUsers = importedUsers;
     }
 
 }

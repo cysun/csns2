@@ -76,7 +76,8 @@ public class DownloadController {
     // differently.
     private String replaceRegex = " |,|;";
 
-    private static Logger logger = LoggerFactory.getLogger( DownloadController.class );
+    private static Logger logger = LoggerFactory
+        .getLogger( DownloadController.class );
 
     private Collection<File> removeDuplicates( Collection<File> files )
     {
@@ -125,14 +126,14 @@ public class DownloadController {
             return null;
         }
 
-        String contentType = contentTypes.getProperty( file.getFileExtension()
-            .toLowerCase() );
+        String contentType = contentTypes
+            .getProperty( file.getFileExtension().toLowerCase() );
         if( contentType == null ) contentType = file.getType();
 
         response.setContentType( contentType );
         response.setHeader( "Content-Length", file.getSize().toString() );
-        response.setHeader( "Content-Disposition", "inline; filename="
-            + file.getName().replaceAll( replaceRegex, "_" ) );
+        response.setHeader( "Content-Disposition",
+            "inline; filename=\"" + file.getName() + "\"" );
 
         fileIO.copy( file, response.getOutputStream() );
 
@@ -153,8 +154,8 @@ public class DownloadController {
             .replace( replaceRegex, "_" );
 
         response.setContentType( "application/zip" );
-        response.setHeader( "Content-Disposition", "attachment; filename="
-            + name + ".zip" );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=" + name + ".zip" );
 
         ZipOutputStream zip = new ZipOutputStream( response.getOutputStream() );
         addToZip( zip, name, submission.getFiles() );
@@ -170,8 +171,8 @@ public class DownloadController {
         String name = assignment.getAlias().replaceAll( replaceRegex, "_" );
 
         response.setContentType( "application/zip" );
-        response.setHeader( "Content-Disposition", "attachment; filename="
-            + name + ".zip" );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=" + name + ".zip" );
 
         ZipOutputStream zip = new ZipOutputStream( response.getOutputStream() );
         for( Submission submission : assignment.getSubmissions() )
@@ -191,15 +192,15 @@ public class DownloadController {
         Section section = sectionDao.getSection( sectionId );
         String name = section.getCourse().getCode();
         response.setContentType( "application/zip" );
-        response.setHeader( "Content-Disposition", "attachment; filename="
-            + name + ".zip" );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=" + name + ".zip" );
 
         User user = SecurityUtils.getUser();
         ZipOutputStream zip = new ZipOutputStream( response.getOutputStream() );
         for( Assignment assignment : section.getAssignments() )
         {
-            if( assignment.isPastDue() && !assignment.isAvailableAfterDueDate() )
-                continue;
+            if( assignment.isPastDue()
+                && !assignment.isAvailableAfterDueDate() ) continue;
 
             String dir = assignment.getAlias();
             Submission submission = submissionDao.getSubmission( user,
@@ -217,8 +218,8 @@ public class DownloadController {
     {
         File folder = fileDao.getFile( folderId );
         response.setContentType( "application/zip" );
-        response.setHeader( "Content-Disposition", "attachment; filename="
-            + folder.getName() + ".zip" );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=\"" + folder.getName() + ".zip\"" );
         ZipOutputStream zip = new ZipOutputStream( response.getOutputStream() );
         addToZip( zip, folder.getName(), fileDao.listFiles( folder ) );
         zip.close();

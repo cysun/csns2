@@ -300,6 +300,35 @@
         <put-attribute name="content" value="/WEB-INF/content/department/projects.jsp" />
     </definition>
 
+    <!-- ===== -->
+    <!-- Group -->
+    <!-- ===== -->
+
+    <definition name="group/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/view.jsp" />
+    </definition>
+
+    <definition name="group/create" extends="layout.basic">
+        <put-attribute name="title" value="Create Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/create.jsp" />
+    </definition>
+
+    <definition name="group/edit" extends="layout.basic">
+        <put-attribute name="title" value="Edit Group" />
+        <put-attribute name="content" value="/WEB-INF/content/group/edit.jsp" />
+    </definition>
+
+    <definition name="group/import0" extends="layout.basic">
+        <put-attribute name="title" value="Import Users" />
+        <put-attribute name="content" value="/WEB-INF/content/group/import0.jsp" />
+    </definition>
+
+    <definition name="group/import1" extends="layout.basic">
+        <put-attribute name="title" value="Import Users" />
+        <put-attribute name="content" value="/WEB-INF/content/group/import1.jsp" />
+    </definition>
+
     <!-- ======= -->
     <!-- Program -->
     <!-- ======= -->

@@ -371,6 +371,15 @@
         primary key (id)
     );
 
+    create table groups (
+        id int8 not null,
+        date timestamp not null,
+        description varchar(255) not null,
+        name varchar(255) not null,
+        department_id int8,
+        primary key (id)
+    );
+
     create table mailinglist_message_attachments (
         message_id int8 not null,
         file_id int8 not null
@@ -391,6 +400,14 @@
         description varchar(255),
         name varchar(255) not null,
         department_id int8,
+        primary key (id)
+    );
+
+    create table members (
+        id int8 not null,
+        date timestamp not null,
+        group_id int8,
+        user_id int8,
         primary key (id)
     );
 
@@ -1482,6 +1499,11 @@
         foreign key (last_post_id) 
         references forum_posts;
 
+    alter table groups 
+        add constraint FKqh3pnyt97wuwjuqmu010d96ma 
+        foreign key (department_id) 
+        references departments;
+
     alter table mailinglist_message_attachments 
         add constraint FKkuyhly7fkj24swagbqq7fhelh 
         foreign key (file_id) 
@@ -1506,6 +1528,16 @@
         add constraint FKpippeslrcwctd4hoqrdd2aef 
         foreign key (department_id) 
         references departments;
+
+    alter table members 
+        add constraint FK1jmeir47b7qcn2sd5m4txgfuw 
+        foreign key (group_id) 
+        references groups;
+
+    alter table members 
+        add constraint FKpj3n6wh5muoeakc485whgs3x5 
+        foreign key (user_id) 
+        references users;
 
     alter table mft_distribution_entries 
         add constraint FK5nwtiuc3f46jspl1dueh5d8ld 

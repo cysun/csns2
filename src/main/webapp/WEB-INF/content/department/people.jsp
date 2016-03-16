@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
@@ -78,9 +79,11 @@ function email( userId )
 <li>${department.name}</li>
 <li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Users"
     alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
-<li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add"
-    alt="[Add]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
+<li class="align_right"><a href="<c:url value='/user/add' />"><img title="Add User"
+    alt="[Add User]" src="<c:url value='/img/icons/user_add.png' />" /></a></li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<li class="align_right"><a href="<c:url value='/department/${dept}/group/create' />"><img title="Create Group"
+    alt="[Create Group]" src="<c:url value='/img/icons/group_add.png' />" /></a></li>
 <li class="align_right"><a href="user/import"><img alt="[Import Students]"
   title="Import Students" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </security:authorize>
@@ -94,6 +97,7 @@ function email( userId )
   <li><a href="#instructor">Instructors</a></li>
   <li><a href="#evaluator">Rubric Evaluators</a></li>
   <li><a href="#reviewer">Program Reviewers</a></li>
+  <li><a href="#group">User Groups</a></li>
 </ul>
 
 <div id="all">
@@ -293,5 +297,22 @@ function email( userId )
 </p></form>
 </security:authorize>
 </div> <!-- end of reviewers -->
+
+<div id="group">
+<c:if test="${fn:length(department.groups) > 0}">
+<table class="viewtable">
+<tr>
+  <th>Name</th><th>Description</th><th>Updated On</th>
+</tr>
+<c:forEach items="${department.groups}" var="group">
+<tr>
+  <td class="nowrap"><a href="<c:url value='/department/${dept}/group/view?id=${group.id}' />">${group.name}</a></td>
+  <td>${group.description}</td>
+  <td class="shrink"><fmt:formatDate value="${group.date}" pattern="yyyy-MM-dd" /></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+</div> <!-- end of groups -->
 
 </div> <!-- tabs -->

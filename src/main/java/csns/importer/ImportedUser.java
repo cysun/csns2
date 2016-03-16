@@ -38,10 +38,13 @@ public class ImportedUser {
 
     boolean isNewEnrollment;
 
+    boolean isNewMember;
+
     public ImportedUser()
     {
         isNewAccount = false;
         isNewEnrollment = false;
+        isNewMember = false;
     }
 
     public void setName( String name )
@@ -151,6 +154,16 @@ public class ImportedUser {
     public void setNewEnrollment( boolean isNewEnrollment )
     {
         this.isNewEnrollment = isNewEnrollment;
+    }
+
+    public boolean isNewMember()
+    {
+        return isNewMember;
+    }
+
+    public void setNewMember( boolean isNewMember )
+    {
+        this.isNewMember = isNewMember;
     }
 
 }

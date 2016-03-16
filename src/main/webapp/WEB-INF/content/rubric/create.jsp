@@ -22,7 +22,7 @@ function help( name )
 
 <ul id="title">
 <li><a href="list" class="bc">Rubrics</a></li>
-<li>Create</li>
+<li>New Rubric</li>
 </ul>
 
 <form:form modelAttribute="rubric">

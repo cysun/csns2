@@ -120,3 +120,21 @@ $$ language plpgsql;
 drop function quarter(integer);
 drop function quarter();
 drop function quarter(date);
+
+create table groups (
+    id              bigint primary key,
+    department_id   bigint,
+    name            varchar(255) not null,
+    description     varchar(8000) not null,
+    date            timestamp not null default current_timestamp
+);
+
+create table members (
+    id          bigint primary key,
+    group_id    bigint references groups(id),
+    user_id     bigint references users(id),
+    date        timestamp not null default current_timestamp
+);
+
+alter table groups add constraint groups_department_fk
+    foreign key (department_id) references departments(id);

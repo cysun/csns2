@@ -8,9 +8,9 @@ create sequence hibernate_sequence minvalue 2000000;
 -- This sequence is used to generate peudo-id's for query results.
 create sequence result_sequence cycle;
 
----------------------
--- users and roles --
----------------------
+------------------------------
+-- users, roles, and groups --
+------------------------------
 
 create table users (
     id                      bigint primary key,
@@ -72,6 +72,21 @@ create table persistent_logins (
     username    varchar(64) not null,
     token       varchar(64) not null,
     last_used   timestamp not null
+);
+
+create table groups (
+    id              bigint primary key,
+    department_id   bigint,
+    name            varchar(255) not null,
+    description     varchar(8000) not null,
+    date            timestamp not null default current_timestamp
+);
+
+create table members (
+    id          bigint primary key,
+    group_id    bigint references groups(id),
+    user_id     bigint references users(id),
+    date        timestamp not null default current_timestamp
 );
 
 -------------------------
@@ -571,6 +586,8 @@ create table department_options (
 
 alter table users add constraint users_major_fk
     foreign key (major_id) references departments(id);
+alter table groups add constraint groups_department_fk
+    foreign key (department_id) references departments(id);
 alter table courses add constraint courses_department_fk
     foreign key (department_id) references departments(id);
 

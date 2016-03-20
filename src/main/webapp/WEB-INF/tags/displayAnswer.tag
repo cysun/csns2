@@ -6,7 +6,7 @@
 <c:set var="question" value="${answer.question}" />
 <li>
 <div class="question">${question.description}</div><jsp:doBody />
-<div class="selection">
+<div class="selection display_answer">
 <c:choose>
   <c:when test="${question.type == 'CHOICE' and question.singleSelection }">
     <c:forEach items="${question.choices}" var="choice" varStatus="choiceStatus">
@@ -32,7 +32,7 @@
     ${question.maxRating}
   </c:when>
   <c:when test="${question.type == 'TEXT'}">
-    <div class="display_answer">${answer.text}</div>
+    ${answer.text}
   </c:when>
 </c:choose>
 </div>

@@ -39,8 +39,9 @@ jquery.url=http://csns.calstatela.edu/static/jquery-1.11.1.min.js
 jqueryui.url=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.js
 jqueryui.css=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.css
 jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins2
-ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.2/ckeditor.js
+ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.5.7/ckeditor.js
 highcharts=http://csns.calstatela.edu/static/highcharts
+mathjax.url=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 #jquery.url=/js/jquery/jquery-1.6.4.min.js
 #jqueryui.url=/js/jqueryui/js/jquery-ui-1.8.15.custom.min.js
 #jqueryui.css=/js/jqueryui/css/redmond/jquery-ui-1.8.15.custom.css

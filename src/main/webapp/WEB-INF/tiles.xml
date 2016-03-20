@@ -16,6 +16,12 @@
         <put-attribute name="menu" value="" />
     </definition>
 
+    <definition name="layout.extra" template="/WEB-INF/layout/template.basic.jsp">
+        <put-list-attribute name="jsUrls">
+            <add-attribute value="${mathjax.url}" />
+        </put-list-attribute>
+    </definition>
+
     <definition name="layout.alljs" template="/WEB-INF/layout/template.basic.jsp">
         <put-list-attribute name="cssUrls">
             <add-attribute value="${jqueryui.css}" />
@@ -42,6 +48,7 @@
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+            <add-attribute value="${mathjax.url}" />
         </put-list-attribute>
     </definition>
 
@@ -54,6 +61,7 @@
             <add-attribute value="${jqueryui.url}" />
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+            <add-attribute value="${mathjax.url}" />
         </put-list-attribute>
     </definition>
 
@@ -515,7 +523,7 @@
     <!-- Assignment -->
     <!-- ========== -->
 
-    <definition name="assignment/view" extends="layout.basic">
+    <definition name="assignment/view" extends="layout.extra">
         <put-attribute name="title" value="View Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/view.jsp" />
     </definition>
@@ -549,7 +557,7 @@
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/edit.jsp" />
     </definition>
 
-    <definition name="assignment/online/view" extends="layout.basic">
+    <definition name="assignment/online/view" extends="layout.extra">
         <put-attribute name="title" value="View Online Assignment" />
         <put-attribute name="content" value="/WEB-INF/content/assignment/online/view.jsp" />
     </definition>
@@ -588,7 +596,7 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/view.jsp" />
     </definition>
 
-    <definition name="submission/description" extends="layout.basic">
+    <definition name="submission/description" extends="layout.extra">
         <put-attribute name="title" value="View Assignment Description" />
         <put-attribute name="content" value="/WEB-INF/content/submission/description.jsp" />
     </definition>
@@ -612,7 +620,7 @@
     <!-- Online Submission -->
     <!-- ================= -->
 
-    <definition name="submission/online/view" extends="layout.basic">
+    <definition name="submission/online/view" extends="layout.extra">
         <put-attribute name="title" value="View Online Submission" />
         <put-attribute name="content" value="/WEB-INF/content/submission/online/view.jsp" />
     </definition>
@@ -627,7 +635,7 @@
         <put-attribute name="content" value="/WEB-INF/content/submission/online/grade.jsp" />
     </definition>
 
-    <definition name="submission/online/summary" extends="layout.basic">
+    <definition name="submission/online/summary" extends="layout.extra">
         <put-attribute name="title" value="Submission Summary" />
         <put-attribute name="content" value="/WEB-INF/content/submission/online/summary.jsp" />
     </definition>
@@ -767,7 +775,7 @@
         <put-attribute name="content" value="/WEB-INF/content/forum/edit.jsp" />
     </definition>
 
-    <definition name="forum/topic/view" extends="layout.basic">
+    <definition name="forum/topic/view" extends="layout.extra">
         <put-attribute name="title" value="View Forum Topic" />
         <put-attribute name="content" value="/WEB-INF/content/forum/topic/view.jsp" />
     </definition>
@@ -796,7 +804,7 @@
     <!-- Wiki -->
     <!-- ==== -->
 
-    <definition name="wiki/page" extends="layout.basic">
+    <definition name="wiki/page" extends="layout.extra">
         <put-attribute name="title" value="Wiki Page" />
         <put-attribute name="content" value="/WEB-INF/content/wiki/page.jsp" />
     </definition>

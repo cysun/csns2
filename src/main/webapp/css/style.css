@@ -388,21 +388,11 @@ table {
 #forums_menu a:hover, #opbar a:hover, #qa a:hover {
 	background-color:#f1f1f1;
 }
-
-.qa_content {
+#forums_menu form {
+    float:right;
+    margin:1px 2px 0 0;
+    padding:0;
 }
-.qa_content table {
-    border:1px solid #bbbbbb;
-}
-.qa_content td {
-    background-color:#eeeeee;
-    border:1px solid #bbbbbb;
-}
-.qa_content th {
-    background-color:#e1e1e1;
-    border:1px solid #bbbbbb;
-}
-
 #qa_section {
     background:#eeeeee url(../img/style/forums_menu.gif) repeat-x bottom center;
     line-height:37px;
@@ -423,11 +413,6 @@ table {
     border: 0px;
     vertical-align: middle;
 }
-#forums_menu form {
-    float:right;
-    margin:1px 2px 0 0;
-    padding:0;
-}
 .qa_list {
     margin: 20px 0;
     border: 1px solid #dddddd;
@@ -437,18 +422,18 @@ table {
 .qa_list li {
     margin: 0;
     padding: 10px;
-    color: #164fa6;
-    font-size: 20px;
-    font-family:"Times New Roman", Times, serif;
-    font-weight: bold;
     border-top: 1px solid #ffffff;
     border-bottom: 1px solid #dddddd;
     border-right: 1px solid #ffffff;
     border-left: 1px solid #dddddd;
     background: #f1f1f1;
 }
-.qa_list li.first {  }
-.qa_list li.last { border-bottom-color:#ffffff; }
+.qa_list li li {
+    padding: 0;
+    margin:0 0 5px 0;
+    border: none;
+    background: none;
+}
 .qa_list li .edit {
 	font-size:14px;
 	font-family:arial;
@@ -463,40 +448,15 @@ table {
     color: black;
 }
 .qa_list .question {
-    color:#222222;
     padding:5px 0;
-    font-weight:normal;
-    font-family:arial;
-    font-size:14px;
 }
 .qa_list .selection {
 	margin-top:10px;
-    color:#444444;
-    font-size:12px;
-    font-family:arial;
-}
-.qa_list li p, .qa_list li h1, .qa_list li h2, .qa_list li h3, .qa_list li h4, .qa_list li h5, .qa_list li h6,
-.qa_list li h7, .qa_list li span  {
-    padding:0;
-    margin:0 0 5px 0;
-    font-size: 14px;
-}
-.qa_list li li {
-    padding: 0;
-    margin:0 0 5px 0;
-    color: #444444;
-    font-size: 14px;
-    font-family: arial;
-    font-weight: normal;
-    border: none;
-    background: none;
 }
 .qa_list .display_answer {
 	padding:10px; 
-	font-size:12px;
-	text-align:justify; 
-	background-color:white; 
-	border:1px solid #dddddd;
+	background-color:white;
+	border:1px solid #aaaaaa;
 }
 
 .topic {

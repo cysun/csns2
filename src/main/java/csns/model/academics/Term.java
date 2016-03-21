@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -24,6 +24,7 @@ import java.util.Date;
 
 import javax.persistence.Embeddable;
 
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,8 +82,8 @@ public class Term implements Serializable, Comparable<Term> {
     @Override
     public boolean equals( Object other )
     {
-        return this == other || other instanceof Term
-            && ((Term) other).code == code;
+        return this == other
+            || other instanceof Term && ((Term) other).code == code;
     }
 
     @Override
@@ -107,9 +108,16 @@ public class Term implements Serializable, Comparable<Term> {
 
     private void setCode( Calendar calendar )
     {
-        code = (calendar.get( Calendar.YEAR ) - 1900) * 10;
+        // JDK's Calendar and Date implementations are known to be problematic.
+        // In Java 8 it's recommended to use java.time, but since we are
+        // targeting Java 7, here we use Joda-Time
+        // (http://www.joda.org/joda-time/) to calculate the correct
+        // (i.e. ISO 8601) week_of_year.
+        LocalDateTime dateTime = LocalDateTime.fromCalendarFields( calendar );
 
-        int week = calendar.get( Calendar.WEEK_OF_YEAR );
+        code = (dateTime.getYear() - 1900) * 10;
+
+        int week = dateTime.getWeekOfWeekyear();
         if( week < 13 )
             code += 1; // Winter term: week 1-12
         else if( week < 25 )

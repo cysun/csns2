@@ -64,6 +64,9 @@
 
     <security:http use-expressions="true">
         <security:csrf disabled="true"/>
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
         <security:form-login login-page="/login"
             authentication-success-handler-ref="authenticationSuccessHandler"
             authentication-failure-handler-ref="authenticationFailureHandler" />

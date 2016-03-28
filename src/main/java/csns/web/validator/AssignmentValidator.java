@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -51,13 +51,17 @@ public class AssignmentValidator implements Validator {
         if( !StringUtils.hasText( assignment.getAlias() ) )
             assignment.setAlias( assignment.getName() );
 
-        if( !assignment.isOnline() )
-        {
-            errors.pushNestedPath( "description" );
-            ValidationUtils.invokeValidator( resourceValidator,
-                assignment.getDescription(), errors );
-            errors.popNestedPath();
-        }
+        /*
+         * Skip resource validation to allow instructors to add their own
+         * scripts and/or styling to the assignment description.
+         */
+        // if( !assignment.isOnline() )
+        // {
+        // errors.pushNestedPath( "description" );
+        // ValidationUtils.invokeValidator( resourceValidator,
+        // assignment.getDescription(), errors );
+        // errors.popNestedPath();
+        // }
     }
 
     public void validate( Assignment assignment, MultipartFile uploadedFile,

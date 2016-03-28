@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,29 +19,21 @@
 package csns.model.assessment;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import csns.model.academics.Course;
 
 /**
  * ABET Student Outcome (a.k.a Student Learning Outcome or SLO).
  */
 @Entity
-@Table(name = "assessment_outcomes")
-public class Outcome implements Serializable {
+@Table(name = "assessment_program_outcomes")
+public class ProgramOutcome implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,25 +50,20 @@ public class Outcome implements Serializable {
 
     private String text;
 
-    @ManyToMany
-    @JoinTable(name = "assessment_outcome_courses",
-        joinColumns = @JoinColumn(name = "outcome_id") ,
-        inverseJoinColumns = @JoinColumn(name = "course_id") ,
-        uniqueConstraints = {
-            @UniqueConstraint(columnNames = { "outcome_id", "course_id" }) })
-    @OrderBy("code asc")
-    private List<Course> courses;
-
-    public Outcome()
+    public ProgramOutcome()
     {
-        this( null, 0 );
     }
 
-    public Outcome( Program program, int index )
+    public ProgramOutcome( Program program )
     {
         this.program = program;
-        this.index = index;
-        this.courses = new ArrayList<Course>();
+        this.index = program.getOutcomes().size();
+    }
+
+    public ProgramOutcome( Program program, String text )
+    {
+        this( program );
+        this.text = text;
     }
 
     public Long getId()
@@ -117,16 +104,6 @@ public class Outcome implements Serializable {
     public void setText( String text )
     {
         this.text = text;
-    }
-
-    public List<Course> getCourses()
-    {
-        return courses;
-    }
-
-    public void setCourses( List<Course> courses )
-    {
-        this.courses = courses;
     }
 
 }

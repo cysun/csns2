@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,27 +19,21 @@
 package csns.model.assessment;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * ABET Educational Objective.
  */
 @Entity
-@Table(name = "assessment_objectives")
-public class Objective implements Serializable {
+@Table(name = "assessment_program_objectives")
+public class ProgramObjective implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,25 +50,20 @@ public class Objective implements Serializable {
 
     private String text;
 
-    @ManyToMany
-    @JoinTable(name = "assessment_objective_outcomes",
-        joinColumns = @JoinColumn(name = "objective_id") ,
-        inverseJoinColumns = @JoinColumn(name = "outcome_id") ,
-        uniqueConstraints = {
-            @UniqueConstraint(columnNames = { "objective_id", "outcome_id" }) })
-    @OrderBy("index asc")
-    private List<Outcome> outcomes;
-
-    public Objective()
+    public ProgramObjective()
     {
-        outcomes = new ArrayList<Outcome>();
     }
 
-    public Objective( Program program, int index )
+    public ProgramObjective( Program program )
     {
-        this();
         this.program = program;
-        this.index = index;
+        this.index = program.getObjectives().size();
+    }
+
+    public ProgramObjective( Program program, String text )
+    {
+        this( program );
+        this.text = text;
     }
 
     public Long getId()
@@ -115,16 +104,6 @@ public class Objective implements Serializable {
     public void setText( String text )
     {
         this.text = text;
-    }
-
-    public List<Outcome> getOutcomes()
-    {
-        return outcomes;
-    }
-
-    public void setOutcomes( List<Outcome> outcomes )
-    {
-        this.outcomes = outcomes;
     }
 
 }

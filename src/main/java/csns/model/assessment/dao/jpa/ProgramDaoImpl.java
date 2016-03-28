@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -46,7 +46,7 @@ public class ProgramDaoImpl implements ProgramDao {
     public List<Program> getPrograms( Department department )
     {
         String query = "from AssessmentProgram where department = :department "
-            + "and deleted = false order by name asc";
+            + "and deleted = false order by id asc";
 
         return entityManager.createQuery( query, Program.class )
             .setParameter( "department", department )

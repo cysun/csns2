@@ -42,9 +42,9 @@ jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins2
 ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.5.7/ckeditor.js
 highcharts=http://csns.calstatela.edu/static/highcharts
 mathjax.url=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-#jquery.url=/js/jquery/jquery-1.6.4.min.js
-#jqueryui.url=/js/jqueryui/js/jquery-ui-1.8.15.custom.min.js
-#jqueryui.css=/js/jqueryui/css/redmond/jquery-ui-1.8.15.custom.css
+#jquery.url=https://code.jquery.com/jquery-1.12.2.min.js
+#jqueryui.url=https://code.jquery.com/ui/1.11.4/jquery-ui.min.js
+#jqueryui.css=https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css
 #jquery.plugins=/js/jqueryplugins
-#ckeditor.url=/js/ckeditor/ckeditor.js
-#highcharts=/js/highcharts
+#ckeditor.url=https://cdn.ckeditor.com/4.5.7/full/ckeditor.js
+#highcharts=https://code.highcharts.com

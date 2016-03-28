@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <ul id="title">
 <li><a href="list" class="bc">Program Assessment</a></li>
@@ -8,52 +7,68 @@
   title="Edit Program" src="<c:url value='/img/icons/report_edit.png' />" /></a></li>
 </ul>
 
+<div id="site-sidebar" style="float: left; margin-top: 0px;">
+<ul>
+  <li><a href="#vision">Vision Statement</a></li>
+  <li><a href="#mission">Mission Statement</a></li>
+  <li><a href="#objectives">Educational Objectives</a></li>
+  <li><a href="#outcomes">Student Outcomes</a></li>
+  <c:forEach items="${program.sections}" var="section">
+    <c:if test="${not section.hidden}">
+    <li><a href="#s${section.id}">${section.name}</a></li>
+    </c:if>
+  </c:forEach>
+</ul>
+</div>
 
+<div id="site-content" style="margin-left: 180px;">
 
 <div class="site-block">
-<div class="site-block-title">Vision Statement</div>
+<div id="vision" class="site-block-title">Vision Statement</div>
 <div class="site-block-content">${program.vision}</div>
 </div>
 
 <div class="site-block">
-<div class="site-block-title">Mission Statement</div>
+<div id="mission" class="site-block-title">Mission Statement</div>
 <div class="site-block-content">${program.mission}</div>
 </div>
 
 <div class="site-block">
-<div class="site-block-title">Educational Objectives
-  <div class="site-block-operations">
-    <a href="objectives?programId=${program.id}"><img title="Edit Objectives"
-       alt="[Edit Objectives]" src="<c:url value='/img/icons/page_edit.png' />" /></a>
-  </div>
-</div>
+<div id="objectives" class="site-block-title">Educational Objectives</div>
 <div class="site-block-content">
-<table class="viewtable autowidth">
-  <c:forEach items="${program.objectives}" var="objective" varStatus="status">
-  <tr>
-    <td>${status.index+1}</td>
-    <td>${objective.text}</td>
-  </tr>
+<ol>
+  <c:forEach items="${program.objectives}" var="objective">
+  <li>${objective.text}</li>
   </c:forEach>
-</table>
+</ol>
 </div>
 </div>
 
 <div class="site-block">
-<div class="site-block-title">Student Outcomes
-  <div class="site-block-operations">
-    <a href="outcomes?programId=${program.id}"><img title="Edit Outcomes"
-       alt="[Edit Outcomes]" src="<c:url value='/img/icons/page_edit.png' />" /></a>
-  </div>
-</div>
+<div id="outcomes" class="site-block-title">Student Outcomes</div>
 <div class="site-block-content">
-<table class="viewtable autowidth">
-  <c:forEach items="${program.outcomes}" var="outcome" varStatus="status">
-  <tr>
-    <td>${status.index+1}</td>
-    <td>${outcome.text}</td>
-  </tr>
+<ol>
+  <c:forEach items="${program.outcomes}" var="outcome">
+  <li>${outcome.text}</li>
   </c:forEach>
-</table>
+</ol>
 </div>
 </div>
+
+<c:forEach items="${program.sections}" var="section">
+<c:if test="${not section.hidden}">
+<div class="site-block">
+<div id="s${section.id}" class="site-block-title">${section.name}</div>
+<div class="site-block-content">
+<ul>
+  <c:forEach items="${section.resources}" var="resource">
+  <li><a href="resource/view?programId=${program.id}&resourceId=${resource.id}"
+           id="r${resource.id}">${resource.name}</a></li>
+  </c:forEach>
+</ul>
+</div>
+</div>
+</c:if>
+</c:forEach>
+
+</div> <!-- end of site-content -->

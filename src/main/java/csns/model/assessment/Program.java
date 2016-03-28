@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -63,19 +63,31 @@ public class Program implements Serializable {
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     @OrderColumn(name = "objective_index")
-    private List<Objective> objectives;
+    private List<ProgramObjective> objectives;
 
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     @OrderColumn(name = "outcome_index")
-    private List<Outcome> outcomes;
+    private List<ProgramOutcome> outcomes;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "program_id")
+    @OrderColumn(name = "section_index")
+    private List<ProgramSection> sections;
 
     @Column(nullable = false)
     private boolean deleted;
 
     public Program()
     {
-        objectives = new ArrayList<Objective>();
-        outcomes = new ArrayList<Outcome>();
+        name = "";
+
+        objectives = new ArrayList<ProgramObjective>();
+        outcomes = new ArrayList<ProgramOutcome>();
+
+        sections = new ArrayList<ProgramSection>();
+        sections.add( new ProgramSection( "Documentation" ) );
+        sections.add( new ProgramSection( "Other Assessment Artifacts" ) );
+
         deleted = false;
     }
 
@@ -83,6 +95,35 @@ public class Program implements Serializable {
     {
         this();
         this.department = department;
+    }
+
+    public ProgramSection getSection( Long sectionId )
+    {
+        for( ProgramSection section : sections )
+            if( section.getId().equals( sectionId ) ) return section;
+
+        return null;
+    }
+
+    public ProgramSection removeSection( Long sectionId )
+    {
+        for( int i = 0; i < sections.size(); ++i )
+            if( sections.get( i ).getId().equals( sectionId ) )
+                return sections.remove( i );
+
+        return null;
+    }
+
+    public void reIndexObjectives()
+    {
+        for( int i = 0; i < objectives.size(); ++i )
+            objectives.get( i ).setIndex( i );
+    }
+
+    public void reIndexOutcomes()
+    {
+        for( int i = 0; i < outcomes.size(); ++i )
+            outcomes.get( i ).setIndex( i );
     }
 
     public Long getId()
@@ -112,7 +153,7 @@ public class Program implements Serializable {
 
     public void setName( String name )
     {
-        this.name = name;
+        if( name != null ) this.name = name;
     }
 
     public String getVision()
@@ -135,24 +176,34 @@ public class Program implements Serializable {
         this.mission = mission;
     }
 
-    public List<Objective> getObjectives()
+    public List<ProgramObjective> getObjectives()
     {
         return objectives;
     }
 
-    public void setObjectives( List<Objective> objectives )
+    public void setObjectives( List<ProgramObjective> objectives )
     {
         this.objectives = objectives;
     }
 
-    public List<Outcome> getOutcomes()
+    public List<ProgramOutcome> getOutcomes()
     {
         return outcomes;
     }
 
-    public void setOutcomes( List<Outcome> outcomes )
+    public void setOutcomes( List<ProgramOutcome> outcomes )
     {
         this.outcomes = outcomes;
+    }
+
+    public List<ProgramSection> getSections()
+    {
+        return sections;
+    }
+
+    public void setSections( List<ProgramSection> sections )
+    {
+        this.sections = sections;
     }
 
     public boolean isDeleted()

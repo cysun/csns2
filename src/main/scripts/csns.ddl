@@ -60,12 +60,7 @@
         primary key (id)
     );
 
-    create table assessment_objective_outcomes (
-        objective_id int8 not null,
-        outcome_id int8 not null
-    );
-
-    create table assessment_objectives (
+    create table assessment_program_objectives (
         id int8 not null,
         objective_index int4 not null,
         text varchar(255),
@@ -73,16 +68,27 @@
         primary key (id)
     );
 
-    create table assessment_outcome_courses (
-        outcome_id int8 not null,
-        course_id int8 not null
-    );
-
-    create table assessment_outcomes (
+    create table assessment_program_outcomes (
         id int8 not null,
         outcome_index int4 not null,
         text varchar(255),
         program_id int8,
+        primary key (id)
+    );
+
+    create table assessment_program_resources (
+        section_id int8 not null,
+        resource_id int8 not null,
+        resource_index int4 not null,
+        primary key (section_id, resource_index)
+    );
+
+    create table assessment_program_sections (
+        id int8 not null,
+        hidden boolean not null,
+        name varchar(255) not null,
+        program_id int8,
+        section_index int4,
         primary key (id)
     );
 
@@ -929,12 +935,6 @@
     alter table academic_standings 
         add constraint UK7hsf5t3wd3nfdl4ckq4tgtjx unique (student_id, department_id, standing_id);
 
-    alter table assessment_objective_outcomes 
-        add constraint UKn5m8patdl62ikhs3g6rpyvtvp unique (objective_id, outcome_id);
-
-    alter table assessment_outcome_courses 
-        add constraint UKif9sa65md71dl2ys9grcxpibm unique (outcome_id, course_id);
-
     alter table assignments 
         add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
 
@@ -1104,33 +1104,28 @@
         foreign key (attachment_id) 
         references files;
 
-    alter table assessment_objective_outcomes 
-        add constraint FKlhylvtmsocye9b19reyvjpmw9 
-        foreign key (outcome_id) 
-        references assessment_outcomes;
-
-    alter table assessment_objective_outcomes 
-        add constraint FKdmu2a2jtmle4229mylqjmtq3j 
-        foreign key (objective_id) 
-        references assessment_objectives;
-
-    alter table assessment_objectives 
-        add constraint FKbn4iwwp6fm5s4vpkvw78plw6h 
+    alter table assessment_program_objectives 
+        add constraint FKv4jcplnohiry495lxm7kaptk 
         foreign key (program_id) 
         references assessment_programs;
 
-    alter table assessment_outcome_courses 
-        add constraint FKp87u1x2jubj6yncj4k57702mw 
-        foreign key (course_id) 
-        references courses;
+    alter table assessment_program_outcomes 
+        add constraint FK64xismhokysu1lnth0hfbiacu 
+        foreign key (program_id) 
+        references assessment_programs;
 
-    alter table assessment_outcome_courses 
-        add constraint FKbb871ogn2bawfi9vv6bn53irm 
-        foreign key (outcome_id) 
-        references assessment_outcomes;
+    alter table assessment_program_resources 
+        add constraint FKdaq0bgj299s0letlufqbtnksg 
+        foreign key (resource_id) 
+        references resources;
 
-    alter table assessment_outcomes 
-        add constraint FK5s6x1yk6skm6hce94ntgxef41 
+    alter table assessment_program_resources 
+        add constraint FKdqv5v8lsf9gk4rqbnxf2b9f3v 
+        foreign key (section_id) 
+        references assessment_program_sections;
+
+    alter table assessment_program_sections 
+        add constraint FKshpgkm1vsh9jo7anwsfn6okw8 
         foreign key (program_id) 
         references assessment_programs;
 

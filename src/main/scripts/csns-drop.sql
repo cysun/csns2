@@ -13,10 +13,10 @@ drop function term(integer);
 drop function term();
 drop function term(date);
 
-drop table assessment_outcome_courses;
-drop table assessment_objective_outcomes;
-drop table assessment_outcomes;
-drop table assessment_objectives;
+drop table assessment_program_resources;
+drop table assessment_program_sections;
+drop table assessment_program_outcomes;
+drop table assessment_program_objectives;
 drop table assessment_programs;
 
 drop table rubric_evaluation_ratings;

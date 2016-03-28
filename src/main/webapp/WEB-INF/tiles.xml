@@ -68,6 +68,7 @@
     <definition name="layout.editor" template="/WEB-INF/layout/template.basic.jsp">
         <put-list-attribute name="jsUrls">
             <add-attribute value="${ckeditor.url}" />
+            <add-attribute value="${mathjax.url}" />
         </put-list-attribute>
     </definition>
 
@@ -1231,29 +1232,79 @@
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/list.jsp" />
     </definition>
 
+    <definition name="assessment/program/add" extends="layout.basic">
+        <put-attribute name="title" value="Add Program" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add.jsp" />
+    </definition>
+
     <definition name="assessment/program/view" extends="layout.basic">
         <put-attribute name="title" value="View Program" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/view.jsp" />
     </definition>
 
-    <definition name="assessment/program/add" extends="layout.editor">
-        <put-attribute name="title" value="Add Program" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add.jsp" />
-    </definition>
-
-    <definition name="assessment/program/edit" extends="layout.editor">
+    <definition name="assessment/program/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Program" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit.jsp" />
     </definition>
 
-    <definition name="assessment/program/objectives" extends="layout.basic">
-        <put-attribute name="title" value="Educational Objectives" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/objectives.jsp" />
+    <definition name="assessment/program/add/objective" extends="layout.editor">
+        <put-attribute name="title" value="Add Educational Objective" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add/objective.jsp" />
     </definition>
 
-    <definition name="assessment/program/addObjective" extends="layout.editor">
-        <put-attribute name="title" value="Add Objective" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/addObjective.jsp" />
+    <definition name="assessment/program/add/outcome" extends="layout.editor">
+        <put-attribute name="title" value="Add Student Outcome" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add/outcome.jsp" />
+    </definition>
+
+    <definition name="assessment/program/add/section" extends="layout.basic">
+        <put-attribute name="title" value="Add Section" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/add/section.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/name" extends="layout.basic">
+        <put-attribute name="title" value="Edit Program Name" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/name.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/vision" extends="layout.editor">
+        <put-attribute name="title" value="Edit Vision Statement" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/vision.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/mission" extends="layout.editor">
+        <put-attribute name="title" value="Edit Mission Statement" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/mission.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/objective" extends="layout.editor">
+        <put-attribute name="title" value="Edit Educational Objective" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/objective.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/outcome" extends="layout.editor">
+        <put-attribute name="title" value="Edit Student Outcome" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/outcome.jsp" />
+    </definition>
+
+    <definition name="assessment/program/edit/section" extends="layout.basic">
+        <put-attribute name="title" value="Edit Section" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/section.jsp" />
+    </definition>
+
+    <definition name="assessment/program/resource/view" extends="layout.basic">
+        <put-attribute name="title" value="View Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/resource/view.jsp" />
+    </definition>
+
+    <definition name="assessment/program/resource/add" extends="layout.editor">
+        <put-attribute name="title" value="Add Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/resource/add.jsp" />
+    </definition>
+
+    <definition name="assessment/program/resource/edit" extends="layout.editor">
+        <put-attribute name="title" value="Edit Resource" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/resource/edit.jsp" />
     </definition>
 
     <!-- ======== -->

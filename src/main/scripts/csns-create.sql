@@ -1532,30 +1532,33 @@ create table assessment_programs (
     deleted         boolean not null default 'f'
 );
 
-create table assessment_objectives (
+create table assessment_program_objectives (
     id              bigint primary key,
     program_id      bigint references assessment_programs(id),
     objective_index integer not null,
     text            varchar(8000)
 );
 
-create table assessment_outcomes (
+create table assessment_program_outcomes (
     id              bigint primary key,
     program_id      bigint references assessment_programs(id),
     outcome_index   integer not null,
     text            varchar(8000)
 );
 
-create table assessment_objective_outcomes (
-    objective_id    bigint not null references assessment_objectives(id),
-    outcome_id      bigint not null references assessment_outcomes(id),
-  unique (objective_id, outcome_id)
+create table assessment_program_sections (
+    id              bigint primary key,
+    program_id      bigint references assessment_programs(id),
+    section_index   integer,
+    name            varchar(255) not null,
+    hidden          boolean not null default 'f'
 );
 
-create table assessment_outcome_courses (
-    outcome_id      bigint not null references assessment_outcomes(id),
-    course_id       bigint not null references courses(id),
-  unique (outcome_id, course_id)
+create table assessment_program_resources (
+    section_id      bigint not null references assessment_program_sections(id),
+    resource_id     bigint not null references resources(id),
+    resource_index  integer not null,
+  primary key (section_id, resource_index)
 );
 
 ------------------------------

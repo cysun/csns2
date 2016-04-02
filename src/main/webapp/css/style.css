@@ -19,17 +19,6 @@ p {
     line-height: 20px;
 }
 
-h3 {
-    font-size: 18px;
-    margin:20px 0;
-    font-weight:bold;
-}
-h4 {
-    font-size: 14px;
-    margin:20px 0;
-    font-weight:bold;
-}
-
 pre {
     white-space: pre-wrap;
     background: transparent url(../img/style/pre_code_bg.gif);
@@ -650,7 +639,8 @@ table {
     border-spacing: 0px;
     border-collapse: collapse;
 }
-.general tr {
+.general tr:hover {
+    background-color:#dddddd;
 }
 .general th, .general td {
     padding:10px;

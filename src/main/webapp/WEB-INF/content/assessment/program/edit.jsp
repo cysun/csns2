@@ -112,6 +112,9 @@ function removeProgram()
       <a href="outcome/edit?programId=${program.id}&index=${status.index}"><img
          title="Edit Outcome" alt="[Edit Outcome]"
          src="<c:url value='/img/icons/page_edit.png' />" /></a>
+      <a href="outcome/measures?fieldId=${outcome.id}&edit=true"><img
+         title="Edit Outcome Measures" alt="[Edit Outcome Measures]"
+         src="<c:url value='/img/icons/table_chart_edit.png' />" /></a>
     </td>
   </tr>
   </c:forEach>

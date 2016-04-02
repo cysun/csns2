@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -56,8 +56,9 @@ public class Resource implements Serializable {
 
     public Resource()
     {
-        isPrivate = false;
+        name = "";
         type = ResourceType.NONE;
+        isPrivate = false;
     }
 
     public Resource( String name )
@@ -69,6 +70,13 @@ public class Resource implements Serializable {
     public Resource( ResourceType type )
     {
         this();
+        this.type = type;
+    }
+
+    public Resource( String name, ResourceType type )
+    {
+        this();
+        this.name = name;
         this.type = type;
     }
 

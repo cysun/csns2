@@ -47,11 +47,18 @@
 <div class="site-block">
 <div id="outcomes" class="site-block-title">Student Outcomes</div>
 <div class="site-block-content">
-<ol>
-  <c:forEach items="${program.outcomes}" var="outcome">
-  <li>${outcome.text}</li>
+<table class="general">
+  <c:forEach items="${program.outcomes}" var="outcome" varStatus="status">
+  <tr>
+    <th class="shrink">${status.index+1}</th>
+    <td>${outcome.text}</td>
+    <td class="shrink">
+      <a href="outcome/measures?fieldId=${outcome.id}"><img alt="[Measures]"
+           title="Measures" src="<c:url value='/img/icons/table_chart.png' />" /></a>
+    </td>
+  </tr>
   </c:forEach>
-</ol>
+</table>
 </div>
 </div>
 

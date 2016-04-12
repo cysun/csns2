@@ -31,7 +31,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import csns.model.core.Resource;
-import csns.model.core.ResourceType;
 import csns.model.survey.SurveyChart;
 
 @Entity
@@ -50,9 +49,12 @@ public class ProgramMeasure implements Serializable {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String description;
+
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    @JoinColumn(name = "description_id")
-    private Resource description;
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
 
     @ManyToOne
     @JoinColumn(name = "rubric_id")
@@ -64,8 +66,7 @@ public class ProgramMeasure implements Serializable {
 
     public ProgramMeasure()
     {
-        description = new Resource( "Program Measure Description",
-            ResourceType.TEXT );
+        resource = new Resource( "Program Measure Resource" );
     }
 
     public Long getId()
@@ -98,14 +99,24 @@ public class ProgramMeasure implements Serializable {
         this.name = name;
     }
 
-    public Resource getDescription()
+    public String getDescription()
     {
         return description;
     }
 
-    public void setDescription( Resource description )
+    public void setDescription( String description )
     {
         this.description = description;
+    }
+
+    public Resource getResource()
+    {
+        return resource;
+    }
+
+    public void setResource( Resource resource )
+    {
+        this.resource = resource;
     }
 
     public Rubric getRubric()

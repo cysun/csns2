@@ -45,9 +45,9 @@ $(function(){
 <tr>
   <td class="overall" >Overall</td>
   <td class="overall center"><fmt:formatNumber pattern=".00" value="${iEvalStats[0].mean}" /></td>
-  <td class="overall center"><fmt:formatNumber pattern=".0" value="${iEvalStats[0].median}" /></td>
-  <td class="overall center">${iEvalStats[0].min}</td>
-  <td class="overall center">${iEvalStats[0].max}</td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${iEvalStats[0].median}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${iEvalStats[0].min}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${iEvalStats[0].max}" /></td>
 </tr>
 </table>
 </c:if>
@@ -68,9 +68,9 @@ $(function(){
 <tr>
   <td class="overall" >Overall</td>
   <td class="overall center"><fmt:formatNumber pattern=".00" value="${sEvalStats[0].mean}" /></td>
-  <td class="overall center"><fmt:formatNumber pattern=".0" value="${sEvalStats[0].median}" /></td>
-  <td class="overall center">${sEvalStats[0].min}</td>
-  <td class="overall center">${sEvalStats[0].max}</td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${sEvalStats[0].median}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${sEvalStats[0].min}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${sEvalStats[0].max}" /></td>
 </tr>
 </table>
 </c:if>
@@ -91,9 +91,9 @@ $(function(){
 <tr>
   <td class="overall" >Overall</td>
   <td class="overall center"><fmt:formatNumber pattern=".00" value="${eEvalStats[0].mean}" /></td>
-  <td class="overall center"><fmt:formatNumber pattern=".0" value="${eEvalStats[0].median}" /></td>
-  <td class="overall center">${eEvalStats[0].min}</td>
-  <td class="overall center">${eEvalStats[0].max}</td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${eEvalStats[0].median}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${eEvalStats[0].min}" /></td>
+  <td class="overall center"><fmt:formatNumber pattern=".00" value="${eEvalStats[0].max}" /></td>
 </tr>
 </table>
 </c:if>

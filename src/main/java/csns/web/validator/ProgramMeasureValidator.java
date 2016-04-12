@@ -47,12 +47,14 @@ public class ProgramMeasureValidator implements Validator {
             "error.field.required" );
         ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
             "error.field.required" );
+        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "description",
+            "error.field.required" );
 
         ProgramMeasure measure = (ProgramMeasure) target;
 
-        errors.pushNestedPath( "description" );
+        errors.pushNestedPath( "resource" );
         ValidationUtils.invokeValidator( resourceValidator,
-            measure.getDescription(), errors );
+            measure.getResource(), errors );
         errors.popNestedPath();
     }
 
@@ -61,10 +63,10 @@ public class ProgramMeasureValidator implements Validator {
     {
         validate( measure, errors );
 
-        if( measure.getDescription().getType() == ResourceType.FILE
-            && measure.getDescription().getFile() == null
+        if( measure.getResource().getType() == ResourceType.FILE
+            && measure.getResource().getFile() == null
             && (uploadedFile == null || uploadedFile.isEmpty()) )
-            errors.rejectValue( "description.file", "error.field.required" );
+            errors.rejectValue( "resource.file", "error.field.required" );
     }
 
 }

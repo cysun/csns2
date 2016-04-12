@@ -5,12 +5,13 @@ a {
 }
 .link, table a, p a, #title a, .courseform a, h3 a, h4 a, .exportlinks a, .blk_wrap .new a, .blk_cnt a, h2 a, 
 .news-attachments ul a, .iconlist a, .pagelinks a, #title_bc a, #forums_menu a, .edit a, #qa_section a,
-.ui-widget-content a {
+.ui-widget-content a, .site-block-content a {
     color:#0070fa;
 }
 .link:hover, table a:hover, p a:hover, #title a:hover, .courseform a:hover, h3 a:hover, h4 a:hover, 
 .exportlinks a:hover, .blk_wrap .new a:hover, .blk_cnt a:hover, h2 a:hover, .news-attachments ul a:hover,
- .iconlist a:hover, .pagelinks a:hover, #title_bc a:hover, #forums_menu a:hover, .edit a:hover, #qa_section a:hover {
+.iconlist a:hover, .pagelinks a:hover, #title_bc a:hover, #forums_menu a:hover, .edit a:hover, #qa_section a:hover,
+.site-block-content a:hover {
     color:#a4f002;
 }
 p {

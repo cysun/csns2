@@ -34,6 +34,7 @@
             <add-attribute value="${jquery.plugins}/jquery-ui-timepicker-addon.js" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${jquery.plugins}/jquery.validate.min.js" />
+            <add-attribute value="${mathjax.url}" />
         </put-list-attribute>
     </definition>
 
@@ -1312,12 +1313,12 @@
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/outcome.jsp" />
     </definition>
 
-    <definition name="assessment/program/measure/add" extends="layout.editor">
+    <definition name="assessment/program/measure/add" extends="layout.qa">
         <put-attribute name="title" value="Add Measure" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/add.jsp" />
     </definition>
 
-    <definition name="assessment/program/measure/edit" extends="layout.editor">
+    <definition name="assessment/program/measure/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Measure" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/edit.jsp" />
     </definition>

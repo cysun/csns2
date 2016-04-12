@@ -1550,7 +1550,8 @@ create table assessment_program_measures (
     id              bigint primary key,
     type            varchar(255) not null,
     name            varchar(255) not null,
-    description_id  bigint references resources(id),
+    description     varchar(80000) not null,
+    resource_id     bigint references resources(id),
     rubric_id       bigint references rubrics(id),
     survey_chart_id bigint references survey_charts(id)
 );

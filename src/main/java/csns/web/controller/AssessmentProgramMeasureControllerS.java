@@ -93,83 +93,27 @@ public class AssessmentProgramMeasureControllerS {
     }
 
     @RequestMapping(
-        value = "/department/{dept}/assessment/program/{field}/measure/add",
+        value = "/department/{dept}/assessment/program/{field}/measure/{operation}",
         method = RequestMethod.GET)
-    public String add( @PathVariable String dept, @PathVariable String field,
-        @RequestParam Long fieldId, ModelMap models )
+    public String operation( @PathVariable String dept,
+        @PathVariable String field, @PathVariable String operation,
+        @RequestParam Long fieldId,
+        @RequestParam(required = false ) Long measureId, ModelMap models)
     {
-        switch( field )
-        {
-            case "outcome":
-                models.put( "outcome",
-                    programOutcomeDao.getProgramOutcome( fieldId ) );
-                break;
-
-            default:
-                logger.warn( "Unsupported program field: " + field );
-                return "redirect:../../list";
-        }
-
-        Department department = departmentDao.getDepartment( dept );
-        models.put( "measure", new ProgramMeasure() );
-        models.put( "resourceTypes", ResourceType.values() );
-        models.put( "rubrics", rubricDao.getDepartmentRubrics( department ) );
-        models.put( "surveyCharts",
-            surveyChartDao.getSurveyCharts( department ) );
-
-        return "assessment/program/measure/add";
-    }
-
-    @RequestMapping(
-        value = "/department/{dept}/assessment/program/{field}/measure/add",
-        method = RequestMethod.POST)
-    public String add( @PathVariable String field, @RequestParam Long fieldId,
-        @ModelAttribute("measure" ) ProgramMeasure measure,
-        @RequestParam(value = "file",
-            required = false) MultipartFile uploadedFile,
-        BindingResult result, SessionStatus sessionStatus)
-    {
-        programMeasureValidator.validate( measure, uploadedFile, result );
-        if( result.hasErrors() ) return "assessment/program/measure/add";
-
-        Resource description = measure.getDescription();
-        if( description.getType() == ResourceType.FILE ) description.setFile(
-            fileIO.save( uploadedFile, SecurityUtils.getUser(), false ) );
+        // Do not show the TEXT resource type.
+        ResourceType resourceTypes[] = { ResourceType.NONE, ResourceType.FILE,
+            ResourceType.URL };
+        models.put( "resourceTypes", resourceTypes );
 
         switch( field )
         {
             case "outcome":
                 ProgramOutcome outcome = programOutcomeDao
                     .getProgramOutcome( fieldId );
-                outcome.getMeasures().add( measure );
-                outcome = programOutcomeDao.saveProgramOutcome( outcome );
-                break;
-
-            default:
-                logger.warn( "Unsupported program field: " + field );
-        }
-
-        sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " added a measure to " + field + " " + fieldId );
-
-        return "redirect:../measures?fieldId=" + fieldId + "&edit=true";
-    }
-
-    @RequestMapping(
-        value = "/department/{dept}/assessment/program/{field}/measure/edit",
-        method = RequestMethod.GET)
-    public String edit( @PathVariable String dept, @PathVariable String field,
-        @RequestParam Long fieldId, @RequestParam Long measureId,
-        ModelMap models )
-    {
-        switch( field )
-        {
-            case "outcome":
-                ProgramOutcome outcome = programOutcomeDao
-                    .getProgramOutcome( fieldId );
+                ProgramMeasure measure = measureId == null
+                    ? new ProgramMeasure() : outcome.getMeasure( measureId );
                 models.put( "outcome", outcome );
-                models.put( "measure", outcome.getMeasure( measureId ) );
+                models.put( "measure", measure );
                 break;
 
             default:
@@ -178,29 +122,46 @@ public class AssessmentProgramMeasureControllerS {
         }
 
         Department department = departmentDao.getDepartment( dept );
-        models.put( "resourceTypes", ResourceType.values() );
         models.put( "rubrics", rubricDao.getDepartmentRubrics( department ) );
         models.put( "surveyCharts",
             surveyChartDao.getSurveyCharts( department ) );
 
-        return "assessment/program/measure/edit";
+        return "assessment/program/measure/" + operation;
     }
 
     @RequestMapping(
-        value = "/department/{dept}/assessment/program/{field}/measure/edit",
+        value = "/department/{dept}/assessment/program/{field}/measure/{operation}",
         method = RequestMethod.POST)
-    public String edit( @PathVariable String field, @RequestParam Long fieldId,
+    public String operation( @PathVariable String dept,
+        @PathVariable String field, @PathVariable String operation,
+        @RequestParam Long fieldId,
         @ModelAttribute("measure" ) ProgramMeasure measure,
         @RequestParam(value = "file",
             required = false) MultipartFile uploadedFile,
         BindingResult result, SessionStatus sessionStatus)
     {
         programMeasureValidator.validate( measure, uploadedFile, result );
-        if( result.hasErrors() ) return "assessment/program/measure/edit";
+        if( result.hasErrors() )
+            return "assessment/program/measure/" + operation;
 
-        Resource description = measure.getDescription();
-        if( description.getType() == ResourceType.FILE ) description.setFile(
-            fileIO.save( uploadedFile, SecurityUtils.getUser(), false ) );
+        Resource resource = measure.getResource();
+        if( measure.getType().equals( "RUBRIC" ) )
+        {
+            resource.setType( ResourceType.URL );
+            resource.setUrl( "/department/" + dept + "/rubric/results?id="
+                + measure.getRubric().getId() );
+        }
+        else if( measure.getType().equals( "SURVEY" ) )
+        {
+            resource.setType( ResourceType.URL );
+            resource.setUrl( "/department/" + dept + "/survey/chart/view?id="
+                + measure.getSurveyChart().getId() );
+        }
+        else
+        {
+            if( resource.getType() == ResourceType.FILE ) resource.setFile(
+                fileIO.save( uploadedFile, SecurityUtils.getUser(), false ) );
+        }
 
         switch( field )
         {
@@ -216,10 +177,10 @@ public class AssessmentProgramMeasureControllerS {
         }
 
         sessionStatus.setComplete();
-        logger.info( SecurityUtils.getUser().getUsername() + " edited measure "
-            + measure.getId() + " of " + field + " " + fieldId );
+        logger.info( SecurityUtils.getUser().getUsername() + " " + operation
+            + "ed a measure of " + field + " " + fieldId );
 
-        return "redirect:../measures?fieldId=" + fieldId + "&edit=true";
+        return "redirect:../measures?edit=true&fieldId=" + fieldId;
     }
 
 }

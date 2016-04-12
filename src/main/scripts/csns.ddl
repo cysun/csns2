@@ -62,9 +62,10 @@
 
     create table assessment_program_measures (
         id int8 not null,
+        description varchar(255) not null,
         name varchar(255) not null,
         type varchar(255) not null,
-        description_id int8,
+        resource_id int8,
         rubric_id int8,
         survey_chart_id int8,
         primary key (id)
@@ -1125,8 +1126,8 @@
         references files;
 
     alter table assessment_program_measures 
-        add constraint FKkku66phsmy3gnygr9jplmedks 
-        foreign key (description_id) 
+        add constraint FKjofuilyqf1kfcv2cio3frpavc 
+        foreign key (resource_id) 
         references resources;
 
     alter table assessment_program_measures 

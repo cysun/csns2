@@ -88,6 +88,12 @@ public class ProgramOutcome implements Serializable {
 
     public void setMeasure( ProgramMeasure measure )
     {
+        if( measure.getId() == null )
+        {
+            measures.add( measure );
+            return;
+        }
+
         for( int i = 0; i < measures.size(); ++i )
             if( measures.get( i ).getId().equals( measure.getId() ) )
             {

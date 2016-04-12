@@ -3,7 +3,7 @@
 
 <script>
 $(function(){
-    $(".sortableElements").sortable({
+    $("#sortableElements").sortable({
         update: function(event,ui){
             $.ajax({
                 type: "POST",
@@ -44,55 +44,53 @@ function removeMeasure( measureId )
 <p>${outcome.text}</p> <br />
 
 <c:if test="${not empty param.edit and fn:length(outcome.measures) > 0}">
-<table class="viewtable autowidth">
-<thead>
-<tr><th>Type</th><th>Name</th><th></th></tr>
-</thead>
-<tbody class="sortableElements">
+<div id="sortableElements">
 <c:forEach items="${outcome.measures}" var="measure">
-<tr data-measure-id="${measure.id}">
-  <td>${measure.type}</td>
-  <td>${measure.name}</td>
-  <td>
+<div class="site-block" data-measure-id="${measure.id}">
+<div class="site-block-title">${measure.name}
+  <div class="site-block-operations">
+    <c:choose>
+      <c:when test="${measure.resource.type == 'FILE'}">
+        <a href="<c:url value='/download?fileId=${measure.resource.file.id}' />"><img
+           title="Download Data" alt="[Download Data]"
+           src="<c:url value='/img/icons/table_chart_magnify.png' />" /></a>
+      </c:when>
+      <c:when test="${measure.resource.type == 'URL'}">
+        <a href="<c:url value='${measure.resource.url}' />"><img title="View Data"
+           alt="[View Data]" src="<c:url value='/img/icons/table_chart_magnify.png' />" /></a>
+      </c:when>
+    </c:choose>
     <a href="measure/edit?fieldId=${outcome.id}&measureId=${measure.id}"><img alt="[Edit Measure]" 
        title="Edit Measure" src="<c:url value='/img/icons/table_chart_edit.png'/>" /></a>
     <a href="javascript:removeMeasure(${measure.id})"><img alt="[Remove Measure]" 
        title="Remove Measure" src="<c:url value='/img/icons/table_chart_delete.png'/>" /></a>
-  </td>
-</tr>
+  </div>
+</div>
+<div class="site-block-content">${measure.description}</div>
+</div>
 </c:forEach>
-</tbody>
-</table>
+</div>
 </c:if>
 
 <c:if test="${empty param.edit and fn:length(outcome.measures) > 0}">
-<table class="general">
 <c:forEach items="${outcome.measures}" var="measure">
-<tr>
-  <th class="shrink">${measure.type}</th>
-  <td>
+<div class="site-block">
+<div class="site-block-title">${measure.name}
+  <div class="site-block-operations">
     <c:choose>
-      <c:when test="${measure.type == 'RUBRIC'}">
-      <a href="<c:url value='/department/${dept}/rubric/results?id=${measure.rubric.id}' />">${measure.name}</a>
+      <c:when test="${measure.resource.type == 'FILE'}">
+        <a href="<c:url value='/download?fileId=${measure.resource.file.id}' />"><img
+           title="Download Data" alt="[Download Data]"
+           src="<c:url value='/img/icons/table_chart_magnify.png' />" /></a>
       </c:when>
-      <c:when test="${measure.type == 'SURVEY'}">
-      <a href="<c:url value='/department/${dept}/survey/chart/view?id=${measure.surveyChart.id}' />">${measure.name}</a>
+      <c:when test="${measure.resource.type == 'URL'}">
+        <a href="<c:url value='${measure.resource.url}' />"><img title="View Data"
+           alt="[View Data]" src="<c:url value='/img/icons/table_chart_magnify.png' />" /></a>
       </c:when>
-      <c:when test="${measure.type == 'OTHER' and measure.description.type == 'FILE'}">
-      <a href="<c:url value='/download?fileId=${measure.description.file.id}' />">${measure.name}</a>
-      </c:when>
-      <c:when test="${measure.type == 'OTHER' and measure.description.type == 'URL'}">
-      <a href="${measure.description.url}">${measure.name}</a>
-      </c:when>
-      <c:otherwise>
-      ${measure.name}
-      </c:otherwise>
     </c:choose>
-  </td>
-</tr>
-<c:if test="${measure.description.type == 'TEXT'}">
-<tr><td colspan="2">${measure.description.text}</td></tr>
-</c:if>
+  </div>
+</div>
+<div class="site-block-content">${measure.description}</div>
+</div>
 </c:forEach>
-</table>
 </c:if>

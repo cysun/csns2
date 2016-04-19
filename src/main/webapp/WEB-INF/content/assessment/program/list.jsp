@@ -11,7 +11,6 @@
 
 <ul>
 <c:forEach items="${programs}" var="program">
-  <li><a href="view?id=${program.id}"><span class="big">${program.name}</span></a></li>
+  <li><a class="link" href="view?id=${program.id}"><span class="big">${program.name}</span></a></li>
 </c:forEach>
 </ul>
-

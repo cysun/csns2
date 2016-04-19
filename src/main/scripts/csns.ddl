@@ -495,6 +495,48 @@
         primary key (id)
     );
 
+    create table prereg_registration_sections (
+        registration_id int8 not null,
+        section_id int8 not null,
+        primary key (registration_id, section_id)
+    );
+
+    create table prereg_registrations (
+        id int8 not null,
+        comments varchar(255),
+        date timestamp not null,
+        schedule_id int8 not null,
+        student_id int8 not null,
+        primary key (id)
+    );
+
+    create table prereg_schedules (
+        id int8 not null,
+        default_section_capacity int4 not null,
+        deleted boolean not null,
+        prereg_end timestamp,
+        prereg_start timestamp,
+        term int4 not null,
+        department_id int8 not null,
+        primary key (id)
+    );
+
+    create table prereg_sections (
+        id int8 not null,
+        capacity int4 not null,
+        class_number varchar(255),
+        days varchar(255),
+        end_time varchar(255),
+        location varchar(255),
+        section_number int4 not null,
+        start_time varchar(255),
+        type varchar(255),
+        course_id int8,
+        linked_to int8,
+        schedule_id int8,
+        primary key (id)
+    );
+
     create table program_elective_courses (
         program_id int8 not null,
         course_id int8 not null
@@ -1012,6 +1054,12 @@
 
     alter table mft_scores 
         add constraint UKcxmltfnit7bi608roobfafund unique (department_id, user_id, date);
+
+    alter table prereg_registrations 
+        add constraint UKi6mkelpyem3vwqu2x17wbo03o unique (student_id, schedule_id);
+
+    alter table prereg_schedules 
+        add constraint UKp4ct818ffp811488dq10jbdtt unique (department_id, term);
 
     alter table program_elective_courses 
         add constraint UKakda9dtkf03rx2p1iql5m38n3 unique (program_id, course_id);
@@ -1619,6 +1667,46 @@
         add constraint FKkgtj0ajt1hio2iivq7ci2sakl 
         foreign key (topic_id) 
         references forum_topics;
+
+    alter table prereg_registration_sections 
+        add constraint FK7su81h0s2an5ffvibv0fhkr0m 
+        foreign key (section_id) 
+        references prereg_sections;
+
+    alter table prereg_registration_sections 
+        add constraint FKh3j0ol8uto6k4ttxtxl4qgapb 
+        foreign key (registration_id) 
+        references prereg_registrations;
+
+    alter table prereg_registrations 
+        add constraint FKph1rmj9en3rca6j8bi10f5xbj 
+        foreign key (schedule_id) 
+        references prereg_schedules;
+
+    alter table prereg_registrations 
+        add constraint FKtqtmg4aylp9sw8cd0gy35bj2 
+        foreign key (student_id) 
+        references users;
+
+    alter table prereg_schedules 
+        add constraint FK4dkuyqnia305pqga0vievxr9b 
+        foreign key (department_id) 
+        references departments;
+
+    alter table prereg_sections 
+        add constraint FKi988e2dgfpfk45yubpywh3jmi 
+        foreign key (course_id) 
+        references courses;
+
+    alter table prereg_sections 
+        add constraint FK2p40xii5rrlg6gsc25o5s6lgu 
+        foreign key (linked_to) 
+        references prereg_sections;
+
+    alter table prereg_sections 
+        add constraint FKmawmgenb1ua7u6kyxucjfinxs 
+        foreign key (schedule_id) 
+        references prereg_schedules;
 
     alter table program_elective_courses 
         add constraint FK16ttem3njkukd6perqgk01713 

@@ -63,6 +63,10 @@ $(function(){
            src="<c:url value='/img/icons/blackboard_sum.png' />" />Sections</a></li>
     <li><a href="<c:url value='/department/${dept}/projects' />"><img alt=""
            src="<c:url value='/img/icons/bricks.png' />" />Projects</a></li>
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+    <li><a href="<c:url value='/department/${dept}/prereg/schedule/list'/>"><img alt=""
+           src="<c:url value='/img/icons/calendar.png' />" />Pre-Registration</a></li>
+</security:authorize>
   </ul></div>
 </li>
 
@@ -76,7 +80,7 @@ $(function(){
     <li id="rubrics-menu-item"><a href="<c:url value='/department/${dept}/rubric/list' />"><img
         alt="" src="<c:url value='/img/icons/table_heatmap2.png' />" />Rubrics</a></li>
     <li id="rubrics-menu-item"><a href="<c:url value='/department/${dept}/journal/list' />"><img
-        alt="" src="<c:url value='/img/icons/reports.png' />" />Course Journals</a></li>
+        alt="" src="<c:url value='/img/icons/books.png' />" />Course Journals</a></li>
 <security:authorize access="principal.isFaculty('${dept}')">
     <li id="mft-menu-item"><a href="<c:url value='/department/${dept}/mft/overview' />"><img
         alt="" src="<c:url value='/img/icons/mft.png' />" />Major Field Test</a></li>

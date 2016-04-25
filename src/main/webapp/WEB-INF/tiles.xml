@@ -1323,6 +1323,35 @@
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/edit.jsp" />
     </definition>
 
+    <!-- ================ -->
+    <!-- Pre-Registration -->
+    <!-- ================ -->
+
+    <definition name="prereg/schedule/list" extends="layout.basic">
+        <put-attribute name="title" value="List Schedules" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/list.jsp" />
+    </definition>
+
+    <definition name="prereg/schedule/view" extends="layout.jqueryui">
+        <put-attribute name="title" value="View Schedule" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/view.jsp" />
+    </definition>
+
+    <definition name="prereg/schedule/create" extends="layout.jqueryui">
+        <put-attribute name="title" value="Create Schedule" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/create.jsp" />
+    </definition>
+
+    <definition name="prereg/schedule/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Schedule" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/edit.jsp" />
+    </definition>
+
+    <definition name="prereg/schedule/import" extends="layout.basic">
+        <put-attribute name="title" value="Import Sections" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/import.jsp" />
+    </definition>
+
     <!-- ======== -->
     <!-- CKEditor -->
     <!-- ======== -->

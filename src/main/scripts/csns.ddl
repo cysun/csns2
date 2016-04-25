@@ -512,7 +512,9 @@
 
     create table prereg_schedules (
         id int8 not null,
+        default_grad_reg_limit int4 not null,
         default_section_capacity int4 not null,
+        default_undergrad_reg_limit int4 not null,
         deleted boolean not null,
         prereg_end timestamp,
         prereg_start timestamp,
@@ -532,7 +534,7 @@
         start_time varchar(255),
         type varchar(255),
         course_id int8,
-        linked_to int8,
+        linked_by int8,
         schedule_id int8,
         primary key (id)
     );
@@ -1057,9 +1059,6 @@
 
     alter table prereg_registrations 
         add constraint UKi6mkelpyem3vwqu2x17wbo03o unique (student_id, schedule_id);
-
-    alter table prereg_schedules 
-        add constraint UKp4ct818ffp811488dq10jbdtt unique (department_id, term);
 
     alter table program_elective_courses 
         add constraint UKakda9dtkf03rx2p1iql5m38n3 unique (program_id, course_id);
@@ -1699,8 +1698,8 @@
         references courses;
 
     alter table prereg_sections 
-        add constraint FK2p40xii5rrlg6gsc25o5s6lgu 
-        foreign key (linked_to) 
+        add constraint FKt9h4k0ndaudqtvl93k36vqcko 
+        foreign key (linked_by) 
         references prereg_sections;
 
     alter table prereg_sections 

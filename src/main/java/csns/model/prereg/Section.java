@@ -29,6 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -74,8 +75,11 @@ public class Section implements Serializable {
     private int capacity;
 
     @ManyToOne
-    @JoinColumn(name = "linked_to")
-    private Section linkedTo;
+    @JoinColumn(name = "linked_by")
+    private Section linkedBy;
+
+    @OneToMany(mappedBy = "linkedBy")
+    private List<Section> linkedTo;
 
     @ManyToMany(mappedBy = "sections")
     @OrderBy("date asc")
@@ -85,6 +89,7 @@ public class Section implements Serializable {
     {
         sectionNumber = 1;
         capacity = 30;
+        linkedTo = new ArrayList<Section>();
         registrations = new ArrayList<Registration>();
     }
 
@@ -92,7 +97,7 @@ public class Section implements Serializable {
     {
         this();
         this.schedule = schedule;
-        this.capacity = 0;
+        this.capacity = schedule.getDefaultSectionCapacity();
     }
 
     public Long getId()
@@ -205,12 +210,22 @@ public class Section implements Serializable {
         this.capacity = capacity;
     }
 
-    public Section getLinkedTo()
+    public Section getLinkedBy()
+    {
+        return linkedBy;
+    }
+
+    public void setLinkedBy( Section linkedBy )
+    {
+        this.linkedBy = linkedBy;
+    }
+
+    public List<Section> getLinkedTo()
     {
         return linkedTo;
     }
 
-    public void setLinkedTo( Section linkedTo )
+    public void setLinkedTo( List<Section> linkedTo )
     {
         this.linkedTo = linkedTo;
     }

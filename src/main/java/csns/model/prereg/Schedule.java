@@ -35,15 +35,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Department;
 import csns.model.academics.Term;
 
 @Entity
-@Table(name = "prereg_schedules",
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = { "department_id", "term" }) )
+@Table(name = "prereg_schedules")
 public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,12 +71,21 @@ public class Schedule implements Serializable {
     @Column(name = "default_section_capacity", nullable = false)
     private int defaultSectionCapacity;
 
+    @Column(name = "default_undergrad_reg_limit", nullable = false)
+    private int defaultUndergradRegLimit;
+
+    @Column(name = "default_grad_reg_limit", nullable = false)
+    private int defaultGradRegLimit;
+
     @Column(nullable = false)
     private boolean deleted;
 
     public Schedule()
     {
         sections = new ArrayList<Section>();
+        defaultSectionCapacity = 30;
+        defaultUndergradRegLimit = 5;
+        defaultGradRegLimit = 3;
         deleted = false;
     }
 
@@ -88,6 +94,16 @@ public class Schedule implements Serializable {
         this();
         this.department = department;
         this.term = term;
+    }
+
+    public boolean isPreregEnded()
+    {
+        return preregEnd != null && (new Date()).after( preregEnd );
+    }
+
+    public boolean isPreregStarted()
+    {
+        return preregStart != null && (new Date()).after( preregStart );
     }
 
     public Long getId()
@@ -158,6 +174,26 @@ public class Schedule implements Serializable {
     public void setDefaultSectionCapacity( int defaultSectionCapacity )
     {
         this.defaultSectionCapacity = defaultSectionCapacity;
+    }
+
+    public int getDefaultUndergradRegLimit()
+    {
+        return defaultUndergradRegLimit;
+    }
+
+    public void setDefaultUndergradRegLimit( int defaultUndergradRegLimit )
+    {
+        this.defaultUndergradRegLimit = defaultUndergradRegLimit;
+    }
+
+    public int getDefaultGradRegLimit()
+    {
+        return defaultGradRegLimit;
+    }
+
+    public void setDefaultGradRegLimit( int defaultGradRegLimit )
+    {
+        this.defaultGradRegLimit = defaultGradRegLimit;
     }
 
     public boolean isDeleted()

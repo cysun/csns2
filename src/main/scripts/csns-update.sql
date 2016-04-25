@@ -5,6 +5,8 @@ create table prereg_schedules (
     prereg_start                timestamp,
     prereg_end                  timestamp,
     default_section_capacity    integer not null default 30,
+    default_undergrad_reg_limit integer not null default 5,
+    default_grad_reg_limit      integer not null default 3,
     deleted                     boolean not null default 'f'
 );
 
@@ -20,7 +22,7 @@ create table prereg_sections (
     end_time        varchar(255),
     location        varchar(255),
     capacity        integer not null default 30,
-    linked_to       bigint references prereg_sections(id)
+    linked_by       bigint references prereg_sections(id)
 );
 
 create table prereg_registrations (

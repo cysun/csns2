@@ -282,6 +282,11 @@ public class Term implements Serializable, Comparable<Term> {
         return s;
     }
 
+    public String getFullName()
+    {
+        return toString();
+    }
+
     public boolean equals( Term term )
     {
         return term == null ? false : code == term.code;

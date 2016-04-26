@@ -106,6 +106,11 @@ public class Schedule implements Serializable {
         return preregStart != null && (new Date()).after( preregStart );
     }
 
+    public boolean isPreregOpen()
+    {
+        return isPreregStarted() && !isPreregEnded();
+    }
+
     public Long getId()
     {
         return id;

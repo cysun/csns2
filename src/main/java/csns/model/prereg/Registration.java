@@ -34,6 +34,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import csns.model.academics.AcademicStanding;
 import csns.model.core.User;
 
 @Entity
@@ -56,6 +57,9 @@ public class Registration implements Serializable {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
+    @Column(name = "reg_limit", nullable = false)
+    private int regLimit;
+
     @ManyToMany
     @JoinTable(name = "prereg_registration_sections",
         joinColumns = @JoinColumn(name = "registration_id") ,
@@ -69,6 +73,7 @@ public class Registration implements Serializable {
 
     public Registration()
     {
+        regLimit = 5;
         date = new Date();
         sections = new HashSet<Section>();
     }
@@ -78,6 +83,35 @@ public class Registration implements Serializable {
         this();
         this.student = student;
         this.schedule = schedule;
+
+        AcademicStanding academicStanding = student
+            .getCurrentStanding( schedule.getDepartment() );
+        if( academicStanding != null
+            && academicStanding.getStanding().getSymbol().startsWith( "G" ) )
+            regLimit = schedule.getDefaultGradRegLimit();
+        else
+            regLimit = schedule.getDefaultUndergradRegLimit();
+    }
+
+    public int getNumOfClasses()
+    {
+        int n = sections.size();
+        for( Section section : sections )
+            if( section.getLinkedBy() != null ) --n;
+
+        return n;
+    }
+
+    public Section removeSection( Long sectionId )
+    {
+        for( Section section : sections )
+            if( section.getId().equals( sectionId ) )
+            {
+                sections.remove( section );
+                return section;
+            }
+
+        return null;
     }
 
     public Long getId()
@@ -108,6 +142,16 @@ public class Registration implements Serializable {
     public void setSchedule( Schedule schedule )
     {
         this.schedule = schedule;
+    }
+
+    public int getRegLimit()
+    {
+        return regLimit;
+    }
+
+    public void setRegLimit( int regLimit )
+    {
+        this.regLimit = regLimit;
     }
 
     public Set<Section> getSections()

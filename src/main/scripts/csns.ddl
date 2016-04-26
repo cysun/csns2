@@ -505,6 +505,7 @@
         id int8 not null,
         comments varchar(255),
         date timestamp not null,
+        reg_limit int4 not null,
         schedule_id int8 not null,
         student_id int8 not null,
         primary key (id)

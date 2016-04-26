@@ -1,9 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
-<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <script>
 function publish( id )
 {
@@ -12,7 +10,6 @@ function publish( id )
         $("#pdate-"+id).load( "publish?id=" + id );
 }
 </script>
-</security:authorize>
 
 <ul id="title">
 <li>Schedules</li>
@@ -23,7 +20,7 @@ function publish( id )
 <c:if test="${fn:length(schedules) > 0}">
 <table class="viewtable autowidth">
 <thead>
-  <tr><th>Term</th><th>Pre-Registration Start</th><th>Pre-Registration End</th><th></th></tr>
+  <tr><th>Term</th><th>Pre-Registration Start</th><th>Pre-Registration End</th><th></th>
 </thead>
 <tbody>
 <c:forEach items="${schedules}" var="schedule">

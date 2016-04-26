@@ -29,6 +29,7 @@ create table prereg_registrations (
     id          bigint primary key,
     student_id  bigint not null references users(id),
     schedule_id bigint not null references prereg_schedules(id),
+    reg_limit   integer not null default 5,
     comments    varchar(8000),
     date        timestamp not null default current_timestamp
 );

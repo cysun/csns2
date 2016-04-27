@@ -17,12 +17,12 @@ function selectClass( sectionId )
 {
 	var row = $("#all-sections tr[data-section-id='" + sectionId + "']");
 	var linkedRow = $("#all-sections tr[data-section-id='" + row.attr("data-linked-by") + "']");
-	row.find("input[type='checkbox']").attr("disabled", false).attr("checked",false);
 	row.hide();
     linkedRow.hide();
 
     row = $("#selected-sections tr[data-section-id='" + sectionId + "']");
     var linkedRow = $("#selected-sections tr[data-section-id='" + row.attr("data-linked-by") + "']");
+    row.find("input[type='checkbox']").attr("disabled", false).prop("checked",true);
     row.show();
     linkedRow.show();
 }
@@ -30,12 +30,12 @@ function deselectClass( sectionId )
 {
     var row = $("#all-sections tr[data-section-id='" + sectionId + "']");
     var linkedRow = $("#all-sections tr[data-section-id='" + row.attr("data-linked-by") + "']");
+    row.find("input[type='checkbox']").attr("disabled", false).prop("checked",false);
     row.show();
     linkedRow.show();
 
     row = $("#selected-sections tr[data-section-id='" + sectionId + "']");
     var linkedRow = $("#selected-sections tr[data-section-id='" + row.attr("data-linked-by") + "']");
-    row.find("input[type='checkbox']").attr("disabled", false).attr("checked",true);
     row.hide();
     linkedRow.hide();
 }
@@ -144,7 +144,10 @@ $(function(){
 
 <table id="selected-sections" class="viewtable autowidth">
 <thead>
-<tr><th></th><th>Course</th><th>Section</th><th>Type</th><th>Number</th><th>Time</th><th>Location</th></tr>
+<tr>
+  <th></th><th>Course</th><th>Section</th><th>Name</th><th>Type</th>
+  <th>Number</th><th>Time</th><th>Location</th>
+</tr>
 </thead>
 <tbody>
 <c:forEach items="${sections}" var="section">
@@ -157,6 +160,7 @@ $(function(){
   </td>
   <td>${section.course.code}</td>
   <td>${section.sectionNumber}</td>
+  <td>${section.course.name}</td>
   <td>${section.type}</td>
   <td>${section.classNumber}</td>
   <td>${section.days}<c:if test="${not empty section.startTime}">
@@ -176,7 +180,10 @@ classes.</p>
 
 <table id="all-sections" class="viewtable autowidth">
 <thead>
-<tr><th></th><th>Course</th><th>Section</th><th>Name</th><th>Type</th><th>Number</th><th>Time</th><th>Location</th></tr>
+<tr>
+  <th></th><th>Course</th><th>Section</th><th>Name</th><th>Type</th>
+  <th>Number</th><th>Time</th><th>Location</th>
+</tr>
 </thead>
 <tbody>
 <c:forEach items="${sections}" var="section">

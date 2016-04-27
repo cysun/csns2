@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <script>
 $(function(){
@@ -8,6 +8,12 @@ $(function(){
     	sortList: [[0,0], [1,0]]
     });
 });
+function publish( id )
+{
+    var msg = "Do you want to start pre-registration now?";
+    if( confirm(msg) )
+        $("#pdate-"+id).load( "publish?id=" + id );
+}
 </script>
 
 <ul id="title">
@@ -19,31 +25,39 @@ $(function(){
     alt="[Edit Schedule]" src="<c:url value='/img/icons/calendar_edit.png' />" /></a></li>
 </ul>
 
-<table class="general autowidth" style="margin-bottom: 2em;">
+<table class="general autowidth">
 <tr>
   <th>Sections:</th><td>${fn:length(schedule.sections)}</td>
-</tr>
-<tr>
   <th>Pre-Registration Start</th>
-  <td><fmt:formatDate value="${schedule.preregStart}" pattern="yyyy-MM-dd" /></td>
+  <td><csns:publishDate itemId="${schedule.id}" date="${schedule.preregStart}"
+                        datePast="${schedule.preregStarted}" /></td>
 </tr>
 <tr>
+  <th>Registrations:</th>
+  <td><a href="../registration/list?scheduleId=${schedule.id}">${fn:length(registrations)}</a></td>
   <th>Pre-Registration End</th>
-  <td><fmt:formatDate value="${schedule.preregEnd}" pattern="yyyy-MM-dd" /></td>
+  <td><csns:dueDate datePattern="yyyy-MM-dd" date="${schedule.preregEnd}"
+                    datePast="${schedule.preregEnded}" /></td>
 </tr>
 </table>
+
+<div style="margin: 1em 0;">${schedule.description}</div>
 
 <c:if test="${fn:length(schedule.sections) > 0}">
 <table id="sections" class="viewtable autowidth">
 <thead>
-<tr><th>Course</th><th>Section</th><th>Enrolled</th><th>Name</th><th>Type</th><th>Number</th><th>Time</th><th>Location</th></tr>
+<tr>
+  <th>Course</th><th>Section</th><th>Enrolled</th><th>Name</th><th>Type</th>
+  <th>Number</th><th>Time</th><th>Location</th></tr>
 </thead>
 <tbody>
 <c:forEach items="${schedule.sections}" var="section">
 <tr>
   <td>${section.course.code}</td>
   <td>${section.sectionNumber}</td>
-  <td>${fn:length(section.registrations)}/${section.capacity}</td>
+  <td>
+    <a href="../registration/list?sectionId=${section.id}">${fn:length(section.registrations)}/${section.capacity}</a>
+  </td>
   <td>${section.course.name}</td>
   <td>${section.type}</td>
   <td>${section.classNumber}</td>

@@ -71,6 +71,8 @@ public class Section implements Serializable {
 
     private String location;
 
+    private String notes;
+
     @Column(nullable = false)
     private int capacity;
 
@@ -198,6 +200,16 @@ public class Section implements Serializable {
     public void setLocation( String location )
     {
         this.location = location;
+    }
+
+    public String getNotes()
+    {
+        return notes;
+    }
+
+    public void setNotes( String notes )
+    {
+        this.notes = notes;
     }
 
     public int getCapacity()

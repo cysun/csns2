@@ -134,8 +134,11 @@
         <security:intercept-url pattern="/department/*/forum/topic/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/search" access="permitAll" />
         <security:intercept-url pattern="/department/*/forum/topic/**" access="authenticated" />
-        <security:intercept-url pattern="/department/*/prereg/schedule/**" access="authenticated and principal.admin" />
-        <security:intercept-url pattern="/department/*/prereg/**" access="authenticated" />
+        <security:intercept-url pattern="/department/*/prereg/register" access="authenticated" />
+        <security:intercept-url pattern="/department/*/prereg/registration/addClass" access="authenticated" />
+        <security:intercept-url pattern="/department/*/prereg/registration/removeClass" access="authenticated" />
+        <security:intercept-url pattern="/department/*/prereg/registration/editComments" access="authenticated" />
+        <security:intercept-url pattern="/department/*/prereg/**" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/wiki/edit" access="authenticated" />
         <security:intercept-url pattern="/wiki/move" access="authenticated" />
         <security:intercept-url pattern="/wiki/revert" access="authenticated" />

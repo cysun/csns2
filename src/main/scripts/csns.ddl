@@ -497,8 +497,7 @@
 
     create table prereg_registration_sections (
         registration_id int8 not null,
-        section_id int8 not null,
-        primary key (registration_id, section_id)
+        section_id int8 not null
     );
 
     create table prereg_registrations (
@@ -517,6 +516,7 @@
         default_section_capacity int4 not null,
         default_undergrad_reg_limit int4 not null,
         deleted boolean not null,
+        description varchar(255),
         prereg_end timestamp,
         prereg_start timestamp,
         term int4 not null,
@@ -531,6 +531,7 @@
         days varchar(255),
         end_time varchar(255),
         location varchar(255),
+        notes varchar(255),
         section_number int4 not null,
         start_time varchar(255),
         type varchar(255),

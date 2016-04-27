@@ -58,6 +58,8 @@ public class Schedule implements Serializable {
         column = @Column(name = "term", nullable = false) ) })
     private Term term;
 
+    private String description;
+
     @Column(name = "prereg_start")
     private Date preregStart;
 
@@ -85,7 +87,7 @@ public class Schedule implements Serializable {
         sections = new ArrayList<Section>();
         defaultSectionCapacity = 30;
         defaultUndergradRegLimit = 5;
-        defaultGradRegLimit = 3;
+        defaultGradRegLimit = 4;
         deleted = false;
     }
 
@@ -139,6 +141,16 @@ public class Schedule implements Serializable {
     public void setTerm( Term term )
     {
         this.term = term;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
     }
 
     public Date getPreregStart()

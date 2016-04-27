@@ -1586,6 +1586,7 @@ create table prereg_schedules (
     id                          bigint primary key,
     department_id               bigint not null references departments(id),
     term                        integer not null,
+    description                 varchar(80000),
     prereg_start                timestamp,
     prereg_end                  timestamp,
     default_section_capacity    integer not null default 30,
@@ -1605,6 +1606,7 @@ create table prereg_sections (
     start_time      varchar(255),
     end_time        varchar(255),
     location        varchar(255),
+    notes           varchar(255),
     capacity        integer not null default 30,
     linked_by       bigint references prereg_sections(id)
 );

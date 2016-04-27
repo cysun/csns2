@@ -47,6 +47,7 @@ import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.prereg.Schedule;
 import csns.model.prereg.Section;
+import csns.model.prereg.dao.RegistrationDao;
 import csns.model.prereg.dao.ScheduleDao;
 import csns.security.SecurityUtils;
 import csns.util.ExcelReader;
@@ -59,6 +60,9 @@ public class PreregScheduleController {
 
     @Autowired
     private ScheduleDao scheduleDao;
+
+    @Autowired
+    private RegistrationDao registrationDao;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -81,7 +85,10 @@ public class PreregScheduleController {
     @RequestMapping("/department/{dept}/prereg/schedule/view")
     public String view( @RequestParam Long id, ModelMap models )
     {
-        models.put( "schedule", scheduleDao.getSchedule( id ) );
+        Schedule schedule = scheduleDao.getSchedule( id );
+        models.put( "schedule", schedule );
+        models.put( "registrations",
+            registrationDao.getRegistrations( schedule ) );
         return "prereg/schedule/view";
     }
 

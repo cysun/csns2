@@ -78,8 +78,8 @@ public class PreregScheduleControllerS {
     public String create( @PathVariable String dept, ModelMap models )
     {
         List<Term> terms = new ArrayList<Term>();
-        terms.add( new Term() );
-        for( int i = 0; i < 3; ++i )
+        terms.add( (new Term()).next() );
+        for( int i = 0; i < 2; ++i )
             terms.add( terms.get( i ).next() );
 
         models.put( "terms", terms );

@@ -10,6 +10,11 @@ $(function(){
         autoOpen: false,
         modal: true
     });
+    $("textarea").each(function(){
+        CKEDITOR.replace( $(this).attr("id"), {
+          toolbar : "Basic"
+        });
+    });
 });
 function help( name )
 {
@@ -23,11 +28,18 @@ function help( name )
 </ul>
 
 <form:form modelAttribute="schedule">
-<table class="general autowidth">
+<table class="general">
   <tr>
-    <th>Term</th>
+    <th class="shrink">Term</th>
     <td>
       <form:select path="term" items="${terms}" itemValue="code" itemLabel="fullName" />
+    </td>
+  </tr>
+
+  <tr>
+    <th>Description</th>
+    <td>
+      <form:textarea path="description" rows="5" cols="80" />
     </td>
   </tr>
 

@@ -58,6 +58,17 @@ public class RegistrationDaoImpl implements RegistrationDao {
     }
 
     @Override
+    public List<Registration> getRegistrations( Schedule schedule )
+    {
+        String query = "from Registration r where r.schedule = :schedule "
+            + "and r.sections is not empty order by r.date asc";
+
+        return entityManager.createQuery( query, Registration.class )
+            .setParameter( "schedule", schedule )
+            .getResultList();
+    }
+
+    @Override
     @Transactional
     public Registration saveRegistration( Registration registration )
     {

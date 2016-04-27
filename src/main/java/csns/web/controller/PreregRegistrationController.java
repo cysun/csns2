@@ -19,6 +19,7 @@
 package csns.web.controller;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -111,6 +112,7 @@ public class PreregRegistrationController {
             registration.getSections().add( section );
             if( section.getLinkedBy() != null )
                 registration.getSections().add( section.getLinkedBy() );
+            registration.setDate( new Date() );
             registration = registrationDao.saveRegistration( registration );
 
             logger.info( user.getUsername() + " added section " + sectionId
@@ -131,6 +133,7 @@ public class PreregRegistrationController {
             Section section = registration.removeSection( sectionId );
             if( section.getLinkedBy() != null )
                 registration.removeSection( section.getLinkedBy().getId() );
+            registration.setDate( new Date() );
             registration = registrationDao.saveRegistration( registration );
 
             logger.info( user.getUsername() + " removed section " + sectionId
@@ -160,6 +163,26 @@ public class PreregRegistrationController {
         response.setContentType( "text/plain" );
         response.getWriter().print( comments );
         return null;
+    }
+
+    @RequestMapping("/department/{dept}/prereg/registration/list")
+    public String list( @RequestParam(required = false ) Long scheduleId,
+        @RequestParam(required = false) Long sectionId, ModelMap models)
+    {
+        if( sectionId != null )
+        {
+            Section section = sectionDao.getSection( sectionId );
+            models.put( "section", section );
+            models.put( "registrations", section.getRegistrations() );
+        }
+        else
+        {
+            Schedule schedule = scheduleDao.getSchedule( scheduleId );
+            models.put( "schedule", schedule );
+            models.put( "registrations",
+                registrationDao.getRegistrations( schedule ) );
+        }
+        return "prereg/registration/list";
     }
 
 }

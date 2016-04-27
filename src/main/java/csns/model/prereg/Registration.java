@@ -19,9 +19,9 @@
 package csns.model.prereg;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -64,7 +65,8 @@ public class Registration implements Serializable {
     @JoinTable(name = "prereg_registration_sections",
         joinColumns = @JoinColumn(name = "registration_id") ,
         inverseJoinColumns = @JoinColumn(name = "section_id") )
-    private Set<Section> sections;
+    @OrderBy("classNumber asc")
+    private List<Section> sections;
 
     private String comments;
 
@@ -75,7 +77,7 @@ public class Registration implements Serializable {
     {
         regLimit = 5;
         date = new Date();
-        sections = new HashSet<Section>();
+        sections = new ArrayList<Section>();
     }
 
     public Registration( User student, Schedule schedule )
@@ -154,12 +156,12 @@ public class Registration implements Serializable {
         this.regLimit = regLimit;
     }
 
-    public Set<Section> getSections()
+    public List<Section> getSections()
     {
         return sections;
     }
 
-    public void setSections( Set<Section> sections )
+    public void setSections( List<Section> sections )
     {
         this.sections = sections;
     }

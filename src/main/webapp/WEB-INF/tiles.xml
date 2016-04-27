@@ -1337,12 +1337,12 @@
         <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/view.jsp" />
     </definition>
 
-    <definition name="prereg/schedule/create" extends="layout.jqueryui">
+    <definition name="prereg/schedule/create" extends="layout.qa">
         <put-attribute name="title" value="Create Schedule" />
         <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/create.jsp" />
     </definition>
 
-    <definition name="prereg/schedule/edit" extends="layout.jqueryui">
+    <definition name="prereg/schedule/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Schedule" />
         <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/edit.jsp" />
     </definition>
@@ -1355,6 +1355,11 @@
     <definition name="prereg/register" extends="layout.jqueryui">
         <put-attribute name="title" value="Pre-Registration" />
         <put-attribute name="content" value="/WEB-INF/content/prereg/register.jsp" />
+    </definition>
+
+    <definition name="prereg/registration/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="List Registrations" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/registration/list.jsp" />
     </definition>
 
     <!-- ======== -->

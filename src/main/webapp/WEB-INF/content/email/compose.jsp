@@ -53,7 +53,7 @@ function addAttachment()
 <li>Email</li>
 </ul>
 
-<form:form action="compose" modelAttribute="email" enctype="multipart/form-data">
+<form:form action="compose" modelAttribute="email" enctype="multipart/form-data" accept-charset="UTF-8">
 <table class="general">
   <tr>
     <th>From</th>

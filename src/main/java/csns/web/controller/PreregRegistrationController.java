@@ -19,10 +19,19 @@
 package csns.web.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +67,9 @@ public class PreregRegistrationController {
 
     @Autowired
     private RegistrationDao registrationDao;
+
+    @Resource(name = "contentTypes")
+    private Properties contentTypes;
 
     private static final Logger logger = LoggerFactory
         .getLogger( PreregRegistrationController.class );
@@ -183,6 +195,63 @@ public class PreregRegistrationController {
                 registrationDao.getRegistrations( schedule ) );
         }
         return "prereg/registration/list";
+    }
+
+    @RequestMapping("/department/{dept}/prereg/registration/export")
+    public String export( @RequestParam(required = false ) Long scheduleId,
+        @RequestParam(required = false) Long sectionId,
+        HttpServletResponse response) throws IOException
+    {
+        String fileName;
+        List<Registration> registrations;
+        if( sectionId != null )
+        {
+            Section section = sectionDao.getSection( sectionId );
+            fileName = "Prereg " + section.getSchedule().getTerm() + " "
+                + section.getCourse().getCode() + "-"
+                + section.getSectionNumber() + ".xlsx";
+            registrations = section.getRegistrations();
+        }
+        else
+        {
+            Schedule schedule = scheduleDao.getSchedule( scheduleId );
+            fileName = "Prereg " + schedule.getTerm() + ".xlsx";
+            registrations = registrationDao.getRegistrations( schedule );
+
+        }
+
+        response.setContentType( contentTypes.getProperty( "xlsx" ) );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=\"" + fileName + "\"" );
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet( "Grades" );
+
+        Row row = sheet.createRow( 0 );
+        row.createCell( 0 ).setCellValue( "CIN" );
+        row.createCell( 1 ).setCellValue( "Name" );
+        row.createCell( 2 ).setCellValue( "Timestamp" );
+
+        int rowIndex = 1;
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+        for( Registration registration : registrations )
+        {
+            row = sheet.createRow( rowIndex++ );
+            row.createCell( 0 )
+                .setCellValue( registration.getStudent().getCin() );
+            row.createCell( 1 )
+                .setCellValue( registration.getStudent().getLastName() + ", "
+                    + registration.getStudent().getFirstName() );
+            row.createCell( 2 )
+                .setCellValue( dateFormat.format( registration.getDate() ) );
+        }
+        wb.write( response.getOutputStream() );
+        wb.close();
+
+        logger.info( SecurityUtils.getUser().getUsername() + " exported "
+            + registrations.size() + " prereg registrations." );
+
+        return null;
     }
 
 }

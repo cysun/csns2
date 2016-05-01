@@ -109,7 +109,7 @@ public class RubricSubmissionController {
         if( stats.get( 0 ).getCount() == 0 ) return;
 
         List<Double> data = new ArrayList<Double>();
-        for( int i = 0; i < stats.size() - 1; ++i )
+        for( int i = 1; i < stats.size() ; ++i )
             data.add( stats.get( i ).getMean() );
         // The overall stats is the first one in the list
         data.add( stats.get( 0 ).getMean() );

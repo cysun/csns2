@@ -75,7 +75,8 @@ public class SectionRosterController {
     @Resource(name = "contentTypes")
     private Properties contentTypes;
 
-    private static final Logger logger = LoggerFactory.getLogger( SectionRosterController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SectionRosterController.class );
 
     @RequestMapping("/section/roster")
     public String roster( @RequestParam Long id, ModelMap models )
@@ -130,17 +131,17 @@ public class SectionRosterController {
         if( enrollment == null )
         {
             enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " added student " + student.getId() + " to section "
-                + sectionId );
+            logger
+                .info( SecurityUtils.getUser().getUsername() + " added student "
+                    + student.getId() + " to section " + sectionId );
         }
 
         return "redirect:/section/roster?id=" + sectionId;
     }
 
     @RequestMapping("/section/roster/drop")
-    public String drop( @RequestParam("userId") Long ids[],
-        @RequestParam Long sectionId )
+    public String drop( @RequestParam("userId" ) Long ids[],
+        @RequestParam Long sectionId)
     {
         Section section = sectionDao.getSection( sectionId );
         List<User> students = userDao.getUsers( ids );
@@ -149,9 +150,9 @@ public class SectionRosterController {
             Enrollment enrollment = enrollmentDao.getEnrollment( section,
                 student );
             enrollmentDao.deleteEnrollment( enrollment );
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " removed student " + student.getId() + " from section "
-                + sectionId );
+            logger.info(
+                SecurityUtils.getUser().getUsername() + " removed student "
+                    + student.getId() + " from section " + sectionId );
         }
 
         return "redirect:/section/roster?id=" + sectionId;
@@ -165,32 +166,35 @@ public class SectionRosterController {
         GradeSheet gradeSheet = new GradeSheet( section );
 
         response.setContentType( contentTypes.getProperty( "xlsx" ) );
-        response.setHeader( "Content-Disposition", "attachment; filename="
-            + section.getCourse().getCode() + "-"
-            + section.getTerm().getShortString() + ".xlsx" );
+        response.setHeader( "Content-Disposition",
+            "attachment; filename=" + section.getCourse().getCode() + "-"
+                + section.getTerm().getShortString() + ".xlsx" );
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet( "Grades" );
 
         int n = section.getAssignments().size();
         Row row = sheet.createRow( 0 );
-        row.createCell( 0 ).setCellValue( "Name" );
+        row.createCell( 0 ).setCellValue( "CIN" );
+        row.createCell( 1 ).setCellValue( "Name" );
         for( int i = 0; i < n; ++i )
-            row.createCell( i + 1 ).setCellValue(
-                section.getAssignments().get( i ).getAlias() );
-        row.createCell( n + 1 ).setCellValue( "Grade" );
+            row.createCell( i + 2 )
+                .setCellValue( section.getAssignments().get( i ).getAlias() );
+        row.createCell( n + 2 ).setCellValue( "Grade" );
 
         int rowIndex = 1;
         Map<Enrollment, String[]> studentGrades = gradeSheet.getStudentGrades();
         for( Enrollment enrollment : studentGrades.keySet() )
         {
             row = sheet.createRow( rowIndex++ );
-            row.createCell( 0 ).setCellValue(
-                enrollment.getStudent().getLastName() + ", "
+            row.createCell( 0 )
+                .setCellValue( enrollment.getStudent().getCin() );
+            row.createCell( 1 )
+                .setCellValue( enrollment.getStudent().getLastName() + ", "
                     + enrollment.getStudent().getFirstName() );
             for( int i = 0; i < n; ++i )
             {
-                Cell cell = row.createCell( i + 1 );
+                Cell cell = row.createCell( i + 2 );
                 String grade = studentGrades.get( enrollment )[i];
                 if( StringUtils.hasText( grade )
                     && grade.matches( "-?\\d+(\\.\\d+)?" ) )
@@ -198,9 +202,8 @@ public class SectionRosterController {
                 else
                     cell.setCellValue( grade );
             }
-            if( enrollment.getGrade() != null )
-                row.createCell( n + 1 ).setCellValue(
-                    enrollment.getGrade().getSymbol() );
+            if( enrollment.getGrade() != null ) row.createCell( n + 2 )
+                .setCellValue( enrollment.getGrade().getSymbol() );
         }
 
         wb.write( response.getOutputStream() );

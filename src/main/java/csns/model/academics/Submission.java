@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -42,8 +42,8 @@ import csns.model.core.User;
 
 @Entity
 @Table(name = "submissions",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "student_id",
-        "assignment_id" }))
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "student_id", "assignment_id" }) )
 @Inheritance
 @DiscriminatorColumn(name = "submission_type")
 @DiscriminatorValue("REGULAR")
@@ -129,7 +129,9 @@ public class Submission implements Serializable {
 
     public boolean isPastDue()
     {
-        return Calendar.getInstance().after( getEffectiveDueDate() );
+        Calendar effectiveDueDate = getEffectiveDueDate();
+        return effectiveDueDate != null
+            && Calendar.getInstance().after( effectiveDueDate );
     }
 
     public Long getId()

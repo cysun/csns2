@@ -36,7 +36,7 @@ function remove( fileId )
 </ul>
 
 <table class="general autowidth">
-<c:if test="${assignment.description != null and (assignment.availableAfterDueDate || not assignment.pastDue)}">
+<c:if test="${assignment.description != null and (assignment.availableAfterDueDate || not submission.pastDue)}">
 <tr>
   <th>Description</th>
   <td>

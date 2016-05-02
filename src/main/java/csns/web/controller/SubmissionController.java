@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -88,7 +88,8 @@ public class SubmissionController {
     @Value("#{applicationProperties.encoding}")
     private String appEncoding;
 
-    private static final Logger logger = LoggerFactory.getLogger( SubmissionController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SubmissionController.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder, WebRequest request )
@@ -110,25 +111,27 @@ public class SubmissionController {
         User user = SecurityUtils.getUser();
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
         Submission submission = submissionDao.getSubmission( user, assignment );
-        if( submission == null )
-            submission = submissionDao.saveSubmission( new Submission( user,
-                assignment ) );
+        if( submission == null ) submission = submissionDao
+            .saveSubmission( new Submission( user, assignment ) );
 
         models.put( "submission", submission );
         return "submission/view";
     }
 
     @RequestMapping(value = "/submission/description")
-    public String description( @RequestParam Long assignmentId,
-        ModelMap models, HttpServletResponse response )
+    public String description( @RequestParam Long assignmentId, ModelMap models,
+        HttpServletResponse response )
     {
+        User user = SecurityUtils.getUser();
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
+        Submission submission = submissionDao.getSubmission( user, assignment );
         if( !assignment.isPublished() )
         {
             models.put( "message", "error.assignment.unpublished" );
             return "error";
         }
-        if( assignment.isPastDue() && !assignment.isAvailableAfterDueDate() )
+        if( submission == null
+            || submission.isPastDue() && !assignment.isAvailableAfterDueDate() )
         {
             models.put( "message", "error.assignment.unavailable" );
             return "error";
@@ -185,9 +188,8 @@ public class SubmissionController {
         if( !uploadedFile.isEmpty() )
         {
             String fileName = uploadedFile.getOriginalFilename();
-            if( !isInstructor
-                && !submission.getAssignment().isFileExtensionAllowed(
-                    File.getFileExtension( fileName ) ) )
+            if( !isInstructor && !submission.getAssignment()
+                .isFileExtensionAllowed( File.getFileExtension( fileName ) ) )
             {
                 models.put( "message", "error.assignment.file.type" );
                 models.put( "backUrl", view );
@@ -207,15 +209,15 @@ public class SubmissionController {
             submission.incrementFileCount();
             submissionDao.saveSubmission( submission );
 
-            logger.info( user.getUsername() + " uploaded file " + file.getId() );
+            logger
+                .info( user.getUsername() + " uploaded file " + file.getId() );
         }
 
         return "redirect:" + view;
     }
 
     @RequestMapping("/submission/remove")
-    public @ResponseBody
-    String remove( @RequestParam Long fileId )
+    public @ResponseBody String remove( @RequestParam Long fileId )
     {
         User user = SecurityUtils.getUser();
         File file = fileDao.getFile( fileId );
@@ -286,8 +288,9 @@ public class SubmissionController {
         submission.setDueDate( dueDate );
         submissionDao.saveSubmission( submission );
 
-        return submission.isOnline() ? "redirect:/submission/online/grade?id="
-            + id : "redirect:/submission/grade?id=" + id;
+        return submission.isOnline()
+            ? "redirect:/submission/online/grade?id=" + id
+            : "redirect:/submission/grade?id=" + id;
     }
 
     @RequestMapping(value = "/submission/edit", params = "grade")
@@ -312,7 +315,7 @@ public class SubmissionController {
     @RequestMapping(value = "/submission/edit", params = "comments")
     public String editComments( @RequestParam Long id,
         @RequestParam String comments, HttpServletResponse response )
-        throws IOException
+            throws IOException
     {
         Submission submission = submissionDao.getSubmission( id );
         submission.setComments( comments );
@@ -338,8 +341,7 @@ public class SubmissionController {
         String subject = submission.getAssignment()
             .getSection()
             .getCourse()
-            .getCode()
-            + " " + submission.getAssignment().getName() + " Grade";
+            .getCode() + " " + submission.getAssignment().getName() + " Grade";
         message.setSubject( subject );
 
         Map<String, Object> vModels = new HashMap<String, Object>();
@@ -371,8 +373,9 @@ public class SubmissionController {
     {
         Submission submission = submissionDao.getSubmission( submissionId );
         emailGrade( submission );
-        return submission.isOnline() ? "redirect:/submission/online/grade?id="
-            + submissionId : "redirect:/submission/grade?id=" + submissionId;
+        return submission.isOnline()
+            ? "redirect:/submission/online/grade?id=" + submissionId
+            : "redirect:/submission/grade?id=" + submissionId;
     }
 
     @RequestMapping(value = "/submission/email", params = "assignmentId")

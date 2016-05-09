@@ -197,7 +197,7 @@ public class UserControllerS {
         handleProfilePicture( user, uploadedFile );
 
         sessionStatus.setComplete();
-        return "redirect:/j_spring_security_logout";
+        return "redirect:/logout";
     }
 
 }

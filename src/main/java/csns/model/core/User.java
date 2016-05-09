@@ -21,6 +21,7 @@ package csns.model.core;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -218,6 +219,9 @@ public class User
         surveysTaken = new HashSet<Survey>();
         numOfForumPosts = 0;
         diskQuota = 200;
+
+        currentStandings = new HashMap<Department, AcademicStanding>();
+        surveysTaken = new HashSet<Survey>();
     }
 
     public User clone()

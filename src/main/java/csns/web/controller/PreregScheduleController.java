@@ -150,12 +150,18 @@ public class PreregScheduleController {
 
     @RequestMapping(value = "/department/{dept}/prereg/schedule/import",
         method = RequestMethod.POST)
-    public String importSections( @RequestParam Long scheduleId,
+    public String importSections( @PathVariable String dept,
+        @RequestParam Long scheduleId,
         @RequestParam(value = "file" ) MultipartFile uploadedFile)
             throws IOException
     {
         if( uploadedFile == null || uploadedFile.isEmpty() )
             return "redirect:import?scheduleId=" + scheduleId;
+
+        Department department = departmentDao.getDepartment( dept );
+        Set<Course> courses = new HashSet<Course>();
+        courses.addAll( department.getUndergraduateCourses() );
+        courses.addAll( department.getGraduateCourses() );
 
         Schedule schedule = scheduleDao.getSchedule( scheduleId );
         Set<String> classNumbers = new HashSet<String>();
@@ -187,7 +193,13 @@ public class PreregScheduleController {
             Course course = courseDao.getCourse( code );
             if( course == null )
             {
-                logger.warn( code + " is not in the system." );
+                logger.debug( code + " is not in the system." );
+                continue;
+            }
+
+            if( !courses.contains( course ) )
+            {
+                logger.debug( code + " is not offered by the department." );
                 continue;
             }
 

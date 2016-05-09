@@ -47,6 +47,8 @@ $(function(){
     alt="[Email Users]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 <li class="align_right"><a href="add"><img title="Add User" alt="[Add User]"
     src="<c:url value='/img/icons/user_add.png' />" /></a></li>
+<li class="align_right"><a href="import"><img alt="[Import Users]"
+  title="Import Users" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </ul>
 
 <form action="search" method="get">

@@ -13,8 +13,8 @@ drop function term(integer);
 drop function term();
 drop function term(date);
 
-drop table prereg_registration_sections;
-drop table prereg_registrations;
+drop table prereg_section_registrations;
+drop table prereg_schedule_registrations;
 drop table prereg_sections;
 drop table prereg_schedules;
 
@@ -166,6 +166,7 @@ drop table section_instructors;
 drop trigger sections_ts_trigger on sections;
 drop function  sections_ts_trigger_function();
 drop table sections;
+drop table course_prerequisites;
 drop trigger courses_ts_trigger on courses;
 drop function courses_ts_trigger_function();
 drop table courses;

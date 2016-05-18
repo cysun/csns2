@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -83,16 +82,16 @@ public class Section implements Serializable {
     @OneToMany(mappedBy = "linkedBy")
     private List<Section> linkedTo;
 
-    @ManyToMany(mappedBy = "sections")
+    @OneToMany(mappedBy = "section")
     @OrderBy("date asc")
-    private List<Registration> registrations;
+    private List<SectionRegistration> registrations;
 
     public Section()
     {
         sectionNumber = 1;
         capacity = 30;
         linkedTo = new ArrayList<Section>();
-        registrations = new ArrayList<Registration>();
+        registrations = new ArrayList<SectionRegistration>();
     }
 
     public Section( Schedule schedule )
@@ -242,12 +241,12 @@ public class Section implements Serializable {
         this.linkedTo = linkedTo;
     }
 
-    public List<Registration> getRegistrations()
+    public List<SectionRegistration> getRegistrations()
     {
         return registrations;
     }
 
-    public void setRegistrations( List<Registration> registrations )
+    public void setRegistrations( List<SectionRegistration> registrations )
     {
         this.registrations = registrations;
     }

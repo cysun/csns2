@@ -21,7 +21,7 @@ package csns.web.controller;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -45,12 +45,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
+import csns.model.prereg.ScheduleRegistration;
 import csns.model.prereg.Registration;
 import csns.model.prereg.Schedule;
 import csns.model.prereg.Section;
-import csns.model.prereg.dao.RegistrationDao;
+import csns.model.prereg.SectionRegistration;
+import csns.model.prereg.dao.ScheduleRegistrationDao;
 import csns.model.prereg.dao.ScheduleDao;
 import csns.model.prereg.dao.SectionDao;
+import csns.model.prereg.dao.SectionRegistrationDao;
 import csns.security.SecurityUtils;
 
 @Controller
@@ -66,7 +69,10 @@ public class PreregRegistrationController {
     private SectionDao sectionDao;
 
     @Autowired
-    private RegistrationDao registrationDao;
+    private ScheduleRegistrationDao scheduleRegistrationDao;
+
+    @Autowired
+    private SectionRegistrationDao sectionRegistrationDao;
 
     @Resource(name = "contentTypes")
     private Properties contentTypes;
@@ -90,23 +96,24 @@ public class PreregRegistrationController {
         }
 
         User user = SecurityUtils.getUser();
-        Registration registration = registrationDao.getRegistration( user,
-            schedule );
-        if( registration == null )
+        ScheduleRegistration scheduleRegistration = scheduleRegistrationDao
+            .getScheduleRegistration( user, schedule );
+        if( scheduleRegistration == null )
         {
             user = userDao.getUser( user.getId() );
-            registration = registrationDao
-                .saveRegistration( new Registration( user, schedule ) );
-            logger.info( "Registration " + registration.getId()
+            scheduleRegistration = scheduleRegistrationDao
+                .saveScheduleRegistration(
+                    new ScheduleRegistration( user, schedule ) );
+            logger.info( "Schedule Registration " + scheduleRegistration.getId()
                 + " created by (self) " + user.getUsername() );
         }
 
         JSONArray jsonArray = new JSONArray();
-        for( Section section : registration.getSections() )
-            if( section.getLinkedTo().isEmpty() )
-                jsonArray.put( section.getId() );
+        for( SectionRegistration sectionRegistration : scheduleRegistration
+            .getSectionRegistrations() )
+            jsonArray.put( sectionRegistration.getSection().getId() );
 
-        models.put( "registration", registration );
+        models.put( "registration", scheduleRegistration );
         models.put( "selectedClasses", jsonArray.toString() );
         return "prereg/register";
     }
@@ -116,19 +123,23 @@ public class PreregRegistrationController {
         @RequestParam Long sectionId )
     {
         User user = SecurityUtils.getUser();
-        Registration registration = registrationDao
-            .getRegistration( registrationId );
-        if( registration.getSchedule().isPreregOpen() || user.isFaculty() )
+        ScheduleRegistration scheduleRegistration = scheduleRegistrationDao
+            .getScheduleRegistration( registrationId );
+        if( scheduleRegistration.getSchedule().isPreregOpen() )
         {
             Section section = sectionDao.getSection( sectionId );
-            registration.getSections().add( section );
-            if( section.getLinkedBy() != null )
-                registration.getSections().add( section.getLinkedBy() );
-            registration.setDate( new Date() );
-            registration = registrationDao.saveRegistration( registration );
-
-            logger.info( user.getUsername() + " added section " + sectionId
-                + " to registration " + registrationId );
+            SectionRegistration sectionRegistration = sectionRegistrationDao
+                .getSectionRegistration( user, section );
+            if( sectionRegistration == null )
+            {
+                sectionRegistration = new SectionRegistration(
+                    scheduleRegistration, user, section );
+                sectionRegistration = sectionRegistrationDao
+                    .saveSectionRegistration( sectionRegistration );
+                logger
+                    .info( user.getUsername() + " created section registration "
+                        + sectionRegistration.getId() );
+            }
         }
         return new ResponseEntity<String>( HttpStatus.OK );
     }
@@ -138,18 +149,21 @@ public class PreregRegistrationController {
         @RequestParam Long registrationId, @RequestParam Long sectionId )
     {
         User user = SecurityUtils.getUser();
-        Registration registration = registrationDao
-            .getRegistration( registrationId );
-        if( registration.getSchedule().isPreregOpen() || user.isFaculty() )
+        ScheduleRegistration scheduleRegistration = scheduleRegistrationDao
+            .getScheduleRegistration( registrationId );
+        if( scheduleRegistration.getSchedule().isPreregOpen() )
         {
-            Section section = registration.removeSection( sectionId );
-            if( section.getLinkedBy() != null )
-                registration.removeSection( section.getLinkedBy().getId() );
-            registration.setDate( new Date() );
-            registration = registrationDao.saveRegistration( registration );
-
-            logger.info( user.getUsername() + " removed section " + sectionId
-                + " from registration " + registrationId );
+            Section section = sectionDao.getSection( sectionId );
+            SectionRegistration sectionRegistration = sectionRegistrationDao
+                .getSectionRegistration( user, section );
+            if( sectionRegistration != null )
+            {
+                sectionRegistrationDao
+                    .deleteSectionRegistration( sectionRegistration );
+                logger
+                    .info( user.getUsername() + " deleted section registration "
+                        + sectionRegistration.getId() );
+            }
         }
         return new ResponseEntity<String>( HttpStatus.OK );
     }
@@ -161,15 +175,16 @@ public class PreregRegistrationController {
             throws IOException
     {
         User user = SecurityUtils.getUser();
-        Registration registration = registrationDao
-            .getRegistration( registrationId );
-        if( registration.getSchedule().isPreregOpen() || user.isFaculty() )
+        ScheduleRegistration scheduleRegistration = scheduleRegistrationDao
+            .getScheduleRegistration( registrationId );
+        if( scheduleRegistration.getSchedule().isPreregOpen() )
         {
-            registration.setComments( comments );
-            registration = registrationDao.saveRegistration( registration );
-
+            scheduleRegistration.setComments( comments );
+            scheduleRegistration = scheduleRegistrationDao
+                .saveScheduleRegistration( scheduleRegistration );
             logger.info( user.getUsername()
-                + " edited comments of registration " + registrationId );
+                + " edited comments of schedule registration "
+                + registrationId );
         }
 
         response.setContentType( "text/plain" );
@@ -192,7 +207,7 @@ public class PreregRegistrationController {
             Schedule schedule = scheduleDao.getSchedule( scheduleId );
             models.put( "schedule", schedule );
             models.put( "registrations",
-                registrationDao.getRegistrations( schedule ) );
+                scheduleRegistrationDao.getScheduleRegistrations( schedule ) );
         }
         return "prereg/registration/list";
     }
@@ -203,21 +218,23 @@ public class PreregRegistrationController {
         HttpServletResponse response) throws IOException
     {
         String fileName;
-        List<Registration> registrations;
+        List<Registration> registrations = new ArrayList<Registration>();
         if( sectionId != null )
         {
             Section section = sectionDao.getSection( sectionId );
             fileName = "Prereg " + section.getSchedule().getTerm() + " "
                 + section.getCourse().getCode() + "-"
                 + section.getSectionNumber() + ".xlsx";
-            registrations = section.getRegistrations();
+            for( SectionRegistration registration : section.getRegistrations() )
+                registrations.add( registration );
         }
         else
         {
             Schedule schedule = scheduleDao.getSchedule( scheduleId );
             fileName = "Prereg " + schedule.getTerm() + ".xlsx";
-            registrations = registrationDao.getRegistrations( schedule );
-
+            for( ScheduleRegistration registration : scheduleRegistrationDao
+                .getScheduleRegistrations( schedule ) )
+                registrations.add( registration );
         }
 
         response.setContentType( contentTypes.getProperty( "xlsx" ) );

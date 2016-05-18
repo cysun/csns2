@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Mahdiye Jamali (mjamali@calstatela.edu).
+ * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -27,52 +27,50 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.core.User;
-import csns.model.prereg.Registration;
-import csns.model.prereg.Schedule;
-import csns.model.prereg.dao.RegistrationDao;
+import csns.model.prereg.Section;
+import csns.model.prereg.SectionRegistration;
+import csns.model.prereg.dao.SectionRegistrationDao;
 
 @Repository
-public class RegistrationDaoImpl implements RegistrationDao {
+public class SectionRegistrationDaoImpl implements SectionRegistrationDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public Registration getRegistration( Long id )
+    public SectionRegistration getSectionRegistration( Long id )
     {
-        return entityManager.find( Registration.class, id );
+        return entityManager.find( SectionRegistration.class, id );
     }
 
     @Override
-    public Registration getRegistration( User student, Schedule schedule )
+    public SectionRegistration getSectionRegistration( User student,
+        Section section )
     {
-        String query = "from Registration where student = :student "
-            + "and schedule = :schedule";
+        String query = "from SectionRegistration where student = :student "
+            + "and section = :section";
 
-        List<Registration> results = entityManager
-            .createQuery( query, Registration.class )
+        List<SectionRegistration> results = entityManager
+            .createQuery( query, SectionRegistration.class )
             .setParameter( "student", student )
-            .setParameter( "schedule", schedule )
+            .setParameter( "section", section )
             .getResultList();
         return results.size() == 0 ? null : results.get( 0 );
     }
 
     @Override
-    public List<Registration> getRegistrations( Schedule schedule )
+    @Transactional
+    public SectionRegistration saveSectionRegistration(
+        SectionRegistration registration )
     {
-        String query = "from Registration r where r.schedule = :schedule "
-            + "and r.sections is not empty order by r.date asc";
-
-        return entityManager.createQuery( query, Registration.class )
-            .setParameter( "schedule", schedule )
-            .getResultList();
+        return entityManager.merge( registration );
     }
 
     @Override
     @Transactional
-    public Registration saveRegistration( Registration registration )
+    public void deleteSectionRegistration( SectionRegistration registration )
     {
-        return entityManager.merge( registration );
+        entityManager.remove( registration );
     }
 
 }

@@ -333,6 +333,12 @@ create trigger courses_ts_trigger
 
 create index courses_ts_index on courses using gin(tsv);
 
+create table course_prerequisites (
+    course_id       bigint not null references courses(id),
+    prerequisite_id bigint not null references courses(id),
+  unique (course_id, prerequisite_id)
+);
+
 create table sections (
     id          bigint primary key,
     term        integer not null,
@@ -1611,7 +1617,7 @@ create table prereg_sections (
     linked_by       bigint references prereg_sections(id)
 );
 
-create table prereg_registrations (
+create table prereg_schedule_registrations (
     id          bigint primary key,
     student_id  bigint not null references users(id),
     schedule_id bigint not null references prereg_schedules(id),
@@ -1621,10 +1627,14 @@ create table prereg_registrations (
   unique (student_id, schedule_id)
 );
 
-create table prereg_registration_sections (
-    registration_id bigint not null references prereg_registrations(id),
-    section_id      bigint not null references prereg_sections(id),
-  primary key (registration_id, section_id)
+create table prereg_section_registrations (
+    id                          bigint primary key,
+    schedule_registration_id    bigint references prereg_schedule_registrations(id),
+    student_id                  bigint not null references users(id),
+    section_id                  bigint not null references prereg_sections(id),
+    date                        timestamp not null default current_timestamp,
+    prereq_met                  boolean,
+  unique (student_id, section_id)
 );
 
 ------------------------------

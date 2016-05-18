@@ -16,23 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.prereg;
-
-import java.util.Date;
-import java.util.List;
+package csns.model.prereg.dao;
 
 import csns.model.core.User;
+import csns.model.prereg.Section;
+import csns.model.prereg.SectionRegistration;
 
-public interface Registration {
+public interface SectionRegistrationDao {
 
-    Long getId();
+    SectionRegistration getSectionRegistration( Long id );
 
-    User getStudent();
+    SectionRegistration getSectionRegistration( User student, Section section );
 
-    String getComments();
+    SectionRegistration saveSectionRegistration(
+        SectionRegistration registration );
 
-    Date getDate();
-
-    List<SectionRegistration> getSectionRegistrations();
+    void deleteSectionRegistration( SectionRegistration registration );
 
 }

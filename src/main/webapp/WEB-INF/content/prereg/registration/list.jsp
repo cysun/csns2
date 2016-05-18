@@ -77,8 +77,8 @@ $(function(){
   </td>
   <td class="nowrap"><fmt:formatDate value="${registration.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
   <td>
-    <c:forEach items="${registration.sections}" var="section">
-      ${section.course.code}-${section.sectionNumber}
+    <c:forEach items="${registration.sectionRegistrations}" var="sectionRegistration">
+      ${sectionRegistration.sectionString}
     </c:forEach>
   </td>
 </tr>

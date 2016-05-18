@@ -142,7 +142,8 @@ $(function(){
 <div style="margin: 1em 0;">${schedule.description}</div>
 
 <h4 id="selected-classes">Selected Classes:
-<span id="numOfClasses">${registration.numOfClasses}</span> / ${registration.regLimit}</h4>
+<span id="numOfClasses">${fn:length(registration.sectionRegistrations)}</span>
+/ ${registration.regLimit}</h4>
 
 <table id="selected-sections" class="viewtable autowidth">
 <thead>

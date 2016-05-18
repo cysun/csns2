@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,6 +19,8 @@
 package csns.model.academics;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,9 +28,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import csns.model.assessment.CourseJournal;
 import csns.model.core.File;
@@ -69,6 +75,15 @@ public class Course implements Serializable, Comparable<Course> {
     @JoinColumn(name = "description_id")
     private File description;
 
+    @ManyToMany
+    @JoinTable(name = "course_prerequisites",
+        joinColumns = @JoinColumn(name = "course_id") ,
+        inverseJoinColumns = @JoinColumn(name = "prerequisite_id") ,
+        uniqueConstraints = { @UniqueConstraint(
+            columnNames = { "course_id", "prerequisite_id" }) })
+    @OrderBy("code asc")
+    private List<Course> prerequisites;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "journal_id", unique = true)
     private CourseJournal journal;
@@ -81,7 +96,8 @@ public class Course implements Serializable, Comparable<Course> {
 
     public Course()
     {
-        minUnits = maxUnits = 4;
+        prerequisites = new ArrayList<Course>();
+        minUnits = maxUnits = 3;
         obsolete = false;
     }
 
@@ -181,6 +197,16 @@ public class Course implements Serializable, Comparable<Course> {
     public void setDescription( File description )
     {
         this.description = description;
+    }
+
+    public List<Course> getPrerequisites()
+    {
+        return prerequisites;
+    }
+
+    public void setPrerequisites( List<Course> prerequisites )
+    {
+        this.prerequisites = prerequisites;
     }
 
     public CourseJournal getJournal()

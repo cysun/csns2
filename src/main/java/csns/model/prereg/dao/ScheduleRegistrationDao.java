@@ -21,17 +21,19 @@ package csns.model.prereg.dao;
 import java.util.List;
 
 import csns.model.core.User;
-import csns.model.prereg.Registration;
+import csns.model.prereg.ScheduleRegistration;
 import csns.model.prereg.Schedule;
 
-public interface RegistrationDao {
+public interface ScheduleRegistrationDao {
 
-    Registration getRegistration( Long id );
+    ScheduleRegistration getScheduleRegistration( Long id );
 
-    Registration getRegistration( User student, Schedule schedule );
+    ScheduleRegistration getScheduleRegistration( User student,
+        Schedule schedule );
 
-    List<Registration> getRegistrations( Schedule schedule );
+    List<ScheduleRegistration> getScheduleRegistrations( Schedule schedule );
 
-    Registration saveRegistration( Registration registration );
+    ScheduleRegistration saveScheduleRegistration(
+        ScheduleRegistration registration );
 
 }

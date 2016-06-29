@@ -43,6 +43,7 @@ import csns.model.forum.Forum;
 import csns.model.forum.dao.ForumDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
+import csns.web.editor.CoursePropertyEditor;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.CourseValidator;
 
@@ -75,6 +76,8 @@ public class CourseControllerS {
     {
         binder.registerCustomEditor( User.class,
             (UserPropertyEditor) context.getBean( "userPropertyEditor" ) );
+        binder.registerCustomEditor( Course.class,
+            (CoursePropertyEditor) context.getBean( "coursePropertyEditor" ) );
     }
 
     @RequestMapping(value = "/course/create", method = RequestMethod.GET)

@@ -4,6 +4,29 @@
 
 <script>
 $(function(){
+    $(".add").autocomplete({
+        source: "<c:url value='/autocomplete/course' />",
+        select: function(event, ui) {
+            if( ui.item )
+            {
+                $("<span>").attr({
+                    id: $(this).attr("id") + "-" + ui.item.id
+                }).append(
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: $(this).attr("id"),
+                        value: ui.item.id
+                    })
+                ).append(
+                    $("<a>").attr({
+                        href: "javascript:delete" + $(this).attr("id") + "(" + ui.item.id + ")"
+                    }).text(ui.item.value)
+                ).append(", ").insertBefore($(this));
+                event.preventDefault();
+                $(this).val("");
+            }
+        }
+    });
     $("#coordinator").autocomplete({
         source: "<c:url value='/autocomplete/user' />",
         select: function(event, ui) {
@@ -19,6 +42,12 @@ $(function(){
 function help( name )
 {
     $("#help-"+name).dialog("open");
+}
+function deleteprerequisites( prereqId )
+{
+    var msg = "Are you sure you want to remove this prerequisite?";
+    if( confirm(msg) )
+      $("#prerequisites-"+prereqId).remove();
 }
 </script>
 
@@ -49,6 +78,18 @@ function help( name )
     <td>
       <form:input path="name" cssClass="forminput" cssStyle="width: 600px;" />
       <div class="error"><form:errors path="name" /></div>
+    </td>
+  </tr>
+  <tr>
+    <th>Prerequisites</th>
+    <td>
+      <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">
+        <span id="prerequisites-${prerequisite.id}">
+          <input type="hidden" name="prerequisites" value="${prerequisite.id}" />
+          <a href="javascript:deleteprerequisites(${prerequisite.id})">${prerequisite.code}</a>,
+        </span>
+      </c:forEach>
+      <input id="prerequisites" type="text" class="forminput add" name="a" style="width: 100px;" />
     </td>
   </tr>
   <tr>

@@ -114,6 +114,15 @@ $(function(){
     $("#commentsLink").click(function(){
         $("#comments").trigger("dblclick"); 
     });
+    $(".notes-dialog").dialog({
+        autoOpen : false,
+        modal : true,
+        width : 450
+    });
+    $(".view-notes").click(function(){
+        var sectionId = $(this).attr("data-section-id");
+        $(".notes-dialog[data-section-id='" + sectionId + "']").dialog("open");
+    });
 });
 </script>
 
@@ -161,8 +170,16 @@ $(function(){
     <input type="checkbox"  data-section-id="${section.id}" checked />
     </c:if>
   </td>
-  <td>${section.course.code}</td>
-  <td>${section.sectionNumber}</td>
+  <td>
+    <a href="<c:url value='/course/view?id=${section.course.id}' />">${section.course.code}</a>
+  </td>
+  <td>${section.sectionNumber}
+    <c:if test="${not empty section.notes}">
+      <a href="javascript:void(0)" class="view-notes" data-section-id="s${section.id}"><img
+        title="View Notes" alt="[View Notes]" src="<c:url value='/img/icons/comment.png' />" /></a>
+      <pre class="notes-dialog" data-section-id="s${section.id}">${section.notes}</pre>
+    </c:if>
+  </td>
   <td>${section.course.name}</td>
   <td>${section.type}</td>
   <td>${section.classNumber}</td>
@@ -197,8 +214,16 @@ classes.</p>
     <input type="checkbox" data-section-id="${section.id}" />
     </c:if>
   </td>
-  <td>${section.course.code}</td>
-  <td>${section.sectionNumber}</td>
+  <td>
+    <a href="<c:url value='/course/view?id=${section.course.id}' />">${section.course.code}</a>
+  </td>
+  <td>${section.sectionNumber}
+    <c:if test="${not empty section.notes}">
+      <a href="javascript:void(0)" class="view-notes" data-section-id="a${section.id}"><img
+        title="View Notes" alt="[View Notes]" src="<c:url value='/img/icons/comment.png' />" /></a>
+      <pre class="notes-dialog" data-section-id="a${section.id}">${section.notes}</pre>
+    </c:if>
+  </td>
   <td>${section.course.name}</td>
   <td>${section.type}</td>
   <td>${section.classNumber}</td>

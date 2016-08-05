@@ -1347,6 +1347,16 @@
         <put-attribute name="content" value="/WEB-INF/content/prereg/schedule/import.jsp" />
     </definition>
 
+    <definition name="prereg/section/add" extends="layout.jqueryui">
+        <put-attribute name="title" value="Add Section" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/section/add.jsp" />
+    </definition>
+
+    <definition name="prereg/section/edit" extends="layout.jqueryui">
+        <put-attribute name="title" value="Edit Section" />
+        <put-attribute name="content" value="/WEB-INF/content/prereg/section/edit.jsp" />
+    </definition>
+
     <definition name="prereg/register" extends="layout.jqueryui">
         <put-attribute name="title" value="Pre-Registration" />
         <put-attribute name="content" value="/WEB-INF/content/prereg/register.jsp" />

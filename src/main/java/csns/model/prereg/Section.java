@@ -53,7 +53,7 @@ public class Section implements Serializable {
     private Course course;
 
     @Column(name = "section_number", nullable = false)
-    private int sectionNumber;
+    private Integer sectionNumber;
 
     private String type;
 
@@ -88,7 +88,6 @@ public class Section implements Serializable {
 
     public Section()
     {
-        sectionNumber = 1;
         capacity = 30;
         linkedTo = new ArrayList<Section>();
         registrations = new ArrayList<SectionRegistration>();
@@ -99,6 +98,19 @@ public class Section implements Serializable {
         this();
         this.schedule = schedule;
         this.capacity = schedule.getDefaultSectionCapacity();
+    }
+
+    // Used for <form:select> in edit.jsp
+    public String getShortText()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append( course.getCode() )
+            .append( "-" )
+            .append( sectionNumber )
+            .append( " (" )
+            .append( type )
+            .append( ")" );
+        return sb.toString();
     }
 
     public Long getId()
@@ -131,12 +143,12 @@ public class Section implements Serializable {
         this.course = course;
     }
 
-    public int getSectionNumber()
+    public Integer getSectionNumber()
     {
         return sectionNumber;
     }
 
-    public void setSectionNumber( int sectionNumber )
+    public void setSectionNumber( Integer sectionNumber )
     {
         this.sectionNumber = sectionNumber;
     }

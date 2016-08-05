@@ -28,6 +28,15 @@
     <td>${course.name}</td>
   </tr>
   <tr>
+    <th>Prerequisites</th>
+    <td>
+      <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">
+        <a href="view?id=${prerequisite.id}">${prerequisite.code}</a><c:if
+          test="${not status.last}">,</c:if>
+      </c:forEach>
+    </td>
+  </tr>
+  <tr>
     <th>Coordinator</th>
     <td>${course.coordinator.name}</td>
   </tr>

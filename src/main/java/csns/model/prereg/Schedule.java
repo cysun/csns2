@@ -34,6 +34,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import csns.model.academics.Department;
@@ -55,7 +56,7 @@ public class Schedule implements Serializable {
 
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "code",
-        column = @Column(name = "term", nullable = false) ) })
+        column = @Column(name = "term", nullable = false)) })
     private Term term;
 
     private String description;
@@ -68,6 +69,7 @@ public class Schedule implements Serializable {
 
     @OneToMany(mappedBy = "schedule",
         cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @OrderBy("course asc, sectionNumber asc")
     private List<Section> sections;
 
     @Column(name = "default_section_capacity", nullable = false)

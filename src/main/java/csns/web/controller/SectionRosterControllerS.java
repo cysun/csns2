@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -75,6 +75,7 @@ public class SectionRosterControllerS {
     public String importRoster( @RequestParam Long sectionId, ModelMap models )
     {
         RosterImporter rosterImporter = (RosterImporter) context.getBean( "rosterImporter" );
+        rosterImporter.selectParser( 2 );
         rosterImporter.setSection( sectionDao.getSection( sectionId ) );
         models.put( "rosterImporter", rosterImporter );
         return "section/roster/import0";

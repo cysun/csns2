@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import csns.importer.ImportedUser;
@@ -32,6 +34,8 @@ import csns.importer.parser.RosterParser;
 
 @Component
 public class RosterParserImpl implements RosterParser {
+
+    private int parser;
 
     private Set<String> programs;
 
@@ -41,8 +45,13 @@ public class RosterParserImpl implements RosterParser {
 
     private Set<String> grades;
 
+    private static final Logger logger = LoggerFactory
+        .getLogger( RosterParserImpl.class );
+
     public RosterParserImpl()
     {
+        parser = 2; // use parser 2 by default;
+
         String p[] = { "ALB", "ALG", "BEB", "BEG", "EDB", "EDG", "ETB", "ETG",
             "HHSB", "HHSG", "NSSB", "NSSG", "XEB", "XEG", "UNB", "UNG" };
         programs = new HashSet<String>( Arrays.asList( p ) );
@@ -60,15 +69,27 @@ public class RosterParserImpl implements RosterParser {
     }
 
     @Override
+    public void selectParser( int parser )
+    {
+        this.parser = parser;
+    }
+
+    @Override
     public List<ImportedUser> parse( String text )
     {
-        Scanner scanner = new Scanner( text );
-        scanner.useDelimiter( "\\s+|\\r\\n|\\r|\\n" );
-        scanner.next();
-        String second = scanner.next();
-        scanner.close();
+        switch( parser )
+        {
+            case 1:
+                return parse1( text );
 
-        return isCin( second ) ? parse1( text ) : parse2( text );
+            case 2:
+                return parse2( text );
+
+            default:
+                logger.warn(
+                    "Invalid parser: [" + parser + "]. Use parse 2 instead." );
+                return parse2( text );
+        }
     }
 
     /**

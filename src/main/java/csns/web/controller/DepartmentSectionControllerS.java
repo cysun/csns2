@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -102,6 +102,7 @@ public class DepartmentSectionControllerS {
         @RequestParam Term term, ModelMap models )
     {
         GradesImporter importer = (GradesImporter) context.getBean( "gradesImporter" );
+        importer.selectParser( 1 );
         importer.setDepartment( departmentDao.getDepartment( dept ) );
         importer.setSection( new Section() );
         importer.getSection().setTerm( term );

@@ -102,7 +102,7 @@ public class SurveyController {
         HttpSession session )
     {
         Department department = departmentDao.getDepartment( dept );
-        List<Survey> surveys = surveyDao.searchSurveys( department, text, 20 );
+        List<Survey> surveys = surveyDao.searchSurveys( department, text, -1 );
         session.setAttribute( "surveySearchTerm", text );
         session.setAttribute( "surveySearchResults", surveys );
         return "redirect:/department/" + dept + "/survey/list#search";
@@ -110,7 +110,7 @@ public class SurveyController {
 
     @RequestMapping("/department/{dept}/survey/view")
     public String view( @RequestParam Long id,
-        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -119,7 +119,7 @@ public class SurveyController {
 
     @RequestMapping("/department/{dept}/survey/editQuestionSheet")
     public String editQuestions( @RequestParam Long surveyId,
-        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
         models.put( "survey", surveyDao.getSurvey( surveyId ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -164,7 +164,7 @@ public class SurveyController {
     public String reorderQuestion( @RequestParam Long surveyId,
         @RequestParam int sectionIndex, @RequestParam Long questionId,
         @RequestParam int newIndex, HttpServletResponse response )
-            throws IOException
+        throws IOException
     {
         Survey survey = surveyDao.getSurvey( surveyId );
         if( !survey.isPublished() )
@@ -270,7 +270,7 @@ public class SurveyController {
     @RequestMapping("/department/{dept}/survey/results")
     @PreAuthorize("principal.isFaculty(#dept)")
     public String results( @PathVariable String dept, @RequestParam Long id,
-        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
         models.put( "survey", surveyDao.getSurvey( id ) );
         models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );

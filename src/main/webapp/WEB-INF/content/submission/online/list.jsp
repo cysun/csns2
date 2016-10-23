@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="section" value="${assignment.section}" />
 
@@ -15,8 +14,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="<c:url value='/submission/online/summary?assignmentId=${assignment.id}' />"><csns:truncate
-  value="${assignment.name}" length="35" /></a></li>
+<li><a class="bc" href="<c:url value='/submission/online/summary?assignmentId=${assignment.id}' />">${assignment.name}</a></li>
 <li>List of Submissions</li>
 </ul>
 

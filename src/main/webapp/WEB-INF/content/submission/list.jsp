@@ -48,7 +48,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><csns:truncate value="${assignment.name}" length="60" /></li>
+<li>${assignment.name}</li>
 <li class="align_right"><a href="email?assignmentId=${assignment.id}"><img title="Email Grades" alt="[Email Grades]"
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 <c:if test="${not assignment.online}">

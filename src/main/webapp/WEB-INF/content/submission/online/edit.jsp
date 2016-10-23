@@ -8,7 +8,7 @@
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taken#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><csns:truncate value="${assignment.name}" length="70" /></li>
+<li>${assignment.name}</li>
 </ul>
 
 <div class="qa_content">

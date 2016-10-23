@@ -25,7 +25,7 @@
     <sql-query name="course.search">
         <return class="csns.model.academics.Course" />
 <![CDATA[
-select * from courses where obsolete = 'f' and
+select * from courses where (obsolete = 'f' or :includeObsolete = 't') and
     (code like upper(:text) || '%' or plainto_tsquery(:text) @@ tsv)
     order by code asc
 ]]>

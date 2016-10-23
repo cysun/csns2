@@ -36,7 +36,7 @@ function help( name )
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><csns:truncate value="${assignment.name}" length="60" /></li>
+<li>${assignment.name}</li>
 <li class="align_right"><a href="online/editQuestionSheet?assignmentId=${assignment.id}"><img title="Edit Questions"
   alt="[Edit Question]" src="<c:url value='/img/icons/page_edit.png' />" /></a></li>
 <li class="align_right"><a href="javascript:deleteAssignment(${assignment.id})"><img title="Delete Assignment"

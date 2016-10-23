@@ -24,12 +24,21 @@ function help( name )
 {
     $("#help-"+name).dialog("open");
 }
+function removeSection( id )
+{
+    var msg = "Before removing this section, please a) notify the students who registered " +
+     "for the section, and b) drop them from the section. Do you want to proceed?";
+    if( confirm(msg) )
+        window.location.href = "remove?id=" + id;
+}
 </script>
 
 <ul id="title">
 <li><a class="bc" href="../schedule/list">Schedules</a></li>
 <li><a class="bc" href="../schedule/view?id=${section.schedule.id}">${section.schedule.term}</a></li>
 <li>Edit Section</li>
+<li class="align_right"><a href="javascript:removeSection(${section.id})"><img title="Remove Section"
+    alt="[Remove Section]" src="<c:url value='/img/icons/page_delete.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="section">

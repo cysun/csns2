@@ -83,13 +83,12 @@ function toggleFilePublic( fileId )
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="list?assignmentId=${assignment.id}"><csns:truncate value="${assignment.name}" length="35" /></a></li>
+<li><a class="bc" href="list?assignmentId=${assignment.id}">${assignment.name}</a></li>
 <security:authorize access="principal.faculty">
-<li><a href="<c:url value='/user/view?id=${submission.student.id}' />"><csns:truncate
-  value="${submission.student.name}" length="25" /></a></li>
+<li><a href="<c:url value='/user/view?id=${submission.student.id}' />">${submission.student.name}</a></li>
 </security:authorize>
 <security:authorize access="not principal.faculty">
-<li><csns:truncate value="${submission.student.name}" length="25" /></li>
+<li>${submission.student.name}</li>
 </security:authorize>
 <li class="align_right"><a href="email?submissionId=${submission.id}"><img title="Email Grade" alt="[Email Grade]"
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>

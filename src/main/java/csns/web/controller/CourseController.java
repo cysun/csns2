@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -37,8 +37,8 @@ public class CourseController {
     public String search( @RequestParam(required = false) String text,
         ModelMap models )
     {
-        if( StringUtils.hasText( text ) )
-            models.addAttribute( "courses", courseDao.searchCourses( text, -1 ) );
+        if( StringUtils.hasText( text ) ) models.addAttribute( "courses",
+            courseDao.searchCourses( text, true, -1 ) );
 
         return "course/search";
     }

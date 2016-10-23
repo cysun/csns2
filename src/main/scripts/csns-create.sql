@@ -123,7 +123,8 @@ create table resources (
     text    text,
     file_id bigint references files(id),
     url     varchar(2000),
-    private boolean not null default 'f'
+    private boolean not null default 'f',
+    deleted boolean not null default 'f'
 );
 
 alter table resources add column tsv tsvector;
@@ -709,6 +710,7 @@ create table site_items (
     id          bigint primary key,
     resource_id bigint references resources(id),
     hidden      boolean not null default 'f',
+    deleted     boolean not null default 'f',
     block_id    bigint references site_blocks(id),
     item_index  integer
 );

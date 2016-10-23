@@ -172,7 +172,7 @@ public class PreregRegistrationController {
         value = "/department/{dept}/prereg/registration/editComments")
     public String editComments( @RequestParam Long registrationId,
         @RequestParam String comments, HttpServletResponse response )
-            throws IOException
+        throws IOException
     {
         User user = SecurityUtils.getUser();
         ScheduleRegistration scheduleRegistration = scheduleRegistrationDao
@@ -193,8 +193,8 @@ public class PreregRegistrationController {
     }
 
     @RequestMapping("/department/{dept}/prereg/registration/list")
-    public String list( @RequestParam(required = false ) Long scheduleId,
-        @RequestParam(required = false) Long sectionId, ModelMap models)
+    public String list( @RequestParam(required = false) Long scheduleId,
+        @RequestParam(required = false) Long sectionId, ModelMap models )
     {
         if( sectionId != null )
         {
@@ -212,10 +212,28 @@ public class PreregRegistrationController {
         return "prereg/registration/list";
     }
 
+    @RequestMapping("/department/{dept}/prereg/registration/delete")
+    public String delete( @RequestParam("userId") Long userIds[],
+        @RequestParam Long sectionId )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        for( Long userId : userIds )
+        {
+            User student = userDao.getUser( userId );
+            SectionRegistration registration = sectionRegistrationDao
+                .getSectionRegistration( student, section );
+            sectionRegistrationDao.deleteSectionRegistration( registration );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " deleted section registration " + registration.getId() );
+        }
+
+        return "redirect:list?sectionId=" + sectionId;
+    }
+
     @RequestMapping("/department/{dept}/prereg/registration/export")
-    public String export( @RequestParam(required = false ) Long scheduleId,
+    public String export( @RequestParam(required = false) Long scheduleId,
         @RequestParam(required = false) Long sectionId,
-        HttpServletResponse response) throws IOException
+        HttpServletResponse response ) throws IOException
     {
         String fileName;
         List<Registration> registrations = new ArrayList<Registration>();

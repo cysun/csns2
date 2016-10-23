@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -40,6 +40,7 @@ import csns.model.site.Item;
 import csns.model.site.Site;
 import csns.model.site.dao.AnnouncementDao;
 import csns.model.site.dao.BlockDao;
+import csns.model.site.dao.ItemDao;
 import csns.model.site.dao.SiteDao;
 import csns.security.SecurityUtils;
 
@@ -59,9 +60,13 @@ public class SiteBlockController {
     private BlockDao blockDao;
 
     @Autowired
+    private ItemDao itemDao;
+
+    @Autowired
     private AnnouncementDao announcementDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( SiteBlockController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SiteBlockController.class );
 
     private Section getSection( String qtr, String cc, int sn )
     {
@@ -110,7 +115,8 @@ public class SiteBlockController {
     @RequestMapping("/site/{qtr}/{cc}-{sn}/block/reorder")
     @ResponseStatus(HttpStatus.OK)
     public void reorder( @PathVariable String qtr, @PathVariable String cc,
-        @PathVariable int sn, @RequestParam Long id, @RequestParam int newIndex )
+        @PathVariable int sn, @RequestParam Long id,
+        @RequestParam int newIndex )
     {
         Site site = getSection( qtr, cc, sn ).getSite();
         Block block = site.removeBlock( id );
@@ -142,8 +148,10 @@ public class SiteBlockController {
         @RequestParam Long itemId )
     {
         Block block = blockDao.getBlock( blockId );
-        block.removeItem( itemId );
+        Item item = block.removeItem( itemId );
         block = blockDao.saveBlock( block );
+        item.delete();
+        itemDao.saveItem( item );
 
         logger.info( SecurityUtils.getUser().getUsername() + " removed item "
             + itemId + " from block " + blockId );

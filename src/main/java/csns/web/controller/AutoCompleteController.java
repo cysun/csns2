@@ -63,8 +63,8 @@ public class AutoCompleteController {
     private SurveyDao surveyDao;
 
     @RequestMapping(value = "/autocomplete/user")
-    public String users( @RequestParam("term" ) String text,
-        HttpServletResponse response) throws JSONException, IOException
+    public String users( @RequestParam("term") String text,
+        HttpServletResponse response ) throws JSONException, IOException
     {
         JSONArray jsonArray = new JSONArray();
         List<User> users = userDao.searchUsersByPrefix( text, 10 );
@@ -85,11 +85,11 @@ public class AutoCompleteController {
     }
 
     @RequestMapping(value = "/autocomplete/course")
-    public String courses( @RequestParam("term" ) String text,
-        HttpServletResponse response) throws JSONException, IOException
+    public String courses( @RequestParam("term") String text,
+        HttpServletResponse response ) throws JSONException, IOException
     {
         JSONArray jsonArray = new JSONArray();
-        List<Course> courses = courseDao.searchCourses( text, 10 );
+        List<Course> courses = courseDao.searchCourses( text, false, 10 );
         for( Course course : courses )
         {
             String label = course.getCode() + " " + course.getName();
@@ -107,8 +107,8 @@ public class AutoCompleteController {
     }
 
     @RequestMapping(value = "/autocomplete/forum")
-    public String forums( @RequestParam("term" ) String text,
-        HttpServletResponse response) throws JSONException, IOException
+    public String forums( @RequestParam("term") String text,
+        HttpServletResponse response ) throws JSONException, IOException
     {
         JSONArray jsonArray = new JSONArray();
         List<Forum> forums = forumDao.searchForums( text, 10 );
@@ -138,8 +138,8 @@ public class AutoCompleteController {
 
     @RequestMapping(value = "/department/{dept}/survey/autocomplete")
     public String autocomplete( @PathVariable String dept,
-        @RequestParam("term" ) String text, HttpServletResponse response)
-            throws JSONException, IOException
+        @RequestParam("term") String text, HttpServletResponse response )
+        throws JSONException, IOException
     {
         Department department = departmentDao.getDepartment( dept );
         JSONArray jsonArray = new JSONArray();

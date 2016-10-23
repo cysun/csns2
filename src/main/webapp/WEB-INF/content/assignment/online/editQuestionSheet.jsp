@@ -44,8 +44,7 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="view?id=${assignment.id}&amp;sectionIndex=${sectionIndex}"><csns:truncate
-  value="${assignment.name}" length="60" /></a></li>
+<li><a class="bc" href="view?id=${assignment.id}&amp;sectionIndex=${sectionIndex}">${assignment.name}</a></li>
 <li>Questions</li>
 </ul>
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -52,11 +52,18 @@ public class ResourceController {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( ResourceController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ResourceController.class );
 
     private String view( Resource resource, ModelMap models,
         HttpServletResponse response )
     {
+        if( resource.isDeleted() )
+        {
+            models.put( "message", "error.resource.deleted" );
+            return "error";
+        }
+
         switch( resource.getType() )
         {
             case TEXT:

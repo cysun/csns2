@@ -54,11 +54,15 @@ public class Resource implements Serializable {
     @Column(name = "private", nullable = false)
     private boolean isPrivate;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
     public Resource()
     {
         name = "";
         type = ResourceType.NONE;
         isPrivate = false;
+        deleted = false;
     }
 
     public Resource( String name )
@@ -91,6 +95,12 @@ public class Resource implements Serializable {
         if( file != null ) resource.file = file.clone();
 
         return resource;
+    }
+
+    public void delete()
+    {
+        deleted = true;
+        if( file != null ) file.setDeleted( true );
     }
 
     public Long getId()
@@ -161,6 +171,16 @@ public class Resource implements Serializable {
     public void setPrivate( boolean isPrivate )
     {
         this.isPrivate = isPrivate;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

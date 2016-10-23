@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -63,11 +63,15 @@ public class Item implements Serializable {
     @Column(nullable = false)
     private boolean hidden;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
     public Item()
     {
-        hidden = false;
         resource = new Resource( ResourceType.FILE );
         additionalResources = new ArrayList<Resource>();
+        hidden = false;
+        deleted = false;
     }
 
     public Item clone()
@@ -91,6 +95,12 @@ public class Item implements Serializable {
     {
         hidden = !hidden;
         return hidden;
+    }
+
+    public void delete()
+    {
+        deleted = true;
+        resource.delete();
     }
 
     public Long getId()
@@ -131,6 +141,16 @@ public class Item implements Serializable {
     public void setHidden( boolean hidden )
     {
         this.hidden = hidden;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public void setDeleted( boolean deleted )
+    {
+        this.deleted = deleted;
     }
 
 }

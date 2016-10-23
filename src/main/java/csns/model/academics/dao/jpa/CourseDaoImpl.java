@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -46,20 +46,23 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public Course getCourse( String code )
     {
-        List<Course> courses = entityManager.createQuery(
-            "from Course where code = :code", Course.class )
+        List<Course> courses = entityManager
+            .createQuery( "from Course where code = :code", Course.class )
             .setParameter( "code", code.toUpperCase() )
             .getResultList();
         return courses.size() == 0 ? null : courses.get( 0 );
     }
 
     @Override
-    public List<Course> searchCourses( String text, int maxResults )
+    public List<Course> searchCourses( String text, boolean includeObsolete,
+        int maxResults )
     {
-        TypedQuery<Course> query = entityManager.createNamedQuery(
-            "course.search", Course.class );
+        TypedQuery<Course> query = entityManager
+            .createNamedQuery( "course.search", Course.class )
+            .setParameter( "text", text )
+            .setParameter( "includeObsolete", includeObsolete );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "text", text ).getResultList();
+        return query.getResultList();
     }
 
     @Override

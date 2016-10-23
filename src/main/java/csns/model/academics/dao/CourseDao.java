@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -28,7 +28,8 @@ public interface CourseDao {
 
     Course getCourse( String code );
 
-    List<Course> searchCourses( String text, int maxResults );
+    List<Course> searchCourses( String text, boolean includeObsolete,
+        int maxResults );
 
     Course saveCourse( Course course );
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -74,7 +74,8 @@ public class SiteController {
     @Autowired
     private FileIO fileIO;
 
-    private static Logger logger = LoggerFactory.getLogger( SiteController.class );
+    private static Logger logger = LoggerFactory
+        .getLogger( SiteController.class );
 
     private Section getSection( String qtr, String cc, int sn )
     {
@@ -99,9 +100,8 @@ public class SiteController {
 
         if( section == null || section.getSite() == null )
         {
-            if( isInstructor )
-                models.put( "sites",
-                    siteDao.getSites( section.getCourse(), user, 10 ) );
+            if( isInstructor ) models.put( "sites",
+                siteDao.getSites( section.getCourse(), user, 10 ) );
             return "site/nosite";
         }
 
@@ -141,7 +141,8 @@ public class SiteController {
             if( oldSite.getSection().getSyllabus() != null
                 && section.getSyllabus() == null )
             {
-                section.setSyllabus( oldSite.getSection().getSyllabus().clone() );
+                section
+                    .setSyllabus( oldSite.getSection().getSyllabus().clone() );
                 section = sectionDao.saveSection( section );
             }
         }
@@ -181,6 +182,13 @@ public class SiteController {
     private String resource( String qtr, String cc, int sn, Resource resource,
         ModelMap models, HttpServletResponse response )
     {
+        if( resource.isDeleted() )
+        {
+            models.put( "message", "error.site.item.deleted" );
+            models.put( "backUrl", "/site/" + qtr + "/" + cc + "-" + sn );
+            return "error";
+        }
+
         switch( resource.getType() )
         {
             case TEXT:

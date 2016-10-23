@@ -24,6 +24,13 @@ $(function(){
         else
             $("#studentsForm").attr("action", "<c:url value='/email/compose' />").submit();
     });
+    $("#drop").click(function(){
+        if( $(":checkbox[name='userId']:checked").length == 0 )
+            alert( "Please select the student(s) you want to drop." );
+        else
+            if( confirm("Are you sure you want to drop these students from the section?") )
+                $("#studentsForm").attr("action", "delete").submit();
+    });
 });
 </script>
 
@@ -46,6 +53,8 @@ $(function(){
 </c:choose>
 <li class="align_right"><a href="export?${qstring}"><img title="Export to Excel"
     alt="[Export to Excel]" src="<c:url value='/img/icons/export_excel.png' />" /></a></li>
+<li class="align_right"><a id="drop" href="javascript:void(0)"><img title="Drop Students"
+    alt="[Drop Students]" src="<c:url value='/img/icons/user_delete.png' />" /></a></li>
 <li class="align_right"><a id="email" href="javascript:void(0)"><img title="Email Students"
     alt="[Email Students]" src="<c:url value='/img/icons/email_to_friend.png' />" /></a></li>
 </ul>
@@ -85,6 +94,7 @@ $(function(){
 </c:forEach>
 </tbody>
 </table>
+<input type="hidden" name="sectionId" value="${section.id}" />
 <input type="hidden" name="backUrl" value="/department/${dept}/prereg/registration/list?${qstring}" />
 </form>
 </c:if>

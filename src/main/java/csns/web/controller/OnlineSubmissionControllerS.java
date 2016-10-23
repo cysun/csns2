@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -51,13 +51,15 @@ public class OnlineSubmissionControllerS {
     @Autowired
     private SubmissionDao submissionDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( OnlineSubmissionControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( OnlineSubmissionControllerS.class );
 
     @RequestMapping(value = "/submission/online/edit",
         method = RequestMethod.GET)
     public String edit( @RequestParam Long assignmentId, ModelMap models )
     {
-        OnlineAssignment assignment = (OnlineAssignment) assignmentDao.getAssignment( assignmentId );
+        OnlineAssignment assignment = (OnlineAssignment) assignmentDao
+            .getAssignment( assignmentId );
         if( !assignment.isPublished() )
         {
             models.put( "message", "error.assignment.unpublished" );
@@ -65,10 +67,10 @@ public class OnlineSubmissionControllerS {
         }
 
         User student = SecurityUtils.getUser();
-        OnlineSubmission submission = (OnlineSubmission) submissionDao.getSubmission(
-            student, assignment );
-        if( submission != null && submission.isPastDue() || submission == null
-            && assignment.isPastDue() )
+        OnlineSubmission submission = (OnlineSubmission) submissionDao
+            .getSubmission( student, assignment );
+        if( submission != null && submission.isPastDue()
+            || submission == null && assignment.isPastDue() )
         {
             models.put( "message", "error.assignment.pastdue" );
             models.put( "backUrl", "/section/taken" );
@@ -78,7 +80,8 @@ public class OnlineSubmissionControllerS {
         if( submission == null )
         {
             submission = new OnlineSubmission( student, assignment );
-            submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
+            submission = (OnlineSubmission) submissionDao
+                .saveSubmission( submission );
         }
 
         // If a submission object is created before the assignment is
@@ -86,7 +89,8 @@ public class OnlineSubmissionControllerS {
         if( submission.getAnswerSheet() == null )
         {
             submission.createAnswerSheet();
-            submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
+            submission = (OnlineSubmission) submissionDao
+                .saveSubmission( submission );
         }
 
         models.put( "submission", submission );
@@ -101,8 +105,13 @@ public class OnlineSubmissionControllerS {
         @RequestParam int sectionIndex, HttpServletRequest request,
         ModelMap models, SessionStatus sessionStatus )
     {
+        // Refresh assignment in case the due date was changed.
+        submission.setAssignment(
+            assignmentDao.getAssignment( submission.getAssignment().getId() ) );
+
         if( submission.isPastDue() )
         {
+            sessionStatus.setComplete();
             models.put( "message", "error.assignment.pastdue" );
             models.put( "backUrl", "/section/taken" );
             return "error";
@@ -113,7 +122,8 @@ public class OnlineSubmissionControllerS {
         if( request.getParameter( "finish" ) != null )
             submission.setFinished( true );
         submission.getAnswerSheet().setDate( new Date() );
-        submission = (OnlineSubmission) submissionDao.saveSubmission( submission );
+        submission = (OnlineSubmission) submissionDao
+            .saveSubmission( submission );
 
         logger.info( SecurityUtils.getUser().getUsername()
             + " edited online submission " + submission.getId() );

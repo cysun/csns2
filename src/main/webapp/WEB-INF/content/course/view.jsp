@@ -15,6 +15,9 @@
 </security:authorize>
 </ul>
 
+<c:if test="${course.obsolete}">
+<p class="error">This course is obsolete.</p>
+</c:if>
 <table class="general autowidth">
   <tr>
     <th>Department</th>

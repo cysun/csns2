@@ -15,8 +15,7 @@ function deleteSection()
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
-<li><a class="bc" href="editQuestionSheet?assignmentId=${assignment.id}&amp;sectionIndex=${param.sectionIndex}"><csns:truncate
-  value="${assignment.name}" length="60" /></a></li>
+<li><a class="bc" href="editQuestionSheet?assignmentId=${assignment.id}&amp;sectionIndex=${param.sectionIndex}">${assignment.name}</a></li>
 <li>Section <csns:romanNumber value="${param.sectionIndex+1}" /></li>
 <c:if test="${not assignment.published}">
 <li class="align_right"><a href="javascript:deleteSection()"><img title="Delete Section"

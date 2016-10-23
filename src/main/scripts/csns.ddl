@@ -502,11 +502,11 @@
 
     create table prereg_schedule_registrations (
         id int8 not null,
-        date timestamp not null,
         comments varchar(255),
+        date timestamp not null,
         reg_limit int4 not null,
-        student_id int8 not null,
         schedule_id int8 not null,
+        student_id int8 not null,
         primary key (id)
     );
 
@@ -528,9 +528,9 @@
         id int8 not null,
         date timestamp not null,
         prereq_met boolean,
-        student_id int8 not null,
         schedule_registration_id int8,
         section_id int8 not null,
+        student_id int8 not null,
         primary key (id)
     );
 
@@ -649,6 +649,7 @@
 
     create table resources (
         id int8 not null,
+        deleted boolean not null,
         private boolean not null,
         name varchar(255),
         text varchar(255),
@@ -806,6 +807,7 @@
 
     create table site_items (
         id int8 not null,
+        deleted boolean not null,
         hidden boolean not null,
         resource_id int8,
         block_id int8,
@@ -1696,24 +1698,19 @@
         references forum_topics;
 
     alter table prereg_schedule_registrations 
-        add constraint FKrn1c5jej2js2fganwbqq1599k 
-        foreign key (student_id) 
-        references users;
-
-    alter table prereg_schedule_registrations 
         add constraint FKllx059j11jemmap6dlhvoq6wy 
         foreign key (schedule_id) 
         references prereg_schedules;
+
+    alter table prereg_schedule_registrations 
+        add constraint FKrn1c5jej2js2fganwbqq1599k 
+        foreign key (student_id) 
+        references users;
 
     alter table prereg_schedules 
         add constraint FK4dkuyqnia305pqga0vievxr9b 
         foreign key (department_id) 
         references departments;
-
-    alter table prereg_section_registrations 
-        add constraint FKcg42frwf4xfp88jvbpvd6cg6q 
-        foreign key (student_id) 
-        references users;
 
     alter table prereg_section_registrations 
         add constraint FKsp22af2lujkh6et5g38a1smxp 
@@ -1724,6 +1721,11 @@
         add constraint FK7bkjqbi60htxt04mvq26esmyn 
         foreign key (section_id) 
         references prereg_sections;
+
+    alter table prereg_section_registrations 
+        add constraint FKcg42frwf4xfp88jvbpvd6cg6q 
+        foreign key (student_id) 
+        references users;
 
     alter table prereg_sections 
         add constraint FKi988e2dgfpfk45yubpywh3jmi 

@@ -20,8 +20,6 @@ drop table prereg_schedules;
 
 drop table assessment_program_resources;
 drop table assessment_program_sections;
-drop table assessment_program_outcome_measures;
-drop table assessment_program_measures;
 drop table assessment_program_outcomes;
 drop table assessment_program_objectives;
 drop table assessment_programs;

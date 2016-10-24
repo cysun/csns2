@@ -37,6 +37,8 @@ import csns.model.assessment.ProgramObjective;
 import csns.model.assessment.ProgramOutcome;
 import csns.model.assessment.ProgramSection;
 import csns.model.assessment.dao.ProgramDao;
+import csns.model.assessment.dao.ProgramObjectiveDao;
+import csns.model.assessment.dao.ProgramOutcomeDao;
 import csns.security.SecurityUtils;
 
 @Controller
@@ -47,6 +49,12 @@ public class AssessmentProgramController {
 
     @Autowired
     private DepartmentDao departmentDao;
+
+    @Autowired
+    private ProgramObjectiveDao programObjectiveDao;
+
+    @Autowired
+    private ProgramOutcomeDao programOutcomeDao;
 
     private static final Logger logger = LoggerFactory
         .getLogger( AssessmentProgramController.class );
@@ -164,9 +172,9 @@ public class AssessmentProgramController {
         method = RequestMethod.POST)
     public String edit( @PathVariable String field,
         @RequestParam Long programId,
-        @RequestParam(required = false ) Long fieldId,
+        @RequestParam(required = false) Long fieldId,
         @RequestParam(required = false) Integer index,
-        @RequestParam String value)
+        @RequestParam String value )
     {
         Program program = programDao.getProgram( programId );
         switch( field )
@@ -259,6 +267,55 @@ public class AssessmentProgramController {
         logger.info( SecurityUtils.getUser().getUsername() + " reordered "
             + field + " " + fieldId + " of assessment program " + programId
             + " to index " + newIndex );
+    }
+
+    @RequestMapping(
+        value = "/department/{dept}/assessment/program/{field}/description",
+        method = RequestMethod.GET)
+    public String description( @PathVariable String field,
+        @RequestParam Long fieldId, ModelMap models )
+    {
+        switch( field )
+        {
+            case "objective":
+                models.put( "objective",
+                    programObjectiveDao.getProgramObjective( fieldId ) );
+                return "assessment/program/objective/description";
+
+            default:
+                models.put( "outcome",
+                    programOutcomeDao.getProgramOutcome( fieldId ) );
+                return "assessment/program/outcome/description";
+        }
+    }
+
+    @RequestMapping(
+        value = "/department/{dept}/assessment/program/{field}/description",
+        method = RequestMethod.POST)
+    public String description( @PathVariable String field,
+        @RequestParam Long fieldId, @RequestParam String description )
+    {
+        switch( field )
+        {
+            case "objective":
+                ProgramObjective objective = programObjectiveDao
+                    .getProgramObjective( fieldId );
+                objective.setDescription( description );
+                objective = programObjectiveDao
+                    .saveProgramObjective( objective );
+                break;
+
+            default:
+                ProgramOutcome outcome = programOutcomeDao
+                    .getProgramOutcome( fieldId );
+                outcome.setDescription( description );
+                outcome = programOutcomeDao.saveProgramOutcome( outcome );
+        }
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " edited the description of program " + field + " " + fieldId );
+
+        return "redirect:description?fieldId=" + fieldId;
     }
 
 }

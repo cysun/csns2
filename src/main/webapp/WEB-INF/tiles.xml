@@ -1283,6 +1283,16 @@
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/outcome.jsp" />
     </definition>
 
+    <definition name="assessment/program/objective/description" extends="layout.editor">
+        <put-attribute name="title" value="Objective Details" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/description/objective.jsp" />
+    </definition>
+
+    <definition name="assessment/program/outcome/description" extends="layout.editor">
+        <put-attribute name="title" value="Outcome Details" />
+        <put-attribute name="content" value="/WEB-INF/content/assessment/program/description/outcome.jsp" />
+    </definition>
+
     <definition name="assessment/program/edit/section" extends="layout.basic">
         <put-attribute name="title" value="Edit Section" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/edit/section.jsp" />
@@ -1301,21 +1311,6 @@
     <definition name="assessment/program/resource/edit" extends="layout.editor">
         <put-attribute name="title" value="Edit Resource" />
         <put-attribute name="content" value="/WEB-INF/content/assessment/program/resource/edit.jsp" />
-    </definition>
-
-    <definition name="assessment/program/measure/outcome" extends="layout.jqueryui">
-        <put-attribute name="title" value="Outcome Measures" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/outcome.jsp" />
-    </definition>
-
-    <definition name="assessment/program/measure/add" extends="layout.qa">
-        <put-attribute name="title" value="Add Measure" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/add.jsp" />
-    </definition>
-
-    <definition name="assessment/program/measure/edit" extends="layout.qa">
-        <put-attribute name="title" value="Edit Measure" />
-        <put-attribute name="content" value="/WEB-INF/content/assessment/program/measure/edit.jsp" />
     </definition>
 
     <!-- ================ -->

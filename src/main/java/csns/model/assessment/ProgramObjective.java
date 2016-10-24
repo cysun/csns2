@@ -50,6 +50,8 @@ public class ProgramObjective implements Serializable {
 
     private String text;
 
+    private String description;
+
     public ProgramObjective()
     {
     }
@@ -104,6 +106,16 @@ public class ProgramObjective implements Serializable {
     public void setText( String text )
     {
         this.text = text;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
     }
 
 }

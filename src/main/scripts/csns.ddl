@@ -60,34 +60,18 @@
         primary key (id)
     );
 
-    create table assessment_program_measures (
-        id int8 not null,
-        description varchar(255) not null,
-        name varchar(255) not null,
-        type varchar(255) not null,
-        resource_id int8,
-        rubric_id int8,
-        survey_chart_id int8,
-        primary key (id)
-    );
-
     create table assessment_program_objectives (
         id int8 not null,
+        description varchar(255),
         objective_index int4 not null,
         text varchar(255),
         program_id int8,
         primary key (id)
     );
 
-    create table assessment_program_outcome_measures (
-        outcome_id int8 not null,
-        measure_id int8 not null,
-        measure_index int4 not null,
-        primary key (outcome_id, measure_index)
-    );
-
     create table assessment_program_outcomes (
         id int8 not null,
+        description varchar(255),
         outcome_index int4 not null,
         text varchar(255),
         program_id int8,
@@ -1011,9 +995,6 @@
     alter table academic_standings 
         add constraint UK7hsf5t3wd3nfdl4ckq4tgtjx unique (student_id, department_id, standing_id);
 
-    alter table assessment_program_outcome_measures 
-        add constraint UK_d2k7ht8yw0xgwf1gb0ieaggw2 unique (measure_id);
-
     alter table assignments 
         add constraint UK_7ed6gywfn7fll8aklgvqwxnlr unique (question_sheet_id);
 
@@ -1192,35 +1173,10 @@
         foreign key (attachment_id) 
         references files;
 
-    alter table assessment_program_measures 
-        add constraint FKjofuilyqf1kfcv2cio3frpavc 
-        foreign key (resource_id) 
-        references resources;
-
-    alter table assessment_program_measures 
-        add constraint FKl6vt8srvauuvutf22wo2tlkgn 
-        foreign key (rubric_id) 
-        references rubrics;
-
-    alter table assessment_program_measures 
-        add constraint FKikjy0516mx742p8dk3u8eigxn 
-        foreign key (survey_chart_id) 
-        references survey_charts;
-
     alter table assessment_program_objectives 
         add constraint FKv4jcplnohiry495lxm7kaptk 
         foreign key (program_id) 
         references assessment_programs;
-
-    alter table assessment_program_outcome_measures 
-        add constraint FKdcu0cfomn78tf0wxpdf6dd2sm 
-        foreign key (measure_id) 
-        references assessment_program_measures;
-
-    alter table assessment_program_outcome_measures 
-        add constraint FKiacg96u2qdxai7s7vt5yhfvac 
-        foreign key (outcome_id) 
-        references assessment_program_outcomes;
 
     alter table assessment_program_outcomes 
         add constraint FK64xismhokysu1lnth0hfbiacu 

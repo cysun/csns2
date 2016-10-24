@@ -19,18 +19,13 @@
 package csns.model.assessment;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 /**
@@ -55,12 +50,7 @@ public class ProgramOutcome implements Serializable {
 
     private String text;
 
-    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    @JoinTable(name = "assessment_program_outcome_measures",
-        joinColumns = @JoinColumn(name = "outcome_id") ,
-        inverseJoinColumns = @JoinColumn(name = "measure_id") )
-    @OrderColumn(name = "measure_index")
-    private List<ProgramMeasure> measures;
+    private String description;
 
     public ProgramOutcome()
     {
@@ -76,39 +66,6 @@ public class ProgramOutcome implements Serializable {
     {
         this( program );
         this.text = text;
-    }
-
-    public ProgramMeasure getMeasure( Long measureId )
-    {
-        for( ProgramMeasure measure : measures )
-            if( measure.getId().equals( measureId ) ) return measure;
-
-        return null;
-    }
-
-    public void setMeasure( ProgramMeasure measure )
-    {
-        if( measure.getId() == null )
-        {
-            measures.add( measure );
-            return;
-        }
-
-        for( int i = 0; i < measures.size(); ++i )
-            if( measures.get( i ).getId().equals( measure.getId() ) )
-            {
-                measures.set( i, measure );
-                break;
-            }
-    }
-
-    public ProgramMeasure removeMeasure( Long measureId )
-    {
-        for( int i = 0; i < measures.size(); ++i )
-            if( measures.get( i ).getId().equals( measureId ) )
-                return measures.remove( i );
-
-        return null;
     }
 
     public Long getId()
@@ -151,14 +108,14 @@ public class ProgramOutcome implements Serializable {
         this.text = text;
     }
 
-    public List<ProgramMeasure> getMeasures()
+    public String getDescription()
     {
-        return measures;
+        return description;
     }
 
-    public void setMeasures( List<ProgramMeasure> measures )
+    public void setDescription( String description )
     {
-        this.measures = measures;
+        this.description = description;
     }
 
 }

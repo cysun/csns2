@@ -20,8 +20,6 @@ create table users (
     last_name               varchar(255) not null,
     first_name              varchar(255) not null,
     middle_name             varchar(255),
-    gender                  char(1) check( gender = 'M' or gender = 'F' ),
-    birthday                date,
     street                  varchar(255),
     city                    varchar(255),
     state                   varchar(255),

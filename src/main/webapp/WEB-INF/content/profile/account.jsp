@@ -12,12 +12,6 @@ $(function() {
         $("#tabs").tabs({
             active : window.location.hash.substring(1)
         });
-    $("#birthday").datepicker({
-        inline: true,
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-60:+00"
-    });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#workPhone").mask("(999) 999-9999");
@@ -89,17 +83,6 @@ $(function() {
   <tr>
     <th>Address</th>
     <td>${user.address}</td>
-  </tr>
-  <tr>
-    <th>Gender</th>
-    <td>
-      <c:if test="${user.gender == 'M'}">Male</c:if>
-      <c:if test="${user.gender == 'F'}">Female</c:if>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${user.birthday}" /></td>
   </tr>
   <tr>
     <th>Disk Quota (MB)</th>

@@ -9,12 +9,6 @@ $(function() {
             ui.ajaxSettings.cache = false;  
         }
     });
-    $("#birthday").datepicker({
-        inline: true,
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-60:+00"
-    });
     $("#cellPhone").mask("(999) 999-9999");
     $("#homePhone").mask("(999) 999-9999");
     $("#workPhone").mask("(999) 999-9999");
@@ -116,22 +110,6 @@ function help( name )
     <th>Work Phone</th>
     <td>
       <form:input path="workPhone" cssClass="forminput" placeholder="(###) ###-####" />
-    </td>
-  </tr>
-  <tr>
-    <th>Gender:</th>
-    <td>
-      <form:select path="gender">
-        <form:option value="" />
-        <form:option value="M">Male</form:option>
-        <form:option value="F">Female</form:option>
-      </form:select>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td>
-      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
     </td>
   </tr>
   <tr>

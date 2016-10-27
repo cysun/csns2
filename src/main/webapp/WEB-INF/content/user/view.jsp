@@ -105,17 +105,6 @@ function email( address )
     <td>${user.address}</td>
   </tr>
   <tr>
-    <th>Gender</th>
-    <td>
-      <c:if test="${user.gender == 'M'}">Male</c:if>
-      <c:if test="${user.gender == 'F'}">Female</c:if>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${user.birthday}" /></td>
-  </tr>
-  <tr>
     <th>Account Enabled</th>
     <td>
       <c:if test="${user.enabled}">Yes</c:if>

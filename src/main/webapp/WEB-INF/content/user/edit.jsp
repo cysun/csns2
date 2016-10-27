@@ -7,12 +7,6 @@ $(function(){
     $("#tabs").tabs({
         cache: false
     });
-    $("#birthday").datepicker({
-        inline: true,
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-60:+00"
-    });
     $("#generate_cin").click(function(event){
         event.preventDefault();
         var cin = "G" + (100000000 + Math.floor(Math.random()*100000000));
@@ -143,22 +137,6 @@ function help( name )
     <th>Work Phone</th>
     <td>
       <form:input path="workPhone" cssClass="forminput" placeholder="(###) ###-####" />
-    </td>
-  </tr>
-  <tr>
-    <th>Gender:</th>
-    <td>
-      <form:select path="gender">
-        <form:option value="" />
-        <form:option value="M">Male</form:option>
-        <form:option value="F">Female</form:option>
-      </form:select>
-    </td>
-  </tr>
-  <tr>
-    <th>Birthday</th>
-    <td>
-      <form:input path="birthday" cssClass="forminput" placeholder="MM/DD/YYYY" />
     </td>
   </tr>
   <tr>

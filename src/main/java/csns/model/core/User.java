@@ -20,7 +20,6 @@ package csns.model.core;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,8 +38,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.slf4j.Logger;
@@ -84,7 +81,7 @@ public class User
     @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "authorities",
-        joinColumns = @JoinColumn(name = "user_id") )
+        joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     private Set<String> roles;
 
@@ -97,13 +94,6 @@ public class User
     @JsonIgnore
     @Column(name = "middle_name")
     private String middleName;
-
-    @JsonIgnore
-    private String gender;
-
-    @JsonIgnore
-    @Temporal(TemporalType.DATE)
-    private Date birthday;
 
     @JsonIgnore
     private String street;
@@ -187,8 +177,8 @@ public class User
     @JsonIgnore
     @OneToMany
     @JoinTable(name = "current_standings",
-        joinColumns = @JoinColumn(name = "student_id") ,
-        inverseJoinColumns = @JoinColumn(name = "academic_standing_id") )
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "academic_standing_id"))
     @MapKeyJoinColumn(name = "department_id")
     private Map<Department, AcademicStanding> currentStandings;
 
@@ -244,8 +234,6 @@ public class User
 
     public void copySelfEditableFieldsFrom( User user )
     {
-        gender = user.gender;
-        birthday = user.birthday;
         street = user.street;
         city = user.city;
         state = user.state;
@@ -514,26 +502,6 @@ public class User
     public void setMiddleName( String middleName )
     {
         this.middleName = middleName;
-    }
-
-    public String getGender()
-    {
-        return gender;
-    }
-
-    public void setGender( String gender )
-    {
-        if( StringUtils.hasText( gender ) ) this.gender = gender;
-    }
-
-    public Date getBirthday()
-    {
-        return birthday;
-    }
-
-    public void setBirthday( Date birthday )
-    {
-        this.birthday = birthday;
     }
 
     public String getStreet()

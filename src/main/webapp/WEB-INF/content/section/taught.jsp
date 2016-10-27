@@ -40,6 +40,9 @@ $(function(){
     $(".viewtable").tablesorter({
         headers: { 3: {sorter: false} }
     });
+    $(".course-code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
 function publish( id, type )
 {
@@ -52,6 +55,11 @@ function createJournal( sectionId )
     var msg = "Do you want to create a course journal for this section?";
     if( confirm(msg) )
         window.location.href = "journal/create?sectionId=" + sectionId;
+}
+function splitCode( code )
+{
+	var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+	return parts ? parts[1] + " " + parts[2] : code;
 }
 </script>
 
@@ -69,7 +77,7 @@ function createJournal( sectionId )
 <table class="outer_viewtable">
   <tr class="rowtypea">
     <td>
-      <a href="<c:url value='${section.siteUrl}' />">${section.course.code}
+      <a href="<c:url value='${section.siteUrl}' />"><span class="course-code">${section.course.code}</span>
          ${section.course.name} - ${section.number}</a>
     </td>
     <td class="action">

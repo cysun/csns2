@@ -14,7 +14,15 @@ $(function(){
     $(".viewtable").tablesorter({
         headers: { 3: {sorter: false} }
     });
+    $(".course-code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
+function splitCode( code )
+{
+    var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+    return parts ? parts[1] + " " + parts[2] : code;
+}
 </script>
 
 <ul id="title">
@@ -30,7 +38,8 @@ $(function(){
 <a id="section-${section.id}"></a>
 <table class="outer_viewtable">
   <tr class="rowtypea">
-    <td>${section.course.code} ${section.course.name} - ${section.number}</td>
+    <td><span class="course-code">${section.course.code}</span>
+      ${section.course.name} - ${section.number}</td>
   </tr>
   <tr> 
     <td colspan="2">

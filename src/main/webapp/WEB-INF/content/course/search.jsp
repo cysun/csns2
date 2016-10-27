@@ -10,7 +10,15 @@ $(function(){
                 window.location.href = "view?id=" + ui.item.id;
         }
     });
+    $(".course-code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
+function splitCode( code )
+{
+    var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+    return parts ? parts[1] + " " + parts[2] : code;
+}
 </script>
 
 <ul id="title">
@@ -32,7 +40,7 @@ $(function(){
 <tr><th>Code</th><th>Name</th><th>Coordinator</th></tr>
 <c:forEach items="${courses}" var="course">
 <tr>
-  <td>${course.code}</td>
+  <td class="course-code">${course.code}</td>
   <td><a href="view?id=${course.id}">${course.name}</a></td>
   <td class="center">${course.coordinator.name}</td>
 </tr>

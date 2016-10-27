@@ -11,7 +11,15 @@ $(function(){
         var term = $("select[name='term'] option:selected").val();
         window.location.href = "taken?term=" + term;
     });
+    $(".course-code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
+function splitCode( code )
+{
+    var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+    return parts ? parts[1] + " " + parts[2] : code;
+}
 </script>
 
 <ul id="title">
@@ -28,7 +36,7 @@ $(function(){
 <table class="outer_viewtable">
   <tr class="rowtypea">
     <td>
-      <a href="<c:url value='${section.siteUrl}' />">${section.course.code}
+      <a href="<c:url value='${section.siteUrl}' />"><span class="course-code">${section.course.code}</span>
          ${section.course.name} - ${section.number}</a>
     </td>
   </tr>

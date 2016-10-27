@@ -29,7 +29,15 @@ $(function(){
            });
        });
     });
+    $(".course-code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
+function splitCode( code )
+{
+    var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+    return parts ? parts[1] + " " + parts[2] : code;
+}
 </script>
 
 <ul id="title">
@@ -60,7 +68,7 @@ $(function(){
 </tr>
 <c:forEach items="${department.undergraduateCourses}" var="course">
 <tr>
-  <td>${course.code}</td>
+  <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -71,7 +79,7 @@ $(function(){
 </c:forEach>
 <c:forEach items="${department.additionalUndergraduateCourses}" var="course">
 <tr>
-  <td>${course.code}</td>
+  <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -104,7 +112,7 @@ $(function(){
 </tr>
 <c:forEach items="${department.graduateCourses}" var="course">
 <tr>
-  <td>${course.code}</td>
+  <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -115,7 +123,7 @@ $(function(){
 </c:forEach>
 <c:forEach items="${department.additionalGraduateCourses}" var="course">
 <tr>
-  <td>${course.code}</td>
+  <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">

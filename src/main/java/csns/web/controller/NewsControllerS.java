@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -85,7 +85,8 @@ public class NewsControllerS {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( NewsControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( NewsControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -108,7 +109,8 @@ public class NewsControllerS {
     @RequestMapping(value = "/department/{dept}/news/post",
         method = RequestMethod.POST)
     public String post( @ModelAttribute News news, @PathVariable String dept,
-        @RequestParam Long forumId, @RequestParam(value = "file",
+        @RequestParam Long forumId,
+        @RequestParam(value = "file",
             required = false) MultipartFile[] uploadedFiles,
         BindingResult result, SessionStatus sessionStatus )
     {
@@ -117,11 +119,11 @@ public class NewsControllerS {
 
         Post post = news.getTopic().getFirstPost();
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
         post.setAuthor( user );
         post.setDate( new Date() );
+        news.getTopic().setLastPostDate( post.getDate() );
 
         Forum forum = forumDao.getForum( forumId );
         news.getTopic().setForum( forum );
@@ -149,10 +151,9 @@ public class NewsControllerS {
 
     @RequestMapping(value = "/department/{dept}/news/edit",
         method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute News news,
-        @PathVariable String dept,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+    public String edit( @ModelAttribute News news, @PathVariable String dept,
+        @RequestParam(value = "file",
+            required = false) MultipartFile[] uploadedFiles,
         BindingResult result, SessionStatus sessionStatus )
     {
         newsValidator.validate( news, result );
@@ -160,9 +161,8 @@ public class NewsControllerS {
 
         Post post = news.getTopic().getFirstPost();
         User user = SecurityUtils.getUser();
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
         post.setEditedBy( user );
         post.setEditDate( new Date() );
         postDao.savePost( post );
@@ -175,8 +175,7 @@ public class NewsControllerS {
     }
 
     @RequestMapping("/department/{dept}/news/deleteAttachment")
-    public @ResponseBody
-    String deleteAttachment( @ModelAttribute News news,
+    public @ResponseBody String deleteAttachment( @ModelAttribute News news,
         @RequestParam Long fileId )
     {
         List<File> attachments = news.getTopic()

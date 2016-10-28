@@ -89,7 +89,7 @@ function unsubscribe()
 <display:setProperty name="paging.banner.full">
     <div class="pagelinks"><a href="{1}">First</a> {0} <a href="{4}">Last</a></div>
 </display:setProperty>
-  <display:column title="Topics" class="cat" maxLength="100">
+  <display:column title="Topics" class="cat">
     <a href="topic/view?id=${topic.id}">
     <c:if test="${topic.pinned}">
     <img border="0" alt="[Sticky]" title="Sticky Topic" src="<c:url value='/img/icons/forums-pin.png'/>" />

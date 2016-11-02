@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,7 +18,6 @@
  */
 package csns.model.academics.dao.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -57,8 +56,8 @@ public class SectionDaoImpl implements SectionDao {
         String query = "from Section where term = :term "
             + "and course = :course and number = :number";
 
-        List<Section> sections = entityManager.createQuery( query,
-            Section.class )
+        List<Section> sections = entityManager
+            .createQuery( query, Section.class )
             .setParameter( "term", term )
             .setParameter( "course", course )
             .setParameter( "number", number )
@@ -66,48 +65,21 @@ public class SectionDaoImpl implements SectionDao {
         return sections.size() == 0 ? null : sections.get( 0 );
     }
 
-    public List<Section> getUndergraduateSections( Department department,
-        Term term )
-    {
-        String query = "select s from Section s, "
-            + "Department d join d.undergraduateCourses c "
-            + "where d = :department and s.term = :term and s.course = c "
-            + "and s.instructors is not empty "
-            + "order by c.code asc, s.number asc";
-
-        return entityManager.createQuery( query, Section.class )
-            .setParameter( "department", department )
-            .setParameter( "term", term )
-            .getResultList();
-    }
-
-    public List<Section> getGraduateSections( Department department,
-        Term term )
-    {
-        String query = "select s from Section s, "
-            + "Department d join d.graduateCourses c "
-            + "where d = :department and s.term = :term and s.course = c "
-            + "and s.instructors is not empty "
-            + "order by c.code asc, s.number asc";
-
-        return entityManager.createQuery( query, Section.class )
-            .setParameter( "department", department )
-            .setParameter( "term", term )
-            .getResultList();
-    }
-
     @Override
     public List<Section> getSections( Department department, Term term )
     {
-        List<Section> sections = new ArrayList<Section>();
-        sections.addAll( getUndergraduateSections( department, term ) );
-        sections.addAll( getGraduateSections( department, term ) );
-        return sections;
+        String query = "from Section s where course.department = :department "
+            + "and term = :term and s.instructors is not empty "
+            + "order by course.code asc, number asc";
+
+        return entityManager.createQuery( query, Section.class )
+            .setParameter( "department", department )
+            .setParameter( "term", term )
+            .getResultList();
     }
 
     @Override
-    public List<Section> getSectionsByInstructor( User instructor,
-        Term term )
+    public List<Section> getSectionsByInstructor( User instructor, Term term )
     {
         String query = "select section from Section section "
             + "join section.instructors instructor "
@@ -121,8 +93,8 @@ public class SectionDaoImpl implements SectionDao {
     }
 
     @Override
-    public List<Section> getSectionsByInstructor( User instructor,
-        Term term, Course course )
+    public List<Section> getSectionsByInstructor( User instructor, Term term,
+        Course course )
     {
         String query = "select section from Section section "
             + "join section.instructors instructor "
@@ -181,8 +153,8 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public List<Section> searchSections( String text, int maxResults )
     {
-        TypedQuery<Section> query = entityManager.createNamedQuery(
-            "section.search", Section.class );
+        TypedQuery<Section> query = entityManager
+            .createNamedQuery( "section.search", Section.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
         return query.setParameter( "text", text ).getResultList();
     }

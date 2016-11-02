@@ -84,6 +84,13 @@ function deleteprerequisites( prereqId )
     </td>
   </tr>
   <tr>
+    <th>Units *</th>
+    <td>
+      <form:input path="units" cssClass="forminput" cssStyle="width: 2em;" />
+      <div class="error"><form:errors path="units"  /></div>
+    </td>
+  </tr>
+  <tr>
     <th>Prerequisites</th>
     <td><input id="prerequisites" type="text" class="forminput add" name="a" style="width: 100px;" /></td>
   <tr>

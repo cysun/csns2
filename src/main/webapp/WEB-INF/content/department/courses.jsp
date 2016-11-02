@@ -59,7 +59,7 @@ function splitCode( code )
 
 <div id="undergraduate">
 <c:if test="${fn:length(department.undergraduateCourses) + fn:length(department.additionalUndergraduateCourses) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th>Code</th><th>Name</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
@@ -103,7 +103,7 @@ function splitCode( code )
 
 <div id="graduate">
 <c:if test="${fn:length(department.graduateCourses) + fn:length(department.additionalGraduateCourses) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th>Code</th><th>Name</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -77,7 +77,8 @@ public class SectionController {
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( SectionController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SectionController.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -125,10 +126,11 @@ public class SectionController {
         }
 
         Term currentTerm = new Term();
-        if( !terms.contains( currentTerm ) )
-            terms.add( 0, currentTerm );
+        if( !terms.contains( currentTerm ) ) terms.add( 0, currentTerm );
         Term nextTerm = currentTerm.next();
         if( !terms.contains( nextTerm ) ) terms.add( 0, nextTerm );
+        Term nextNextTerm = nextTerm.next();
+        if( !terms.contains( nextNextTerm ) ) terms.add( 0, nextNextTerm );
 
         models.put( "user", user );
         models.put( "term", term );
@@ -201,13 +203,14 @@ public class SectionController {
         if( section.getEnrollments().size() > 0 )
         {
             models.put( "message", "error.section.nonempty" );
-            models.put( "backUrl", "/section/taught#section-" + section.getId() );
+            models.put( "backUrl",
+                "/section/taught#section-" + section.getId() );
             return "error";
         }
 
         section = sectionDao.deleteSection( section );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " deleted section " + section.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " deleted section "
+            + section.getId() );
 
         return "redirect:/section/taught";
     }
@@ -229,7 +232,8 @@ public class SectionController {
             Map<String, String> json = new HashMap<String, String>();
             json.put( "id", instructor.getId().toString() );
             json.put( "value", instructor.getName() );
-            json.put( "label", instructor.getCin() + " " + instructor.getName() );
+            json.put( "label",
+                instructor.getCin() + " " + instructor.getName() );
             jsonArray.put( json );
         }
 
@@ -250,8 +254,8 @@ public class SectionController {
             section.getInstructors().add( instructor );
             sectionDao.saveSection( section );
 
-            logger.info( "Instructor " + instructorId + " added to section "
-                + id );
+            logger.info(
+                "Instructor " + instructorId + " added to section " + id );
         }
 
         return "redirect:/section/edit?id=" + id;
@@ -268,8 +272,8 @@ public class SectionController {
             section.getInstructors().remove( instructor );
             sectionDao.saveSection( section );
 
-            logger.info( "Instructor " + instructorId
-                + " removed from section " + id );
+            logger.info(
+                "Instructor " + instructorId + " removed from section " + id );
         }
 
         return "redirect:/section/edit?id=" + id;

@@ -37,11 +37,12 @@ function splitCode( code )
 
 <c:if test="${not empty courses}">
 <table class="viewtable autowidth">
-<tr><th>Code</th><th>Name</th><th>Coordinator</th></tr>
+<tr><th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th></tr>
 <c:forEach items="${courses}" var="course">
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="view?id=${course.id}">${course.name}</a></td>
+  <td class="center">${course.units}</td>
   <td class="center">${course.coordinator.name}</td>
 </tr>
 </c:forEach>

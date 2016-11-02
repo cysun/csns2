@@ -61,11 +61,8 @@ public class Course implements Serializable, Comparable<Course> {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "min_units", nullable = false)
-    private int minUnits;
-
-    @Column(name = "max_units", nullable = false)
-    private int maxUnits;
+    @Column(name = "units", nullable = false)
+    private int units;
 
     @ManyToOne
     @JoinColumn(name = "coordinator_id")
@@ -77,8 +74,8 @@ public class Course implements Serializable, Comparable<Course> {
 
     @ManyToMany
     @JoinTable(name = "course_prerequisites",
-        joinColumns = @JoinColumn(name = "course_id") ,
-        inverseJoinColumns = @JoinColumn(name = "prerequisite_id") ,
+        joinColumns = @JoinColumn(name = "course_id"),
+        inverseJoinColumns = @JoinColumn(name = "prerequisite_id"),
         uniqueConstraints = { @UniqueConstraint(
             columnNames = { "course_id", "prerequisite_id" }) })
     @OrderBy("code asc")
@@ -97,7 +94,7 @@ public class Course implements Serializable, Comparable<Course> {
     public Course()
     {
         prerequisites = new ArrayList<Course>();
-        minUnits = maxUnits = 3;
+        units = 3;
         obsolete = false;
     }
 
@@ -159,24 +156,14 @@ public class Course implements Serializable, Comparable<Course> {
         this.name = name;
     }
 
-    public int getMinUnits()
+    public int getUnits()
     {
-        return minUnits;
+        return units;
     }
 
-    public void setMinUnits( int minUnits )
+    public void setUnits( int units )
     {
-        this.minUnits = minUnits;
-    }
-
-    public int getMaxUnits()
-    {
-        return maxUnits;
-    }
-
-    public void setMaxUnits( int maxUnits )
-    {
-        this.maxUnits = maxUnits;
+        this.units = units;
     }
 
     public User getCoordinator()

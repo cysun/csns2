@@ -30,25 +30,25 @@ $(function(){
 </ul>
 
 <c:if test="${fn:length(projects) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th>Project</th><th>Sponsor</th><th>Student</th><th>Advisor</th>
 </tr>
 <c:forEach items="${projects}" var="project">
 <c:if test="${project.published or user.isFaculty(dept) or project.isMember(user)}">
 <tr <c:if test="${not project.published}">style="color: gray;"</c:if>>
-  <td>
+  <td class="nowrap">
     <c:if test="${project.isPrivate()}"><img border="0" alt="[Private Project]"
           title="Private Project" src="<c:url value='/img/icons/lock.png' />" /></c:if>
     <a href="project/view?id=${project.id}">${project.title}</a>
   </td>
-  <td class="center" style="width: 100px;">${project.sponsor}</td>
-  <td style="width: 250px;">
+  <td class="center">${project.sponsor}</td>
+  <td>
     <c:forEach items="${project.students}" var="student" varStatus="status">
       ${student.name}<c:if test="${not status.last}">, </c:if>
     </c:forEach>
   </td>
-  <td style="width: 100px;">
+  <td>
     <c:forEach items="${project.advisors}" var="advisor" varStatus="status">
       ${advisor.name}<c:if test="${not status.last}">, </c:if>
     </c:forEach>

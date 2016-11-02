@@ -1,6 +1,10 @@
-alter table users drop column gender;
-alter table users drop column birthday;
+update grades set value = 3.7 where symbol = 'A-';
+update grades set value = 3.3 where symbol = 'B+';
+update grades set value = 2.7 where symbol = 'B-';
+update grades set value = 2.3 where symbol = 'C+';
+update grades set value = 1.7 where symbol = 'C-';
+update grades set value = 1.3 where symbol = 'D+';
+update grades set value = 0.7 where symbol = 'D-';
 
-update forum_topics t set last_post_date = (
-    select date from forum_posts where id = t.last_post_id
-) where t.last_post_date is null;
+alter table courses drop column min_units;
+alter table courses rename column max_units to units;

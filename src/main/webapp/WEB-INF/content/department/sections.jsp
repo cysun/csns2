@@ -31,7 +31,7 @@ $(function(){
 </ul>
 
 <c:if test="${fn:length(sections) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <thead>
 <tr>
   <th>Code</th><th>Name</th><th>Instructor</th>
@@ -43,11 +43,11 @@ $(function(){
 <tbody>
 <c:forEach items="${sections}" var="section">
 <tr>
-  <td>
+  <td class="nowrap">
     ${section.course.code}
     <c:if test="${section.number != 1}">(${section.number})</c:if>
   </td>
-  <td>
+  <td class="nowrap">
     <c:choose>
       <c:when test="${empty section.site}">${section.course.name}</c:when>
       <c:otherwise>

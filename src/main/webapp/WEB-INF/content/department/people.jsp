@@ -111,7 +111,7 @@ function email( userId )
 <div id="admin">
 <c:if test="${fn:length(department.administrators) > 0}">
 <form id="adminForm" method="post">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -149,7 +149,7 @@ function email( userId )
 <div id="faculty">
 <c:if test="${fn:length(department.faculty) > 0}">
 <form id="facultyForm" method="post">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -187,7 +187,7 @@ function email( userId )
 <div id="instructor">
 <c:if test="${fn:length(department.instructors) > 0}">
 <form id="instructorForm" method="post">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -225,7 +225,7 @@ function email( userId )
 <div id="evaluator">
 <c:if test="${fn:length(department.evaluators) > 0}">
 <form id="evaluatorForm" method="post">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -263,7 +263,7 @@ function email( userId )
 <div id="reviewer">
 <c:if test="${fn:length(department.reviewers) > 0}">
 <form id="reviewerForm" method="post">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
@@ -300,7 +300,7 @@ function email( userId )
 
 <div id="group">
 <c:if test="${fn:length(department.groups) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <tr>
   <th>Name</th><th>Description</th><th>Updated On</th>
 </tr>

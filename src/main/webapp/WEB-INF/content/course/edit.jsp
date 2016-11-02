@@ -81,6 +81,13 @@ function deleteprerequisites( prereqId )
     </td>
   </tr>
   <tr>
+    <th>Units *</th>
+    <td>
+      <form:input path="units" cssClass="forminput" cssStyle="width: 2em;" />
+      <div class="error"><form:errors path="units"  /></div>
+    </td>
+  </tr>
+  <tr>
     <th>Prerequisites</th>
     <td>
       <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">

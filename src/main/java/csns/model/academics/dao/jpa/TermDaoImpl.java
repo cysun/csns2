@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -41,8 +41,7 @@ public class TermDaoImpl implements TermDao {
     {
         String query = "select distinct section.term from Section section "
             + "join section.instructors instructor "
-            + "where instructor = :instructor "
-            + "order by section.term desc";
+            + "where instructor = :instructor order by section.term desc";
 
         return entityManager.createQuery( query, Term.class )
             .setParameter( "instructor", instructor )
@@ -78,10 +77,9 @@ public class TermDaoImpl implements TermDao {
     @Override
     public List<Term> getSectionTerms( Department department )
     {
-        String query = "select distinct s.term from Section s, "
-            + "Department d join d.undergraduateCourses c1 join d.graduateCourses c2 "
-            + "where d = :department and (s.course = c1 or s.course = c2) "
-            + "order by s.term desc";
+        String query = "select distinct s.term from Section s "
+            + "where course.department = :department "
+            + "and s.instructors is not empty order by s.term desc";
 
         return entityManager.createQuery( query, Term.class )
             .setParameter( "department", department )

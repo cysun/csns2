@@ -15,7 +15,7 @@
 </c:if>
 
 <c:if test="${fn:length(charts) > 0}">
-<table class="viewtable">
+<table class="viewtable autowidth">
 <thead>
   <tr><th>Name</th><th>Author</th><th>Updated</th></tr>
 </thead>
@@ -23,8 +23,8 @@
   <c:forEach items="${charts}" var="chart">
   <tr>
     <td><a href="view?id=${chart.id}">${chart.name}</a></td>
-    <td class="shrink">${chart.author.username}</td>
-    <td class="shrink"><fmt:formatDate value="${chart.date}" pattern="MM/dd/yyyy" /></td>
+    <td>${chart.author.username}</td>
+    <td><fmt:formatDate value="${chart.date}" pattern="MM/dd/yyyy" /></td>
   </tr>
   </c:forEach>
 </tbody>

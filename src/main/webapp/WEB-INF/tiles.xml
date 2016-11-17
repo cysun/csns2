@@ -723,12 +723,12 @@
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/view.jsp" />
     </definition>
 
-    <definition name="survey/chart/create" extends="layout.basic">
+    <definition name="survey/chart/create" extends="layout.jqueryui">
         <put-attribute name="title" value="Create Survey Chart" />
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/create.jsp" />
     </definition>
 
-    <definition name="survey/chart/edit" extends="layout.basic">
+    <definition name="survey/chart/edit" extends="layout.jqueryui">
         <put-attribute name="title" value="Edit Survey Chart" />
         <put-attribute name="content" value="/WEB-INF/content/survey/chart/edit.jsp" />
     </definition>

@@ -4,7 +4,7 @@
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/wiki/content/' />">Wiki</a></li>
-<csns:wikiSearchForm />
+<csns:wikiSearchForm text="${param.text}" />
 </ul>
 
 <div id="wiki_content">

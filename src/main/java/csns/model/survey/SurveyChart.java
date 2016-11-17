@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -104,6 +104,9 @@ public class SurveyChart implements Serializable {
         boolean showInLegend = series.size() > 1;
         for( SurveyChartSeries serie : series )
             chart.getSeries().add( serie.getHighchartSeries( showInLegend ) );
+
+        if( yMin != null ) chart.getyAxis().setMin( yMin );
+        if( yMax != null ) chart.getyAxis().setMax( yMax );
 
         return chart;
     }

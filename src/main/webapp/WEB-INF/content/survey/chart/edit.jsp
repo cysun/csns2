@@ -42,7 +42,15 @@ $(function(){
 	    }
 	    event.preventDefault();
 	});
+    $("div.help").dialog({
+        autoOpen: false,
+        modal: true
+    });
 });
+function help( name )
+{
+    $("#help-"+name).dialog("open");
+}
 function deleteChart()
 {
 	if( confirm("Are you sure you want to delete this chart?") )
@@ -90,7 +98,19 @@ function deleteChart()
     <th>Y Axis Label</th>
     <td><form:input path="yLabel" cssClass="leftinput" maxlength="255" /></td>
   </tr>
+  <tr>
+    <th><csns:help name="yrange">Y Axis Range</csns:help></th>
+    <td>
+       <form:input path="yMin" cssClass="leftinput center" style="width: 2em;" /> -
+       <form:input path="yMax" cssClass="leftinput center" style="width: 2em;" />
+    </td>
+  </tr>
 
   <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
 </table>
 </form:form>
+
+<div id="help-yrange" class="help">
+Highcharts can usually figure out the proper range based on the values, so in
+most cases you can leave the range empty.
+</div>

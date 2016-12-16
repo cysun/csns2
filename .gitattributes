@@ -9,11 +9,11 @@
 *.css  text
 *.jsp  text
 *.sql  text
+*.ddl  text
 *.tag  text
 *.txt  text
 *.tld  text
 *.xml  text
-*.vm   text
 
 *.properties text
 
@@ -21,7 +21,6 @@
 # *.sln text eol=crlf
 
 # Declare files that will always have LF line endings on checkout.
-*.ddl text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
 

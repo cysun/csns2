@@ -1,5 +1,4 @@
-
-    create sequence hibernate_sequence start 1 increment 1;
+create sequence hibernate_sequence start 1 increment 1;
 
     create table academic_standings (
         id int8 not null,
@@ -214,10 +213,9 @@
     create table courses (
         id int8 not null,
         code varchar(255) not null,
-        max_units int4 not null,
-        min_units int4 not null,
         name varchar(255) not null,
         obsolete boolean not null,
+        units int4 not null,
         coordinator_id int8,
         department_id int8,
         description_id int8,

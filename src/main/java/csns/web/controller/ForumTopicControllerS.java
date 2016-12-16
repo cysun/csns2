@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,6 +18,7 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,7 @@ import csns.security.SecurityUtils;
 import csns.util.FileIO;
 import csns.util.NotificationService;
 import csns.web.validator.MessageValidator;
+import freemarker.template.TemplateException;
 
 @Controller
 @SessionAttributes("post")
@@ -97,8 +99,9 @@ public class ForumTopicControllerS {
         method = RequestMethod.POST)
     public String create( @ModelAttribute Post post, @PathVariable String dept,
         @RequestParam(value = "file",
-            required = false ) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus)
+            required = false) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus )
+        throws IOException, TemplateException
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/create";
@@ -122,11 +125,11 @@ public class ForumTopicControllerS {
 
         String subject = "New Topic in CSNS Forum - " + forum.getShortName()
             + ": " + topic.getName();
-        String vTemplate = "notification.new.forum.topic.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "topic", topic );
-        vModels.put( "dept", dept );
-        notificationService.notifiy( forum, subject, vTemplate, vModels,
+        String fTemplate = "notification.new.forum.topic.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "topic", topic );
+        fModels.put( "dept", dept );
+        notificationService.notifiy( forum, subject, fTemplate, fModels,
             false );
 
         logger.info( user.getUsername() + " created topic " + topic.getId() );
@@ -148,8 +151,8 @@ public class ForumTopicControllerS {
         method = RequestMethod.POST)
     public String edit( @ModelAttribute Post post, @PathVariable String dept,
         @RequestParam(value = "file",
-            required = false ) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus)
+            required = false) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus )
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/edit";
@@ -171,7 +174,7 @@ public class ForumTopicControllerS {
     @RequestMapping(value = "/department/{dept}/forum/topic/reply",
         method = RequestMethod.GET)
     public String reply( @RequestParam Long id,
-        @RequestParam(required = false ) Long postId, ModelMap models)
+        @RequestParam(required = false) Long postId, ModelMap models )
     {
         Topic topic = topicDao.getTopic( id );
         Post post = new Post();
@@ -200,8 +203,9 @@ public class ForumTopicControllerS {
         method = RequestMethod.POST)
     public String reply( @ModelAttribute Post post, @PathVariable String dept,
         @RequestParam(value = "file",
-            required = false ) MultipartFile[] uploadedFiles,
-        BindingResult result, SessionStatus sessionStatus)
+            required = false) MultipartFile[] uploadedFiles,
+        BindingResult result, SessionStatus sessionStatus )
+        throws IOException, TemplateException
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "forum/topic/reply";
@@ -224,11 +228,11 @@ public class ForumTopicControllerS {
 
         String subject = "New Reply in CSNS Forum - " + forum.getShortName()
             + ": " + topic.getName();
-        String vTemplate = "notification.new.forum.reply.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "topic", topic );
-        vModels.put( "dept", dept );
-        notificationService.notifiy( topic, subject, vTemplate, vModels, true );
+        String fTemplate = "notification.new.forum.reply.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "topic", topic );
+        fModels.put( "dept", dept );
+        notificationService.notifiy( topic, subject, fTemplate, fModels, true );
 
         logger
             .info( user.getUsername() + " replied to topic " + topic.getId() );

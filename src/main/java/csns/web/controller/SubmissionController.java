@@ -29,17 +29,15 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -63,6 +61,8 @@ import csns.model.core.dao.FileDao;
 import csns.security.SecurityUtils;
 import csns.util.FileIO;
 import csns.web.editor.CalendarPropertyEditor;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 @Controller
 public class SubmissionController {
@@ -83,10 +83,7 @@ public class SubmissionController {
     private MailSender mailSender;
 
     @Autowired
-    private VelocityEngine velocityEngine;
-
-    @Value("#{applicationProperties.encoding}")
-    private String appEncoding;
+    private Configuration freemarkerConfiguration;
 
     private static final Logger logger = LoggerFactory
         .getLogger( SubmissionController.class );
@@ -315,7 +312,7 @@ public class SubmissionController {
     @RequestMapping(value = "/submission/edit", params = "comments")
     public String editComments( @RequestParam Long id,
         @RequestParam String comments, HttpServletResponse response )
-            throws IOException
+        throws IOException
     {
         Submission submission = submissionDao.getSubmission( id );
         submission.setComments( comments );
@@ -327,6 +324,7 @@ public class SubmissionController {
     }
 
     private void emailGrade( Submission submission )
+        throws IOException, TemplateException
     {
         if( !StringUtils.hasText( submission.getGrade() )
             || submission.isGradeMailed() ) return;
@@ -344,12 +342,13 @@ public class SubmissionController {
             .getCode() + " " + submission.getAssignment().getName() + " Grade";
         message.setSubject( subject );
 
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "grade", submission.getGrade() );
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "grade", submission.getGrade() );
         String comments = submission.getComments();
-        vModels.put( "comments", comments != null ? comments : "" );
-        String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.submission.grade.vm", appEncoding, vModels );
+        fModels.put( "comments", comments != null ? comments : "" );
+        String text = FreeMarkerTemplateUtils.processTemplateIntoString(
+            freemarkerConfiguration.getTemplate( "email.submission.grade.txt" ),
+            fModels );
         message.setText( text );
 
         try
@@ -370,6 +369,7 @@ public class SubmissionController {
 
     @RequestMapping(value = "/submission/email", params = "submissionId")
     public String emailGrade( @RequestParam Long submissionId )
+        throws IOException, TemplateException
     {
         Submission submission = submissionDao.getSubmission( submissionId );
         emailGrade( submission );
@@ -380,6 +380,7 @@ public class SubmissionController {
 
     @RequestMapping(value = "/submission/email", params = "assignmentId")
     public String emailGrades( @RequestParam Long assignmentId )
+        throws IOException, TemplateException
     {
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
         for( Submission submission : assignment.getSubmissions() )

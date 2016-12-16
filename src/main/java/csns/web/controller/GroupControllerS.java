@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.WebUtils;
 
 import csns.importer.ImportedUser;
 import csns.importer.UsersImporter;
@@ -146,16 +145,16 @@ public class GroupControllerS {
     @RequestMapping(value = "/department/{dept}/group/import",
         method = RequestMethod.POST)
     public String importUsers(
-        @ModelAttribute("importer" ) UsersImporter importer,
-        @RequestParam("_page") int currentPage, @RequestParam Long id,
-        HttpServletRequest request, SessionStatus sessionStatus)
+        @ModelAttribute("importer") UsersImporter importer,
+        @RequestParam("_page") int currentPage,
+        @RequestParam(value = "_target", required = false) Integer targetPage,
+        @RequestParam Long id, HttpServletRequest request,
+        SessionStatus sessionStatus )
     {
         Group group = groupDao.getGroup( id );
 
         if( request.getParameter( "_finish" ) == null )
         {
-            int targetPage = WebUtils.getTargetPage( request, "_target",
-                currentPage );
             if( targetPage == 1 && currentPage < targetPage )
             {
                 importer.checkAccountStatus();

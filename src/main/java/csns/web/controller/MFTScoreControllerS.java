@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.util.WebUtils;
 
 import csns.importer.MFTScoreImporter;
 import csns.importer.parser.MFTScoreParser;
@@ -66,7 +65,8 @@ public class MFTScoreControllerS {
     @Autowired
     private MFTScoreImporterValidator importerValidator;
 
-    private static final Logger logger = LoggerFactory.getLogger( MFTScoreController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( MFTScoreController.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder, WebRequest request )
@@ -88,19 +88,17 @@ public class MFTScoreControllerS {
     public String importScoreReport(
         @ModelAttribute("importer") MFTScoreImporter importer,
         @PathVariable String dept, @RequestParam("_page") int currentPage,
+        @RequestParam(value = "_target", required = false) Integer targetPage,
         HttpServletRequest request, BindingResult result,
         SessionStatus sessionStatus, ModelMap models )
     {
-        int targetPage = WebUtils.getTargetPage( request, "_target",
-            currentPage );
-
-        if( targetPage == 0 )
+        if( targetPage != null && targetPage == 0 )
         {
             importer.clear();
             return "mft/import0";
         }
 
-        if( targetPage == 1 )
+        if( targetPage != null && targetPage == 1 )
         {
             importerValidator.validate( importer, result );
             if( result.hasErrors() ) return "mft/import0";
@@ -113,7 +111,8 @@ public class MFTScoreControllerS {
         for( MFTScore score : importer.getScores() )
             mftScoreDao.saveScore( score );
 
-        String date = (new SimpleDateFormat( "yyyy-MM-dd" )).format( importer.getDate() );
+        String date = (new SimpleDateFormat( "yyyy-MM-dd" ))
+            .format( importer.getDate() );
         logger.info( SecurityUtils.getUser().getUsername() + " imported "
             + importer.getScores().size() + " mft scores for [" + dept + ","
             + date + "]." );

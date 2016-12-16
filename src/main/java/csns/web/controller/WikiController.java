@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -62,6 +62,7 @@ import csns.model.wiki.dao.PageDao;
 import csns.model.wiki.dao.RevisionDao;
 import csns.security.SecurityUtils;
 import csns.util.NotificationService;
+import freemarker.template.TemplateException;
 
 @Controller
 public class WikiController {
@@ -78,7 +79,8 @@ public class WikiController {
     @Autowired
     private NotificationService notificationService;
 
-    private static final Logger logger = LoggerFactory.getLogger( WikiController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( WikiController.class );
 
     public static String getDept( String path )
     {
@@ -96,7 +98,8 @@ public class WikiController {
     public String view( @RequestParam(required = false) Long revisionId,
         HttpServletRequest request, ModelMap models )
     {
-        String path = (String) request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE );
+        String path = (String) request.getAttribute(
+            HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE );
         models.put( "path", path );
 
         Revision revision = revisionId == null ? revisionDao.getRevision( path )
@@ -126,14 +129,15 @@ public class WikiController {
             models.put( "isAdmin",
                 dept == null ? user.isSysadmin() : user.isAdmin( dept ) );
 
-            Subscription subscription = subscriptionDao.getSubscription(
-                revision.getPage(), user );
+            Subscription subscription = subscriptionDao
+                .getSubscription( revision.getPage(), user );
             if( subscription != null )
             {
                 if( subscription.isNotificationSent() )
                 {
                     subscription.setNotificationSent( false );
-                    subscription = subscriptionDao.saveSubscription( subscription );
+                    subscription = subscriptionDao
+                        .saveSubscription( subscription );
                 }
                 models.put( "subscription", subscription );
             }
@@ -170,7 +174,7 @@ public class WikiController {
 
     @RequestMapping(value = "/wiki/move", method = RequestMethod.POST)
     public String move( @RequestParam String from, @RequestParam String to,
-        ModelMap models )
+        ModelMap models ) throws IOException, TemplateException
     {
         if( pageDao.getPage( to ) != null )
         {
@@ -189,12 +193,12 @@ public class WikiController {
         subscriptionDao.subscribe( page, user );
 
         String subject = "Wiki Page " + from + " Moved";
-        String vTemplate = "notification.wiki.page.moved.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "page", page );
-        vModels.put( "author", user );
-        vModels.put( "from", from );
-        notificationService.notifiy( page, subject, vTemplate, vModels, false );
+        String fTemplate = "notification.wiki.page.moved.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "page", page );
+        fModels.put( "author", user );
+        fModels.put( "from", from );
+        notificationService.notifiy( page, subject, fTemplate, fModels, false );
 
         return "redirect:" + to;
     }
@@ -210,7 +214,7 @@ public class WikiController {
 
     @RequestMapping("/wiki/revert")
     public String revert( @RequestParam Long revisionId, HttpSession session,
-        ModelMap models )
+        ModelMap models ) throws IOException, TemplateException
     {
         Revision revision = revisionDao.getRevision( revisionId );
         Page page = revision.getPage();
@@ -231,11 +235,11 @@ public class WikiController {
         subscriptionDao.subscribe( page, user );
 
         String subject = "New Revision of Wiki Page " + page.getPath();
-        String vTemplate = "notification.new.wiki.revision.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "page", page );
-        vModels.put( "author", user );
-        notificationService.notifiy( page, subject, vTemplate, vModels, true );
+        String fTemplate = "notification.new.wiki.revision.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "page", page );
+        fModels.put( "author", user );
+        notificationService.notifiy( page, subject, fTemplate, fModels, true );
 
         return "redirect:" + page.getPath();
     }
@@ -272,7 +276,8 @@ public class WikiController {
         throws Exception
     {
         StringWriter result = new StringWriter();
-        TransformerHandler transformerHandler = ((SAXTransformerFactory) TransformerFactory.newInstance()).newTransformerHandler();
+        TransformerHandler transformerHandler = ((SAXTransformerFactory) TransformerFactory
+            .newInstance()).newTransformerHandler();
         transformerHandler.setResult( new StreamResult( result ) );
         XslFilter xslFilter = new XslFilter();
         ContentHandler contentHandler = xslFilter.xsl( transformerHandler,

@@ -1,4 +1,4 @@
-<h2>$department.name Department Wiki</h2>
+<h2>${department.name} Department Wiki</h2>
 
 <p>Just like any <a href="http://en.wikipedia.org/wiki/Wiki">Wiki</a>, you can
 create new pages under <tt>/wiki/content/</tt>, e.g. <tt>/wiki/content/mypage</tt>,

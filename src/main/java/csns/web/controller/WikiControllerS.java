@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,6 +18,7 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ import csns.security.SecurityUtils;
 import csns.util.FileIO;
 import csns.util.NotificationService;
 import csns.web.validator.MessageValidator;
+import freemarker.template.TemplateException;
 
 @Controller
 @SessionAttributes({ "revision", "post" })
@@ -83,7 +85,8 @@ public class WikiControllerS {
     @Autowired
     private NotificationService notificationService;
 
-    private static final Logger logger = LoggerFactory.getLogger( WikiControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( WikiControllerS.class );
 
     @RequestMapping(value = "/wiki/edit", method = RequestMethod.GET)
     public String edit( @RequestParam String path, ModelMap models,
@@ -119,6 +122,7 @@ public class WikiControllerS {
     @RequestMapping(value = "/wiki/edit", method = RequestMethod.POST)
     public String edit( @ModelAttribute Revision revision, HttpSession session,
         BindingResult result, SessionStatus sessionStatus )
+        throws IOException, TemplateException
     {
         // NOTE In theory it is possible to craft a POST request to bypass both
         // password and locked, but it is unlikely, and considering this is wiki
@@ -141,11 +145,11 @@ public class WikiControllerS {
         subscriptionDao.subscribe( page, user );
 
         String subject = "New Revision of Wiki Page " + page.getPath();
-        String vTemplate = "notification.new.wiki.revision.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "page", page );
-        vModels.put( "author", user );
-        notificationService.notifiy( page, subject, vTemplate, vModels, true );
+        String fTemplate = "notification.new.wiki.revision.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "page", page );
+        fModels.put( "author", user );
+        notificationService.notifiy( page, subject, fTemplate, fModels, true );
 
         return "redirect:" + page.getPath();
     }
@@ -160,18 +164,18 @@ public class WikiControllerS {
     }
 
     @RequestMapping(value = "/wiki/discuss", method = RequestMethod.POST)
-    public String discuss( @ModelAttribute Post post,
-        @RequestParam Long pageId, @RequestParam(value = "file",
+    public String discuss( @ModelAttribute Post post, @RequestParam Long pageId,
+        @RequestParam(value = "file",
             required = false) MultipartFile[] uploadedFiles,
         BindingResult result, SessionStatus sessionStatus )
+        throws IOException, TemplateException
     {
         messageValidator.validate( post, result );
         if( result.hasErrors() ) return "wiki/discuss";
 
         User user = SecurityUtils.getUser();
-        if( uploadedFiles != null )
-            post.getAttachments().addAll(
-                fileIO.save( uploadedFiles, user, true ) );
+        if( uploadedFiles != null ) post.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, user, true ) );
 
         post.setAuthor( user );
         post.setDate( new Date() );
@@ -191,12 +195,12 @@ public class WikiControllerS {
         subscriptionDao.subscribe( page, user );
 
         String subject = "New Discussion of Wiki Page " + page.getPath();
-        String vTemplate = "notification.new.wiki.discussion.vm";
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "page", page );
-        vModels.put( "author", user );
-        vModels.put( "topic", topic );
-        notificationService.notifiy( page, subject, vTemplate, vModels, false );
+        String fTemplate = "notification.new.wiki.discussion.txt";
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "page", page );
+        fModels.put( "author", user );
+        fModels.put( "topic", topic );
+        notificationService.notifiy( page, subject, fTemplate, fModels, false );
 
         return "redirect:/wiki/discussions?id=" + page.getId();
     }

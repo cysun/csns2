@@ -16,5 +16,5 @@ fields after last name, though currently they are not processed.</p>
 <form:form modelAttribute="importer">
 <p><form:textarea path="text" rows="20" cols="80" cssStyle="width: 100%; border: 1px solid;" /></p>
 <p><input type="hidden" name="_page" value="0" />
-<input type="submit" name="_target1" value="Next" class="subbutton" /></p>
+<button class="subbutton" name="_target" value="1">Next</button></p>
 </form:form>

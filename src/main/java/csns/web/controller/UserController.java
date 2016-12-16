@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,13 +18,13 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.util.DefaultUrls;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 @Controller
 @SuppressWarnings("deprecation")
@@ -62,15 +64,13 @@ public class UserController {
     private JavaMailSender mailSender;
 
     @Autowired
-    private VelocityEngine velocityEngine;
+    private Configuration freemarkerConfiguration;
 
     @Value("#{applicationProperties.email}")
     private String appEmail;
 
-    @Value("#{applicationProperties.encoding}")
-    private String appEncoding;
-
-    private final static Logger logger = LoggerFactory.getLogger( UserController.class );
+    private final static Logger logger = LoggerFactory
+        .getLogger( UserController.class );
 
     @RequestMapping(value = "/user/search")
     public String search( @RequestParam(required = false) String text,
@@ -82,9 +82,8 @@ public class UserController {
             if( text.toLowerCase().contains( "standing:" ) )
             {
                 String words[] = text.split( ":" );
-                if( words.length > 1 )
-                    users = userDao.searchUsersByStanding( dept,
-                        words[1].trim() );
+                if( words.length > 1 ) users = userDao
+                    .searchUsersByStanding( dept, words[1].trim() );
             }
             else
                 users = userDao.searchUsers( text );
@@ -108,6 +107,7 @@ public class UserController {
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     public String resetPassword( HttpServletRequest request, ModelMap models )
+        throws IOException, TemplateException
     {
         String username = request.getParameter( "username" );
         String cin = request.getParameter( "cin" );
@@ -141,11 +141,12 @@ public class UserController {
 
         logger.info( "Reset password for " + user.getUsername() );
 
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "username", user.getUsername() );
-        vModels.put( "password", newPassword );
-        String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.resetPassword.vm", appEncoding, vModels );
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "username", user.getUsername() );
+        fModels.put( "password", newPassword );
+        String text = FreeMarkerTemplateUtils.processTemplateIntoString(
+            freemarkerConfiguration.getTemplate( "email.resetPassword.txt" ),
+            fModels );
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo( user.getPrimaryEmail() );
@@ -154,8 +155,8 @@ public class UserController {
         try
         {
             mailSender.send( message );
-            logger.info( "Password reset message sent to "
-                + user.getPrimaryEmail() );
+            logger.info(
+                "Password reset message sent to " + user.getPrimaryEmail() );
         }
         catch( MailException e )
         {

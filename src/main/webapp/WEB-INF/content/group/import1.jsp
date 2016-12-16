@@ -29,6 +29,6 @@ looks fine, click the Import button to import the data.</p>
 
 <form:form modelAttribute="importer">
 <input type="hidden" name="_page" value="1" />
-<p><input type="submit" name="_target0" value="Back" class="subbutton" />
+<p><button class="subbutton" name="_target" value="0">Back</button>
 <input type="submit" name="_finish" value="Import" class="subbutton" /></p>
 </form:form>

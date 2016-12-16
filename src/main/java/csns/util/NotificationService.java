@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,16 +18,16 @@
  */
 package csns.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import csns.model.core.Subscribable;
 import csns.model.core.Subscription;
@@ -35,6 +35,8 @@ import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 @Component
 public class NotificationService {
@@ -46,7 +48,7 @@ public class NotificationService {
     private SubscriptionDao subscriptionDao;
 
     @Autowired
-    private VelocityEngine velocityEngine;
+    private Configuration freemarkerConfiguration;
 
     @Autowired
     private MassMailSender massMailSender;
@@ -57,17 +59,16 @@ public class NotificationService {
     @Value("#{applicationProperties.email}")
     private String appEmail;
 
-    @Value("#{applicationProperties.encoding}")
-    private String appEncoding;
-
     public void notifiy( Subscribable subscribable, String subject,
-        String vTemplate, Map<String, Object> vModels, boolean notificationFlag )
+        String template, Map<String, Object> models, boolean notificationFlag )
+        throws IOException, TemplateException
     {
-        vModels.put( "appUrl", appUrl );
-        vModels.put( "appEmail", appEmail );
+        models.put( "appUrl", appUrl );
+        models.put( "appEmail", appEmail );
 
         User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions( subscribable );
+        List<Subscription> subscriptions = subscriptionDao
+            .getSubscriptions( subscribable );
         List<String> addresses = new ArrayList<String>();
         for( Subscription subscription : subscriptions )
             if( !subscription.isNotificationSent()
@@ -83,8 +84,8 @@ public class NotificationService {
 
         if( addresses.size() > 0 )
         {
-            String text = VelocityEngineUtils.mergeTemplateIntoString(
-                velocityEngine, vTemplate, appEncoding, vModels );
+            String text = FreeMarkerTemplateUtils.processTemplateIntoString(
+                freemarkerConfiguration.getTemplate( template ), models );
             SimpleMailMessage email = new SimpleMailMessage();
             email.setFrom( appEmail );
             email.setTo( appEmail );

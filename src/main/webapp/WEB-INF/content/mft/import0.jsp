@@ -41,7 +41,7 @@ function help( name )
 <div class="error"><form:errors path="text" /></div>
 <p>
   <input type="hidden" name="_page" value="0" />
-  <input type="submit" name="_target1" value="Next" class="subbutton" />
+  <button class="subbutton" name="_target" value="1">Next</button>
 </p>
 </form:form>
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,17 +18,16 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -52,6 +51,8 @@ import csns.model.wiki.dao.RevisionDao;
 import csns.security.SecurityUtils;
 import csns.web.editor.UserPropertyEditor;
 import csns.web.validator.DepartmentValidator;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 @Controller
 @SessionAttributes("department")
@@ -70,15 +71,13 @@ public class DepartmentControllerS {
     private DepartmentValidator departmentValidator;
 
     @Autowired
-    private VelocityEngine velocityEngine;
-
-    @Value("#{applicationProperties.encoding}")
-    private String appEncoding;
+    private Configuration freemarkerConfiguration;
 
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( DepartmentControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( DepartmentControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -98,6 +97,7 @@ public class DepartmentControllerS {
         method = RequestMethod.POST)
     public String add( @ModelAttribute Department department,
         BindingResult bindingResult, SessionStatus sessionStatus )
+        throws IOException, TemplateException
     {
         departmentValidator.validate( department, bindingResult );
         if( bindingResult.hasErrors() ) return "department/add";
@@ -158,7 +158,8 @@ public class DepartmentControllerS {
         for( int i = 0; i < names.length; ++i )
         {
             Mailinglist mailinglist = new Mailinglist();
-            mailinglist.setName( department.getAbbreviation() + "-" + names[i] );
+            mailinglist
+                .setName( department.getAbbreviation() + "-" + names[i] );
             mailinglist.setDescription( descriptions[i] );
             mailinglist.setDepartment( department );
             department.getMailinglists().add( mailinglist );
@@ -169,6 +170,7 @@ public class DepartmentControllerS {
     }
 
     private void createWikiPages( Department department )
+        throws IOException, TemplateException
     {
         String paths[] = {
             "/wiki/content/department/" + department.getAbbreviation() + "/",
@@ -176,10 +178,10 @@ public class DepartmentControllerS {
                 + "/sidebar" };
         String subjects[] = { department.getName() + " Department Wiki",
             department.getName() + " Department Wiki Sidebar" };
-        String vTemplates[] = { "wiki.department.home.vm",
-            "wiki.department.sidebar.vm" };
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "department", department );
+        String fTemplates[] = { "wiki.department.home.txt",
+            "wiki.department.sidebar.txt" };
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "department", department );
 
         for( int i = 0; i < paths.length; ++i )
         {
@@ -195,8 +197,10 @@ public class DepartmentControllerS {
             revision.setAuthor( department.getAdministrators().get( 0 ) );
             revision.setIncludeSidebar( true );
             revision.setSubject( subjects[i] );
-            revision.setContent( VelocityEngineUtils.mergeTemplateIntoString(
-                velocityEngine, vTemplates[i], appEncoding, vModels ) );
+            revision
+                .setContent( FreeMarkerTemplateUtils.processTemplateIntoString(
+                    freemarkerConfiguration.getTemplate( fTemplates[i] ),
+                    fModels ) );
 
             revisionDao.saveRevision( revision );
         }

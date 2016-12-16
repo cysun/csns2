@@ -52,8 +52,8 @@ each of these students, then try again.</p>
 
 <form:form modelAttribute="importer"><p>
   <input type="hidden" name="_page" value="1" />
-  <input type="submit" name="_target0" value="Back" class="subbutton" />
+  <button class="subbutton" name="_target" value="0">Back</button>
   <c:if test="${fn:length(importer.failedUsers) == 0}">
-    <input type="submit" name="_target2" value="Import" class="subbutton" />
+    <input type="submit" name="_finish" value="Import" class="subbutton" />
   </c:if>
 </p></form:form>

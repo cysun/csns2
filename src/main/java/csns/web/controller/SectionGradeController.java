@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -25,18 +25,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,6 +48,8 @@ import csns.model.academics.dao.SectionDao;
 import csns.model.academics.dao.SubmissionDao;
 import csns.model.core.User;
 import csns.security.SecurityUtils;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 @Controller
 public class SectionGradeController {
@@ -70,15 +70,13 @@ public class SectionGradeController {
     private MailSender mailSender;
 
     @Autowired
-    private VelocityEngine velocityEngine;
+    private Configuration freemarkerConfiguration;
 
-    @Value("#{applicationProperties.encoding}")
-    private String appEncoding;
+    private static final Logger logger = LoggerFactory
+        .getLogger( SectionGradeController.class );
 
-    private static final Logger logger = LoggerFactory.getLogger( SectionGradeController.class );
-
-    @RequestMapping(value = "/section/grade", params = { "!grade", "!gradeId",
-        "!comments" })
+    @RequestMapping(value = "/section/grade",
+        params = { "!grade", "!gradeId", "!comments" })
     public String grade( @RequestParam Long enrollmentId, ModelMap models )
         throws JSONException
     {
@@ -105,10 +103,8 @@ public class SectionGradeController {
 
         Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
         models.put( "enrollment", enrollment );
-        models.put(
-            "submissions",
-            submissionDao.getSubmissions( enrollment.getStudent(),
-                enrollment.getSection() ) );
+        models.put( "submissions", submissionDao.getSubmissions(
+            enrollment.getStudent(), enrollment.getSection() ) );
 
         return "section/grade";
     }
@@ -152,6 +148,7 @@ public class SectionGradeController {
     }
 
     private void emailGrade( Enrollment enrollment )
+        throws IOException, TemplateException
     {
         if( enrollment.getGrade() == null || enrollment.isGradeMailed() )
             return;
@@ -167,12 +164,13 @@ public class SectionGradeController {
         String subject = course.getCode() + " Grade";
         message.setSubject( subject );
 
-        Map<String, Object> vModels = new HashMap<String, Object>();
-        vModels.put( "grade", enrollment.getGrade().getSymbol() );
+        Map<String, Object> fModels = new HashMap<String, Object>();
+        fModels.put( "grade", enrollment.getGrade().getSymbol() );
         String comments = enrollment.getComments();
-        vModels.put( "comments", comments != null ? comments : "" );
-        String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine, "email.section.grade.vm", appEncoding, vModels );
+        fModels.put( "comments", comments != null ? comments : "" );
+        String text = FreeMarkerTemplateUtils.processTemplateIntoString(
+            freemarkerConfiguration.getTemplate( "email.section.grade.txt" ),
+            fModels );
         message.setText( text );
 
         try
@@ -193,6 +191,7 @@ public class SectionGradeController {
 
     @RequestMapping(value = "/section/email", params = "enrollmentId")
     public String emailGrade( @RequestParam Long enrollmentId )
+        throws IOException, TemplateException
     {
         emailGrade( enrollmentDao.getEnrollment( enrollmentId ) );
         return "redirect:/section/grade?enrollmentId=" + enrollmentId;
@@ -200,6 +199,7 @@ public class SectionGradeController {
 
     @RequestMapping(value = "/section/email", params = "sectionId")
     public String emailGrades( @RequestParam Long sectionId )
+        throws IOException, TemplateException
     {
         Section section = sectionDao.getSection( sectionId );
         for( Enrollment enrollment : section.getEnrollments() )

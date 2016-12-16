@@ -1,15 +1,15 @@
-$author.name created a new revision of the wiki page $page.path.
-You can use the following link to access the page: 
+${author.name} moved the wiki page ${from} to ${page.path}.
+You can use the following link to access the page at its new location: 
 
-    $appUrl$page.path
+    ${appUrl}${page.path}
 
 ****************************************************************************
 If you no longer wish to receive email notifications about changes to this
 page, please click the following link to unsubscribe:
-$appUrl/subscription/page/unsubscribe?id=$page.id
+${appUrl}/subscription/page/unsubscribe?id=${page.id?c}
 Note that you will be asked for your username and password if you are not
 logged on to CSNS. If you forget or do not know your username or password,
 please follow the instructions at
-$appUrl/resetPassword
+${appUrl}/resetPassword
 and your account information will be emailed to you.
 ****************************************************************************

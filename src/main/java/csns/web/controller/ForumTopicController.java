@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -57,7 +57,8 @@ public class ForumTopicController {
     @Autowired
     private SubscriptionDao subscriptionDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( ForumTopicController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ForumTopicController.class );
 
     @RequestMapping("/department/{dept}/forum/topic/view")
     public String view( @RequestParam Long id, ModelMap models )
@@ -88,8 +89,8 @@ public class ForumTopicController {
     }
 
     @RequestMapping("/department/{dept}/forum/topic/pin")
-    public @ResponseBody
-    String pin( @RequestParam Long id, ModelMap models )
+    @ResponseBody
+    public void pin( @RequestParam Long id, ModelMap models )
     {
         Topic topic = topicDao.getTopic( id );
         topic.setPinned( true );
@@ -97,13 +98,11 @@ public class ForumTopicController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " pinned topic "
             + topic.getId() );
-
-        return "";
     }
 
     @RequestMapping("/department/{dept}/forum/topic/unpin")
-    public @ResponseBody
-    String unpin( @RequestParam Long id, ModelMap models )
+    @ResponseBody
+    public void unpin( @RequestParam Long id, ModelMap models )
     {
         Topic topic = topicDao.getTopic( id );
         topic.setPinned( false );
@@ -111,13 +110,11 @@ public class ForumTopicController {
 
         logger.info( SecurityUtils.getUser().getUsername() + " unpinned topic "
             + topic.getId() );
-
-        return "";
     }
 
     @RequestMapping("/department/{dept}/forum/topic/search")
-    public String search( @RequestParam Long forumId,
-        @RequestParam String text, ModelMap models )
+    public String search( @RequestParam Long forumId, @RequestParam String text,
+        ModelMap models )
     {
         Forum forum = forumDao.getForum( forumId );
         models.put( "forum", forum );

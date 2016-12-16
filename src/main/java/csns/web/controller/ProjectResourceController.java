@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -46,12 +46,13 @@ public class ProjectResourceController {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( ProjectResourceController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ProjectResourceController.class );
 
     @RequestMapping("/department/{dept}/project/resource/view")
-    public String view( @PathVariable String dept,
-        @RequestParam Long projectId, @RequestParam Long resourceId,
-        ModelMap models, HttpServletResponse response )
+    public String view( @PathVariable String dept, @RequestParam Long projectId,
+        @RequestParam Long resourceId, ModelMap models,
+        HttpServletResponse response )
     {
         User user = SecurityUtils.getUser();
         Project project = projectDao.getProject( projectId );
@@ -89,8 +90,8 @@ public class ProjectResourceController {
     }
 
     @RequestMapping("/department/{dept}/project/resource/reorder")
-    public @ResponseBody
-    String reorder( @RequestParam Long projectId,
+    @ResponseBody
+    public void reorder( @RequestParam Long projectId,
         @RequestParam Long resourceId, @RequestParam int newIndex )
     {
         Project project = projectDao.getProject( projectId );
@@ -104,8 +105,6 @@ public class ProjectResourceController {
                 + " reordered resource " + resourceId + " of project "
                 + projectId + " to index " + newIndex );
         }
-
-        return "";
     }
 
     @RequestMapping("/department/{dept}/project/resource/delete")

@@ -13,7 +13,11 @@
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
-    <mvc:annotation-driven />
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <mvc:resources mapping="/favicon.ico" location="/favicon.ico" cache-period="31556926" />
     <mvc:resources mapping="/img/**" location="/img/" cache-period="31556926" />

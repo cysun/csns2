@@ -243,7 +243,8 @@ public class ForumTopicControllerS {
     }
 
     @RequestMapping("/department/{dept}/forum/topic/deleteAttachment")
-    public @ResponseBody String deleteAttachment( @ModelAttribute Post post,
+    @ResponseBody
+    public void deleteAttachment( @ModelAttribute Post post,
         @RequestParam Long fileId )
     {
         for( File attachment : post.getAttachments() )
@@ -254,8 +255,6 @@ public class ForumTopicControllerS {
                     + " deleted attachment " + fileId );
                 break;
             }
-
-        return "";
     }
 
 }

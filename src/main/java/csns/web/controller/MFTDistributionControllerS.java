@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -51,13 +51,14 @@ public class MFTDistributionControllerS {
     @Autowired
     private MFTDistributionDao mftDistributionDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( MFTDistributionControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( MFTDistributionControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder, WebRequest request )
     {
-        binder.registerCustomEditor( Date.class, new CustomDateEditor(
-            new SimpleDateFormat( "MM/yyyy" ), true ) );
+        binder.registerCustomEditor( Date.class,
+            new CustomDateEditor( new SimpleDateFormat( "MM/yyyy" ), true ) );
     }
 
     @RequestMapping(value = "/department/{dept}/mft/distribution/edit",
@@ -81,23 +82,21 @@ public class MFTDistributionControllerS {
     }
 
     @RequestMapping("/department/{dept}/mft/distribution/addEntry")
-    public @ResponseBody
-    String addEntry(
+    @ResponseBody
+    public void addEntry(
         @ModelAttribute("distribution") MFTDistribution distribution,
         @RequestParam int value, @RequestParam int percentile )
     {
-        distribution.getEntries().add(
-            new MFTDistributionEntry( value, percentile ) );
+        distribution.getEntries()
+            .add( new MFTDistributionEntry( value, percentile ) );
         logger.info( SecurityUtils.getUser().getUsername() + " added entry ("
             + value + "," + percentile + ") to mft distribution "
             + distribution.getId() );
-
-        return "";
     }
 
     @RequestMapping("/department/{dept}/mft/distribution/deleteEntry")
-    public @ResponseBody
-    String deleteEntry(
+    @ResponseBody
+    public void deleteEntry(
         @ModelAttribute("distribution") MFTDistribution distribution,
         @RequestParam int value )
     {
@@ -110,8 +109,6 @@ public class MFTDistributionControllerS {
                     + " from mft distribution " + distribution.getId() );
                 break;
             }
-
-        return "";
     }
 
 }

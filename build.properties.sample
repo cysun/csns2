@@ -31,20 +31,11 @@ mail.smtp.server=localhost
 mail.smtp.username=cysun@localhost.localdomain
 mail.smtp.password=abcd
 
-## JavaScript libraries such as jQuery and CKEditor are hosted outside the
-## project. If you have internet connection during development, you may use
-## the ones hosted on csns.calstatela.edu; otherwise you can download the
-## libraries and place them under src/main/webapp/js.
-jquery.url=http://csns.calstatela.edu/static/jquery-1.11.1.min.js
-jqueryui.url=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.js
-jqueryui.css=http://csns.calstatela.edu/static/jqueryui-1.11.0/jquery-ui.min.css
+## JavaScript libraries.
+jquery.url=https://code.jquery.com/jquery-3.1.1.min.js
+jqueryui.url=https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
+jqueryui.css=https://code.jquery.com/ui/1.12.1/themes/redmond/jquery-ui.css
+highcharts=https://code.highcharts.com
+mathjax.url=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins2
 ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.5.7/ckeditor.js
-highcharts=http://csns.calstatela.edu/static/highcharts
-mathjax.url=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-#jquery.url=https://code.jquery.com/jquery-1.12.2.min.js
-#jqueryui.url=https://code.jquery.com/ui/1.11.4/jquery-ui.min.js
-#jqueryui.css=https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css
-#jquery.plugins=/js/jqueryplugins
-#ckeditor.url=https://cdn.ckeditor.com/4.5.7/full/ckeditor.js
-#highcharts=https://code.highcharts.com

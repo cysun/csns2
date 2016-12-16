@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -69,7 +69,8 @@ public class SurveyChartControllerS {
     @Autowired
     private SurveyChartSeriesValidator surveyChartSeriesValidator;
 
-    private static final Logger logger = LoggerFactory.getLogger( SurveyChartControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SurveyChartControllerS.class );
 
     @RequestMapping(value = "/department/{dept}/survey/chart/create",
         method = RequestMethod.GET)
@@ -93,8 +94,8 @@ public class SurveyChartControllerS {
         chart.setDepartment( departmentDao.getDepartment( dept ) );
         chart = surveyChartDao.saveSurveyChart( chart );
 
-        logger.info( user.getUsername() + " created survey chart "
-            + chart.getId() );
+        logger.info(
+            user.getUsername() + " created survey chart " + chart.getId() );
 
         sessionStatus.setComplete();
         return "redirect:view?id=" + chart.getId();
@@ -121,31 +122,29 @@ public class SurveyChartControllerS {
         chart.setDate( new Date() );
         chart = surveyChartDao.saveSurveyChart( chart );
 
-        logger.info( user.getUsername() + " edited survey chart "
-            + chart.getId() );
+        logger.info(
+            user.getUsername() + " edited survey chart " + chart.getId() );
 
         sessionStatus.setComplete();
         return "redirect:view?id=" + chart.getId();
     }
 
     @RequestMapping("/department/{dept}/survey/chart/addXCoordinate")
-    public @ResponseBody
-    String addXCoordinate( @ModelAttribute("chart") SurveyChart chart,
+    @ResponseBody
+    public void addXCoordinate( @ModelAttribute("chart") SurveyChart chart,
         @RequestParam String coordinate )
     {
         chart.getxCoordinates().add( coordinate );
         logger.info( "X coordinate added: " + coordinate );
-        return "";
     }
 
     @RequestMapping("/department/{dept}/survey/chart/removeXCoordinate")
-    public @ResponseBody
-    String removeXCoordinate( @ModelAttribute("chart") SurveyChart chart,
+    @ResponseBody
+    public void removeXCoordinate( @ModelAttribute("chart") SurveyChart chart,
         @RequestParam String coordinate )
     {
         chart.getxCoordinates().remove( coordinate );
         logger.info( "X coordinate removed: " + coordinate );
-        return "";
     }
 
     @RequestMapping(value = "/department/{dept}/survey/chart/addSeries",
@@ -160,8 +159,7 @@ public class SurveyChartControllerS {
 
     @RequestMapping(value = "/department/{dept}/survey/chart/addSeries",
         method = RequestMethod.POST)
-    public String addSeries(
-        @ModelAttribute("series") SurveyChartSeries series,
+    public String addSeries( @ModelAttribute("series") SurveyChartSeries series,
         BindingResult result, SessionStatus sessionStatus )
     {
         surveyChartSeriesValidator.validate( series, result );
@@ -205,8 +203,8 @@ public class SurveyChartControllerS {
     }
 
     @RequestMapping("/department/{dept}/survey/chart/addPoint")
-    public @ResponseBody
-    String addPoint( @ModelAttribute("series") SurveyChartSeries series,
+    @ResponseBody
+    public void addPoint( @ModelAttribute("series") SurveyChartSeries series,
         @RequestParam Long surveyId, @RequestParam int sectionIndex,
         @RequestParam int questionIndex )
     {
@@ -218,12 +216,11 @@ public class SurveyChartControllerS {
 
         logger.info( "Chart point added: (" + surveyId + "," + sectionIndex
             + "," + questionIndex + ")" );
-        return "";
     }
 
     @RequestMapping("/department/{dept}/survey/chart/removePoint")
-    public @ResponseBody
-    String removePoint( @ModelAttribute("series") SurveyChartSeries series,
+    @ResponseBody
+    public void removePoint( @ModelAttribute("series") SurveyChartSeries series,
         @RequestParam Long surveyId, @RequestParam int sectionIndex,
         @RequestParam int questionIndex )
     {
@@ -238,8 +235,6 @@ public class SurveyChartControllerS {
         else
             logger.info( "Chart point not found: (" + surveyId + ","
                 + sectionIndex + "," + questionIndex + ")" );
-
-        return "";
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -24,15 +24,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 
-@Controller
+@RestController
 @SuppressWarnings("deprecation")
 public class UserService {
 
@@ -42,18 +42,19 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final Logger logger = LoggerFactory.getLogger( UserService.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( UserService.class );
 
     @RequestMapping("/service/user/login")
-    public String login( @RequestParam String username,
+    public User login( @RequestParam String username,
         @RequestParam String password, ModelMap models )
     {
         User user = userDao.getUserByUsername( username );
-        if( user == null
-            || !passwordEncoder.encodePassword( password, null ).equals(
-                user.getPassword() ) )
+        if( user == null || !passwordEncoder.encodePassword( password, null )
+            .equals( user.getPassword() ) )
         {
-            logger.info( "Username or password does not match for " + username );
+            logger
+                .info( "Username or password does not match for " + username );
             user = null;
         }
         else
@@ -66,8 +67,7 @@ public class UserService {
                 logger.info( "Access key generated for " + username );
             }
         }
-        models.put( "user", user );
-        return "jsonView";
+        return user;
     }
 
 }

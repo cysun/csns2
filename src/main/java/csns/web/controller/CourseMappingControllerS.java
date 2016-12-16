@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -56,7 +55,8 @@ public class CourseMappingControllerS {
     @Autowired
     private CourseMappingDao courseMappingDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( CourseMappingControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( CourseMappingControllerS.class );
 
     @RequestMapping("/department/{dept}/course/mapping/addCourse")
     @ResponseBody
@@ -80,7 +80,7 @@ public class CourseMappingControllerS {
     }
 
     @RequestMapping("/department/{dept}/course/mapping/removeCourse")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public void removeCourse( @ModelAttribute("mapping") CourseMapping mapping,
         @RequestParam Long courseId )
     {

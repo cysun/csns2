@@ -214,7 +214,8 @@ public class SubmissionController {
     }
 
     @RequestMapping("/submission/remove")
-    public @ResponseBody String remove( @RequestParam Long fileId )
+    @ResponseBody
+    public void remove( @RequestParam Long fileId )
     {
         User user = SecurityUtils.getUser();
         File file = fileDao.getFile( fileId );
@@ -230,8 +231,6 @@ public class SubmissionController {
 
         logger.info( user.getUsername() + " removed file " + file.getId()
             + " from submission " + submission.getId() );
-
-        return "";
     }
 
     @RequestMapping("/submission/list")

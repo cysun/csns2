@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -55,7 +55,8 @@ public class SubscriptionController {
     @Autowired
     SubscriptionDao subscriptionDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( SubscriptionController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SubscriptionController.class );
 
     private Subscribable subscribe( String type, Long id )
     {
@@ -120,19 +121,19 @@ public class SubscriptionController {
     }
 
     @RequestMapping(value = "/subscription/{type}/subscribe", params = "ajax")
-    public @ResponseBody
-    String ajaxSubscribe( @PathVariable String type, @RequestParam Long id )
+    @ResponseBody
+    public void ajaxSubscribe( @PathVariable String type,
+        @RequestParam Long id )
     {
         subscribe( type, id );
-        return "";
     }
 
     @RequestMapping(value = "/subscription/{type}/unsubscribe", params = "ajax")
-    public @ResponseBody
-    String ajaxUnsubscribe( @PathVariable String type, @RequestParam Long id )
+    @ResponseBody
+    public void ajaxUnsubscribe( @PathVariable String type,
+        @RequestParam Long id )
     {
         unsubscribe( type, id );
-        return "";
     }
 
     @RequestMapping("/subscription/{type}/subscribe")
@@ -147,8 +148,8 @@ public class SubscriptionController {
     }
 
     @RequestMapping("/subscription/{type}/unsubscribe")
-    public String unsubscribe( @PathVariable String type,
-        @RequestParam Long id, ModelMap models )
+    public String unsubscribe( @PathVariable String type, @RequestParam Long id,
+        ModelMap models )
     {
         Subscribable subscribable = unsubscribe( type, id );
         String[] arguments = { subscribable.getType(), subscribable.getName() };

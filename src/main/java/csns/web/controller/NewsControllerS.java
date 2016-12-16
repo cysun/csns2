@@ -175,7 +175,8 @@ public class NewsControllerS {
     }
 
     @RequestMapping("/department/{dept}/news/deleteAttachment")
-    public @ResponseBody String deleteAttachment( @ModelAttribute News news,
+    @ResponseBody
+    public void deleteAttachment( @ModelAttribute News news,
         @RequestParam Long fileId )
     {
         List<File> attachments = news.getTopic()
@@ -189,8 +190,6 @@ public class NewsControllerS {
                     + " deleted attachment " + fileId );
                 break;
             }
-
-        return "";
     }
 
 }

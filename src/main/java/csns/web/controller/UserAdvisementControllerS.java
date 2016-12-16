@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -59,7 +59,8 @@ public class UserAdvisementControllerS {
     @Autowired
     private FileIO fileIO;
 
-    private Logger logger = LoggerFactory.getLogger( UserAdvisementControllerS.class );
+    private Logger logger = LoggerFactory
+        .getLogger( UserAdvisementControllerS.class );
 
     @RequestMapping(value = "/user/advisement/edit", method = RequestMethod.GET)
     public String edit( @RequestParam Long id, ModelMap models )
@@ -70,15 +71,14 @@ public class UserAdvisementControllerS {
 
     @RequestMapping(value = "/user/advisement/edit",
         method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute("record") AdvisementRecord record,
-        @RequestParam(value = "file", required = false) MultipartFile[] uploadedFiles,
+    public String edit( @ModelAttribute("record") AdvisementRecord record,
+        @RequestParam(value = "file",
+            required = false) MultipartFile[] uploadedFiles,
         SessionStatus sessionStatus )
     {
         User student = record.getStudent();
-        if( uploadedFiles != null )
-            record.getAttachments().addAll(
-                fileIO.save( uploadedFiles, student, false ) );
+        if( uploadedFiles != null ) record.getAttachments()
+            .addAll( fileIO.save( uploadedFiles, student, false ) );
 
         record = advisementRecordDao.saveAdvisementRecord( record );
 
@@ -91,7 +91,8 @@ public class UserAdvisementControllerS {
     }
 
     @RequestMapping("/user/advisement/deleteAttachment")
-    public @ResponseBody String deleteAttachment(
+    @ResponseBody
+    public void deleteAttachment(
         @ModelAttribute("record") AdvisementRecord record,
         @RequestParam Long fileId )
     {
@@ -106,8 +107,6 @@ public class UserAdvisementControllerS {
 
                 break;
             }
-
-        return "";
     }
 
     @RequestMapping(value = "/user/advisement/email",
@@ -139,8 +138,8 @@ public class UserAdvisementControllerS {
         emailUtils.sendHtmlMail( email );
         sessionStatus.setComplete();
 
-        models.put( "backUrl", "/user/view?id="
-            + email.getRecipients().get( 0 ).getId() + "#4" );
+        models.put( "backUrl",
+            "/user/view?id=" + email.getRecipients().get( 0 ).getId() + "#4" );
         models.put( "message", "status.email.sent" );
         return "status";
     }

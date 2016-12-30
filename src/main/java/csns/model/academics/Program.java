@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.advisement;
+package csns.model.academics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ import javax.persistence.Table;
 import csns.model.academics.Department;
 import csns.model.core.User;
 
-@Entity(name = "AdvisementProgram")
-@Table(name = "advisement_programs")
+@Entity
+@Table(name = "programs")
 public class Program implements Serializable {
 
     private static final long serialVersionUID = 1L;

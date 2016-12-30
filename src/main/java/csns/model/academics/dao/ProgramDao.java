@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.advisement.dao;
+package csns.model.academics.dao;
 
 import java.util.List;
 
 import csns.model.academics.Department;
-import csns.model.advisement.Program;
+import csns.model.academics.Program;
 
 public interface ProgramDao {
 
     Program getProgram( Long id );
 
     List<Program> getPrograms( Department department );
+
+    List<Program> searchPrograms( String text, int maxResults );
 
     Program saveProgram( Program program );
 

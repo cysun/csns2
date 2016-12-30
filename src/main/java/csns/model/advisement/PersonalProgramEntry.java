@@ -31,7 +31,7 @@ import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
 
 @Entity
-@Table(name = "advisement_personal_program_entries")
+@Table(name = "personal_program_entries")
 public class PersonalProgramEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;

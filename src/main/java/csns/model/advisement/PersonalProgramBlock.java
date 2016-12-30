@@ -31,7 +31,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "advisement_personal_program_blocks")
+@Table(name = "personal_program_blocks")
 public class PersonalProgramBlock implements Serializable {
 
     private static final long serialVersionUID = 1L;

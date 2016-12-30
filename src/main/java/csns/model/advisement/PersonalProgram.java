@@ -35,10 +35,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import csns.model.academics.Program;
 import csns.model.core.User;
 
 @Entity
-@Table(name = "advisement_personal_programs")
+@Table(name = "personal_programs")
 public class PersonalProgram implements Serializable {
 
     private static final long serialVersionUID = 1L;

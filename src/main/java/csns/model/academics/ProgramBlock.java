@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.advisement;
+package csns.model.academics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import javax.persistence.Table;
 import csns.model.academics.Course;
 
 @Entity
-@Table(name = "advisement_program_blocks")
+@Table(name = "program_blocks")
 public class ProgramBlock implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class ProgramBlock implements Serializable {
     private int unitsRequired;
 
     @ManyToMany
-    @JoinTable(name = "advisement_program_block_courses",
+    @JoinTable(name = "program_block_courses",
         joinColumns = @JoinColumn(name = "block_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id"))
     @OrderBy("code asc")

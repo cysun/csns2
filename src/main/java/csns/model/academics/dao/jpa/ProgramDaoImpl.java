@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.advisement.dao.jpa;
+package csns.model.academics.dao.jpa;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
-import csns.model.advisement.Program;
-import csns.model.advisement.dao.ProgramDao;
+import csns.model.academics.Program;
+import csns.model.academics.dao.ProgramDao;
 
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
@@ -51,6 +52,15 @@ public class ProgramDaoImpl implements ProgramDao {
         return entityManager.createQuery( query, Program.class )
             .setParameter( "department", department )
             .getResultList();
+    }
+
+    @Override
+    public List<Program> searchPrograms( String text, int maxResults )
+    {
+        TypedQuery<Program> query = entityManager
+            .createNamedQuery( "program.search", Program.class );
+        if( maxResults > 0 ) query.setMaxResults( maxResults );
+        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

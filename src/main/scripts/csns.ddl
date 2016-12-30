@@ -9,57 +9,6 @@ create sequence hibernate_sequence start 1 increment 1;
         primary key (id)
     );
 
-    create table advisement_personal_program_blocks (
-        id int8 not null,
-        description varchar(255),
-        name varchar(255),
-        program_id int8,
-        block_index int4,
-        primary key (id)
-    );
-
-    create table advisement_personal_program_entries (
-        id int8 not null,
-        course_id int8,
-        enrollment_id int8,
-        block_id int8,
-        primary key (id)
-    );
-
-    create table advisement_personal_programs (
-        id int8 not null,
-        approve_date timestamp,
-        approved_by int8,
-        program_id int8,
-        primary key (id)
-    );
-
-    create table advisement_program_block_courses (
-        block_id int8 not null,
-        course_id int8 not null
-    );
-
-    create table advisement_program_blocks (
-        id int8 not null,
-        description varchar(255),
-        name varchar(255),
-        units_required int4 not null,
-        program_id int8,
-        block_index int4,
-        primary key (id)
-    );
-
-    create table advisement_programs (
-        id int8 not null,
-        description varchar(255),
-        name varchar(255) not null,
-        obsolete boolean not null,
-        publish_date timestamp,
-        department_id int8,
-        last_edited_by int8,
-        primary key (id)
-    );
-
     create table advisement_record_attachments (
         record_id int8 not null,
         file_id int8 not null
@@ -533,6 +482,31 @@ create sequence hibernate_sequence start 1 increment 1;
         primary key (id)
     );
 
+    create table personal_program_blocks (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255),
+        program_id int8,
+        block_index int4,
+        primary key (id)
+    );
+
+    create table personal_program_entries (
+        id int8 not null,
+        course_id int8,
+        enrollment_id int8,
+        block_id int8,
+        primary key (id)
+    );
+
+    create table personal_programs (
+        id int8 not null,
+        approve_date timestamp,
+        approved_by int8,
+        program_id int8,
+        primary key (id)
+    );
+
     create table prereg_schedule_registrations (
         id int8 not null,
         comments varchar(255),
@@ -581,6 +555,32 @@ create sequence hibernate_sequence start 1 increment 1;
         course_id int8,
         linked_by int8,
         schedule_id int8,
+        primary key (id)
+    );
+
+    create table program_block_courses (
+        block_id int8 not null,
+        course_id int8 not null
+    );
+
+    create table program_blocks (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255),
+        units_required int4 not null,
+        program_id int8,
+        block_index int4,
+        primary key (id)
+    );
+
+    create table programs (
+        id int8 not null,
+        description varchar(255),
+        name varchar(255) not null,
+        obsolete boolean not null,
+        publish_date timestamp,
+        department_id int8,
+        last_edited_by int8,
         primary key (id)
     );
 
@@ -1141,61 +1141,6 @@ create sequence hibernate_sequence start 1 increment 1;
         foreign key (student_id) 
         references users;
 
-    alter table advisement_personal_program_blocks 
-        add constraint FK5rkoigpjhkof2xilcagq90t1c 
-        foreign key (program_id) 
-        references advisement_personal_programs;
-
-    alter table advisement_personal_program_entries 
-        add constraint FK7njruqqdsxb7otitm4t250fne 
-        foreign key (course_id) 
-        references courses;
-
-    alter table advisement_personal_program_entries 
-        add constraint FKhuqeo9uyeaj22eeeb0betvkdg 
-        foreign key (enrollment_id) 
-        references enrollments;
-
-    alter table advisement_personal_program_entries 
-        add constraint FK9ewfachf3x6ju3170uggvk0ep 
-        foreign key (block_id) 
-        references advisement_personal_program_blocks;
-
-    alter table advisement_personal_programs 
-        add constraint FKox6d0xl70d6aqu59n1v7cfnlo 
-        foreign key (approved_by) 
-        references users;
-
-    alter table advisement_personal_programs 
-        add constraint FKh0gbw38vxxb4x7telipx9o72o 
-        foreign key (program_id) 
-        references advisement_programs;
-
-    alter table advisement_program_block_courses 
-        add constraint FKnimmmpp76wenryvisx8asiyxu 
-        foreign key (course_id) 
-        references courses;
-
-    alter table advisement_program_block_courses 
-        add constraint FKa6uy2yoo08ni9hdnycjm937m9 
-        foreign key (block_id) 
-        references advisement_program_blocks;
-
-    alter table advisement_program_blocks 
-        add constraint FK29ekpy0otgrjy6sh4ppu8tojf 
-        foreign key (program_id) 
-        references advisement_programs;
-
-    alter table advisement_programs 
-        add constraint FKphmf6hlcuyy3e1vlkr0cp02hd 
-        foreign key (department_id) 
-        references departments;
-
-    alter table advisement_programs 
-        add constraint FKog3ck24yk2cwj4xgeyvv80my7 
-        foreign key (last_edited_by) 
-        references users;
-
     alter table advisement_record_attachments 
         add constraint FKftg6oecxviruh653eijskud32 
         foreign key (file_id) 
@@ -1731,6 +1676,36 @@ create sequence hibernate_sequence start 1 increment 1;
         foreign key (topic_id) 
         references forum_topics;
 
+    alter table personal_program_blocks 
+        add constraint FK30q9qyn8wkolgd7yej6dwwghs 
+        foreign key (program_id) 
+        references personal_programs;
+
+    alter table personal_program_entries 
+        add constraint FKsysrrkugmyjve6nussbql35bc 
+        foreign key (course_id) 
+        references courses;
+
+    alter table personal_program_entries 
+        add constraint FKhgdby36jf3mfdflm5qb6k3x2d 
+        foreign key (enrollment_id) 
+        references enrollments;
+
+    alter table personal_program_entries 
+        add constraint FKm9rs4748jb4qxjdx6xmpqe6jr 
+        foreign key (block_id) 
+        references personal_program_blocks;
+
+    alter table personal_programs 
+        add constraint FKk03jhtcdp7utd8jub1xjmpacc 
+        foreign key (approved_by) 
+        references users;
+
+    alter table personal_programs 
+        add constraint FKh8em09oudpn1vtmfcm9xbnvwc 
+        foreign key (program_id) 
+        references programs;
+
     alter table prereg_schedule_registrations 
         add constraint FKllx059j11jemmap6dlhvoq6wy 
         foreign key (schedule_id) 
@@ -1775,6 +1750,31 @@ create sequence hibernate_sequence start 1 increment 1;
         add constraint FKmawmgenb1ua7u6kyxucjfinxs 
         foreign key (schedule_id) 
         references prereg_schedules;
+
+    alter table program_block_courses 
+        add constraint FK9695vxyaeejmel1y3vv7bpydj 
+        foreign key (course_id) 
+        references courses;
+
+    alter table program_block_courses 
+        add constraint FKagkbpnfr2g9qt31jm5snqg11l 
+        foreign key (block_id) 
+        references program_blocks;
+
+    alter table program_blocks 
+        add constraint FK6ca55f8kguyejb7lgdwrakg4y 
+        foreign key (program_id) 
+        references programs;
+
+    alter table programs 
+        add constraint FK7xrusj91mbbujeaxtrrdowj7e 
+        foreign key (department_id) 
+        references departments;
+
+    alter table programs 
+        add constraint FK743oatupdj37v604vwdg3amlj 
+        foreign key (last_edited_by) 
+        references users;
 
     alter table project_advisors 
         add constraint FK9ga66lqyxwk3n0yu9pe6n7dm0 
@@ -2092,9 +2092,9 @@ create sequence hibernate_sequence start 1 increment 1;
         references files;
 
     alter table users 
-        add constraint FKe4elftlc2mfworv7jl88qi8yb 
+        add constraint FKpb5rrytf665yfcum2mhy4jk3q 
         foreign key (personal_program_id) 
-        references advisement_personal_programs;
+        references personal_programs;
 
     alter table users 
         add constraint FKnxpsvtwa6bes7prvq0ka1wad3 

@@ -35,7 +35,7 @@ create table users (
     enabled                 boolean not null default 't',
     temporary               boolean not null default 'f',
     major_id                bigint,
-    program_id              bigint,
+    personal_program_id     bigint,
     num_of_forum_posts      integer not null default 0,
     disk_quota              integer not null default 200,
     access_key              varchar(255) unique
@@ -595,54 +595,59 @@ alter table groups add constraint groups_department_fk
 alter table courses add constraint courses_department_fk
     foreign key (department_id) references departments(id);
 
---------------
--- programs --
---------------
+-------------------------
+-- advisement programs --
+-------------------------
 
-create table programs (
+create table advisement_programs (
     id              bigint primary key,
     department_id   bigint references departments(id),
     name            varchar(255) not null,
-    description     varchar(80000)
+    description     varchar(8000),
+    publish_date    timestamp,
+    last_edited_by  bigint references users(id),
+    obsolete        boolean not null default 'f'
 );
 
-create table program_required_courses (
-    program_id  bigint not null references programs(id),
-    course_id   bigint not null references courses(id),
-  unique (program_id, course_id)
+create table advisement_program_blocks (
+    id              bigint primary key,
+    program_id      bigint references advisement_programs(id),
+    block_index     integer,
+    name            varchar(255),
+    description     varchar(8000),
+    units_required  integer not null default 0
 );
 
-create table program_elective_courses (
-    program_id  bigint not null references programs(id),
-    course_id   bigint not null references courses(id),
-  unique (program_id, course_id)
+create table advisement_program_block_courses (
+    block_id    bigint not null references advisement_program_blocks(id),
+    course_id   bigint not null references courses(id)
 );
 
-alter table users add constraint users_program_fk
-    foreign key (program_id) references programs(id);
+create table advisement_personal_programs (
+    id              bigint primary key,
+    program_id      bigint references advisement_programs(id),
+    approve_date    timestamp,
+    approved_by     bigint references users(id)
+);
 
-alter table programs add column tsv tsvector;
+create table advisement_personal_program_blocks (
+    id          bigint primary key,
+    program_id  bigint references advisement_personal_programs(id),
+    block_index integer,
+    name        varchar(255),
+    description varchar(8000)
+);
 
-create function programs_ts_trigger_function() returns trigger as $$
-declare
-    l_department    departments%rowtype;
-begin
-	if new.department_id is not null then
-        select * into l_department from departments where id = new.department_id;
-        new.tsv := setweight(to_tsvector(l_department.name), 'A') ||
-                   setweight(to_tsvector(l_department.abbreviation), 'A') ||
-                   setweight(to_tsvector(new.name), 'A') ||
-                   setweight(to_tsvector(new.description), 'D');
-    end if;
-    return new;
-end
-$$ language plpgsql;
+create table advisement_personal_program_entries (
+    id              bigint primary key,
+    block_id        bigint references advisement_personal_program_blocks(id),
+    course_id       bigint references courses(id),
+    enrollment_id   bigint references enrollments(id)
+);
 
-create trigger programs_ts_trigger
-    before insert or update on programs
-    for each row execute procedure programs_ts_trigger_function();
-
-create index programs_ts_index on programs using gin(tsv);
+alter table users add constraint users_personal_program_id_fkey
+    foreign key (personal_program_id)
+    references advisement_personal_programs(id);
 
 ---------------------
 -- course mappings --

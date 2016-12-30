@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -16,20 +16,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics.dao.jpa;
+package csns.model.advisement.dao.jpa;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Department;
-import csns.model.academics.Program;
-import csns.model.academics.dao.ProgramDao;
+import csns.model.advisement.Program;
+import csns.model.advisement.dao.ProgramDao;
 
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
@@ -52,15 +51,6 @@ public class ProgramDaoImpl implements ProgramDao {
         return entityManager.createQuery( query, Program.class )
             .setParameter( "department", department )
             .getResultList();
-    }
-
-    @Override
-    public List<Program> searchPrograms( String text, int maxResults )
-    {
-        TypedQuery<Program> query = entityManager.createNamedQuery(
-            "program.search", Program.class );
-        if( maxResults > 0 ) query.setMaxResults( maxResults );
-        return query.setParameter( "text", text ).getResultList();
     }
 
     @Override

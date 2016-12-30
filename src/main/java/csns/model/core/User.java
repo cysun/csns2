@@ -37,6 +37,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -51,7 +52,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import csns.model.academics.AcademicStanding;
 import csns.model.academics.Department;
-import csns.model.academics.Program;
+import csns.model.advisement.PersonalProgram;
 import csns.model.survey.Survey;
 
 @Entity
@@ -170,9 +171,9 @@ public class User
     private Department major;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "program_id")
-    private Program program;
+    @OneToOne
+    @JoinColumn(name = "personal_program_id")
+    private PersonalProgram personalProgram;
 
     @JsonIgnore
     @OneToMany
@@ -674,14 +675,14 @@ public class User
         this.major = major;
     }
 
-    public Program getProgram()
+    public PersonalProgram getPersonalProgram()
     {
-        return program;
+        return personalProgram;
     }
 
-    public void setProgram( Program program )
+    public void setPersonalProgram( PersonalProgram personalProgram )
     {
-        this.program = program;
+        this.personalProgram = personalProgram;
     }
 
     public Map<Department, AcademicStanding> getCurrentStandings()

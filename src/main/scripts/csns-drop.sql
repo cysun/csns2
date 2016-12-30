@@ -119,12 +119,13 @@ drop table course_mapping_group2;
 drop table course_mapping_group1;
 drop table course_mappings;
 
-drop trigger programs_ts_trigger on programs;
-drop function programs_ts_trigger_function();
-alter table users drop constraint users_program_fk;
-drop table program_elective_courses;
-drop table program_required_courses;
-drop table programs;
+alter table users drop constraint users_personal_program_id_fkey;
+drop table advisement_personal_program_entries;
+drop table advisement_personal_program_blocks;
+drop table advisement_personal_programs;
+drop table advisement_program_block_courses;
+drop table advisement_program_blocks;
+drop table advisement_programs;
 
 alter table courses drop constraint courses_department_fk;
 alter table groups drop constraint groups_department_fk;

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -16,26 +16,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics;
+package csns.model.advisement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(name = "programs")
+import csns.model.academics.Department;
+import csns.model.core.User;
+
+@Entity(name = "AdvisementProgram")
+@Table(name = "advisement_programs")
 public class Program implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,57 +56,30 @@ public class Program implements Serializable {
 
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "program_required_courses",
-        joinColumns = @JoinColumn(name = "program_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"),
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "program_id",
-            "course_id" }) })
-    @OrderBy("code asc")
-    private List<Course> requiredCourses;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "program_id")
+    @OrderColumn(name = "block_index")
+    private List<ProgramBlock> blocks;
 
-    @ManyToMany
-    @JoinTable(name = "program_elective_courses",
-        joinColumns = @JoinColumn(name = "program_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"),
-        uniqueConstraints = { @UniqueConstraint(columnNames = { "program_id",
-            "course_id" }) })
-    @OrderBy("code asc")
-    private List<Course> electiveCourses;
+    @Column(name = "publish_date")
+    private Calendar publishDate;
+
+    @ManyToOne
+    @JoinColumn(name = "last_edited_by")
+    private User lastEditedBy;
+
+    @Column(nullable = false)
+    private boolean obsolete;
 
     public Program()
     {
-        requiredCourses = new ArrayList<Course>();
-        electiveCourses = new ArrayList<Course>();
+        blocks = new ArrayList<ProgramBlock>();
     }
 
     public Program( Department department )
     {
         this();
         this.department = department;
-    }
-
-    public Program clone()
-    {
-        Program program = new Program( department );
-
-        program.name = "Copy of " + name;
-        program.description = description;
-        program.getRequiredCourses().addAll( requiredCourses );
-        program.getElectiveCourses().addAll( electiveCourses );
-
-        return program;
-    }
-
-    public boolean contains( Course course )
-    {
-        for( Course c : requiredCourses )
-            if( c.getId().equals( course.getId() ) ) return true;
-
-        for( Course c : electiveCourses )
-            if( c.getId().equals( course.getId() ) ) return true;
-
-        return false;
     }
 
     public Long getId()
@@ -146,24 +122,44 @@ public class Program implements Serializable {
         this.description = description;
     }
 
-    public List<Course> getRequiredCourses()
+    public List<ProgramBlock> getBlocks()
     {
-        return requiredCourses;
+        return blocks;
     }
 
-    public void setRequiredCourses( List<Course> requiredCourses )
+    public void setBlocks( List<ProgramBlock> blocks )
     {
-        this.requiredCourses = requiredCourses;
+        this.blocks = blocks;
     }
 
-    public List<Course> getElectiveCourses()
+    public Calendar getPublishDate()
     {
-        return electiveCourses;
+        return publishDate;
     }
 
-    public void setElectiveCourses( List<Course> electiveCourses )
+    public void setPublishDate( Calendar publishDate )
     {
-        this.electiveCourses = electiveCourses;
+        this.publishDate = publishDate;
+    }
+
+    public User getLastEditedBy()
+    {
+        return lastEditedBy;
+    }
+
+    public void setLastEditedBy( User lastEditedBy )
+    {
+        this.lastEditedBy = lastEditedBy;
+    }
+
+    public boolean isObsolete()
+    {
+        return obsolete;
+    }
+
+    public void setObsolete( boolean obsolete )
+    {
+        this.obsolete = obsolete;
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -53,7 +53,8 @@ public class FileIO {
     @Resource(name = "contentTypes")
     Properties contentTypes;
 
-    private static final Logger logger = LoggerFactory.getLogger( FileIO.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( FileIO.class );
 
     public FileIO()
     {
@@ -66,12 +67,12 @@ public class FileIO {
 
     public java.io.File getDiskFile( File file, boolean followReference )
     {
-        java.io.File diskFile = new java.io.File( fileDir, file.getId()
-            .toString() );
+        java.io.File diskFile = new java.io.File( fileDir,
+            file.getId().toString() );
 
         return diskFile.exists() || !followReference
-            || file.getReference() == null ? diskFile : new java.io.File(
-            fileDir, file.getReference().getId().toString() );
+            || file.getReference() == null ? diskFile
+                : getDiskFile( file.getReference(), true );
     }
 
     public File save( MultipartFile uploadedFile, User user, boolean isPublic )
@@ -177,22 +178,22 @@ public class FileIO {
     public void delete( File file )
     {
         java.io.File diskFile = getDiskFile( file, false );
-        if( !diskFile.delete() )
-            logger.error( "Failed to delete file " + diskFile.getAbsolutePath() );
+        if( !diskFile.delete() ) logger
+            .error( "Failed to delete file " + diskFile.getAbsolutePath() );
     }
 
     public void write( File file, HttpServletResponse response )
     {
-        String contentType = contentTypes.getProperty( file.getFileExtension()
-            .toLowerCase() );
+        String contentType = contentTypes
+            .getProperty( file.getFileExtension().toLowerCase() );
         if( contentType == null ) contentType = file.getType();
 
         try
         {
             response.setContentType( contentType );
             response.setHeader( "Content-Length", file.getSize().toString() );
-            response.setHeader( "Content-Disposition", "inline; filename="
-                + file.getName().replace( ' ', '_' ) );
+            response.setHeader( "Content-Disposition",
+                "inline; filename=" + file.getName().replace( ' ', '_' ) );
             copy( file, response.getOutputStream() );
         }
         catch( Exception e )

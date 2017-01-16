@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -123,18 +123,15 @@ public class SiteController {
         return "site/view";
     }
 
-    @RequestMapping("/site/create")
-    public String create( @RequestParam Long sectionId,
-        @RequestParam(required = false) Long siteId, ModelMap models )
+    private String create( Long sectionId, Site oldSite )
     {
         Section section = sectionDao.getSection( sectionId );
         if( section.getSite() != null )
             return "redirect:" + section.getSiteUrl();
 
         Site site = new Site( section );
-        if( siteId != null )
+        if( oldSite != null )
         {
-            Site oldSite = siteDao.getSite( siteId );
             site = oldSite.clone();
             site.setSection( section );
 
@@ -151,8 +148,43 @@ public class SiteController {
         logger.info( SecurityUtils.getUser().getUsername()
             + " created site for section " + section.getId() );
 
-        String url = "redirect:" + section.getSiteUrl();
-        return siteId == null ? url : url + "/block/list";
+        return "redirect:" + section.getSiteUrl() + "/block/list";
+    }
+
+    @RequestMapping(value = "/site/create", params = "siteId")
+    public String create( @RequestParam Long sectionId, Long siteId )
+    {
+        return create( sectionId, siteDao.getSite( siteId ) );
+    }
+
+    @RequestMapping(value = "/site/create", params = "siteUrl")
+    public String create( @RequestParam Long sectionId, String siteUrl,
+        ModelMap models )
+    {
+        String tokens[] = siteUrl.split( "/|-" );
+        int index = -1;
+        for( int i = 0; i < tokens.length; ++i )
+            if( tokens[i].equalsIgnoreCase( "site" ) )
+            {
+                index = i;
+                break;
+            }
+        if( index < 0 || tokens.length <= index + 3 )
+        {
+            models.put( "message", "error.site.invalid.url" );
+            return "error";
+        }
+
+        String qtr = tokens[index + 1];
+        String cc = tokens[index + 2];
+        int sn = Integer.parseInt( tokens[index + 3] );
+        return create( sectionId, getSection( qtr, cc, sn ).getSite() );
+    }
+
+    @RequestMapping(value = "/site/create")
+    public String create( @RequestParam Long sectionId )
+    {
+        return create( sectionId, (Site) null );
     }
 
     @RequestMapping("/site/{qtr}/{cc}-{sn}/settings")

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015-2017, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -24,75 +24,80 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import csns.model.academics.Department;
 import csns.model.academics.Program;
-import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.ProgramBlock;
+import csns.model.academics.dao.ProgramBlockDao;
 import csns.model.academics.dao.ProgramDao;
 import csns.security.SecurityUtils;
 
 @Controller
-@SessionAttributes("program")
-public class ProgramControllerS {
+@SessionAttributes("block")
+public class ProgramBlockControllerS {
 
     @Autowired
     private ProgramDao programDao;
 
     @Autowired
-    private DepartmentDao departmentDao;
+    private ProgramBlockDao programBlockDao;
 
     private static final Logger logger = LoggerFactory
-        .getLogger( ProgramControllerS.class );
+        .getLogger( ProgramBlockControllerS.class );
 
-    @RequestMapping(value = "/department/{dept}/program/create",
+    @RequestMapping(value = "/department/{dept}/program/block/add",
         method = RequestMethod.GET)
-    public String create( @PathVariable String dept, ModelMap models )
+    public String add( @RequestParam Long programId, ModelMap models )
     {
-        Department department = departmentDao.getDepartment( dept );
-        models.put( "program", new Program( department ) );
-        return "program/create";
+        models.put( "program", programDao.getProgram( programId ) );
+        models.put( "block", new ProgramBlock() );
+        return "program/block/add";
     }
 
-    @RequestMapping(value = "/department/{dept}/program/create",
+    @RequestMapping(value = "/department/{dept}/program/block/add",
         method = RequestMethod.POST)
-    public String create( @ModelAttribute Program program,
+    public String add( @RequestParam Long programId,
+        @ModelAttribute("block") ProgramBlock block,
         SessionStatus sessionStatus )
     {
+        Program program = programDao.getProgram( programId );
+        program.getBlocks().add( block );
         program = programDao.saveProgram( program );
         sessionStatus.setComplete();
 
-        logger.info( SecurityUtils.getUser().getUsername() + "created program "
-            + program.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " added block ["
+            + block.getName() + "] to program " + programId );
 
-        return "redirect:view?id=" + program.getId();
+        return "redirect:list?programId=" + programId;
     }
 
-    @RequestMapping(value = "/department/{dept}/program/edit",
+    @RequestMapping(value = "/department/{dept}/program/block/edit",
         method = RequestMethod.GET)
-    public String edit( @RequestParam Long id, ModelMap models )
+    public String edit( @RequestParam Long id, @RequestParam Long programId,
+        ModelMap models )
     {
-        models.put( "program", programDao.getProgram( id ) );
-        return "program/edit";
+        models.put( "block", programBlockDao.getProgramBlock( id ) );
+        models.put( "program", programDao.getProgram( programId ) );
+        return "program/block/edit";
     }
 
-    @RequestMapping(value = "/department/{dept}/program/edit",
+    @RequestMapping(value = "/department/{dept}/program/block/edit",
         method = RequestMethod.POST)
-    public String edit( @ModelAttribute Program program,
+    public String edit( @RequestParam Long programId,
+        @ModelAttribute("block") ProgramBlock block,
         SessionStatus sessionStatus )
     {
-        program = programDao.saveProgram( program );
+        block = programBlockDao.saveProgramBlock( block );
         sessionStatus.setComplete();
 
-        logger.info( SecurityUtils.getUser().getUsername() + "edited program "
-            + program.getId() );
+        logger.info( SecurityUtils.getUser().getUsername() + " edited block "
+            + block.getId() );
 
-        return "redirect:view?id=" + program.getId();
+        return "redirect:list?programId=" + programId;
     }
 
 }

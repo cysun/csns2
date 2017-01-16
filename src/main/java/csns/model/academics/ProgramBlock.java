@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -61,6 +61,18 @@ public class ProgramBlock implements Serializable {
     public ProgramBlock()
     {
         courses = new ArrayList<Course>();
+    }
+
+    public ProgramBlock clone()
+    {
+        ProgramBlock block = new ProgramBlock();
+
+        block.name = name;
+        block.description = description;
+        block.unitsRequired = unitsRequired;
+        block.courses.addAll( courses );
+
+        return block;
     }
 
     public Long getId()

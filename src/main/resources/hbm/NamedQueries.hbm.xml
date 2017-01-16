@@ -58,7 +58,7 @@ select a.* from assignments a
         <return class="csns.model.academics.Program" />
 <![CDATA[
 select p.* from programs p, plainto_tsquery(:text) q
-    where p.department_id is not null
+    where p.publish_date is not null
     and q @@ tsv order by ts_rank(tsv, q, 16|32) desc
 ]]>
     </sql-query>

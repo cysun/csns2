@@ -605,7 +605,7 @@ create table programs (
     name            varchar(255) not null,
     description     varchar(8000),
     publish_date    timestamp,
-    last_edited_by  bigint references users(id),
+    published_by    bigint references users(id),
     obsolete        boolean not null default 'f'
 );
 

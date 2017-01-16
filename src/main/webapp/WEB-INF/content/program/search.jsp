@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <ul id="title">
 <li>Programs</li>
@@ -12,11 +13,13 @@
 
 <c:if test="${not empty programs}">
 <table class="viewtable autowidth">
-<tr><th>Department</th><th>Name</th></tr>
+<tr><th>Department</th><th>Name</th><th>Publish Date</th><th>Published By</th></tr>
 <c:forEach items="${programs}" var="program">
 <tr>
   <td>${program.department.name}</td>
   <td><a href="../department/${program.department.abbreviation}/program/view?id=${program.id}">${program.name}</a></td>
+  <td><fmt:formatDate value="${program.publishDate.time}" pattern="yyyy-MM-dd" /></td>
+  <td>${program.publishedBy.name}</td>
 </tr>
 </c:forEach>
 </table>

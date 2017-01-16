@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -16,29 +16,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.web.validator;
+package csns.web.controller;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.model.academics.Program;
+import csns.model.academics.dao.ProgramDao;
 
-@Component
-public class ProgramValidator implements Validator {
+@Controller
+public class ProgramBlockController {
 
-    @Override
-    public boolean supports( Class<?> clazz )
+    @Autowired
+    private ProgramDao programDao;
+
+    @RequestMapping("/department/{dept}/program/block/list")
+    public String list( @RequestParam Long programId, ModelMap models )
     {
-        return Program.class.isAssignableFrom( clazz );
-    }
-
-    @Override
-    public void validate( Object target, Errors errors )
-    {
-        ValidationUtils.rejectIfEmptyOrWhitespace( errors, "name",
-            "error.field.required" );
+        models.put( "program", programDao.getProgram( programId ) );
+        return "program/block/list";
     }
 
 }

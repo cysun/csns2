@@ -270,11 +270,6 @@
         <put-attribute name="content" value="/WEB-INF/content/department/people.jsp" />
     </definition>
 
-    <definition name="department/programs" extends="layout.basic">
-        <put-attribute name="title" value="Programs" />
-        <put-attribute name="content" value="/WEB-INF/content/department/programs.jsp" />
-    </definition>
-
     <definition name="department/courses" extends="layout.jqueryui">
         <put-attribute name="title" value="Courses" />
         <put-attribute name="content" value="/WEB-INF/content/department/courses.jsp" />
@@ -343,6 +338,11 @@
         <put-attribute name="content" value="/WEB-INF/content/program/search.jsp" />
     </definition>
 
+    <definition name="program/list" extends="layout.basic">
+        <put-attribute name="title" value="Programs" />
+        <put-attribute name="content" value="/WEB-INF/content/program/list.jsp" />
+    </definition>
+
     <definition name="program/view" extends="layout.basic">
         <put-attribute name="title" value="View Program" />
         <put-attribute name="content" value="/WEB-INF/content/program/view.jsp" />
@@ -356,6 +356,21 @@
     <definition name="program/edit" extends="layout.qa">
         <put-attribute name="title" value="Edit Program" />
         <put-attribute name="content" value="/WEB-INF/content/program/edit.jsp" />
+    </definition>
+
+    <definition name="program/block/list" extends="layout.jqueryui">
+        <put-attribute name="title" value="Program Blocks" />
+        <put-attribute name="content" value="/WEB-INF/content/program/block/list.jsp" />
+    </definition>
+
+    <definition name="program/block/add" extends="layout.qa">
+        <put-attribute name="title" value="Add Program Block" />
+        <put-attribute name="content" value="/WEB-INF/content/program/block/add.jsp" />
+    </definition>
+
+    <definition name="program/block/edit" extends="layout.qa">
+        <put-attribute name="title" value="Edit Program Block" />
+        <put-attribute name="content" value="/WEB-INF/content/program/block/edit.jsp" />
     </definition>
 
     <!-- ====== -->

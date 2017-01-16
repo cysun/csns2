@@ -13,11 +13,12 @@ $(function(){
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/program/search' />">Programs</a></li>
-<li><a class="bc" href="list">${program.department.name}</a></li>
-<li>Create Program</li>
+<li><a class="bc" href="../list">${program.department.name}</a></li>
+<li><a class="bc" href="list?programId=${program.id}">${program.name}</a></li>
+<li>Edit Block</li>
 </ul>
 
-<form:form modelAttribute="program">
+<form:form modelAttribute="block">
 <table class="general">
   <tr>
     <th class="shrink">Name *</th>
@@ -30,8 +31,14 @@ $(function(){
     <td><form:textarea path="description" rows="5" cols="80" /></td>
   </tr>
   <tr>
+    <th class="shrink">Units Required *</th>
+    <td>
+      <form:input path="unitsRequired" cssClass="smallinput" required="true" />
+    </td>
+  </tr>
+  <tr>
     <th></th>
-    <td><input type="submit" class="subbutton" value="Create" /></td>
+    <td><input type="submit" class="subbutton" value="Save" /></td>
   </tr>
 </table>
 </form:form>

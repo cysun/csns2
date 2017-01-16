@@ -53,16 +53,16 @@ $(function(){
     <li><a href="<c:url value='/department/${dept}/people'/>"><img alt=""
            src="<c:url value='/img/icons/group.png' />" />People</a></li>
 </security:authorize>
-<%--
-    <li><a href="<c:url value='/department/${dept}/programs' />"><img alt=""
-           src="<c:url value='/img/icons/reports.png' />" />Programs</a></li>
---%>
     <li><a href="<c:url value='/department/${dept}/courses' />"><img alt=""
            src="<c:url value='/img/icons/books.png' />" />Courses</a></li>
     <li><a href="<c:url value='/department/${dept}/sections' />"><img alt=""
            src="<c:url value='/img/icons/blackboard_sum.png' />" />Sections</a></li>
     <li><a href="<c:url value='/department/${dept}/projects' />"><img alt=""
            src="<c:url value='/img/icons/bricks.png' />" />Projects</a></li>
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
+    <li><a href="<c:url value='/department/${dept}/program/list' />"><img alt=""
+           src="<c:url value='/img/icons/reports.png' />" />Programs</a></li>
+</security:authorize>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
     <li><a href="<c:url value='/department/${dept}/prereg/schedule/list'/>"><img alt=""
            src="<c:url value='/img/icons/calendar.png' />" />Pre-Registration</a></li>

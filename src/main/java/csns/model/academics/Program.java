@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -65,8 +65,8 @@ public class Program implements Serializable {
     private Calendar publishDate;
 
     @ManyToOne
-    @JoinColumn(name = "last_edited_by")
-    private User lastEditedBy;
+    @JoinColumn(name = "published_by")
+    private User publishedBy;
 
     @Column(nullable = false)
     private boolean obsolete;
@@ -74,12 +74,32 @@ public class Program implements Serializable {
     public Program()
     {
         blocks = new ArrayList<ProgramBlock>();
+        obsolete = false;
     }
 
     public Program( Department department )
     {
         this();
         this.department = department;
+    }
+
+    public Program clone()
+    {
+        Program program = new Program();
+
+        program.department = department;
+        program.name = "Copy of " + name;
+        program.description = description;
+        for( ProgramBlock block : blocks )
+            program.blocks.add( block.clone() );
+
+        return program;
+    }
+
+    public boolean isPublished()
+    {
+        return publishDate != null
+            && Calendar.getInstance().after( publishDate );
     }
 
     public Long getId()
@@ -142,14 +162,14 @@ public class Program implements Serializable {
         this.publishDate = publishDate;
     }
 
-    public User getLastEditedBy()
+    public User getPublishedBy()
     {
-        return lastEditedBy;
+        return publishedBy;
     }
 
-    public void setLastEditedBy( User lastEditedBy )
+    public void setPublishedBy( User publishedBy )
     {
-        this.lastEditedBy = lastEditedBy;
+        this.publishedBy = publishedBy;
     }
 
     public boolean isObsolete()

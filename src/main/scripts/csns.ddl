@@ -580,7 +580,7 @@ create sequence hibernate_sequence start 1 increment 1;
         obsolete boolean not null,
         publish_date timestamp,
         department_id int8,
-        last_edited_by int8,
+        published_by int8,
         primary key (id)
     );
 
@@ -1772,8 +1772,8 @@ create sequence hibernate_sequence start 1 increment 1;
         references departments;
 
     alter table programs 
-        add constraint FK743oatupdj37v604vwdg3amlj 
-        foreign key (last_edited_by) 
+        add constraint FK507rq74eqb0jmn6i9ugsu6uy2 
+        foreign key (published_by) 
         references users;
 
     alter table project_advisors 

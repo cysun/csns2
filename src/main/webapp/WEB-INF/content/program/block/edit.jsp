@@ -9,6 +9,12 @@ $(function(){
         });
     });
 });
+function removeBlock()
+{
+    var msg = "Are you sure you want to remove this block?";
+    if( confirm(msg) )
+        window.location.href = "remove?programId=${program.id}&blockId=${block.id}";
+}
 </script>
 
 <ul id="title">
@@ -16,6 +22,8 @@ $(function(){
 <li><a class="bc" href="../list">${program.department.name}</a></li>
 <li><a class="bc" href="list?programId=${program.id}">${program.name}</a></li>
 <li>Edit Block</li>
+<li class="align_right"><a href="javascript:removeBlock()"><img title="Remove Block"
+  alt="[Remove Block]" src="<c:url value='/img/icons/brick_delete.png' />" /></a></li>
 </ul>
 
 <form:form modelAttribute="block">

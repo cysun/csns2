@@ -107,7 +107,7 @@ public class ProfileController {
 
         if( user.getMajor() != null )
             models.put( "programs", programDao.getPrograms( user.getMajor() ) );
-
+/*
         Program program = user.getProgram();
         if( program != null )
         {
@@ -120,7 +120,7 @@ public class ProfileController {
             programStatus.sort();
             models.put( "programStatus", programStatus );
         }
-
+*/
         return "profile/program";
     }
 
@@ -169,7 +169,7 @@ public class ProfileController {
         models.put( "subscriptions", subscriptions );
         return "profile/mailinglists";
     }
-
+/*
     @RequestMapping("/profile/setMajor")
     public String setMajor( @RequestParam(required = false) Long majorId )
     {
@@ -206,5 +206,5 @@ public class ProfileController {
         // Program is the 3rd tab in Profile
         return "redirect:../profile#2";
     }
-
+*/
 }

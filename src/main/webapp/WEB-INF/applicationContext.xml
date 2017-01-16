@@ -114,6 +114,7 @@
         <security:intercept-url pattern="/department/*/project/delete" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/project/resource/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/project/**" access="authenticated" />
+        <security:intercept-url pattern="/department/*/program/list" access="permitAll" />
         <security:intercept-url pattern="/department/*/program/view" access="permitAll" />
         <security:intercept-url pattern="/department/*/program/**" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/course/mapping/list" access="permitAll" />

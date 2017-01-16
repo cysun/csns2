@@ -75,6 +75,15 @@ public class ProgramBlock implements Serializable {
         return block;
     }
 
+    public Course removeCourse( Long courseId )
+    {
+        for( int i = 0; i < courses.size(); ++i )
+            if( courses.get( i ).getId().equals( courseId ) )
+                return courses.remove( i );
+
+        return null;
+    }
+
     public Long getId()
     {
         return id;

@@ -77,7 +77,7 @@ public class UserProgramController {
 
         if( user.getMajor() != null )
             models.put( "programs", programDao.getPrograms( user.getMajor() ) );
-
+/*
         Program program = user.getProgram();
         if( program != null )
         {
@@ -89,11 +89,11 @@ public class UserProgramController {
             programStatus.addCourseWaivers( courseWaiverDao.getCourseWaivers( user ) );
             programStatus.sort();
             models.put( "programStatus", programStatus );
-        }
+        } */
 
         return "user/program";
     }
-
+/*
     @RequestMapping("/user/setMajor")
     public String setMajor( @RequestParam Long userId,
         @RequestParam(required = false) Long majorId )
@@ -136,5 +136,5 @@ public class UserProgramController {
         // Program is the 4th tab
         return "redirect:view?id=" + userId + "#3";
     }
-
+*/
 }

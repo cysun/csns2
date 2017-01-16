@@ -102,6 +102,15 @@ public class Program implements Serializable {
             && Calendar.getInstance().after( publishDate );
     }
 
+    public ProgramBlock removeBlock( Long blockId )
+    {
+        for( int i = 0; i < blocks.size(); ++i )
+            if( blocks.get( i ).getId().equals( blockId ) )
+                return blocks.remove( i );
+
+        return null;
+    }
+
     public Long getId()
     {
         return id;

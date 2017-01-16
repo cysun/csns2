@@ -55,7 +55,7 @@ public class ProgramStatus {
     public ProgramStatus( Program program )
     {
         this.program = program;
-
+/*
         mappings = new HashMap<Course, Set<Course>>();
         courseStatusIndex = new LinkedHashMap<Course, CourseStatus>();
 
@@ -75,7 +75,7 @@ public class ProgramStatus {
             courseStatusIndex.put( course, courseStatus );
         }
 
-        otherEnrollments = new ArrayList<Enrollment>();
+        otherEnrollments = new ArrayList<Enrollment>(); */
     }
 
     public void addCourseMapping( Course course, Collection<Course> courses )

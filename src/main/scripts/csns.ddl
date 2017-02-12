@@ -231,16 +231,6 @@ create sequence hibernate_sequence start 1 increment 1;
         primary key (student_id, department_id)
     );
 
-    create table department_additional_graduate_courses (
-        department_id int8 not null,
-        course_id int8 not null
-    );
-
-    create table department_additional_undergraduate_courses (
-        department_id int8 not null,
-        course_id int8 not null
-    );
-
     create table department_administrators (
         department_id int8 not null,
         user_id int8 not null
@@ -1391,26 +1381,6 @@ create sequence hibernate_sequence start 1 increment 1;
         add constraint FK5l1x1lo6pyw1xk1j22kyo2oox 
         foreign key (student_id) 
         references users;
-
-    alter table department_additional_graduate_courses 
-        add constraint FKk479et8rlqvhduj2ehgdin2rh 
-        foreign key (course_id) 
-        references courses;
-
-    alter table department_additional_graduate_courses 
-        add constraint FKd1bh18ai7xgynw5sgo8y6qkwa 
-        foreign key (department_id) 
-        references departments;
-
-    alter table department_additional_undergraduate_courses 
-        add constraint FKrmv3fkvmohlhmx8g5oi9ryycy 
-        foreign key (course_id) 
-        references courses;
-
-    alter table department_additional_undergraduate_courses 
-        add constraint FK5l0ccrq8b59kfqycxratcv7hu 
-        foreign key (department_id) 
-        references departments;
 
     alter table department_administrators 
         add constraint FKtlytkm4dgi77g0n85thhh0cyk 

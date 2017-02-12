@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -144,20 +144,6 @@ public class Department implements Serializable {
     @OrderBy("code asc")
     private List<Course> undergraduateCourses;
 
-    /**
-     * Additional courses are the courses offered by other departments which the
-     * students have to take to meet major requirements, particularly the ones
-     * that are related to program assessment, e.g. EE444 and TECH250 for
-     * Computer Science.
-     */
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "department_additional_undergraduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @OrderBy("code asc")
-    private List<Course> additionalUndergraduateCourses;
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "department_graduate_courses",
@@ -165,20 +151,6 @@ public class Department implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "course_id"))
     @OrderBy("code asc")
     private List<Course> graduateCourses;
-
-    /**
-     * Additional courses are the courses offered by other departments which the
-     * students have to take to meet major requirements, particularly the ones
-     * that are related to program assessment, e.g. EE444 and TECH250 for
-     * Computer Science.
-     */
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "department_additional_graduate_courses",
-        joinColumns = @JoinColumn(name = "department_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @OrderBy("code asc")
-    private List<Course> additionalGraduateCourses;
 
     @JsonIgnore
     @OneToMany(mappedBy = "department",
@@ -209,9 +181,7 @@ public class Department implements Serializable {
         groups = new ArrayList<Group>();
 
         undergraduateCourses = new ArrayList<Course>();
-        additionalUndergraduateCourses = new ArrayList<Course>();
         graduateCourses = new ArrayList<Course>();
-        additionalGraduateCourses = new ArrayList<Course>();
 
         forums = new ArrayList<Forum>();
         mailinglists = new ArrayList<Mailinglist>();
@@ -337,17 +307,6 @@ public class Department implements Serializable {
         this.undergraduateCourses = undergraduateCourses;
     }
 
-    public List<Course> getAdditionalUndergraduateCourses()
-    {
-        return additionalUndergraduateCourses;
-    }
-
-    public void setAdditionalUndergraduateCourses(
-        List<Course> additionalUndergraduateCourses )
-    {
-        this.additionalUndergraduateCourses = additionalUndergraduateCourses;
-    }
-
     public List<Course> getGraduateCourses()
     {
         return graduateCourses;
@@ -356,17 +315,6 @@ public class Department implements Serializable {
     public void setGraduateCourses( List<Course> graduateCourses )
     {
         this.graduateCourses = graduateCourses;
-    }
-
-    public List<Course> getAdditionalGraduateCourses()
-    {
-        return additionalGraduateCourses;
-    }
-
-    public void setAdditionalGraduateCourses(
-        List<Course> additionalGraduateCourses )
-    {
-        this.additionalGraduateCourses = additionalGraduateCourses;
     }
 
     public List<Forum> getForums()

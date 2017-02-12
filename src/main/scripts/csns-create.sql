@@ -567,18 +567,8 @@ create table department_undergraduate_courses (
     department_id   bigint not null references departments(id),
     course_id       bigint not null references courses(id)
 );
-    
-create table department_additional_undergraduate_courses (
-    department_id   bigint not null references departments(id),
-    course_id       bigint not null references courses(id)
-);
 
 create table department_graduate_courses (
-    department_id   bigint not null references departments(id),
-    course_id       bigint not null references courses(id)
-);
-
-create table department_additional_graduate_courses (
     department_id   bigint not null references departments(id),
     course_id       bigint not null references courses(id)
 );

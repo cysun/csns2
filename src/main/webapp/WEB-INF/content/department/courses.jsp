@@ -58,7 +58,7 @@ function splitCode( code )
 </ul>
 
 <div id="undergraduate">
-<c:if test="${fn:length(department.undergraduateCourses) + fn:length(department.additionalUndergraduateCourses) > 0}">
+<c:if test="${fn:length(department.undergraduateCourses) > 0}">
 <table class="viewtable autowidth">
 <tr>
   <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
@@ -67,18 +67,6 @@ function splitCode( code )
   </security:authorize>
 </tr>
 <c:forEach items="${department.undergraduateCourses}" var="course">
-<tr>
-  <td class="course-code">${course.code}</td>
-  <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
-  <td class="center">${course.units}</td>
-  <td>${course.coordinator.name}</td>
-  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <td class="center"><a href="course/undergraduate/remove?courseId=${course.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
-  </security:authorize>
-</tr>
-</c:forEach>
-<c:forEach items="${department.additionalUndergraduateCourses}" var="course">
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
@@ -104,7 +92,7 @@ function splitCode( code )
 </div>
 
 <div id="graduate">
-<c:if test="${fn:length(department.graduateCourses) + fn:length(department.additionalGraduateCourses) > 0}">
+<c:if test="${fn:length(department.graduateCourses) > 0}">
 <table class="viewtable autowidth">
 <tr>
   <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
@@ -113,18 +101,6 @@ function splitCode( code )
   </security:authorize>
 </tr>
 <c:forEach items="${department.graduateCourses}" var="course">
-<tr>
-  <td class="course-code">${course.code}</td>
-  <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
-  <td class="center">${course.units}</td>
-  <td>${course.coordinator.name}</td>
-  <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <td class="center"><a href="course/graduate/remove?courseId=${course.id}"><img
-    title="Remove" alt="[Remove]" border="0" src="<c:url value='/img/icons/delete.png' />" /></a></td>
-  </security:authorize>
-</tr>
-</c:forEach>
-<c:forEach items="${department.additionalGraduateCourses}" var="course">
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>

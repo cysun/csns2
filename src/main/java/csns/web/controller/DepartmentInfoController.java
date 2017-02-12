@@ -145,20 +145,15 @@ public class DepartmentInfoController {
     {
         Department department = departmentDao.getDepartment( dept );
         Course course = courseDao.getCourse( courseId );
-        boolean isDepartmentCourse = course.getDepartment() != null
-            && course.getDepartment().getId().equals( department.getId() );
 
         List<Course> courses;
         switch( level )
         {
             case "undergraduate":
-                courses = isDepartmentCourse
-                    ? department.getUndergraduateCourses()
-                    : department.getAdditionalUndergraduateCourses();
+                courses = department.getUndergraduateCourses();
                 break;
             case "graduate":
-                courses = isDepartmentCourse ? department.getGraduateCourses()
-                    : department.getAdditionalGraduateCourses();
+                courses = department.getGraduateCourses();
                 break;
             default:
                 logger.warn( "Invalid course level: " + level );

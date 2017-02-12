@@ -35,6 +35,10 @@
     <td>${course.units}</td>
   </tr>
   <tr>
+    <th>Unit Factor</th>
+    <td>${course.unitFactor}</td>
+  </tr>
+  <tr>
     <th>Prerequisites</th>
     <td>
       <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">

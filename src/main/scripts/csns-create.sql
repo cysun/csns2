@@ -309,6 +309,7 @@ create table courses (
     code            varchar(255) not null unique,
     name            varchar(255) not null,
     units           integer not null default 3,
+    unit_factor     double precision not null default 1.0,
     coordinator_id  bigint references users(id),
     description_id  bigint references files(id),
     journal_id      bigint unique,

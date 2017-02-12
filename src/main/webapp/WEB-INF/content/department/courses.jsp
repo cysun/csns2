@@ -61,7 +61,7 @@ function splitCode( code )
 <c:if test="${fn:length(department.undergraduateCourses) + fn:length(department.additionalUndergraduateCourses) > 0}">
 <table class="viewtable autowidth">
 <tr>
-  <th>Code</th><th>Name</th><th>Coordinator</th>
+  <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
     <th></th>
   </security:authorize>
@@ -70,6 +70,7 @@ function splitCode( code )
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
+  <td class="center">${course.units}</td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/undergraduate/remove?courseId=${course.id}"><img
@@ -81,6 +82,7 @@ function splitCode( code )
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
+  <td class="center">${course.units}</td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/undergraduate/remove?courseId=${course.id}"><img
@@ -105,7 +107,7 @@ function splitCode( code )
 <c:if test="${fn:length(department.graduateCourses) + fn:length(department.additionalGraduateCourses) > 0}">
 <table class="viewtable autowidth">
 <tr>
-  <th>Code</th><th>Name</th><th>Coordinator</th>
+  <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <th></th>
   </security:authorize>
@@ -114,6 +116,7 @@ function splitCode( code )
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
+  <td class="center">${course.units}</td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/graduate/remove?courseId=${course.id}"><img
@@ -125,6 +128,7 @@ function splitCode( code )
 <tr>
   <td class="course-code">${course.code}</td>
   <td><a href="<c:url value='/course/view?id=${course.id}' />">${course.name}</a></td>
+  <td class="center">${course.units}</td>
   <td>${course.coordinator.name}</td>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
   <td class="center"><a href="course/graduate/remove?courseId=${course.id}"><img

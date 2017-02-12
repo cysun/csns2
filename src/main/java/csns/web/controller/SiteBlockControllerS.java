@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -93,7 +93,8 @@ public class SiteBlockControllerS {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( SiteBlockControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SiteBlockControllerS.class );
 
     private Section getSection( String qtr, String cc, int sn )
     {
@@ -129,8 +130,8 @@ public class SiteBlockControllerS {
         site = siteDao.saveSite( site );
         sessionStatus.setComplete();
 
-        logger.info( user.getUsername() + " added a block to site "
-            + site.getId() );
+        logger.info(
+            user.getUsername() + " added a block to site " + site.getId() );
 
         return "redirect:list";
     }
@@ -180,7 +181,8 @@ public class SiteBlockControllerS {
         method = RequestMethod.POST)
     public String addItem( @PathVariable String qtr, @PathVariable String cc,
         @PathVariable int sn, @ModelAttribute Item item,
-        @RequestParam Long blockId, @RequestParam(value = "uploadedFile",
+        @RequestParam Long blockId,
+        @RequestParam(value = "uploadedFile",
             required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
@@ -190,18 +192,16 @@ public class SiteBlockControllerS {
         User user = SecurityUtils.getUser();
         Block block = blockDao.getBlock( blockId );
         Resource resource = item.getResource();
-        if( resource.getType() != ResourceType.NONE )
-        {
-            if( resource.getType() == ResourceType.FILE && uploadedFile != null
-                && !uploadedFile.isEmpty() )
-                resource.setFile( fileIO.save( uploadedFile, user, true ) );
-            block.getItems().add( item );
-            block = blockDao.saveBlock( block );
-            sessionStatus.setComplete();
+        if( resource.getType() == ResourceType.FILE && uploadedFile != null
+            && !uploadedFile.isEmpty() )
+            resource.setFile( fileIO.save( uploadedFile, user, true ) );
+        block.getItems().add( item );
+        block = blockDao.saveBlock( block );
+        sessionStatus.setComplete();
 
-            logger.info( user.getUsername() + " added an item to block "
-                + block.getId() );
-        }
+        logger.info(
+            user.getUsername() + " added an item to block " + block.getId() );
+
         return "redirect:list";
     }
 
@@ -221,14 +221,11 @@ public class SiteBlockControllerS {
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editItem",
         method = RequestMethod.POST)
-    public String editItem(
-        @PathVariable String qtr,
-        @PathVariable String cc,
-        @PathVariable int sn,
-        @ModelAttribute Block block,
-        @RequestParam Long newBlockId,
-        @ModelAttribute Item item,
-        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+    public String editItem( @PathVariable String qtr, @PathVariable String cc,
+        @PathVariable int sn, @ModelAttribute Block block,
+        @RequestParam Long newBlockId, @ModelAttribute Item item,
+        @RequestParam(value = "uploadedFile",
+            required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         itemValidator.validate( item, uploadedFile, bindingResult );
@@ -269,11 +266,10 @@ public class SiteBlockControllerS {
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/addResource",
         method = RequestMethod.POST)
-    public String addResource(
-        @ModelAttribute Item item,
-        @ModelAttribute Resource resource,
-        @RequestParam Long blockId,
-        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+    public String addResource( @ModelAttribute Item item,
+        @ModelAttribute Resource resource, @RequestParam Long blockId,
+        @RequestParam(value = "uploadedFile",
+            required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         resourceValidator.validate( resource, uploadedFile, bindingResult );
@@ -309,11 +305,10 @@ public class SiteBlockControllerS {
 
     @RequestMapping(value = "/site/{qtr}/{cc}-{sn}/block/editResource",
         method = RequestMethod.POST)
-    public String editResource(
-        @ModelAttribute Item item,
-        @ModelAttribute Resource resource,
-        @RequestParam Long blockId,
-        @RequestParam(value = "uploadedFile", required = false) MultipartFile uploadedFile,
+    public String editResource( @ModelAttribute Item item,
+        @ModelAttribute Resource resource, @RequestParam Long blockId,
+        @RequestParam(value = "uploadedFile",
+            required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         resourceValidator.validate( resource, uploadedFile, bindingResult );

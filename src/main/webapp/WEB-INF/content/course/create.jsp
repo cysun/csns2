@@ -72,22 +72,29 @@ function deleteprerequisites( prereqId )
   <tr>
     <th><csns:help name="code">Code</csns:help> *</th>
     <td>
-      <form:input path="code" cssClass="forminput" cssStyle="width: 100px;" />
+      <form:input path="code" cssClass="forminput" cssStyle="width: 100px;" required="required" />
       <div class="error"><form:errors path="code" /></div>
     </td>
   </tr>
   <tr>
     <th>Name *</th>
     <td>
-      <form:input path="name" cssClass="forminput" cssStyle="width: 600px;" />
+      <form:input path="name" cssClass="forminput" cssStyle="width: 600px;" required="required" />
       <div class="error"><form:errors path="name"  /></div>
     </td>
   </tr>
   <tr>
     <th>Units *</th>
     <td>
-      <form:input path="units" cssClass="forminput" cssStyle="width: 2em;" />
+      <form:input path="units" cssClass="forminput" cssStyle="width: 4em;" required="required" />
       <div class="error"><form:errors path="units"  /></div>
+    </td>
+  </tr>
+  <tr>
+    <th><csns:help name="unit-factor">Unit Factor</csns:help> *</th>
+    <td>
+      <form:input path="unitFactor" cssClass="forminput" cssStyle="width: 4em;" required="required" />
+      <div class="error"><form:errors path="unitFactor"  /></div>
     </td>
   </tr>
   <tr>
@@ -117,3 +124,8 @@ function deleteprerequisites( prereqId )
 <div id="help-code" class="help">A course code must consist of uppercase letters
 followed by a number, and optionally, followed by another uppercase letter, e.g.
 <span class="tt">CS101</span> or <span class="tt">CS496A</span>.</div>
+
+<div id="help-unit-factor" class="help">Unit factor is used to make quarter
+units and semester units equivalent for the purpose of calculating GPA. The
+unit factor for a semester course is 1.0, and the unit factor for a quarter
+course is 0.667.</div>

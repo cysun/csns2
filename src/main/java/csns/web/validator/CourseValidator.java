@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -64,6 +64,9 @@ public class CourseValidator implements Validator {
 
         if( course.getUnits() < 0 )
             errors.rejectValue( "units", "error.course.units.invalid" );
+
+        if( course.getUnitFactor() <= 0 || course.getUnitFactor() > 1 ) errors
+            .rejectValue( "unitFactor", "error.course.unitfactor.invalid" );
     }
 
 }

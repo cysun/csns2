@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -64,6 +64,9 @@ public class Course implements Serializable, Comparable<Course> {
     @Column(name = "units", nullable = false)
     private int units;
 
+    @Column(name = "unit_factor", nullable = false)
+    private double unitFactor;
+
     @ManyToOne
     @JoinColumn(name = "coordinator_id")
     private User coordinator;
@@ -95,6 +98,7 @@ public class Course implements Serializable, Comparable<Course> {
     {
         prerequisites = new ArrayList<Course>();
         units = 3;
+        unitFactor = 1.0;
         obsolete = false;
     }
 
@@ -164,6 +168,16 @@ public class Course implements Serializable, Comparable<Course> {
     public void setUnits( int units )
     {
         this.units = units;
+    }
+
+    public double getUnitFactor()
+    {
+        return unitFactor;
+    }
+
+    public void setUnitFactor( double unitFactor )
+    {
+        this.unitFactor = unitFactor;
     }
 
     public User getCoordinator()

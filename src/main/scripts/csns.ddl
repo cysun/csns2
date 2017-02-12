@@ -215,6 +215,7 @@ create sequence hibernate_sequence start 1 increment 1;
         code varchar(255) not null,
         name varchar(255) not null,
         obsolete boolean not null,
+        unit_factor float8 not null,
         units int4 not null,
         coordinator_id int8,
         department_id int8,

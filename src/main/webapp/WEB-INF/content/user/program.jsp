@@ -1,158 +1,59 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
- <script>
+<script>
 $(function(){
-    $("#major").change(function(){
-        window.location.href = "setMajor?userId=${user.id}&majorId=" + $(this).val();
+    $(".select").hide();
+    $(".select").change(function(){
+        var field = $(this).attr("data-field");
+        var msg = "Are you sure you want to change this student's " + field + "?";
+        if( confirm(msg) )
+            window.location.href = field + "/set?userId=${user.id}&" + field + "Id=" + $(this).val();
     });
-    $("#program").change(function(){
-        window.location.href = "setProgram?userId=${user.id}&programId=" + $(this).val();
+    $(".change").click(function(){
+        var field = $(this).attr("data-field");
+        $("#"+field+"-display").toggle();
+        $("#"+field+"-select").toggle();
+        if( $(this).html() == 'Change' )
+            $(this).html("Cancel");
+        else
+            $(this).html("Change");
     });
-    $("table").tablesorter({
-        sortList: [[0,0]]
-    });
+    if( "${user.major.id}" )
+        $("#major-select").val( "${user.major.id}" );
+    if( "${user.personalProgram.id}" )
+        $("#program-select").val( "${user.personalProgram.program.id}" );
 });
 </script>
-
-<form:form modelAttribute="user">
 <table class="general autowidth">
 <tr>
   <th>Major</th>
-  <td>
-    <form:select path="major">
-      <form:option value="" label=""/>
-      <form:options items="${departments}" itemValue="id" itemLabel="name"/>
-    </form:select>
+  <td style="min-width: 4em;">
+    <span id="major-display">${user.major.name}</span>
+<c:if test="${fn:length(departments) > 0}">
+    <select id="major-select" class="select" data-field="major" name="majorId">
+      <option value=""></option>
+      <c:forEach items="${departments}" var="department">
+      <option value="${department.id}">${department.name}</option>
+      </c:forEach>
+    </select>
+</c:if>
   </td>
+  <td><a class="change" data-field="major" href="javascript:void(0)">Change</a></td>
 </tr>  
 <tr>
   <th>Program</th>
-  <td>
-    <form:select path="program">
-      <form:option value="" label=""/>
-      <form:options items="${programs}" itemValue="id" itemLabel="name"/>
-    </form:select>
-  </td>
-</tr>
-</table>
-</form:form>
-
-<c:if test="${not empty programStatus}">
-${programStatus.program.description}
-
-<h4>Required Courses</h4>
-<table class="viewtable autowidth">
-<thead>
-<tr><th>Course</th><th>Status</th></tr>
-</thead>
-<tbody>
-<c:forEach items="${programStatus.requiredCourseStatuses}" var="courseStatus">
-<tr>
-  <td>
-    <c:forEach items="${courseStatus.courses}" var="course">
-    <div class="pstat">
-      <div class="pstat-course-code">${course.code}</div>
-      <div><csns:truncate value="${course.name}" length="55" /></div>
-    </div>
-    </c:forEach>
-  </td>
-  <td class="nowrap">
-    <c:forEach items="${courseStatus.enrollments}" var="enrollment">
-    <div class="pstat">
-      <div class="pstat-course-code">${enrollment.section.course.code}</div>
-      <div class="pstat-term">${enrollment.section.term.shortString}</div>
-      <div>${enrollment.grade.symbol}</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseSubstitutions}" var="substitution">
-    <div class="pstat">
-      <div class="pstat-course-code">${substitution.original.code}</div>
-      <div>Substituted by ${substitution.substitute.code}</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseTransfers}" var="transfer">
-    <div class="pstat">
-      <div class="pstat-course-code">${transfer.course.code}</div>
-      <div>Transferred</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseWaivers}" var="waiver">
-    <div class="pstat">
-      <div class="pstat-course-code">${waiver.course.code}</div>
-      <div>Waived</div>
-    </div>
-    </c:forEach>
-  </td>
-</tr>
-</c:forEach>
-</tbody>
-</table>
-
-<h4>Elective Courses</h4>
-<table class="viewtable autowidth">
-<thead>
-<tr><th>Course</th><th>Status</th></tr>
-</thead>
-<tbody>
-<c:forEach items="${programStatus.electiveCourseStatuses}" var="courseStatus">
-<tr>
-  <td>
-    <c:forEach items="${courseStatus.courses}" var="course">
-    <div class="pstat">
-      <div class="pstat-course-code">${course.code}</div>
-      <div><csns:truncate value="${course.name}" length="55" /></div>
-    </div>
-    </c:forEach>
-  </td>
-  <td class="nowrap">
-    <c:forEach items="${courseStatus.enrollments}" var="enrollment">
-    <div class="pstat">
-      <div class="pstat-course-code">${enrollment.section.course.code}</div>
-      <div class="pstat-term">${enrollment.section.term.shortString}</div>
-      <div>${enrollment.grade.symbol}</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseSubstitutions}" var="substitution">
-    <div class="pstat">
-      <div class="pstat-course-code">${substitution.original.code}</div>
-      <div>Substituted by ${substitution.substitute.code}</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseTransfers}" var="transfer">
-    <div class="pstat">
-      <div class="pstat-course-code">${transfer.course.code}</div>
-      <div>Transferred</div>
-    </div>
-    </c:forEach>
-    <c:forEach items="${courseStatus.courseWaivers}" var="waiver">
-    <div class="pstat">
-      <div class="pstat-course-code">${waiver.course.code}</div>
-      <div>Waived</div>
-    </div>
-    </c:forEach>
-  </td>
-</tr>
-</c:forEach>
-</tbody>
-</table>
- 
-<h4>Other Courses</h4>
-<table class="viewtable autowidth">
-<thead>
-  <tr><th>Code</th><th>Name</th><th colspan="2">Information</th></tr>
-</thead>
-<tbody>
-  <c:forEach items="${programStatus.otherEnrollments}" var="enrollment">
-  <tr>
-    <td>${enrollment.section.course.code}</td>
-    <td>${enrollment.section.course.name}</td>
-    <td>${enrollment.section.term.shortString}</td>
-    <td>${enrollment.grade.symbol}</td>
-  </tr>
-  </c:forEach>
-</tbody>
-</table>
+  <td style="min-width: 4em;">
+    <span id="program-display">${user.personalProgram.program.name}</span>
+<c:if test="${fn:length(programs) > 0}">
+    <select id="program-select" class="select" data-field="program" name="programId">
+      <option value=""></option>
+      <c:forEach items="${programs}" var="program">
+      <option value="${program.id}">${program.name}</option>
+      </c:forEach>
+    </select>
 </c:if>
+  </td>
+  <td><a class="change" data-field="program" href="javascript:void(0)">Change</a></td>
+</tr>
+</table>

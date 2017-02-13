@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015-2017, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -16,23 +16,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with CSNS. If not, see http://www.gnu.org/licenses/agpl.html.
  */
-package csns.model.academics.dao;
+package csns.model.advisement.dao;
 
 import java.util.List;
 
-import csns.model.academics.Department;
-import csns.model.academics.Program;
+import csns.model.advisement.PersonalProgram;
+import csns.model.core.User;
 
-public interface ProgramDao {
+public interface PersonalProgramDao {
 
-    Program getProgram( Long id );
+    PersonalProgram getPersonalProgram( Long id );
 
-    List<Program> getPrograms( Department department );
+    List<PersonalProgram> getPersonalPrograms( User student );
 
-    List<Program> getPublishedPrograms( Department department );
-
-    List<Program> searchPrograms( String text, int maxResults );
-
-    Program saveProgram( Program program );
+    PersonalProgram savePersonalProgram( PersonalProgram program );
 
 }

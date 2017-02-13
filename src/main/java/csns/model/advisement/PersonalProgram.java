@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -21,6 +21,7 @@ package csns.model.advisement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,11 +32,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import csns.model.academics.Program;
+import csns.model.academics.ProgramBlock;
 import csns.model.core.User;
 
 @Entity
@@ -52,7 +53,7 @@ public class PersonalProgram implements Serializable {
     @JoinColumn(name = "program_id")
     private Program program;
 
-    @OneToOne(mappedBy = "personalProgram")
+    @ManyToOne
     @JoinColumn(name = "student_id")
     private User student;
 
@@ -60,6 +61,9 @@ public class PersonalProgram implements Serializable {
     @JoinColumn(name = "program_id")
     @OrderColumn(name = "block_index")
     private List<PersonalProgramBlock> blocks;
+
+    @Column(nullable = false)
+    private Date date;
 
     @Column(name = "approve_date")
     private Calendar approveDate;
@@ -71,6 +75,15 @@ public class PersonalProgram implements Serializable {
     public PersonalProgram()
     {
         blocks = new ArrayList<PersonalProgramBlock>();
+    }
+
+    public PersonalProgram( Program program )
+    {
+        this();
+        this.program = program;
+
+        for( ProgramBlock programBlock : program.getBlocks() )
+            blocks.add( new PersonalProgramBlock( programBlock ) );
     }
 
     public Long getId()
@@ -121,6 +134,16 @@ public class PersonalProgram implements Serializable {
     public void setApproveDate( Calendar approveDate )
     {
         this.approveDate = approveDate;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate( Date date )
+    {
+        this.date = date;
     }
 
     public User getApprovedBy()

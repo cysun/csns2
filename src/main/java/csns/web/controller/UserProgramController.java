@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2015-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,6 +18,8 @@
  */
 package csns.web.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +28,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.helper.ProgramStatus;
 import csns.model.academics.Program;
-import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.DepartmentDao;
-import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
-import csns.model.advisement.dao.CourseSubstitutionDao;
-import csns.model.advisement.dao.CourseTransferDao;
-import csns.model.advisement.dao.CourseWaiverDao;
+import csns.model.advisement.PersonalProgram;
+import csns.model.advisement.dao.PersonalProgramDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -49,24 +47,13 @@ public class UserProgramController {
     private ProgramDao programDao;
 
     @Autowired
+    private PersonalProgramDao personalProgramDao;
+
+    @Autowired
     private DepartmentDao departmentDao;
 
-    @Autowired
-    private CourseMappingDao courseMappingDao;
-
-    @Autowired
-    private EnrollmentDao enrollmentDao;
-
-    @Autowired
-    private CourseSubstitutionDao courseSubstitutionDao;
-
-    @Autowired
-    private CourseTransferDao courseTransferDao;
-
-    @Autowired
-    private CourseWaiverDao courseWaiverDao;
-
-    private static final Logger logger = LoggerFactory.getLogger( UserProgramController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( UserProgramController.class );
 
     @RequestMapping("/user/program")
     public String program( @RequestParam Long userId, ModelMap models )
@@ -75,66 +62,66 @@ public class UserProgramController {
         models.put( "user", user );
         models.put( "departments", departmentDao.getDepartments() );
 
-        if( user.getMajor() != null )
-            models.put( "programs", programDao.getPrograms( user.getMajor() ) );
-/*
-        Program program = user.getProgram();
-        if( program != null )
-        {
-            ProgramStatus programStatus = new ProgramStatus( user.getProgram() );
-            programStatus.addCourseMappings( courseMappingDao.getCourseMappings( program.getDepartment() ) );
-            programStatus.addEnrollments( enrollmentDao.getEnrollments( user ) );
-            programStatus.addCourseSubstitutions( courseSubstitutionDao.getCourseSubstitutions( user ) );
-            programStatus.addCourseTransfers( courseTransferDao.getCourseTransfers( user ) );
-            programStatus.addCourseWaivers( courseWaiverDao.getCourseWaivers( user ) );
-            programStatus.sort();
-            models.put( "programStatus", programStatus );
-        } */
+        if( user.getMajor() != null ) models.put( "programs",
+            programDao.getPublishedPrograms( user.getMajor() ) );
 
         return "user/program";
     }
-/*
-    @RequestMapping("/user/setMajor")
+
+    @RequestMapping("/user/major/set")
     public String setMajor( @RequestParam Long userId,
         @RequestParam(required = false) Long majorId )
     {
         User user = userDao.getUser( userId );
-        user.setMajor( majorId == null ? null
-            : departmentDao.getDepartment( majorId ) );
-        user.setProgram( null );
-        user = userDao.saveUser( user );
-
-        if( user.getMajor() == null )
+        if( majorId == null )
+        {
+            user.setMajor( null );
+            user = userDao.saveUser( user );
             logger.info( SecurityUtils.getUser().getUsername()
                 + " removed major for " + user.getUsername() );
+        }
         else
+        {
+            user.setMajor( departmentDao.getDepartment( majorId ) );
+            user = userDao.saveUser( user );
             logger.info( SecurityUtils.getUser().getUsername()
-                + " set major to " + user.getMajor().getAbbreviation()
-                + " for " + user.getUsername() );
-
+                + " set major to " + user.getMajor().getAbbreviation() + " for "
+                + user.getUsername() );
+        }
         // Program is the 4th tab
-        return "redirect:view?id=" + userId + "#3";
+        return "redirect:../view?id=" + userId + "#3";
     }
 
-    @RequestMapping("/user/setProgram")
+    @RequestMapping("/user/program/set")
     public String setProgram( @RequestParam Long userId,
         @RequestParam(required = false) Long programId )
     {
-        User user = userDao.getUser( userId );
-        user.setProgram( programId == null ? null
-            : programDao.getProgram( programId ) );
-        user = userDao.saveUser( user );
+        User student = userDao.getUser( userId );
 
-        if( user.getProgram() == null )
+        if( programId == null )
+        {
+            student.setPersonalProgram( null );
+            student = userDao.saveUser( student );
             logger.info( SecurityUtils.getUser().getUsername()
-                + " removed program for " + user.getUsername() );
+                + " removed personal program for " + student.getUsername() );
+        }
         else
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " set program to " + user.getProgram().getId() + " for "
-                + user.getUsername() );
+        {
+            Program program = programDao.getProgram( programId );
+            PersonalProgram personalProgram = new PersonalProgram( program );
+            personalProgram.setStudent( student );
+            personalProgram.setDate( new Date() );
+            personalProgram = personalProgramDao
+                .savePersonalProgram( personalProgram );
 
+            student.setPersonalProgram( personalProgram );
+            student = userDao.saveUser( student );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " set personal program " + personalProgram.getId() + " for "
+                + student.getUsername() );
+        }
         // Program is the 4th tab
-        return "redirect:view?id=" + userId + "#3";
+        return "redirect:../view?id=" + userId + "#3";
     }
-*/
+
 }

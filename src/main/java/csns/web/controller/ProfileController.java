@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -21,24 +21,13 @@ package csns.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import csns.helper.ProgramStatus;
-import csns.model.academics.Program;
-import csns.model.academics.dao.CourseMappingDao;
-import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
-import csns.model.academics.dao.ProgramDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
-import csns.model.advisement.dao.CourseSubstitutionDao;
-import csns.model.advisement.dao.CourseTransferDao;
-import csns.model.advisement.dao.CourseWaiverDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
@@ -54,33 +43,13 @@ public class ProfileController {
     private UserDao userDao;
 
     @Autowired
-    private DepartmentDao departmentDao;
-
-    @Autowired
-    private ProgramDao programDao;
-
-    @Autowired
-    private CourseMappingDao courseMappingDao;
-
-    @Autowired
     private EnrollmentDao enrollmentDao;
-
-    @Autowired
-    private CourseSubstitutionDao courseSubstitutionDao;
-
-    @Autowired
-    private CourseTransferDao courseTransferDao;
-
-    @Autowired
-    private CourseWaiverDao courseWaiverDao;
 
     @Autowired
     private AdvisementRecordDao advisementRecordDao;
 
     @Autowired
     private SubscriptionDao subscriptionDao;
-
-    private static final Logger logger = LoggerFactory.getLogger( ProfileController.class );
 
     @RequestMapping("/profile")
     public String profile( ModelMap models )
@@ -101,26 +70,8 @@ public class ProfileController {
     @RequestMapping("/profile/program")
     public String program( ModelMap models )
     {
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        models.put( "user", user );
-        models.put( "departments", departmentDao.getDepartments() );
-
-        if( user.getMajor() != null )
-            models.put( "programs", programDao.getPrograms( user.getMajor() ) );
-/*
-        Program program = user.getProgram();
-        if( program != null )
-        {
-            ProgramStatus programStatus = new ProgramStatus( user.getProgram() );
-            programStatus.addCourseMappings( courseMappingDao.getCourseMappings( program.getDepartment() ) );
-            programStatus.addEnrollments( enrollmentDao.getEnrollments( user ) );
-            programStatus.addCourseSubstitutions( courseSubstitutionDao.getCourseSubstitutions( user ) );
-            programStatus.addCourseTransfers( courseTransferDao.getCourseTransfers( user ) );
-            programStatus.addCourseWaivers( courseWaiverDao.getCourseWaivers( user ) );
-            programStatus.sort();
-            models.put( "programStatus", programStatus );
-        }
-*/
+        models.put( "user",
+            userDao.getUser( SecurityUtils.getUser().getId() ) );
         return "profile/program";
     }
 
@@ -128,7 +79,8 @@ public class ProfileController {
     public String advisement( ModelMap models )
     {
         User user = SecurityUtils.getUser();
-        models.put( "records", advisementRecordDao.getAdvisementRecords( user ) );
+        models.put( "records",
+            advisementRecordDao.getAdvisementRecords( user ) );
         return "profile/advisement";
     }
 
@@ -136,8 +88,8 @@ public class ProfileController {
     public String forumSubscriptions( ModelMap models )
     {
         User user = SecurityUtils.getUser();
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
-            user, Forum.class );
+        List<Subscription> subscriptions = subscriptionDao
+            .getSubscriptions( user, Forum.class );
 
         List<Forum> departmentForums = new ArrayList<Forum>();
         List<Forum> courseForums = new ArrayList<Forum>();
@@ -163,48 +115,11 @@ public class ProfileController {
     public String mailinglistSubscriptions( ModelMap models )
     {
         User user = SecurityUtils.getUser();
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions(
-            user, Mailinglist.class );
+        List<Subscription> subscriptions = subscriptionDao
+            .getSubscriptions( user, Mailinglist.class );
 
         models.put( "subscriptions", subscriptions );
         return "profile/mailinglists";
     }
-/*
-    @RequestMapping("/profile/setMajor")
-    public String setMajor( @RequestParam(required = false) Long majorId )
-    {
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        user.setMajor( majorId == null ? null
-            : departmentDao.getDepartment( majorId ) );
-        user.setProgram( null );
-        user = userDao.saveUser( user );
 
-        if( user.getMajor() == null )
-            logger.info( user.getUsername() + " removed major." );
-        else
-            logger.info( user.getUsername() + " set major to "
-                + user.getMajor().getAbbreviation() );
-
-        // Program is the 3rd tab in Profile
-        return "redirect:../profile#2";
-    }
-
-    @RequestMapping("/profile/setProgram")
-    public String setProgram( @RequestParam(required = false) Long programId )
-    {
-        User user = userDao.getUser( SecurityUtils.getUser().getId() );
-        user.setProgram( programId == null ? null
-            : programDao.getProgram( programId ) );
-        user = userDao.saveUser( user );
-
-        if( user.getProgram() == null )
-            logger.info( user.getUsername() + " removed program." );
-        else
-            logger.info( user.getUsername() + " set program to "
-                + user.getProgram().getId() );
-
-        // Program is the 3rd tab in Profile
-        return "redirect:../profile#2";
-    }
-*/
 }

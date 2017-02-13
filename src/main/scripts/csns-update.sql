@@ -8,3 +8,11 @@ update courses set unit_factor = 0.667
 
 update courses set units = 4 where unit_factor < 1;
 update courses set units = 3 where unit_factor = 1;
+
+alter table personal_programs add column student_id bigint references users(id);
+alter table personal_programs add column date timestamp not null default current_timestamp;
+
+alter table personal_program_blocks drop column name;
+alter table personal_program_blocks drop column description;
+alter table personal_program_blocks add column
+    program_block_id bigint references program_blocks(id);

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -27,8 +27,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import csns.model.academics.Course;
+import csns.model.academics.ProgramBlock;
 
 @Entity
 @Table(name = "personal_program_blocks")
@@ -40,9 +44,9 @@ public class PersonalProgramBlock implements Serializable {
     @GeneratedValue
     private Long id;
 
-    private String name;
-
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "program_block_id")
+    private ProgramBlock programBlock;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "block_id")
@@ -51,6 +55,15 @@ public class PersonalProgramBlock implements Serializable {
     public PersonalProgramBlock()
     {
         entries = new ArrayList<PersonalProgramEntry>();
+    }
+
+    public PersonalProgramBlock( ProgramBlock programBlock )
+    {
+        this();
+        this.programBlock = programBlock;
+
+        for( Course course : programBlock.getCourses() )
+            entries.add( new PersonalProgramEntry( course ) );
     }
 
     public Long getId()
@@ -63,24 +76,14 @@ public class PersonalProgramBlock implements Serializable {
         this.id = id;
     }
 
-    public String getName()
+    public ProgramBlock getProgramBlock()
     {
-        return name;
+        return programBlock;
     }
 
-    public void setName( String name )
+    public void setProgramBlock( ProgramBlock programBlock )
     {
-        this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription( String description )
-    {
-        this.description = description;
+        this.programBlock = programBlock;
     }
 
     public List<PersonalProgramEntry> getEntries()

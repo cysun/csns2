@@ -616,17 +616,18 @@ create table program_block_courses (
 
 create table personal_programs (
     id              bigint primary key,
+    student_id      bigint references users(id),
     program_id      bigint references programs(id),
+    date            timestamp not null default current_timestamp,
     approve_date    timestamp,
     approved_by     bigint references users(id)
 );
 
 create table personal_program_blocks (
-    id          bigint primary key,
-    program_id  bigint references personal_programs(id),
-    block_index integer,
-    name        varchar(255),
-    description varchar(8000)
+    id                  bigint primary key,
+    program_block_id    bigint references program_blocks(id),
+    program_id          bigint references personal_programs(id),
+    block_index         integer
 );
 
 create table personal_program_entries (

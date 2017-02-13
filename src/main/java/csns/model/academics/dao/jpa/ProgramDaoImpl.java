@@ -55,6 +55,18 @@ public class ProgramDaoImpl implements ProgramDao {
     }
 
     @Override
+    public List<Program> getPublishedPrograms( Department department )
+    {
+        String query = "from Program where department = :department "
+            + "and publishDate < current_timestamp and obsolete = false "
+            + "order by name asc";
+
+        return entityManager.createQuery( query, Program.class )
+            .setParameter( "department", department )
+            .getResultList();
+    }
+
+    @Override
     public List<Program> searchPrograms( String text, int maxResults )
     {
         TypedQuery<Program> query = entityManager

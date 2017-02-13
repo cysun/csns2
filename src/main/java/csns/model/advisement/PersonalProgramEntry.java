@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -50,6 +50,11 @@ public class PersonalProgramEntry implements Serializable {
 
     public PersonalProgramEntry()
     {
+    }
+
+    public PersonalProgramEntry( Course course )
+    {
+        this.course = course;
     }
 
     public Long getId()

@@ -475,8 +475,7 @@ create sequence hibernate_sequence start 1 increment 1;
 
     create table personal_program_blocks (
         id int8 not null,
-        description varchar(255),
-        name varchar(255),
+        program_block_id int8,
         program_id int8,
         block_index int4,
         primary key (id)
@@ -493,8 +492,10 @@ create sequence hibernate_sequence start 1 increment 1;
     create table personal_programs (
         id int8 not null,
         approve_date timestamp,
+        date timestamp not null,
         approved_by int8,
         program_id int8,
+        student_id int8,
         primary key (id)
     );
 
@@ -1648,6 +1649,11 @@ create sequence hibernate_sequence start 1 increment 1;
         references forum_topics;
 
     alter table personal_program_blocks 
+        add constraint FKbygxgxylutgc5jwnikn8xfuyl 
+        foreign key (program_block_id) 
+        references program_blocks;
+
+    alter table personal_program_blocks 
         add constraint FK30q9qyn8wkolgd7yej6dwwghs 
         foreign key (program_id) 
         references personal_programs;
@@ -1676,6 +1682,11 @@ create sequence hibernate_sequence start 1 increment 1;
         add constraint FKh8em09oudpn1vtmfcm9xbnvwc 
         foreign key (program_id) 
         references programs;
+
+    alter table personal_programs 
+        add constraint FK78sw9n22if9iibuyx7kqudjip 
+        foreign key (student_id) 
+        references users;
 
     alter table prereg_schedule_registrations 
         add constraint FKllx059j11jemmap6dlhvoq6wy 

@@ -91,6 +91,7 @@ public class ProgramBlockControllerS {
         @ModelAttribute("block") ProgramBlock block,
         SessionStatus sessionStatus )
     {
+        if( block.isRequireAll() ) block.setUnitsRequired( null );
         block = programBlockDao.saveProgramBlock( block );
         sessionStatus.setComplete();
 

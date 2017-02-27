@@ -559,7 +559,8 @@ create sequence hibernate_sequence start 1 increment 1;
         id int8 not null,
         description varchar(255),
         name varchar(255),
-        units_required int4 not null,
+        require_all boolean not null,
+        units_required int4,
         program_id int8,
         block_index int4,
         primary key (id)

@@ -9,6 +9,10 @@ update courses set unit_factor = 0.667
 update courses set units = 4 where unit_factor < 1;
 update courses set units = 3 where unit_factor = 1;
 
+alter table program_blocks alter column units_required drop not null;
+alter table program_blocks alter column units_required drop default;
+alter table program_blocks add column require_all boolean not null default 't';
+
 alter table personal_programs add column student_id bigint references users(id);
 alter table personal_programs add column date timestamp not null default current_timestamp;
 

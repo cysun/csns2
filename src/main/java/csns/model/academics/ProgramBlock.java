@@ -48,8 +48,11 @@ public class ProgramBlock implements Serializable {
 
     private String description;
 
-    @Column(name = "units_required", nullable = false)
-    private int unitsRequired;
+    @Column(name = "units_required")
+    private Integer unitsRequired;
+
+    @Column(name = "require_all", nullable = false)
+    private boolean requireAll;
 
     @ManyToMany
     @JoinTable(name = "program_block_courses",
@@ -60,6 +63,7 @@ public class ProgramBlock implements Serializable {
 
     public ProgramBlock()
     {
+        requireAll = true;
         courses = new ArrayList<Course>();
     }
 
@@ -70,6 +74,7 @@ public class ProgramBlock implements Serializable {
         block.name = name;
         block.description = description;
         block.unitsRequired = unitsRequired;
+        block.requireAll = requireAll;
         block.courses.addAll( courses );
 
         return block;
@@ -114,14 +119,24 @@ public class ProgramBlock implements Serializable {
         this.description = description;
     }
 
-    public int getUnitsRequired()
+    public Integer getUnitsRequired()
     {
         return unitsRequired;
     }
 
-    public void setUnitsRequired( int unitsRequired )
+    public void setUnitsRequired( Integer unitsRequired )
     {
         this.unitsRequired = unitsRequired;
+    }
+
+    public boolean isRequireAll()
+    {
+        return requireAll;
+    }
+
+    public void setRequireAll( boolean requireAll )
+    {
+        this.requireAll = requireAll;
     }
 
     public List<Course> getCourses()

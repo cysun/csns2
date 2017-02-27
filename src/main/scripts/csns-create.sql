@@ -606,7 +606,8 @@ create table program_blocks (
     block_index     integer,
     name            varchar(255),
     description     varchar(8000),
-    units_required  integer not null default 0
+    units_required  integer,
+    require_all     boolean not null default 't'
 );
 
 create table program_block_courses (

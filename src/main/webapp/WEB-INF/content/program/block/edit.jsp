@@ -3,6 +3,18 @@
 
 <script>
 $(function(){
+    var $unitsRequired = $("input[name='unitsRequired']");
+    if( $("input[name='requireAll']:checked").val() == "true" )
+        $unitsRequired.prop( "disabled", true );
+    $("input[name='requireAll']").change(function(){
+        if( $(this).val() == "true" )
+        {
+            $unitsRequired.val("");
+            $unitsRequired.prop( "disabled", true );
+        }
+        else
+            $unitsRequired.prop( "disabled", false );
+    });
     $("textarea").each(function(){
         CKEDITOR.replace( $(this).attr("id"), {
           toolbar : "Basic"
@@ -39,9 +51,11 @@ function removeBlock()
     <td><form:textarea path="description" rows="5" cols="80" /></td>
   </tr>
   <tr>
-    <th class="shrink">Units Required *</th>
+    <th class="shrink">Requirements</th>
     <td>
-      <form:input path="unitsRequired" cssClass="smallinput" required="true" />
+      <form:radiobutton path="requireAll" value="true" /> All Courses Required
+      <form:radiobutton path="requireAll" value="false" /> Require
+      <form:input path="unitsRequired" cssClass="smallinput" required="true" /> Units
     </td>
   </tr>
   <tr>

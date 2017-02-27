@@ -60,7 +60,11 @@ $(function(){
 <div id="sortableBlocks">
 <c:forEach items="${program.blocks}" var="block">
 <div id="block-${block.id}" class="site-block" data-program-id="${program.id}" data-block-id="${block.id}">
-<div class="site-block-title">${block.name} <span style="margin-left: 1em;">(${block.unitsRequired} Units)</span>
+<div class="site-block-title">${block.name}
+  <span style="margin-left: 1em;">
+    <c:if test="${block.requireAll}">(All Courses Required)</c:if>
+    <c:if test="${not block.requireAll}">(${block.unitsRequired} Units Required)</c:if>
+  </span>
   <div class="site-block-operations">
     <a href="edit?id=${block.id}&programId=${program.id}"><img
        title="Edit Block" alt="[Edit Block]" src="<c:url value='/img/icons/brick_edit.png' />" /></a>

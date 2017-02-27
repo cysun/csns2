@@ -42,7 +42,12 @@ function remove( id )
 
 <c:forEach items="${program.blocks}" var="block">
 <div id="block-${block.id}" class="site-block">
-<div class="site-block-title">${block.name} <span style="margin-left: 1em;">(${block.unitsRequired} Units)</span></div>
+<div class="site-block-title">${block.name}
+  <span style="margin-left: 1em;">
+    <c:if test="${block.requireAll}">(All Courses Required)</c:if>
+    <c:if test="${not block.requireAll}">(${block.unitsRequired} Units Required)</c:if>
+  </span>
+</div>
 <div class="site-block-content">
 ${block.description}
 <c:if test="${fn:length(block.courses) > 0}">

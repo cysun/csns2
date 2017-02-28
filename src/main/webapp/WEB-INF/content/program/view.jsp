@@ -22,18 +22,14 @@ function remove( id )
 <li><a class="bc" href="list">${program.department.name}</a></li>
 <li>${program.name}</li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-<c:if test="${program.published}">
-  <li class="align_right"><a href="javascript:clone(${program.id})"><img alt="[Clone Program]"
-      title="Clone Program" src="<c:url value='/img/icons/report_code.png' />" /></a></li>
-</c:if>
-<c:if test="${not program.published}">
   <li class="align_right"><a href="block/list?programId=${program.id}"><img title="Edit Blocks"
       alt="[Edit Blocks]" src="<c:url value='/img/icons/bricks.png' />" /></a></li>
   <li class="align_right"><a href="edit?id=${program.id}"><img alt="[Edit Program]"
       title="Edit Program" src="<c:url value='/img/icons/report_edit.png' />" /></a></li>
-</c:if>
   <li class="align_right"><a href="javascript:remove(${program.id})"><img alt="[Remove Program]"
       title="Remove Program" src="<c:url value='/img/icons/report_delete.png' />" /></a></li>
+  <li class="align_right"><a href="javascript:clone(${program.id})"><img alt="[Clone Program]"
+      title="Clone Program" src="<c:url value='/img/icons/report_code.png' />" /></a></li>
 </security:authorize>
 </ul>
 

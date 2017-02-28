@@ -101,7 +101,7 @@ public class ProgramController {
         logger.info( SecurityUtils.getUser().getUsername() + " created program "
             + newProgram.getId() + " from " + program.getId() );
 
-        return "redirect:edit?id=" + newProgram.getId();
+        return "redirect:view?id=" + newProgram.getId();
     }
 
     @RequestMapping("/department/{dept}/program/remove")

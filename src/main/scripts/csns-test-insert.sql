@@ -47,7 +47,6 @@ insert into courses (id, department_id, code, name, coordinator_id) values
 
 insert into department_undergraduate_courses values (1000100, 1000200);
 insert into department_undergraduate_courses values (1000100, 1000201);
-insert into department_additional_undergraduate_courses values (1000100, 1000203);
 insert into department_graduate_courses values (1000100, 1000202);
 insert into department_undergraduate_courses values (1000101, 1000204);
 insert into department_undergraduate_courses values (1000101, 1000205);

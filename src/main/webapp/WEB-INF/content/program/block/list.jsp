@@ -83,7 +83,7 @@ ${block.description}
     <td>${course.name}</td>
     <td class="center">${course.units}</td>
     <td><a href="removeCourse?programId=${program.id}&blockId=${block.id}&courseId=${course.id}"><img
-           title="Remove Course" alt="[Remove Course]" src="/csns2/img/icons/plugin_delete.png" /></a>
+           title="Remove Course" alt="[Remove Course]" src="<c:url value='/img/icons/plugin_delete.png' />" /></a>
   </c:forEach>
 </table>
 </c:if>

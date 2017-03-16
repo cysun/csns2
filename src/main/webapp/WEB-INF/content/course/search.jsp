@@ -23,6 +23,11 @@ function saveCourseIds(){
     localStorage.setItem( "searchText", "${param.text}" );
     localStorage.setItem( "courseIds", courseIds.join() );
 }
+function removeCourseIds(){
+    if( ! testLocalStorage() ) return;
+    localStorage.removeItem( "searchText" );
+    localStorage.removeItem( "courseIds" );
+}
 $(function(){
     $("table").tablesorter({
         sortList: [[0,0]]
@@ -40,11 +45,10 @@ $(function(){
     $(".course").each(function(){
         $(this).html( splitCode($(this).html()) );
     });
-    if( testLocalStorage() && ! "${param.text}" )
-    {
-    	localStorage.removeItem( "searchText" );
-    	localStorage.removeItem( "courseIds" );
-    }
+    if( $(".course").length > 0 )
+        saveCourseIds();
+    else
+        removeCourseIds();
 });
 function splitCode( code )
 {

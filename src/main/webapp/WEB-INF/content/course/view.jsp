@@ -29,7 +29,13 @@ $(function(){
               window.location.href = "view?id=" + courseIds[currentIndex+1];
           });
     }
+    $("#code").html( splitCode($("#code").html()) );
 });
+function splitCode( code )
+{
+    var parts = code.match("^([a-zA-Z]+)([0-9].*)$");
+    return parts ? parts[1] + " " + parts[2] : code;
+}
 </script>
 <ul id="title">
 <li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
@@ -44,32 +50,26 @@ $(function(){
 </ul>
 
 <p>
-<c:if test="${course.obsolete}"><span class="error">This course is obsolete.</span></c:if>
-<span style="float: right; margin-bottom: 5px;">
 <button class="prev subbutton">Prev</button>
 <button class="next subbutton">Next</button>
-</span> 
 </p>
 <table class="general autowidth">
   <tr>
-    <th>Department</th>
-    <td colspan="3">${course.department.name}</td>
-  <tr>
     <th>Code</th>
-    <td>${course.code}</td>
-    <th class="shrink">Name</th>
+    <td id="code">${course.code}</td>
+    <th>Name</th>
     <td>${course.name}</td>
   </tr>
   <tr>
     <th>Units</th>
     <td>${course.units}</td>
-    <th class="shrink">Unit Factor</th>
+    <th>Unit Factor</th>
     <td>${course.unitFactor}</td>
   </tr>
   <tr>
     <th>Coordinator</th>
     <td>${course.coordinator.name}</td>
-    <th class="shrink">Description</th>
+    <th>Description</th>
     <td>
       <c:if test="${course.description != null}">
       <a href="<c:url value='/download?fileId=${course.description.id}' />">View</a>
@@ -90,3 +90,4 @@ $(function(){
     <td colspan="3">${course.catalogDescription}</td>
   </tr>
 </table>
+<c:if test="${course.obsolete}"><p class="error">This course is obsolete.</p></c:if>

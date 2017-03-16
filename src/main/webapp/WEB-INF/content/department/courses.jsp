@@ -43,7 +43,7 @@ function splitCode( code )
 <ul id="title">
 <li><a class="bc" href="<c:url value='/course/search' />">Courses</a></li>
 <li>${department.name}</li>
-<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<security:authorize access="authenticated and principal.isFaculty('${dept}')">
 <li class="align_right"><a href="<c:url value='/course/create' />"><img title="Create Course"
     alt="[Create Course]" src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </security:authorize>

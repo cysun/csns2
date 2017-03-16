@@ -2,7 +2,34 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <script>
+function testLocalStorage(){
+    try
+    {
+        localStorage.setItem("test", "test");
+        localStorage.removeItem("test");
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+}
+function saveCourseIds(){
+    if( ! testLocalStorage() ) return;
+
+    var courseIds = [];
+    $(".course").each(function(){
+        courseIds.push($(this).attr("data-course-id"));
+    });
+    localStorage.setItem( "searchText", "${param.text}" );
+    localStorage.setItem( "courseIds", courseIds.join() );
+}
 $(function(){
+    $("table").tablesorter({
+        sortList: [[0,0]]
+    });
+    $("table").bind("sortEnd", function(){
+        saveCourseIds();
+    });
     $("#search").autocomplete({
         source: "<c:url value='/autocomplete/course' />",
         select: function(event, ui) {
@@ -10,9 +37,14 @@ $(function(){
                 window.location.href = "view?id=" + ui.item.id;
         }
     });
-    $(".course-code").each(function(){
+    $(".course").each(function(){
         $(this).html( splitCode($(this).html()) );
     });
+    if( testLocalStorage() && ! "${param.text}" )
+    {
+    	localStorage.removeItem( "searchText" );
+    	localStorage.removeItem( "courseIds" );
+    }
 });
 function splitCode( code )
 {
@@ -23,7 +55,7 @@ function splitCode( code )
 
 <ul id="title">
 <li>Courses</li>
-<security:authorize access="authenticated and principal.admin">
+<security:authorize access="authenticated and principal.faculty">
 <li class="align_right"><a href="create"><img title="Create Course" alt="[Create Course]"
     src="<c:url value='/img/icons/table_add.png' />" /></a></li>
 </security:authorize>
@@ -37,14 +69,17 @@ function splitCode( code )
 
 <c:if test="${not empty courses}">
 <table class="viewtable autowidth">
-<tr><th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th></tr>
+<thead><tr><th>Code</th><th>Name</th><th>Units</th><th>Unit Factor</th><th>Coordinator</th></tr></thead>
+<tbody>
 <c:forEach items="${courses}" var="course">
 <tr>
-  <td class="course-code">${course.code}</td>
+  <td class="course" data-course-id="${course.id}">${course.code}</td>
   <td><a href="view?id=${course.id}">${course.name}</a></td>
   <td class="center">${course.units}</td>
+  <td class="center">${course.unitFactor}</td>
   <td class="center">${course.coordinator.name}</td>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>

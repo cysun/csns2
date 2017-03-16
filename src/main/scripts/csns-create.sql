@@ -304,16 +304,17 @@ insert into grades (id, symbol, value, description) values
 ----------------------------------------------------
 
 create table courses (
-    id              bigint primary key,
-    department_id   bigint,
-    code            varchar(255) not null unique,
-    name            varchar(255) not null,
-    units           integer not null default 3,
-    unit_factor     double precision not null default 1.0,
-    coordinator_id  bigint references users(id),
-    description_id  bigint references files(id),
-    journal_id      bigint unique,
-    obsolete        boolean not null default 'f'
+    id                  bigint primary key,
+    department_id       bigint,
+    code                varchar(255) not null unique,
+    name                varchar(255) not null,
+    units               integer not null default 3,
+    unit_factor         double precision not null default 1.0,
+    coordinator_id      bigint references users(id),
+    description_id      bigint references files(id),
+    catalog_description varchar(8000),
+    journal_id          bigint unique,
+    obsolete            boolean not null default 'f'
 );
 
 alter table courses add column tsv tsvector;

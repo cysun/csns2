@@ -75,6 +75,9 @@ public class Course implements Serializable, Comparable<Course> {
     @JoinColumn(name = "description_id")
     private File description;
 
+    @Column(name = "catalog_description")
+    private String catalogDescription;
+
     @ManyToMany
     @JoinTable(name = "course_prerequisites",
         joinColumns = @JoinColumn(name = "course_id"),
@@ -198,6 +201,16 @@ public class Course implements Serializable, Comparable<Course> {
     public void setDescription( File description )
     {
         this.description = description;
+    }
+
+    public String getCatalogDescription()
+    {
+        return catalogDescription;
+    }
+
+    public void setCatalogDescription( String catalogDescription )
+    {
+        this.catalogDescription = catalogDescription;
     }
 
     public List<Course> getPrerequisites()

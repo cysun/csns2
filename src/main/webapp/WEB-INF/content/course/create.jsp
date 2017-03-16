@@ -113,6 +113,12 @@ function deleteprerequisites( prereqId )
     </td>
   </tr>
   <tr>
+    <th>Catalog Description</th>
+    <td>
+      <form:textarea path="catalogDescription" cssStyle="width: 99%;" rows="6" />
+    </td>
+  </tr>
+  <tr>
     <th></th>
     <td>
       <input type="submit" class="subbutton" value="Create" />

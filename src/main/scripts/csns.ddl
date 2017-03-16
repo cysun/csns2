@@ -212,6 +212,7 @@ create sequence hibernate_sequence start 1 increment 1;
 
     create table courses (
         id int8 not null,
+        catalog_description varchar(255),
         code varchar(255) not null,
         name varchar(255) not null,
         obsolete boolean not null,

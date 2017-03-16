@@ -120,6 +120,12 @@ function deleteprerequisites( prereqId )
     </td>
   </tr>
   <tr>
+    <th>Catalog Description</th>
+    <td>
+      <form:textarea path="catalogDescription" cssStyle="width: 99%;" rows="6" />
+    </td>
+  </tr>
+  <tr>
     <th>Obsolete</th>
     <td><form:checkbox path="obsolete" cssStyle="width: auto;" /></td>
   </tr>

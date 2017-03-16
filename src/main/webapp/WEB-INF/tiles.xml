@@ -382,7 +382,7 @@
         <put-attribute name="content" value="/WEB-INF/content/course/search.jsp" />
     </definition>
 
-    <definition name="course/view" extends="layout.basic">
+    <definition name="course/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Course" />
         <put-attribute name="content" value="/WEB-INF/content/course/view.jsp" />
     </definition>

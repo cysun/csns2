@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -67,7 +67,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     @Transactional
-    @PreAuthorize("principal.admin or principal.id == #course.coordinator.id")
+    @PreAuthorize("principal.faculty")
     public Course saveCourse( Course course )
     {
         return entityManager.merge( course );

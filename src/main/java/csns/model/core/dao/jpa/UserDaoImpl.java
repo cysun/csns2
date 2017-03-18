@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,15 +18,11 @@
  */
 package csns.model.core.dao.jpa;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +45,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByCin( String cin )
     {
-        List<User> users = entityManager.createQuery(
-            "from User where cin = :cin", User.class )
+        List<User> users = entityManager
+            .createQuery( "from User where cin = :cin", User.class )
             .setParameter( "cin", cin )
             .getResultList();
         return users.size() == 0 ? null : users.get( 0 );
@@ -86,22 +82,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsers( Long ids[] )
     {
-        if( ids == null || ids.length < 1 ) return new ArrayList<User>();
+        String query = "from User where id in (:ids) "
+            + "order by lastName asc, firstName asc";
 
-        CriteriaBuilder cbuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> cquery = cbuilder.createQuery( User.class );
-        Root<User> user = cquery.from( User.class );
-
-        Predicate criteria = cbuilder.equal( user.get( "id" ), ids[0] );
-        for( int i = 1; i < ids.length; ++i )
-            criteria = cbuilder.or( criteria,
-                cbuilder.equal( user.get( "id" ), ids[i] ) );
-        cquery.where( criteria );
-
-        cquery.orderBy( cbuilder.asc( user.get( "lastName" ) ),
-            cbuilder.asc( user.get( "firstName" ) ) );
-
-        return entityManager.createQuery( cquery ).getResultList();
+        return entityManager.createQuery( query, User.class )
+            .setParameter( "ids", Arrays.asList( ids ) )
+            .getResultList();
     }
 
     @Override
@@ -151,8 +137,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> searchUsersByStanding( String dept, String symbol )
     {
-        return entityManager.createNamedQuery( "user.search.by.standing",
-            User.class )
+        return entityManager
+            .createNamedQuery( "user.search.by.standing", User.class )
             .setParameter( "dept", dept )
             .setParameter( "symbol", symbol.toUpperCase() )
             .getResultList();

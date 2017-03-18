@@ -29,7 +29,9 @@ $(function(){
               window.location.href = "view?id=" + courseIds[currentIndex+1];
           });
     }
-    $("#code").html( splitCode($("#code").html()) );
+    $(".code").each(function(){
+        $(this).html( splitCode($(this).html()) );
+    });
 });
 function splitCode( code )
 {
@@ -56,9 +58,20 @@ function splitCode( code )
 <table class="general autowidth">
   <tr>
     <th>Code</th>
-    <td id="code">${course.code}</td>
+    <td class="code">${course.code}</td>
+    <th>Department</th>
+    <td>${course.department.name}</td>
+  </tr>
+  <tr>
     <th>Name</th>
     <td>${course.name}</td>
+    <th>Prerequisites</th>
+    <td colspan="3">
+      <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">
+        <a href="view?id=${prerequisite.id}"><span class="code">${prerequisite.code}</span></a><c:if
+          test="${not status.last}">,</c:if>
+      </c:forEach>
+    </td>
   </tr>
   <tr>
     <th>Units</th>
@@ -74,15 +87,6 @@ function splitCode( code )
       <c:if test="${course.description != null}">
       <a href="<c:url value='/download?fileId=${course.description.id}' />">View</a>
       </c:if>
-    </td>
-  </tr>
-  <tr>
-    <th>Prerequisites</th>
-    <td colspan="3">
-      <c:forEach items="${course.prerequisites}" var="prerequisite" varStatus="status">
-        <a href="view?id=${prerequisite.id}">${prerequisite.code}</a><c:if
-          test="${not status.last}">,</c:if>
-      </c:forEach>
     </td>
   </tr>
   <tr>

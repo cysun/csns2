@@ -37,5 +37,5 @@ jqueryui.url=https://code.jquery.com/ui/1.12.1/jquery-ui.min.js
 jqueryui.css=https://code.jquery.com/ui/1.12.1/themes/redmond/jquery-ui.css
 highcharts=https://code.highcharts.com
 mathjax.url=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-jquery.plugins=http://csns.calstatela.edu/static/jqueryplugins2
-ckeditor.url=http://csns.calstatela.edu/static/ckeditor-4.5.7/ckeditor.js
+jquery.plugins=https://csns.calstatela.edu/static/jqueryplugins2
+ckeditor.url=https://csns.calstatela.edu/static/ckeditor-4.5.7/ckeditor.js

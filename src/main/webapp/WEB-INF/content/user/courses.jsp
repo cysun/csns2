@@ -32,7 +32,7 @@ $(function(){
 
 <h4>Courses Taken</h4>
 <c:if test="${fn:length(coursesTaken) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Term</th><th>Course</th><th>Instructor</th><th>Grade</th></tr>
 </thead>
@@ -54,7 +54,7 @@ $(function(){
 
 <h4>Course Substitutions</h4>
 <c:if test="${fn:length(courseSubstitutions) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Course</th><th>Substitute</th><th>Advisor</th><th>Date</th></tr>
 </thead>
@@ -86,7 +86,7 @@ $(function(){
 
 <h4>Course Transfers</h4>
 <c:if test="${fn:length(courseTransfers) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Course</th><th>Advisor</th><th>Date</th></tr>
 </thead>
@@ -115,7 +115,7 @@ $(function(){
 
 <h4>Course Waivers</h4>
 <c:if test="${fn:length(courseWaivers) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Course</th><th>Advisor</th><th>Date</th></tr>
 </thead>

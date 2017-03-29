@@ -26,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.academics.Program;
 import csns.model.advisement.PersonalProgram;
 import csns.model.advisement.dao.PersonalProgramDao;
 import csns.model.core.User;
@@ -40,6 +41,20 @@ public class PersonalProgramDaoImpl implements PersonalProgramDao {
     public PersonalProgram getPersonalProgram( Long id )
     {
         return entityManager.find( PersonalProgram.class, id );
+    }
+
+    @Override
+    public PersonalProgram getPersonalProgram( User student, Program program )
+    {
+        String query = "from PersonalProgram where student = :student "
+            + "and program = :program order by date desc";
+
+        List<PersonalProgram> personalPrograms = entityManager
+            .createQuery( query, PersonalProgram.class )
+            .setParameter( "student", student )
+            .setParameter( "program", program )
+            .getResultList();
+        return personalPrograms.size() == 0 ? null : personalPrograms.get( 0 );
     }
 
     @Override

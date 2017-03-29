@@ -19,6 +19,7 @@
 package csns.web.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import csns.helper.ProgramChecker;
+import csns.model.academics.Enrollment;
 import csns.model.academics.Program;
+import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
+import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
 import csns.model.advisement.PersonalProgram;
+import csns.model.advisement.PersonalProgramBlock;
+import csns.model.advisement.PersonalProgramEntry;
+import csns.model.advisement.dao.PersonalProgramBlockDao;
 import csns.model.advisement.dao.PersonalProgramDao;
+import csns.model.advisement.dao.PersonalProgramEntryDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -44,13 +54,25 @@ public class UserProgramController {
     private UserDao userDao;
 
     @Autowired
+    private DepartmentDao departmentDao;
+
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private EnrollmentDao enrollmentDao;
+
+    @Autowired
     private ProgramDao programDao;
 
     @Autowired
     private PersonalProgramDao personalProgramDao;
 
     @Autowired
-    private DepartmentDao departmentDao;
+    private PersonalProgramBlockDao personalProgramBlockDao;
+
+    @Autowired
+    private PersonalProgramEntryDao personalProgramEntryDao;
 
     private static final Logger logger = LoggerFactory
         .getLogger( UserProgramController.class );
@@ -59,9 +81,26 @@ public class UserProgramController {
     public String program( @RequestParam Long userId, ModelMap models )
     {
         User user = userDao.getUser( userId );
-        models.put( "user", user );
-        models.put( "departments", departmentDao.getDepartments() );
+        List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
+        if( user.getPersonalProgram() != null )
+        {
+            enrollments.removeAll( user.getPersonalProgram().getEnrollments() );
+            ProgramChecker programChecker = new ProgramChecker(
+                user.getPersonalProgram() );
+            int entriesUpdated = programChecker
+                .checkRequirements( enrollments );
+            if( entriesUpdated > 0 )
+            {
+                personalProgramDao
+                    .savePersonalProgram( user.getPersonalProgram() );
+                logger.info(
+                    "Auto updated personal program of " + user.getUsername() );
+            }
+        }
 
+        models.put( "user", user );
+        models.put( "enrollments", enrollments );
+        models.put( "departments", departmentDao.getDepartments() );
         if( user.getMajor() != null ) models.put( "programs",
             programDao.getPublishedPrograms( user.getMajor() ) );
 
@@ -76,6 +115,7 @@ public class UserProgramController {
         if( majorId == null )
         {
             user.setMajor( null );
+            user.setPersonalProgram( null );
             user = userDao.saveUser( user );
             logger.info( SecurityUtils.getUser().getUsername()
                 + " removed major for " + user.getUsername() );
@@ -83,6 +123,11 @@ public class UserProgramController {
         else
         {
             user.setMajor( departmentDao.getDepartment( majorId ) );
+            if( user.getPersonalProgram() != null && !user.getPersonalProgram()
+                .getProgram()
+                .getDepartment()
+                .getId()
+                .equals( majorId ) ) user.setPersonalProgram( null );
             user = userDao.saveUser( user );
             logger.info( SecurityUtils.getUser().getUsername()
                 + " set major to " + user.getMajor().getAbbreviation() + " for "
@@ -96,32 +141,94 @@ public class UserProgramController {
     public String setProgram( @RequestParam Long userId,
         @RequestParam(required = false) Long programId )
     {
-        User student = userDao.getUser( userId );
+        User user = userDao.getUser( userId );
 
         if( programId == null )
         {
-            student.setPersonalProgram( null );
-            student = userDao.saveUser( student );
+            user.setPersonalProgram( null );
+            user = userDao.saveUser( user );
             logger.info( SecurityUtils.getUser().getUsername()
-                + " removed personal program for " + student.getUsername() );
+                + " removed personal program for " + user.getUsername() );
         }
         else
         {
             Program program = programDao.getProgram( programId );
-            PersonalProgram personalProgram = new PersonalProgram( program );
-            personalProgram.setStudent( student );
-            personalProgram.setDate( new Date() );
-            personalProgram = personalProgramDao
-                .savePersonalProgram( personalProgram );
-
-            student.setPersonalProgram( personalProgram );
-            student = userDao.saveUser( student );
-            logger.info( SecurityUtils.getUser().getUsername()
-                + " set personal program " + personalProgram.getId() + " for "
-                + student.getUsername() );
+            PersonalProgram personalProgram = personalProgramDao
+                .getPersonalProgram( user, program );
+            if( personalProgram == null )
+            {
+                personalProgram = new PersonalProgram( program );
+                personalProgram.setStudent( user );
+                personalProgram.setDate( new Date() );
+                personalProgram = personalProgramDao
+                    .savePersonalProgram( personalProgram );
+            }
+            user.setPersonalProgram( personalProgram );
+            user = userDao.saveUser( user );
+            logger.info(
+                SecurityUtils.getUser().getUsername() + " set personal program "
+                    + personalProgram.getId() + " for " + user.getUsername() );
         }
         // Program is the 4th tab
         return "redirect:../view?id=" + userId + "#3";
+    }
+
+    @RequestMapping("/user/program/entry/add")
+    public String addPersonalProgramEntry( @RequestParam Long userId,
+        @RequestParam Long blockId, @RequestParam Long courseId )
+    {
+        PersonalProgramBlock block = personalProgramBlockDao
+            .getPersonalProgramBlock( blockId );
+        block.getEntries()
+            .add( new PersonalProgramEntry( courseDao.getCourse( courseId ) ) );
+        personalProgramBlockDao.savePersonalProgramBlock( block );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " add a new entry to personal program block " + blockId );
+        return "redirect:../../view?id=" + userId + "#3";
+    }
+
+    @RequestMapping("/user/program/entry/update")
+    public String updatePersonalProgramEntry( @RequestParam Long userId,
+        @RequestParam Long entryId, @RequestParam Long enrollmentId )
+    {
+        PersonalProgramEntry entry = personalProgramEntryDao
+            .getPersonalProgramEntry( entryId );
+        Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
+        entry.setEnrollment( enrollment );
+        entry = personalProgramEntryDao.savePersonalProgramEntry( entry );
+        logger.info( SecurityUtils.getUser().getUsername() + " set enrollment "
+            + enrollmentId + " to personal program entry " + entryId
+            + " for user " + userId );
+        // Program is the 4th tab
+        return "redirect:../../view?id=" + userId + "#3";
+    }
+
+    @RequestMapping(value = "/user/program/entry/update", params = "operation")
+    @ResponseBody
+    public void updatePersonalProgramEntry( @RequestParam Long entryId,
+        @RequestParam String operation )
+    {
+        PersonalProgramEntry entry = personalProgramEntryDao
+            .getPersonalProgramEntry( entryId );
+        switch( operation )
+        {
+            case "prereq":
+                entry.setPrereqMet( entry.isPrereqMet() ? false : true );
+                personalProgramEntryDao.savePersonalProgramEntry( entry );
+                logger.info( SecurityUtils.getUser().getUsername()
+                    + " toggled prereq met of personal program entry "
+                    + entryId );
+                break;
+
+            case "delete":
+                personalProgramEntryDao.deletePersonalProgramEntry( entry );
+                logger.info( SecurityUtils.getUser().getUsername()
+                    + " deleted personal program entry " + entryId );
+                break;
+
+            default:
+                logger.warn( "Unsupported operation: " + operation );
+        }
     }
 
 }

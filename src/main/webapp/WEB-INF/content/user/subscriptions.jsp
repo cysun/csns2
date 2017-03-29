@@ -5,7 +5,7 @@
 
 <c:if test="${fn:length(mailinglists) > 0}">
 <h3>Mailing Lists</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Department</th><th>Mailing List</th><th>Auto-Subscribed</th></tr>
   <c:forEach items="${mailinglists}" var="subscription">
   <tr>
@@ -19,7 +19,7 @@
 
 <c:if test="${fn:length(departmentForums) > 0}">
 <h3>Department Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Department</th><th>Forum</th><th>Auto-Subscribed</th></tr>
   <c:forEach items="${departmentForums}" var="subscription">
   <tr>
@@ -33,7 +33,7 @@
 
 <c:if test="${fn:length(courseForums) > 0}">
 <h3>Course Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Forum</th><th>Auto-Subscribed</th></tr>
   <c:forEach items="${courseForums}" var="subscription">
   <tr>
@@ -47,7 +47,7 @@
 
 <c:if test="${fn:length(otherForums) > 0}">
 <h3>Other Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Forum</th><th>Auto-Subscribed</th></tr>
   <c:forEach items="${otherForums}" var="subscription">
   <tr>

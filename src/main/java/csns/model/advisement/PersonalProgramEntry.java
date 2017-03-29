@@ -20,6 +20,7 @@ package csns.model.advisement;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -47,6 +48,9 @@ public class PersonalProgramEntry implements Serializable {
     @ManyToOne
     @JoinColumn(name = "enrollment_id")
     private Enrollment enrollment;
+
+    @Column(name = "prereq_met", nullable = false)
+    private boolean prereqMet = false;
 
     public PersonalProgramEntry()
     {
@@ -85,6 +89,16 @@ public class PersonalProgramEntry implements Serializable {
     public void setEnrollment( Enrollment enrollment )
     {
         this.enrollment = enrollment;
+    }
+
+    public boolean isPrereqMet()
+    {
+        return prereqMet;
+    }
+
+    public void setPrereqMet( boolean prereqMet )
+    {
+        this.prereqMet = prereqMet;
     }
 
 }

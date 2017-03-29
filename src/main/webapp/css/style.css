@@ -1170,19 +1170,25 @@ tr th.shrink, tr td.shrink {
     background-color: #ff0000;
 }
 
-/** Program Status **/
-.pstat div {
-    display: inline-block;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+/** Personal Program **/
+#personal-program {
+    margin-top: 1em;
 }
-.pstat-course-code {
-    width: 4em;
-    border-right:1px solid #dddddd;
+#personal-program::after {
+    content:"";
+    display:block;
+    clear:both;
 }
-.pstat-term {
-    width: 2em;
-    border-right:1px solid #dddddd;
+#personal-program .left-block {
+    float: left;
+    width: 64%;
+}
+#personal-program .right-block {
+    float: right;
+    width: 34%;
+}
+#personal-program .prereq-met {
+    background: lightyellow;
 }
 /************* Editor Border Fix *****************/
 .assignment_date td th,

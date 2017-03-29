@@ -622,7 +622,8 @@ create table personal_programs (
     program_id      bigint references programs(id),
     date            timestamp not null default current_timestamp,
     approve_date    timestamp,
-    approved_by     bigint references users(id)
+    approved_by     bigint references users(id),
+  unique (student_id, program_id)
 );
 
 create table personal_program_blocks (
@@ -636,7 +637,8 @@ create table personal_program_entries (
     id              bigint primary key,
     block_id        bigint references personal_program_blocks(id),
     course_id       bigint references courses(id),
-    enrollment_id   bigint references enrollments(id)
+    enrollment_id   bigint references enrollments(id),
+    prereq_met      boolean not null default 'f'
 );
 
 alter table users add constraint users_personal_program_id_fkey

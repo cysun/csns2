@@ -18,20 +18,14 @@
  */
 package csns.model.advisement.dao;
 
-import java.util.List;
+import csns.model.advisement.PersonalProgramEntry;
 
-import csns.model.academics.Program;
-import csns.model.advisement.PersonalProgram;
-import csns.model.core.User;
+public interface PersonalProgramEntryDao {
 
-public interface PersonalProgramDao {
+    PersonalProgramEntry getPersonalProgramEntry( Long id );
 
-    PersonalProgram getPersonalProgram( Long id );
+    PersonalProgramEntry savePersonalProgramEntry( PersonalProgramEntry entry );
 
-    PersonalProgram getPersonalProgram( User student, Program program );
-
-    List<PersonalProgram> getPersonalPrograms( User student );
-
-    PersonalProgram savePersonalProgram( PersonalProgram program );
+    void deletePersonalProgramEntry( PersonalProgramEntry entry );
 
 }

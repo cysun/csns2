@@ -22,7 +22,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,13 +37,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
+import csns.model.academics.Course;
+import csns.model.academics.Enrollment;
 import csns.model.academics.Program;
 import csns.model.academics.ProgramBlock;
 import csns.model.core.User;
 
 @Entity
-@Table(name = "personal_programs")
+@Table(name = "personal_programs",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "program_id", "student_id" }))
 public class PersonalProgram implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -84,6 +92,24 @@ public class PersonalProgram implements Serializable {
 
         for( ProgramBlock programBlock : program.getBlocks() )
             blocks.add( new PersonalProgramBlock( programBlock ) );
+    }
+
+    public Set<Enrollment> getEnrollments()
+    {
+        Set<Enrollment> enrollments = new HashSet<Enrollment>();
+        for( PersonalProgramBlock block : blocks )
+            for( PersonalProgramEntry entry : block.getEntries() )
+                if( entry.getEnrollment() != null )
+                    enrollments.add( entry.getEnrollment() );
+        return enrollments;
+    }
+
+    public List<Map<Course, PersonalProgramEntry>> getEntryMaps()
+    {
+        List<Map<Course, PersonalProgramEntry>> entryMaps = new ArrayList<Map<Course, PersonalProgramEntry>>();
+        for( PersonalProgramBlock block : blocks )
+            entryMaps.add( block.getEntryMap() );
+        return entryMaps;
     }
 
     public Long getId()

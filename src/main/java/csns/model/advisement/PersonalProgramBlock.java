@@ -20,10 +20,13 @@ package csns.model.advisement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -48,7 +51,7 @@ public class PersonalProgramBlock implements Serializable {
     @JoinColumn(name = "program_block_id")
     private ProgramBlock programBlock;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "block_id")
     private List<PersonalProgramEntry> entries;
 
@@ -64,6 +67,33 @@ public class PersonalProgramBlock implements Serializable {
 
         for( Course course : programBlock.getCourses() )
             entries.add( new PersonalProgramEntry( course ) );
+    }
+
+    public boolean isRequirementsMet()
+    {
+        int classesCompleted = 0;
+        int unitsCompleted = 0;
+        for( PersonalProgramEntry entry : entries )
+            if( entry.getEnrollment() != null )
+            {
+                ++classesCompleted;
+                unitsCompleted += entry.getEnrollment()
+                    .getSection()
+                    .getCourse()
+                    .getUnits();
+            }
+
+        return programBlock.isRequireAll() && classesCompleted == entries.size()
+            || classesCompleted > 0
+                && unitsCompleted >= programBlock.getUnitsRequired();
+    }
+
+    public Map<Course, PersonalProgramEntry> getEntryMap()
+    {
+        Map<Course, PersonalProgramEntry> entryMap = new HashMap<Course, PersonalProgramEntry>();
+        for( PersonalProgramEntry entry : entries )
+            entryMap.put( entry.getCourse(), entry );
+        return entryMap;
     }
 
     public Long getId()

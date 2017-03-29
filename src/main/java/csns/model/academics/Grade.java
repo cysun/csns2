@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -61,6 +61,11 @@ public class Grade implements Serializable, Comparable<Grade> {
         if( v1 == null && v2 != null ) return -1;
 
         return v1.compareTo( v2 );
+    }
+
+    public boolean isPassingGrade()
+    {
+        return value != null && value >= 2 || symbol.equals( "CR" );
     }
 
     public Long getId()

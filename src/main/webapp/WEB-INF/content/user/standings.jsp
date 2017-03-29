@@ -38,7 +38,7 @@ function deleteStanding( id )
 </ul>
 
 <h4>Standing History</h4>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr>
     <th>Department</th><th>Standing</th><th>Term</th>
     <c:if test="${isFaculty}"><th></th></c:if>

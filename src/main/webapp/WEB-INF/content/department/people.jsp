@@ -302,13 +302,14 @@ function email( userId )
 <c:if test="${fn:length(department.groups) > 0}">
 <table class="viewtable autowidth">
 <tr>
-  <th>Name</th><th>Description</th><th>Updated On</th>
+  <th>Name</th><th>Description</th><th>Members</th><th>Updated On</th>
 </tr>
 <c:forEach items="${department.groups}" var="group">
 <tr>
   <td class="nowrap"><a href="<c:url value='/department/${dept}/group/view?id=${group.id}' />">${group.name}</a></td>
   <td>${group.description}</td>
-  <td class="shrink"><fmt:formatDate value="${group.date}" pattern="yyyy-MM-dd" /></td>
+  <td class="center">${fn:length(group.members)}</td>
+  <td><fmt:formatDate value="${group.date}" pattern="yyyy-MM-dd" /></td>
 </tr>
 </c:forEach>
 </table>

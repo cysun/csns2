@@ -72,12 +72,13 @@ function email( userId )
 <h3>${group.name}</h3>
 <p>${group.description}</p>
 
-<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <p style="margin-top: 1em;">
-<button class="subbutton">Add User</button>
+<span style="margin-right: 1em;">Members: ${fn:length(group.members)}</span>
+<security:authorize access="authenticated and principal.isAdmin('${dept}')">
+<button class="subbutton">Add</button>
 <input id="search" name="text" type="text" class="forminput" size="40" />
-</p>
 </security:authorize>
+</p>
 
 <c:if test="${fn:length(group.members) > 0 }">
 <form id="users-form" method="post">

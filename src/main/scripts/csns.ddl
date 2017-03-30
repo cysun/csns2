@@ -377,7 +377,7 @@ create sequence hibernate_sequence start 1 increment 1;
     create table groups (
        id int8 not null,
         date timestamp not null,
-        description varchar(255) not null,
+        description varchar(255),
         name varchar(255) not null,
         department_id int8,
         primary key (id)
@@ -1066,6 +1066,9 @@ create sequence hibernate_sequence start 1 increment 1;
 
     alter table grades 
        add constraint UK_2ljyc433n941undoa4gnv7ony unique (symbol);
+
+    alter table members 
+       add constraint UKc2tlx6det7nhu66mv4ktta8c3 unique (group_id, user_id);
 
     alter table mft_distribution_types 
        add constraint UKbkgmth8ayk24wvyx04uyxcfhh unique (department_id, alias);

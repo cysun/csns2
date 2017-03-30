@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Mahdiye Jamali (mjamali@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -80,24 +80,25 @@ public class GroupController {
     {
         Group group = groupDao.getGroup( groupId );
         User user = userDao.getUser( userId );
-        memberDao.saveMember( new Member( group, user ) );
+        Member member = memberDao.getMember( group, user );
+        if( member == null )
+        {
+            memberDao.saveMember( new Member( group, user ) );
+            logger.info( SecurityUtils.getUser().getUsername() + " added user "
+                + user.getUsername() + " to group " + group.getId() );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " added user "
-            + user.getUsername() + " to group " + group.getId() );
-
-        group.setDate( new Date() );
-        groupDao.saveGroup( group );
+            group.setDate( new Date() );
+            groupDao.saveGroup( group );
+        }
 
         return "redirect:view?id=" + groupId;
     }
 
     @RequestMapping("/department/{dept}/group/removeMembers")
     public String removeMembers( @RequestParam Long groupId,
-        @RequestParam("memberId" ) Long memberIds[])
+        @RequestParam("memberId") Long memberIds[] )
     {
-        for( Long memberId : memberIds )
-            memberDao.deleteMember( memberDao.getMember( memberId ) );
-
+        memberDao.deleteMembers( memberIds );
         logger.info( SecurityUtils.getUser().getUsername() + " deleted members "
             + Arrays.toString( memberIds ) + " from group " + groupId );
 

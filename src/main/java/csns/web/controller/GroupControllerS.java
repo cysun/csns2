@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Mahdiye Jamali (mjamali@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,10 +91,7 @@ public class GroupControllerS {
         if( result.hasErrors() ) return "group/create";
 
         group.setDate( new Date() );
-        if( !StringUtils.hasText( group.getDescription() ) )
-            group.setDescription( group.getName() );
         group = groupDao.saveGroup( group );
-
         logger.info( SecurityUtils.getUser().getUsername() + " created group "
             + group.getId() );
 
@@ -120,10 +116,7 @@ public class GroupControllerS {
         if( result.hasErrors() ) return "group/edit";
 
         group.setDate( new Date() );
-        if( !StringUtils.hasText( group.getDescription() ) )
-            group.setDescription( group.getName() );
         group = groupDao.saveGroup( group );
-
         logger.info( SecurityUtils.getUser().getUsername() + " edited group "
             + group.getId() );
 
@@ -169,18 +162,23 @@ public class GroupControllerS {
         {
             if( !importedUser.isNewMember() ) continue;
 
+            boolean isNewUser = false;
             String cin = importedUser.getCin();
             User user = userDao.getUserByCin( cin );
             if( user == null )
             {
+                isNewUser = true;
                 user = SecurityUtils.createTemporaryAccount( cin,
                     importedUser.getFirstName(), importedUser.getLastName() );
                 user = userDao.saveUser( user );
                 logger.info( "New account created for user " + user.getName() );
             }
 
-            memberDao.saveMember( new Member( group, user ) );
-            ++count;
+            if( isNewUser || memberDao.getMember( group, user ) == null )
+            {
+                memberDao.saveMember( new Member( group, user ) );
+                ++count;
+            }
         }
 
         if( count > 0 )

@@ -84,7 +84,7 @@ public class PersonalProgramBlock implements Serializable {
             }
 
         return programBlock.isRequireAll() && classesCompleted == entries.size()
-            || classesCompleted > 0
+            || !programBlock.isRequireAll() && classesCompleted > 0
                 && unitsCompleted >= programBlock.getUnitsRequired();
     }
 

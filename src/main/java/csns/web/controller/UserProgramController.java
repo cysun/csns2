@@ -31,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import csns.helper.ProgramChecker;
+import csns.model.academics.CourseMapping;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Program;
 import csns.model.academics.dao.CourseDao;
+import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
@@ -60,6 +62,9 @@ public class UserProgramController {
     private CourseDao courseDao;
 
     @Autowired
+    private CourseMappingDao courseMappingDao;
+
+    @Autowired
     private EnrollmentDao enrollmentDao;
 
     @Autowired
@@ -81,25 +86,31 @@ public class UserProgramController {
     public String program( @RequestParam Long userId, ModelMap models )
     {
         User user = userDao.getUser( userId );
-        List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
         if( user.getPersonalProgram() != null )
         {
+            List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
             enrollments.removeAll( user.getPersonalProgram().getEnrollments() );
             ProgramChecker programChecker = new ProgramChecker(
                 user.getPersonalProgram() );
             int entriesUpdated = programChecker
                 .checkRequirements( enrollments );
+            List<CourseMapping> courseMappings = courseMappingDao
+                .getCourseMappings(
+                    user.getPersonalProgram().getProgram().getDepartment() );
+            if( courseMappings.size() > 0 ) entriesUpdated += programChecker
+                .checkRequirements( courseMappings, enrollments );
             if( entriesUpdated > 0 )
             {
                 personalProgramDao
                     .savePersonalProgram( user.getPersonalProgram() );
-                logger.info(
-                    "Auto updated personal program of " + user.getUsername() );
+                logger.info( "Auto updated " + entriesUpdated
+                    + " entries in the personal program of "
+                    + user.getUsername() );
             }
+            models.put( "enrollments", enrollments );
         }
 
         models.put( "user", user );
-        models.put( "enrollments", enrollments );
         models.put( "departments", departmentDao.getDepartments() );
         if( user.getMajor() != null ) models.put( "programs",
             programDao.getPublishedPrograms( user.getMajor() ) );
@@ -175,38 +186,33 @@ public class UserProgramController {
 
     @RequestMapping("/user/program/entry/add")
     public String addPersonalProgramEntry( @RequestParam Long userId,
-        @RequestParam Long blockId, @RequestParam Long courseId )
+        @RequestParam Long blockId,
+        @RequestParam(required = false) Long courseId,
+        @RequestParam(required = false) Long enrollmentId )
     {
-        PersonalProgramBlock block = personalProgramBlockDao
-            .getPersonalProgramBlock( blockId );
-        block.getEntries()
-            .add( new PersonalProgramEntry( courseDao.getCourse( courseId ) ) );
-        personalProgramBlockDao.savePersonalProgramBlock( block );
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " add a new entry to personal program block " + blockId );
+        PersonalProgramEntry entry = null;
+        if( courseId != null )
+            entry = new PersonalProgramEntry( courseDao.getCourse( courseId ) );
+        if( enrollmentId != null ) entry = new PersonalProgramEntry(
+            enrollmentDao.getEnrollment( enrollmentId ) );
+        if( entry != null )
+        {
+            PersonalProgramBlock block = personalProgramBlockDao
+                .getPersonalProgramBlock( blockId );
+            block.getEntries().add( entry );
+            personalProgramBlockDao.savePersonalProgramBlock( block );
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " add a new entry to personal program block " + blockId );
+        }
+
         return "redirect:../../view?id=" + userId + "#3";
     }
 
     @RequestMapping("/user/program/entry/update")
-    public String updatePersonalProgramEntry( @RequestParam Long userId,
-        @RequestParam Long entryId, @RequestParam Long enrollmentId )
-    {
-        PersonalProgramEntry entry = personalProgramEntryDao
-            .getPersonalProgramEntry( entryId );
-        Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
-        entry.setEnrollment( enrollment );
-        entry = personalProgramEntryDao.savePersonalProgramEntry( entry );
-        logger.info( SecurityUtils.getUser().getUsername() + " set enrollment "
-            + enrollmentId + " to personal program entry " + entryId
-            + " for user " + userId );
-        // Program is the 4th tab
-        return "redirect:../../view?id=" + userId + "#3";
-    }
-
-    @RequestMapping(value = "/user/program/entry/update", params = "operation")
     @ResponseBody
-    public void updatePersonalProgramEntry( @RequestParam Long entryId,
-        @RequestParam String operation )
+    public void updatePersonalProgramEntry( @RequestParam String operation,
+        @RequestParam Long entryId,
+        @RequestParam(required = false) Long enrollmentId )
     {
         PersonalProgramEntry entry = personalProgramEntryDao
             .getPersonalProgramEntry( entryId );
@@ -224,6 +230,15 @@ public class UserProgramController {
                 personalProgramEntryDao.deletePersonalProgramEntry( entry );
                 logger.info( SecurityUtils.getUser().getUsername()
                     + " deleted personal program entry " + entryId );
+                break;
+
+            case "enrollment":
+                entry.setEnrollment(
+                    enrollmentDao.getEnrollment( enrollmentId ) );
+                personalProgramEntryDao.savePersonalProgramEntry( entry );
+                logger.info( SecurityUtils.getUser().getUsername()
+                    + " set enrollment " + enrollmentId
+                    + " to personal program entry " + entryId );
                 break;
 
             default:

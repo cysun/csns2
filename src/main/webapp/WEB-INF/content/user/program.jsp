@@ -3,9 +3,11 @@
 
 <script>
 $(function(){
-    $("table.block").tablesorter({
+    /* sort the program table and hide the <thead> element */
+    $("#program").tablesorter({
         sortList: [[0,0]]
     });
+    $(".hidden").hide();
     /* major and program selections */
     $(".select").hide();
     $(".select").change(function(){
@@ -27,6 +29,16 @@ $(function(){
         $("#major-select").val( "${user.major.id}" );
     if( "${user.personalProgram.id}" )
         $("#program-select").val( "${user.personalProgram.program.id}" );
+    /* adjust position of the enrollments table */
+    if( $("#enrollments").length )
+        $(window).scroll(function(){
+            var distanceToTop = $("#enrollments").offset().top - $(window).scrollTop();
+            if( distanceToTop <= 10 && ! $("#enrollments").hasClass("top-float") )
+                $("#enrollments").addClass("top-float");  
+            if( $("#enrollments").offset().top <= $("#program").offset().top
+                    && $("#enrollments").hasClass("top-float") )
+                $("#enrollments").removeClass("top-float");
+        });
     /* prereq-met toggle */
     $(".prereq").each(function(){
        if( $(this).attr("data-prereq-met") == "true" )
@@ -35,7 +47,11 @@ $(function(){
     $(".prereq").dblclick(function(){
         if( confirm("Toggle prerequisites met?") )
             $.ajax({
-                url: "program/entry/update?operation=prereq&entryId=" + $(this).attr("data-entry-id"),
+                url: "program/entry/update",
+                data: {
+                    operation: "prereq",
+                    entryId: $(this).attr("data-entry-id")
+                },
                 context: $(this),
                 success: function(){
                     $(this).toggleClass("prereq-met");
@@ -74,7 +90,11 @@ $(function(){
        var msg = "Are you sure you want to delete this course requirement?";
        if( confirm(msg) )
            $.ajax({
-               url: "program/entry/update?operation=delete&entryId=" + $parent.attr("data-entry-id"),
+               url: "program/entry/update",
+               data: {
+                   operation: "delete",
+                   entryId: $parent.attr("data-entry-id")
+               },
                success: function(){
                    $parent.remove();
                }
@@ -88,13 +108,34 @@ $(function(){
         accept: ".enrollment",
         hoverClass: "ui-state-highlight",
         drop: function( event, ui ){
-            window.location.href= "program/entry/update?userId=${user.id}" +
-                "&entryId=" + $(this).attr("data-entry-id") +
-                "&enrollmentId=" + ui.draggable.attr("data-enrollment-id");
+            var enrollmentId = ui.draggable.attr("data-enrollment-id");
+            $.ajax({
+               url: "program/entry/update",
+               data: {
+                   operation: "enrollment",
+                   entryId: $(this).attr("data-entry-id"),
+                   enrollmentId: enrollmentId
+               },
+               context: $(this),
+               success: function(){
+                   $(this).children("td").slice(3).remove();
+                   $(this).append( ui.draggable.children("td") );
+                   $("tr.enrollment[data-enrollment-id='" + enrollmentId + "']").remove();
+               }
+            });
         }
     });
-    /* hide the <thead> which is required by tablesorter */
-    $(".hidden").hide();
+    $(".block-title").droppable({
+       accept: ".enrollment",
+       hoverClass: "ui-state-highlight",
+       drop: function( event, ui ){
+           var userId = "${user.id}";
+           var blockId = $(this).attr("data-block-id");
+           var enrollmentId = ui.draggable.attr("data-enrollment-id");
+           window.location.href = "program/entry/add?userId=" + userId +
+                   "&blockId=" + blockId + "&enrollmentId=" + enrollmentId;
+       }
+    });
 });
 </script>
 <table class="general autowidth">
@@ -135,12 +176,18 @@ $(function(){
 
 <%-- personal program --%>
 <div class="left-block">
-<table class="general2 block">
+<table id="program" class="general2">
 <thead class="hidden"><tr><th colspan="6"></th></tr></thead>
 <c:forEach items="${user.personalProgram.blocks}" var="block">
 <tbody>
   <tr>
     <th class="block-title" data-block-id="${block.id}" colspan="6" style="text-align: left;">
+      <c:if test="${block.requirementsMet}">
+        <span class="requirements-indicator requirements-met">&nbsp;</span>
+      </c:if>
+      <c:if test="${not block.requirementsMet}">
+        <span class="requirements-indicator requirements-not-met">&nbsp;</span>
+      </c:if>
       ${block.programBlock.name}
       <c:if test="${block.programBlock.requireAll}">(All Courses Required)</c:if>
       <c:if test="${not block.programBlock.requireAll}">(${block.programBlock.unitsRequired} Units Required)</c:if>
@@ -171,7 +218,8 @@ $(function(){
 
 <%-- enrollments --%>
 <div class="right-block">
-<table class="general2 autowidth">
+<c:if test="${fn:length(enrollments) > 0}">
+<table id="enrollments" class="general2 autowidth">
 <thead>
   <tr><th>Term</th><th>Course</th><th>Grade</th></tr>
 </thead>
@@ -180,11 +228,12 @@ $(function(){
   <tr class="enrollment" data-enrollment-id="${enrollment.id}">
     <td>${enrollment.section.term}</td>
     <td>${enrollment.section.course.code}</td>
-    <td><span style="margin-left: 1em;">${enrollment.grade.symbol}</span></td>
+    <td>${enrollment.grade.symbol}</td>
   </tr>
   </c:forEach>
 </tbody>
 </table>
+</c:if>
 </div>
 
 </div> <!-- end of personal program -->

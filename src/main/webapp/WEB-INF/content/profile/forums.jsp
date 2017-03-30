@@ -59,7 +59,7 @@ $(function(){
 
 <c:if test="${fn:length(departmentForums) > 0}">
 <h3>Department Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Department</th><th>Forum</th><th>Unsubscribe</th></tr>
   <c:forEach items="${departmentForums}" var="forum">
   <tr id="forum-${forum.id}">
@@ -76,7 +76,7 @@ $(function(){
 
 <c:if test="${fn:length(courseForums) > 0}">
 <h3>Course Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Forum</th><th>Unsubscribe</th></tr>
   <c:forEach items="${courseForums}" var="forum">
   <tr>
@@ -92,7 +92,7 @@ $(function(){
 
 <c:if test="${fn:length(otherForums) > 0}">
 <h3>Other Forums</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr><th>Forum</th><th>Unsubscribe</th></tr>
   <c:forEach items="${otherForums}" var="forum">
   <tr>

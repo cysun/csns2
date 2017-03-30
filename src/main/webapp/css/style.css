@@ -1171,6 +1171,10 @@ tr th.shrink, tr td.shrink {
 }
 
 /** Personal Program **/
+.top-float {
+    position: fixed;
+    top: 10px;
+}
 #personal-program {
     margin-top: 1em;
 }
@@ -1189,6 +1193,18 @@ tr th.shrink, tr td.shrink {
 }
 #personal-program .prereq-met {
     background: lightyellow;
+}
+#personal-program span.requirements-indicator {
+    display: inline-block;
+    min-width: 1em;
+    border: 1px solid lightgray;
+    margin-right: 0.5em;
+}
+#personal-program .requirements-met {
+    background: lightgreen;
+}
+#personal-program .requirements-not-met {
+    background: white;
 }
 /************* Editor Border Fix *****************/
 .assignment_date td th,

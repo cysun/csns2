@@ -9,7 +9,7 @@ $(function(){
 </script>
 
 <c:if test="${fn:length(coursesTaken) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Term</th><th>Course</th><th>Instructor</th><th>Grade</th></tr>
 </thead>

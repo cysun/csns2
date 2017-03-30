@@ -26,7 +26,7 @@ function unsubscribe( id )
 
 <c:if test="${fn:length(subscriptions) > 0}">
 <h3>Department Mailing Lists</h3>
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
   <tr>
     <th>Department</th><th>Mailing List</th>
     <th>Auto-Subscribed</th><th>Unsubscribe</th>

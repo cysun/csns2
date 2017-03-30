@@ -61,6 +61,12 @@ public class PersonalProgramEntry implements Serializable {
         this.course = course;
     }
 
+    public PersonalProgramEntry( Enrollment enrollment )
+    {
+        this.enrollment = enrollment;
+        this.course = enrollment.getSection().getCourse();
+    }
+
     public Long getId()
     {
         return id;

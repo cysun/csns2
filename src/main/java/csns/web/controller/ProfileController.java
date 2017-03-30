@@ -21,13 +21,20 @@ package csns.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import csns.helper.ProgramChecker;
+import csns.model.academics.CourseMapping;
+import csns.model.academics.Enrollment;
+import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.advisement.dao.AdvisementRecordDao;
+import csns.model.advisement.dao.PersonalProgramDao;
 import csns.model.core.Subscription;
 import csns.model.core.User;
 import csns.model.core.dao.SubscriptionDao;
@@ -46,10 +53,19 @@ public class ProfileController {
     private EnrollmentDao enrollmentDao;
 
     @Autowired
+    private CourseMappingDao courseMappingDao;
+
+    @Autowired
+    private PersonalProgramDao personalProgramDao;
+
+    @Autowired
     private AdvisementRecordDao advisementRecordDao;
 
     @Autowired
     private SubscriptionDao subscriptionDao;
+
+    private static final Logger logger = LoggerFactory
+        .getLogger( ProfileController.class );
 
     @RequestMapping("/profile")
     public String profile( ModelMap models )
@@ -70,8 +86,31 @@ public class ProfileController {
     @RequestMapping("/profile/program")
     public String program( ModelMap models )
     {
-        models.put( "user",
-            userDao.getUser( SecurityUtils.getUser().getId() ) );
+        User user = userDao.getUser( SecurityUtils.getUser().getId() );
+        if( user.getPersonalProgram() != null )
+        {
+            List<Enrollment> enrollments = enrollmentDao.getEnrollments( user );
+            enrollments.removeAll( user.getPersonalProgram().getEnrollments() );
+            ProgramChecker programChecker = new ProgramChecker(
+                user.getPersonalProgram() );
+            int entriesUpdated = programChecker
+                .checkRequirements( enrollments );
+            List<CourseMapping> courseMappings = courseMappingDao
+                .getCourseMappings(
+                    user.getPersonalProgram().getProgram().getDepartment() );
+            if( courseMappings.size() > 0 ) entriesUpdated += programChecker
+                .checkRequirements( courseMappings, enrollments );
+            if( entriesUpdated > 0 )
+            {
+                personalProgramDao
+                    .savePersonalProgram( user.getPersonalProgram() );
+                logger.info( "Auto updated " + entriesUpdated
+                    + " entries in the personal program of "
+                    + user.getUsername() );
+            }
+        }
+
+        models.put( "user", user );
         return "profile/program";
     }
 

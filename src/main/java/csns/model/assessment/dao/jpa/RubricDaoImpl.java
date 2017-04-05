@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -64,7 +64,7 @@ public class RubricDaoImpl implements RubricDao {
     {
         String query = "from Rubric where department = :department "
             + "and publishDate is not null and publishDate < :now "
-            + "and deleted = false order by name asc";
+            + "and obsolete = false and deleted = false order by name asc";
 
         return entityManager.createQuery( query, Rubric.class )
             .setParameter( "department", department )
@@ -88,8 +88,8 @@ public class RubricDaoImpl implements RubricDao {
     {
         String query = "from Rubric where department is null "
             + "and creator = :creator and publishDate is not null "
-            + "and publishDate < :now and deleted = false "
-            + "order by name asc";
+            + "and publishDate < :now and obsolete = false "
+            + "and deleted = false order by name asc";
 
         return entityManager.createQuery( query, Rubric.class )
             .setParameter( "creator", creator )
@@ -100,8 +100,8 @@ public class RubricDaoImpl implements RubricDao {
     @Override
     public List<Rubric> searchRubrics( String text, int maxResults )
     {
-        TypedQuery<Rubric> query = entityManager.createNamedQuery(
-            "rubric.search", Rubric.class );
+        TypedQuery<Rubric> query = entityManager
+            .createNamedQuery( "rubric.search", Rubric.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
         return query.setParameter( "text", text ).getResultList();
     }

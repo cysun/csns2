@@ -1470,6 +1470,7 @@ create table rubrics (
     creator_id      bigint references users(id),
     publish_date    timestamp,
     public          boolean not null default 'f',
+    obsolete        boolean not null default 'f',
     deleted         boolean not null default 'f'
 );
 

@@ -750,6 +750,7 @@ create sequence hibernate_sequence start 1 increment 1;
         description varchar(255),
         public boolean not null,
         name varchar(255) not null,
+        obsolete boolean not null,
         publish_date timestamp,
         scale int4 not null,
         creator_id int8,

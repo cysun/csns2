@@ -72,6 +72,13 @@ function deleteRubric( id )
   </tr>
 </c:if>
 
+  <tr>
+    <th>Obsolete</th>
+    <td>
+      <form:checkbox path="obsolete" />
+    </td>
+  </tr>
+
   <tr><th></th><td><input class="subbutton" type="submit" value="Save" /></td></tr>
 </table>
 </form:form>

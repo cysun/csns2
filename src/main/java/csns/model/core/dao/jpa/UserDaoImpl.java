@@ -18,6 +18,7 @@
  */
 package csns.model.core.dao.jpa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -82,6 +83,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsers( Long ids[] )
     {
+        if( ids == null || ids.length == 0 ) return new ArrayList<User>();
+        
         String query = "from User where id in (:ids) "
             + "order by lastName asc, firstName asc";
 

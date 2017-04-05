@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -75,6 +75,8 @@ public class Rubric implements Serializable {
 
     @Column(name = "public", nullable = false)
     private boolean isPublic;
+
+    private boolean obsolete;
 
     private boolean deleted;
 
@@ -193,6 +195,16 @@ public class Rubric implements Serializable {
     public void setPublic( boolean isPublic )
     {
         this.isPublic = isPublic;
+    }
+
+    public boolean isObsolete()
+    {
+        return obsolete;
+    }
+
+    public void setObsolete( boolean obsolete )
+    {
+        this.obsolete = obsolete;
     }
 
     public boolean isDeleted()

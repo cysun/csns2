@@ -32,6 +32,8 @@ function promote( id )
     title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a></li>
 </ul>
 
+<c:if test="${rubric.obsolete}"><p class="error">This rubric is obsolete.</p></c:if>
+
 ${rubric.description}
 
 <table class="viewtable">

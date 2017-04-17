@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -51,8 +51,9 @@ import csns.model.core.User;
 import csns.model.site.Site;
 
 @Entity
-@Table(name = "sections", uniqueConstraints = @UniqueConstraint(columnNames = {
-    "term", "course_id", "number" }))
+@Table(name = "sections",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "term", "course_id", "number" }))
 public class Section implements Serializable, Comparable<Section> {
 
     private static final long serialVersionUID = 1L;
@@ -83,8 +84,8 @@ public class Section implements Serializable, Comparable<Section> {
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Enrollment> enrollments;
 
-    @OneToMany(mappedBy = "section", cascade = { CascadeType.MERGE,
-        CascadeType.PERSIST })
+    @OneToMany(mappedBy = "section",
+        cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @OrderBy("name asc")
     @Where(clause = "deleted='f'")
     private List<Assignment> assignments;
@@ -109,7 +110,7 @@ public class Section implements Serializable, Comparable<Section> {
     @JoinTable(name = "section_attendance_events",
         joinColumns = @JoinColumn(name = "section_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id"))
-    @OrderColumn(name = "event_order")
+    @OrderBy("id desc")
     private List<AttendanceEvent> attendanceEvents;
 
     @Column(nullable = false)

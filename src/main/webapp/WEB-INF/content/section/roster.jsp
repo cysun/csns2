@@ -44,7 +44,6 @@ $(function(){
    });
 });
 </script>
-
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/taught#section-${section.id}' />">${section.course.code} - ${section.number}</a></li>
 <li>Students</li>
@@ -62,7 +61,8 @@ $(function(){
 
 <p>Total Students: ${fn:length(gradeSheet.studentGrades)}</p>
 <form id="studentsForm" method="post">
-<table class="viewtable">
+<div style="overflow-x: auto; transform: rotateX(180deg);">
+<table class="viewtable" style="transform:rotateX(180deg);">
 <thead>
   <tr>
     <th><input id="selectAll" type="checkbox" /></th><th></th>
@@ -107,6 +107,7 @@ $(function(){
   </c:forEach>
 </tbody>
 </table>
+</div>
 <input type="hidden" name="sectionId" value="${section.id}" />
 <input type="hidden" name="backUrl" value="/section/roster?id=${section.id}" />
 </form>

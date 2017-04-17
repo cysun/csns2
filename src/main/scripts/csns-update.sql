@@ -1,1 +1,2 @@
-alter table rubrics add column obsolete boolean not null default 'f';
+alter table section_attendance_events drop constraint section_attendance_events_pkey;
+alter table section_attendance_events drop column event_order;

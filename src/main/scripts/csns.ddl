@@ -760,9 +760,7 @@ create sequence hibernate_sequence start 1 increment 1;
 
     create table section_attendance_events (
        section_id int8 not null,
-        event_id int8 not null,
-        event_order int4 not null,
-        primary key (section_id, event_order)
+        event_id int8 not null
     );
 
     create table section_instructors (

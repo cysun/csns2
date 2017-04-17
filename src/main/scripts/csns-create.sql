@@ -421,9 +421,7 @@ create table attendance_records (
 
 create table section_attendance_events (
     section_id  bigint not null references sections(id),
-    event_id    bigint not null references attendance_events(id),
-    event_order integer not null,
-  primary key (section_id, event_order)
+    event_id    bigint not null references attendance_events(id)
 );
 
 --------------------------------

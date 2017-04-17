@@ -36,7 +36,8 @@ $(function(){
 <p>Total Students: ${fn:length(gradeSheet.studentGrades)}</p>
 
 <form id="studentsForm" method="post">
-<table class="viewtable">
+<div style="overflow-x: auto; transform: rotateX(180deg);">
+<table class="viewtable" style="transform: rotateX(180deg);">
 <thead>
   <tr>
     <th><input id="selectAll" type="checkbox" /></th>
@@ -61,5 +62,6 @@ $(function(){
   </c:forEach>
 </tbody>
 </table>
+</div>
 <input type="hidden" name="backUrl" value="/department/${dept}/section?id=${section.id}" />
 </form>

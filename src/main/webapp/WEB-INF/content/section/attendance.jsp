@@ -2,10 +2,16 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <script>
+function updateAbsence( $cell, value )
+{
+    var $absence = $cell.closest("tr").children("td.absence-count");
+    var count = Number( $absence.html() ) + value;
+    if( count > 0 )
+        $absence.html(count);
+    else
+        $absence.html("");
+}
 $(function(){
-    $("table").tablesorter({
-        sortList: [[0,0]]
-    });
     var newEventDialog = $("#newEventForm").dialog({
        autoOpen: false,
        resizable: false,
@@ -56,13 +62,24 @@ $(function(){
                 {
                     $(this).removeClass("attended");
                     $(this).addClass("absent");
+                    updateAbsence($(this), 1);
                 }
                 else if( $(this).hasClass("absent") )
+                {
                     $(this).removeClass("absent");
+                    updateAbsence($(this), -1);
+                }
                 else
                     $(this).addClass("attended");
             }
         });
+    });
+    $("tr.student").each(function(index,row){
+        var count = $(row).children("td.absent").length;
+        if( count > 0 ) $(row).children("td.absence-count").html(count);
+    });
+    $("table").tablesorter({
+        sortList: [[0,0]]
     });
 })
 </script>
@@ -88,19 +105,22 @@ to a student to indicate whether the student attended the event:</p>
 
 
 <c:if test="${fn:length(section.attendanceEvents) > 0}">
-<table class="viewtable autowidth">
+<div style="overflow-x: auto; transform: rotateX(180deg);">
+<table class="viewtable autowidth" style="transform:rotateX(180deg);">
 <thead>
 <tr>
   <th>Student</th>
+  <th class="sorter-digit">Absence</th>
   <c:forEach items="${section.attendanceEvents}" var="event">
-    <th class="event" data-event-id="${event.id}">${event.name}</th>
+    <th class="event sorter-false" data-event-id="${event.id}">${event.name}</th>
   </c:forEach>
 </tr>
 </thead>
 <tbody>
 <c:forEach items="${section.enrollments}" var="enrollment">
-<tr>
+<tr class="student">
   <td>${enrollment.student.lastName}, ${enrollment.student.firstName}</td>
+  <td class="absence-count center"></td>
   <c:forEach items="${section.attendanceEvents}" var="event">
   <c:set var="attended" value="${event.isAttended(enrollment.student)}" />
   <c:choose>
@@ -119,6 +139,7 @@ to a student to indicate whether the student attended the event:</p>
 </c:forEach>
 </tbody>
 </table>
+</div>
 </c:if>
 
 <form id="newEventForm" action="attendance/addEvent" method="post">

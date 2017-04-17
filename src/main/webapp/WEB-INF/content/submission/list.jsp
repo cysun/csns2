@@ -73,7 +73,7 @@ $(function(){
 </c:if>
 
 <table class="viewtable autowidth">
-<thead><tr><th></th><th>Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
+<thead><tr><th></th><th class="sorter-text">Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr>

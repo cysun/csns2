@@ -82,7 +82,7 @@ function email( userId )
 
 <c:if test="${fn:length(group.members) > 0 }">
 <form id="users-form" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
 <tr>
   <th><input class="selectAll" type="checkbox" /></th>

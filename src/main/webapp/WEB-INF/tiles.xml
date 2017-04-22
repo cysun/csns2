@@ -333,12 +333,12 @@
     <!-- Program -->
     <!-- ======= -->
 
-    <definition name="program/search" extends="layout.basic">
+    <definition name="program/search" extends="layout.jqueryui">
         <put-attribute name="title" value="Programs" />
         <put-attribute name="content" value="/WEB-INF/content/program/search.jsp" />
     </definition>
 
-    <definition name="program/list" extends="layout.basic">
+    <definition name="program/list" extends="layout.jqueryui">
         <put-attribute name="title" value="Programs" />
         <put-attribute name="content" value="/WEB-INF/content/program/list.jsp" />
     </definition>
@@ -944,7 +944,7 @@
     <!-- Project -->
     <!-- ======= -->
 
-    <definition name="project/search" extends="layout.basic">
+    <definition name="project/search" extends="layout.jqueryui">
         <put-attribute name="title" value="Search Projects" />
         <put-attribute name="content" value="/WEB-INF/content/project/search.jsp" />
     </definition>

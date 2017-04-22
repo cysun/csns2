@@ -1,6 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<script>
+$(function(){
+   $("table").tablesorter(); 
+});
+</script>
+
 <ul id="title">
 <li>Programs</li>
 </ul>
@@ -12,7 +18,7 @@
 </form>
 
 <c:if test="${not empty programs}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <tr><th>Department</th><th>Name</th><th>Publish Date</th><th>Published By</th></tr>
 <c:forEach items="${programs}" var="program">
 <tr>

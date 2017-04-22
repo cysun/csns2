@@ -2,6 +2,7 @@
 
 <script>
 $(function(){
+    $("table").tablesorter();
     $("#add").click(function(){
         window.location.href = "add";
     });
@@ -59,15 +60,18 @@ $(function(){
 
 <c:if test="${not empty users}">
 <form id="usersForm" method="post">
-<table class="viewtable">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input id="selectAll" type="checkbox" /></th><th></th>
+  <th class="sorter-false"><input id="selectAll" type="checkbox" /></th><th></th>
   <th>CIN</th><th>Name</th><th>Email</th><th></th>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${users}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
-  <td class="shrink">
+  <td>
     <c:if test="${not empty user.profileThumbnail}">
     <img src="<c:url value='/download.html?fileId=${user.profileThumbnail.id}' />"
       alt="[Profile Thumbnail]" class="thumbnails" name="${user.profilePicture.id}"
@@ -86,6 +90,7 @@ $(function(){
   </td>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/user/search" />
 </form>

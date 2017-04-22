@@ -18,7 +18,7 @@ function publish( id )
 </ul>
 
 <c:if test="${fn:length(schedules) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Term</th><th>Pre-Registration Start</th><th>Pre-Registration End</th><th></th>
 </thead>

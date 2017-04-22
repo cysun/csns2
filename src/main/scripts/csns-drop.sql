@@ -42,8 +42,14 @@ drop table mft_indicators;
 drop table mft_scores;
 
 drop table project_resources;
+drop trigger project_liaisons_ts_trigger on project_liaisons;
+drop function project_liaisons_ts_trigger_function();
 drop table project_liaisons;
+drop trigger project_students_ts_trigger on project_students;
+drop function project_students_ts_trigger_function();
 drop table project_students;
+drop trigger project_advisors_ts_trigger on project_advisors;
+drop function project_advisors_ts_trigger_function();
 drop table project_advisors;
 drop trigger projects_ts_trigger on projects;
 drop function projects_ts_trigger_function();

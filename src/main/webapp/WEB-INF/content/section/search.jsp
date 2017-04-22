@@ -20,7 +20,7 @@ $(function(){
 </form>
 
 <c:if test="${not empty sections}">
-<table class="viewtable">
+<table class="general2 autowidth">
 <thead>
 <tr>
   <th>Year</th><th>Term</th><th>Code</th><th>Name</th><th>Instructor</th>

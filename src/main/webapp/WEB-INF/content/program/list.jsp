@@ -3,8 +3,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
-<security:authorize access="authenticated and principal.isAdmin('${dept}')">
 <script>
+$(function(){
+    $("table").tablesorter();
+});
 function publish( id )
 {
     var msg = "Do you want to publish this program now?";
@@ -12,7 +14,6 @@ function publish( id )
         window.location.href = "publish?id=" + id;
 }
 </script>
-</security:authorize>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/program/search' />">Programs</a></li>
@@ -24,7 +25,7 @@ function publish( id )
 </ul>
 
 <c:if test="${fn:length(programs) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
   <tr><th>Name</th><th>Publish Date</th><th>Published By</th></tr>
 </thead>
@@ -38,7 +39,9 @@ function publish( id )
   </c:if>
   <c:if test="${not program.published}">
     <td colspan="2" class="center">
+      <security:authorize access="authenticated and principal.isAdmin('${dept}')">
       <a href="javascript:publish(${program.id})">Publish</a>
+      </security:authorize>
     </td>
   </c:if>
 </tr>

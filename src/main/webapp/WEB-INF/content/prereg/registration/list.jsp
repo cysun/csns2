@@ -63,7 +63,7 @@ $(function(){
 
 <c:if test="${fn:length(registrations) > 0}">
 <form id="studentsForm" method="post">
-<table id="registrations" class="viewtable autowidth">
+<table id="registrations" class="general2 autowidth">
 <thead>
 <tr>
   <th><input id="selectAll" type="checkbox" /></th><th>CIN</th>

@@ -55,7 +55,7 @@ function publish( id )
 <div style="margin: 1em 0;">${schedule.description}</div>
 
 <c:if test="${fn:length(schedule.sections) > 0}">
-<table id="sections" class="viewtable autowidth">
+<table id="sections" class="general2 autowidth">
 <thead>
 <tr>
   <th>Course</th><th>Section</th><th>Enrolled</th><th>Name</th><th>Type</th>

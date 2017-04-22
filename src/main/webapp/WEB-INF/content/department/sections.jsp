@@ -6,7 +6,7 @@
 $(function(){
     $("table").tablesorter();
     $("select[name='term'] option").each(function(){
-       if( $(this).val() == ${term.code}) 
+       if( $(this).val() == "${term.code}") 
            $(this).attr('selected', true);
     });
     $("select[name='term']").change(function(){
@@ -31,12 +31,12 @@ $(function(){
 </ul>
 
 <c:if test="${fn:length(sections) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
 <thead>
 <tr>
   <th>Code</th><th>Name</th><th>Instructor</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-    <th></th>
+    <th class="sorter-false"></th>
   </security:authorize>
 </tr>
 </thead>

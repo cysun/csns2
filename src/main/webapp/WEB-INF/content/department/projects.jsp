@@ -4,9 +4,10 @@
 
 <script>
 $(function(){
+    $("table").tablesorter();
     $("select[name='year'] option").each(function(){
-       if( $(this).val() == ${year}) 
-           $(this).attr('selected', true);
+        if( $(this).val() == "${year}") 
+            $(this).attr('selected', true);
     });
     $("select[name='year']").change(function(){
         var year = $("select[name='year'] option:selected").val();
@@ -30,10 +31,13 @@ $(function(){
 </ul>
 
 <c:if test="${fn:length(projects) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
   <th>Project</th><th>Sponsor</th><th>Student</th><th>Advisor</th>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${projects}" var="project">
 <c:if test="${project.published or user.isFaculty(dept) or project.isMember(user)}">
 <tr <c:if test="${not project.published}">style="color: gray;"</c:if>>
@@ -56,5 +60,6 @@ $(function(){
 </tr>
 </c:if>
 </c:forEach>
+</tbody>
 </table>
 </c:if>

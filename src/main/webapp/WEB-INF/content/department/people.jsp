@@ -5,6 +5,7 @@
 
 <script>
 $(function(){
+    $("table").tablesorter();
     $("#tabs").tabs({
         cache: false
     });
@@ -111,14 +112,17 @@ function email( userId )
 <div id="admin">
 <c:if test="${fn:length(department.administrators) > 0}">
 <form id="adminForm" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input class="selectAll" type="checkbox" /></th>
+  <th class="sorter-false"><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th class="center"></th>
+  <th class="center sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.administrators}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
@@ -131,6 +135,7 @@ function email( userId )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/department/${dept}/people#admin" />
 </form>
@@ -149,14 +154,17 @@ function email( userId )
 <div id="faculty">
 <c:if test="${fn:length(department.faculty) > 0}">
 <form id="facultyForm" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input class="selectAll" type="checkbox" /></th>
+  <th class="sorter-false"><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th class="center"></th>
+  <th class="center sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.faculty}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
@@ -169,6 +177,7 @@ function email( userId )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/department/${dept}/people#faculty" />
 </form>
@@ -187,14 +196,17 @@ function email( userId )
 <div id="instructor">
 <c:if test="${fn:length(department.instructors) > 0}">
 <form id="instructorForm" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input class="selectAll" type="checkbox" /></th>
+  <th class="sorter-false"><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th class="center"></th>
+  <th class="center sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.instructors}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
@@ -207,6 +219,7 @@ function email( userId )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/department/${dept}/people#instructor" />
 </form>
@@ -225,14 +238,17 @@ function email( userId )
 <div id="evaluator">
 <c:if test="${fn:length(department.evaluators) > 0}">
 <form id="evaluatorForm" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input class="selectAll" type="checkbox" /></th>
+  <th class="sorter-false"><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th class="center"></th>
+  <th class="center sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.evaluators}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
@@ -245,6 +261,7 @@ function email( userId )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/department/${dept}/people#evaluator" />
 </form>
@@ -263,14 +280,17 @@ function email( userId )
 <div id="reviewer">
 <c:if test="${fn:length(department.reviewers) > 0}">
 <form id="reviewerForm" method="post">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th><input class="selectAll" type="checkbox" /></th>
+  <th class="sorter-false"><input class="selectAll" type="checkbox" /></th>
   <th>CIN</th><th>Name</th><th>Primary Email</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th class="center"></th>
+  <th class="center sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.reviewers}" var="user">
 <tr>
   <td class="center"><input type="checkbox" name="userId" value="${user.id}" /></td>
@@ -283,6 +303,7 @@ function email( userId )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 <input type="hidden" name="backUrl" value="/department/${dept}/people#reviewer" />
 </form>
@@ -300,10 +321,13 @@ function email( userId )
 
 <div id="group">
 <c:if test="${fn:length(department.groups) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
-  <th>Name</th><th>Description</th><th>Members</th><th>Updated On</th>
+  <th>Name</th><th class="sorter-false">Description</th><th>Members</th><th>Updated On</th>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.groups}" var="group">
 <tr>
   <td class="nowrap"><a href="<c:url value='/department/${dept}/group/view?id=${group.id}' />">${group.name}</a></td>
@@ -312,6 +336,7 @@ function email( userId )
   <td><fmt:formatDate value="${group.date}" pattern="yyyy-MM-dd" /></td>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>
 </div> <!-- end of groups -->

@@ -4,6 +4,7 @@
 
 <script>
 $(function(){
+    $("table").tablesorter();
     $("#tabs").tabs({
         cache: false
     });
@@ -59,13 +60,16 @@ function splitCode( code )
 
 <div id="undergraduate">
 <c:if test="${fn:length(department.undergraduateCourses) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
   <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-    <th></th>
+    <th class="sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.undergraduateCourses}" var="course">
 <tr>
   <td class="course-code">${course.code}</td>
@@ -78,6 +82,7 @@ function splitCode( code )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>
 
@@ -93,13 +98,16 @@ function splitCode( code )
 
 <div id="graduate">
 <c:if test="${fn:length(department.graduateCourses) > 0}">
-<table class="viewtable autowidth">
+<table class="general2 autowidth">
+<thead>
 <tr>
   <th>Code</th><th>Name</th><th>Units</th><th>Coordinator</th>
   <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-  <th></th>
+  <th class="sorter-false"></th>
   </security:authorize>
 </tr>
+</thead>
+<tbody>
 <c:forEach items="${department.graduateCourses}" var="course">
 <tr>
   <td class="course-code">${course.code}</td>
@@ -112,6 +120,7 @@ function splitCode( code )
   </security:authorize>
 </tr>
 </c:forEach>
+</tbody>
 </table>
 </c:if>
 

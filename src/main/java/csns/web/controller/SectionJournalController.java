@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -60,7 +60,8 @@ public class SectionJournalController {
     @Autowired
     private EnrollmentDao enrollmentDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( SectionJournalController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SectionJournalController.class );
 
     @RequestMapping("/section/journal/create")
     public String create( @RequestParam Long sectionId )
@@ -74,11 +75,10 @@ public class SectionJournalController {
 
         // Populate handouts if the section has a class website
         Site site = section.getSite();
-        if( site != null )
-            for( Block block : site.getBlocks() )
-                if( block.getType().equals( Block.Type.REGULAR ) )
-                    for( Item item : block.getItems() )
-                        journal.getHandouts().add( item.getResource().clone() );
+        if( site != null ) for( Block block : site.getBlocks() )
+            if( block.getType().equals( Block.Type.REGULAR ) )
+                for( Item item : block.getItems() )
+                journal.getHandouts().add( item.getResource().clone() );
 
         // Populate assignments
         journal.getAssignments().addAll( section.getAssignments() );
@@ -86,6 +86,35 @@ public class SectionJournalController {
         section = sectionDao.saveSection( section );
         logger.info( SecurityUtils.getUser().getUsername()
             + " created course journal for section " + sectionId );
+
+        return "redirect:view?sectionId=" + sectionId;
+    }
+
+    @RequestMapping("/section/journal/recreate")
+    public String recreate( @RequestParam Long sectionId, ModelMap models )
+    {
+        Section section = sectionDao.getSection( sectionId );
+        CourseJournal journal = section.getJournal();
+        if( journal == null || journal.isSubmitted() || journal.isApproved() )
+        {
+            models.put( "message", "error.section.journal.recreate" );
+            models.put( "backUrl", "/section/taught" );
+            return "error";
+        }
+
+        journal.getHandouts().clear();
+        Site site = section.getSite();
+        if( site != null ) for( Block block : site.getBlocks() )
+            if( block.getType().equals( Block.Type.REGULAR ) )
+                for( Item item : block.getItems() )
+                journal.getHandouts().add( item.getResource().clone() );
+
+        journal.getAssignments().clear();
+        journal.getAssignments().addAll( section.getAssignments() );
+
+        section = sectionDao.saveSection( section );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " recreated course journal for section " + sectionId );
 
         return "redirect:view?sectionId=" + sectionId;
     }
@@ -102,9 +131,8 @@ public class SectionJournalController {
 
         models.put( "section", section );
         User coordinator = section.getCourse().getCoordinator();
-        if( coordinator != null )
-            models.put( "isCoordinator",
-                coordinator.getId().equals( SecurityUtils.getUser().getId() ) );
+        if( coordinator != null ) models.put( "isCoordinator",
+            coordinator.getId().equals( SecurityUtils.getUser().getId() ) );
 
         return "section/journal/view";
     }
@@ -144,7 +172,8 @@ public class SectionJournalController {
         @RequestParam Long assignmentId )
     {
         User user = SecurityUtils.getUser();
-        CourseJournal courseJournal = courseJournalDao.getCourseJournal( journalId );
+        CourseJournal courseJournal = courseJournalDao
+            .getCourseJournal( journalId );
         Assignment assignment = assignmentDao.getAssignment( assignmentId );
 
         List<Assignment> assignments = courseJournal.getAssignments();
@@ -176,7 +205,8 @@ public class SectionJournalController {
         @RequestParam Long enrollmentId )
     {
         User user = SecurityUtils.getUser();
-        CourseJournal courseJournal = courseJournalDao.getCourseJournal( journalId );
+        CourseJournal courseJournal = courseJournalDao
+            .getCourseJournal( journalId );
         Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
 
         List<Enrollment> samples = courseJournal.getStudentSamples();

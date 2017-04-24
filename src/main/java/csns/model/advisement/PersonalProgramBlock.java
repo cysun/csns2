@@ -72,15 +72,13 @@ public class PersonalProgramBlock implements Serializable {
     public boolean isRequirementsMet()
     {
         int classesCompleted = 0;
-        int unitsCompleted = 0;
+        double unitsCompleted = 0;
         for( PersonalProgramEntry entry : entries )
-            if( entry.getEnrollment() != null )
+            if( entry.getEnrollment() != null || entry.isRequirementMet() )
             {
                 ++classesCompleted;
-                unitsCompleted += entry.getEnrollment()
-                    .getSection()
-                    .getCourse()
-                    .getUnits();
+                Course course = entry.getCourse();
+                unitsCompleted += course.getUnits() * course.getUnitFactor();
             }
 
         return programBlock.isRequireAll() && classesCompleted == entries.size()

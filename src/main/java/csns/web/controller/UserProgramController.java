@@ -18,6 +18,7 @@
  */
 package csns.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,9 +40,11 @@ import csns.model.academics.dao.CourseMappingDao;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.ProgramDao;
+import csns.model.advisement.AdvisementRecord;
 import csns.model.advisement.PersonalProgram;
 import csns.model.advisement.PersonalProgramBlock;
 import csns.model.advisement.PersonalProgramEntry;
+import csns.model.advisement.dao.AdvisementRecordDao;
 import csns.model.advisement.dao.PersonalProgramBlockDao;
 import csns.model.advisement.dao.PersonalProgramDao;
 import csns.model.advisement.dao.PersonalProgramEntryDao;
@@ -78,6 +81,9 @@ public class UserProgramController {
 
     @Autowired
     private PersonalProgramEntryDao personalProgramEntryDao;
+
+    @Autowired
+    private AdvisementRecordDao advisementRecordDao;
 
     private static final Logger logger = LoggerFactory
         .getLogger( UserProgramController.class );
@@ -184,6 +190,49 @@ public class UserProgramController {
         return "redirect:../view?id=" + userId + "#3";
     }
 
+    @RequestMapping("/user/program/approve")
+    public String approvePersonalProgram( @RequestParam Long programId )
+    {
+        PersonalProgram program = personalProgramDao
+            .getPersonalProgram( programId );
+        if( !program.isApproved() )
+        {
+            User advisor = SecurityUtils.getUser();
+            program.setApproveDate( new Date() );
+            program.setApprovedBy( advisor );
+            program = personalProgramDao.savePersonalProgram( program );
+            logger.info( "Personal program " + programId + " is approved by "
+                + advisor.getUsername() );
+
+            AdvisementRecord record = new AdvisementRecord(
+                program.getStudent(), advisor );
+            StringBuilder sb = (new StringBuilder())
+                .append( "Study plan approved by " )
+                .append( advisor.getName() )
+                .append( " on " )
+                .append( (new SimpleDateFormat( "M/d/yyyy" ))
+                    .format( program.getApproveDate() ) )
+                .append( "." );
+            record.setComment( sb.toString() );
+            record = advisementRecordDao.saveAdvisementRecord( record );
+            logger.info( "Auto-generated advisement record " + record.getId() );
+        }
+
+        return "redirect:../view?id=" + program.getStudent().getId() + "#3";
+    }
+
+    private void unapprovePersonalProgram( PersonalProgram program )
+    {
+        if( program.isApproved() )
+        {
+            program.setApproveDate( null );
+            program.setApprovedBy( null );
+            program = personalProgramDao.savePersonalProgram( program );
+            logger.info( "Perosnal program " + program.getId()
+                + " un-approved by " + SecurityUtils.getUser().getUsername() );
+        }
+    }
+
     @RequestMapping("/user/program/entry/add")
     public String addPersonalProgramEntry( @RequestParam Long userId,
         @RequestParam Long blockId,
@@ -203,47 +252,55 @@ public class UserProgramController {
             personalProgramBlockDao.savePersonalProgramBlock( block );
             logger.info( SecurityUtils.getUser().getUsername()
                 + " add a new entry to personal program block " + blockId );
+            unapprovePersonalProgram(
+                personalProgramDao.getPersonalProgram( block ) );
         }
 
         return "redirect:../../view?id=" + userId + "#3";
     }
 
-    @RequestMapping("/user/program/entry/update")
-    @ResponseBody
-    public void updatePersonalProgramEntry( @RequestParam String operation,
-        @RequestParam Long entryId,
-        @RequestParam(required = false) Long enrollmentId )
+    @RequestMapping("/user/program/entry/delete")
+    public String deletePersonalProgramEntry( @RequestParam Long userId,
+        @RequestParam Long entryId )
     {
         PersonalProgramEntry entry = personalProgramEntryDao
             .getPersonalProgramEntry( entryId );
-        switch( operation )
-        {
-            case "prereq":
-                entry.setPrereqMet( entry.isPrereqMet() ? false : true );
-                personalProgramEntryDao.savePersonalProgramEntry( entry );
-                logger.info( SecurityUtils.getUser().getUsername()
-                    + " toggled prereq met of personal program entry "
-                    + entryId );
-                break;
+        PersonalProgram program = personalProgramDao
+            .getPersonalProgram( entry );
+        personalProgramEntryDao.deletePersonalProgramEntry( entry );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " deleted personal program entry " + entryId );
+        unapprovePersonalProgram( program );
+        return "redirect:../../view?id=" + userId + "#3";
+    }
 
-            case "delete":
-                personalProgramEntryDao.deletePersonalProgramEntry( entry );
-                logger.info( SecurityUtils.getUser().getUsername()
-                    + " deleted personal program entry " + entryId );
-                break;
+    @RequestMapping(value = "/user/program/entry/update",
+        params = "enrollmentId")
+    @ResponseBody
+    public void updatePersonalProgramEntry( @RequestParam Long entryId,
+        @RequestParam Long enrollmentId )
+    {
+        PersonalProgramEntry entry = personalProgramEntryDao
+            .getPersonalProgramEntry( entryId );
+        entry.setEnrollment( enrollmentDao.getEnrollment( enrollmentId ) );
+        personalProgramEntryDao.savePersonalProgramEntry( entry );
+        logger.info( SecurityUtils.getUser().getUsername() + " set enrollment "
+            + enrollmentId + " to personal program entry " + entryId );
+    }
 
-            case "enrollment":
-                entry.setEnrollment(
-                    enrollmentDao.getEnrollment( enrollmentId ) );
-                personalProgramEntryDao.savePersonalProgramEntry( entry );
-                logger.info( SecurityUtils.getUser().getUsername()
-                    + " set enrollment " + enrollmentId
-                    + " to personal program entry " + entryId );
-                break;
-
-            default:
-                logger.warn( "Unsupported operation: " + operation );
-        }
+    @RequestMapping("/user/program/entry/update")
+    @ResponseBody
+    public void updatePersonalProgramEntry( @RequestParam Long entryId,
+        @RequestParam boolean prereqMet, @RequestParam boolean requirementMet )
+    {
+        PersonalProgramEntry entry = personalProgramEntryDao
+            .getPersonalProgramEntry( entryId );
+        entry.setPrereqMet( prereqMet );
+        entry.setRequirementMet( requirementMet );
+        personalProgramEntryDao.savePersonalProgramEntry( entry );
+        logger.info(
+            SecurityUtils.getUser().getUsername() + " updated program entry "
+                + entryId + ": (" + prereqMet + "," + requirementMet + ")" );
     }
 
 }

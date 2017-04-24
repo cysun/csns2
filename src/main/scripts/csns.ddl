@@ -485,6 +485,7 @@ create sequence hibernate_sequence start 1 increment 1;
     create table personal_program_entries (
        id int8 not null,
         prereq_met boolean not null,
+        requirement_met boolean not null,
         course_id int8,
         enrollment_id int8,
         block_id int8,

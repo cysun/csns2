@@ -1191,9 +1191,6 @@ tr th.shrink, tr td.shrink {
     float: right;
     width: 34%;
 }
-#personal-program .prereq-met {
-    background: lightyellow;
-}
 #personal-program span.requirements-indicator {
     display: inline-block;
     min-width: 1em;

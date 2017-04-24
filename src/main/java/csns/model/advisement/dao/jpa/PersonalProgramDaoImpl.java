@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import csns.model.academics.Program;
 import csns.model.advisement.PersonalProgram;
+import csns.model.advisement.PersonalProgramBlock;
+import csns.model.advisement.PersonalProgramEntry;
 import csns.model.advisement.dao.PersonalProgramDao;
 import csns.model.core.User;
 
@@ -53,6 +55,33 @@ public class PersonalProgramDaoImpl implements PersonalProgramDao {
             .createQuery( query, PersonalProgram.class )
             .setParameter( "student", student )
             .setParameter( "program", program )
+            .getResultList();
+        return personalPrograms.size() == 0 ? null : personalPrograms.get( 0 );
+    }
+
+    @Override
+    public PersonalProgram getPersonalProgram( PersonalProgramBlock block )
+    {
+        String query = "select program from PersonalProgram program "
+            + "join program.blocks block where block = :block";
+
+        List<PersonalProgram> personalPrograms = entityManager
+            .createQuery( query, PersonalProgram.class )
+            .setParameter( "block", block )
+            .getResultList();
+        return personalPrograms.size() == 0 ? null : personalPrograms.get( 0 );
+    }
+
+    @Override
+    public PersonalProgram getPersonalProgram( PersonalProgramEntry entry )
+    {
+        String query = "select program from PersonalProgram program "
+            + "join program.blocks block join block.entries entry "
+            + "where entry = :entry";
+
+        List<PersonalProgram> personalPrograms = entityManager
+            .createQuery( query, PersonalProgram.class )
+            .setParameter( "entry", entry )
             .getResultList();
         return personalPrograms.size() == 0 ? null : personalPrograms.get( 0 );
     }

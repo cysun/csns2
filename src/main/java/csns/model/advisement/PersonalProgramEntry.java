@@ -52,6 +52,9 @@ public class PersonalProgramEntry implements Serializable {
     @Column(name = "prereq_met", nullable = false)
     private boolean prereqMet = false;
 
+    @Column(name = "requirement_met", nullable = false)
+    private boolean requirementMet = false;
+
     public PersonalProgramEntry()
     {
     }
@@ -105,6 +108,16 @@ public class PersonalProgramEntry implements Serializable {
     public void setPrereqMet( boolean prereqMet )
     {
         this.prereqMet = prereqMet;
+    }
+
+    public boolean isRequirementMet()
+    {
+        return requirementMet;
+    }
+
+    public void setRequirementMet( boolean requirementMet )
+    {
+        this.requirementMet = requirementMet;
     }
 
 }

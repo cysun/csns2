@@ -137,3 +137,6 @@ create trigger project_liaisons_ts_trigger
 
 update sections set tsv = '';
 update projects set tsv = '';
+
+alter table personal_program_entries
+    add column requirement_met boolean not null default 'f';

@@ -20,7 +20,6 @@ package csns.model.advisement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +73,7 @@ public class PersonalProgram implements Serializable {
     private Date date;
 
     @Column(name = "approve_date")
-    private Calendar approveDate;
+    private Date approveDate;
 
     @ManyToOne
     @JoinColumn(name = "approved_by")
@@ -110,6 +109,11 @@ public class PersonalProgram implements Serializable {
         for( PersonalProgramBlock block : blocks )
             entryMaps.add( block.getEntryMap() );
         return entryMaps;
+    }
+
+    public boolean isApproved()
+    {
+        return approveDate != null && approvedBy != null;
     }
 
     public Long getId()
@@ -152,12 +156,12 @@ public class PersonalProgram implements Serializable {
         this.blocks = blocks;
     }
 
-    public Calendar getApproveDate()
+    public Date getApproveDate()
     {
         return approveDate;
     }
 
-    public void setApproveDate( Calendar approveDate )
+    public void setApproveDate( Date approveDate )
     {
         this.approveDate = approveDate;
     }

@@ -643,7 +643,8 @@ create table personal_program_entries (
     block_id        bigint references personal_program_blocks(id),
     course_id       bigint references courses(id),
     enrollment_id   bigint references enrollments(id),
-    prereq_met      boolean not null default 'f'
+    prereq_met      boolean not null default 'f',
+    requirement_met boolean not null default 'f'
 );
 
 alter table users add constraint users_personal_program_id_fkey
@@ -1372,7 +1373,7 @@ declare
     l_department    departments%rowtype;
 begin
     new.tsv := setweight(to_tsvector(new.title), 'A') ||
-               setweight(to_tsvector(coalesce(new.sponsor, ''), 'B') ||
+               setweight(to_tsvector(coalesce(new.sponsor, '')), 'B') ||
                setweight(to_tsvector(coalesce(new.description, '')), 'D');
     select * into l_department from departments where id = new.department_id;
     new.tsv := new.tsv ||

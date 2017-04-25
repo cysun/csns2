@@ -182,6 +182,11 @@
         <put-attribute name="content" value="/WEB-INF/content/user/import.jsp" />
     </definition>
 
+    <definition name="user/gradeImportResults" extends="layout.basic">
+        <put-attribute name="title" value="Import Grades" />
+        <put-attribute name="content" value="/WEB-INF/content/user/gradeImportResults.jsp" />
+    </definition>
+
     <definition name="register" extends="layout.jqueryui">
         <put-attribute name="title" value="Register" />
         <put-attribute name="content" value="/WEB-INF/content/register.jsp" />

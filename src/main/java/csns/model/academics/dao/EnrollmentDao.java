@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -20,8 +20,10 @@ package csns.model.academics.dao;
 
 import java.util.List;
 
+import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Section;
+import csns.model.academics.Term;
 import csns.model.core.User;
 
 public interface EnrollmentDao {
@@ -29,6 +31,8 @@ public interface EnrollmentDao {
     Enrollment getEnrollment( Long id );
 
     Enrollment getEnrollment( Section section, User student );
+
+    Enrollment getEnrollment( Course course, Term term, User student );
 
     List<Enrollment> getEnrollments( User student );
 

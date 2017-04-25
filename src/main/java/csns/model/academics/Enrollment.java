@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -33,8 +33,8 @@ import csns.model.core.User;
 
 @Entity
 @Table(name = "enrollments",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "section_id",
-        "student_id" }))
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "section_id", "student_id" }))
 public class Enrollment implements Serializable, Comparable<Enrollment> {
 
     private static final long serialVersionUID = 1L;
@@ -58,18 +58,22 @@ public class Enrollment implements Serializable, Comparable<Enrollment> {
     private String comments;
 
     @Column(name = "grade_mailed", nullable = false)
-    private boolean gradeMailed;
+    private boolean gradeMailed = false;
 
     public Enrollment()
     {
-        gradeMailed = false;
     }
 
     public Enrollment( Section section, User student )
     {
-        this();
+        this( section, student, null );
+    }
+
+    public Enrollment( Section section, User student, Grade grade )
+    {
         this.section = section;
         this.student = student;
+        this.grade = grade;
     }
 
     @Override

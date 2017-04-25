@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -32,6 +32,13 @@ public interface SectionDao {
     Section getSection( Long id );
 
     Section getSection( Term term, Course course, int number );
+
+    /**
+     * A special section is a section without an instructor. We use a special
+     * section to hold the bulk-imported grades that don't belong to an actual
+     * CSNS section.
+     */
+    Section getSpecialSection( Term term, Course course );
 
     List<Section> getSections( Department department, Term term );
 

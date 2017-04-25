@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -28,8 +28,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Section;
+import csns.model.academics.Term;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.core.User;
 
@@ -52,9 +54,25 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         String query = "from Enrollment where section = :section "
             + "and student = :student";
 
-        List<Enrollment> enrollments = entityManager.createQuery( query,
-            Enrollment.class )
+        List<Enrollment> enrollments = entityManager
+            .createQuery( query, Enrollment.class )
             .setParameter( "section", section )
+            .setParameter( "student", student )
+            .getResultList();
+        return enrollments.size() == 0 ? null : enrollments.get( 0 );
+    }
+
+    @Override
+    public Enrollment getEnrollment( Course course, Term term, User student )
+    {
+        String query = "from Enrollment where section.course = :course "
+            + "and section.term = :term and student = :student "
+            + "order by id asc";
+
+        List<Enrollment> enrollments = entityManager
+            .createQuery( query, Enrollment.class )
+            .setParameter( "course", course )
+            .setParameter( "term", term )
             .setParameter( "student", student )
             .getResultList();
         return enrollments.size() == 0 ? null : enrollments.get( 0 );

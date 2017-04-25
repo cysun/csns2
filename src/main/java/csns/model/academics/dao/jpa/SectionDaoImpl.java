@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -61,6 +61,20 @@ public class SectionDaoImpl implements SectionDao {
             .setParameter( "term", term )
             .setParameter( "course", course )
             .setParameter( "number", number )
+            .getResultList();
+        return sections.size() == 0 ? null : sections.get( 0 );
+    }
+
+    @Override
+    public Section getSpecialSection( Term term, Course course )
+    {
+        String query = "from Section where term = :term "
+            + "and course = :course and instructors is empty order by id asc";
+
+        List<Section> sections = entityManager
+            .createQuery( query, Section.class )
+            .setParameter( "term", term )
+            .setParameter( "course", course )
             .getResultList();
         return sections.size() == 0 ? null : sections.get( 0 );
     }
@@ -175,7 +189,7 @@ public class SectionDaoImpl implements SectionDao {
         Section section = new Section();
         section.setTerm( term );
         section.setCourse( course );
-        section.getInstructors().add( instructor );
+        if( instructor != null ) section.getInstructors().add( instructor );
         section.setNumber( currentNum + 1 );
 
         return saveSection( section );

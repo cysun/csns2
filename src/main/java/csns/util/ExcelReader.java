@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Mahdiye Jamali (mjamali@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -20,6 +20,9 @@ package csns.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -36,7 +39,11 @@ public class ExcelReader {
 
     private int rows, cols;
 
-    private int currentRow = 0;
+    private int current;
+
+    private String[] currentRow;
+
+    Map<String, Integer> colIndexes;
 
     private DataFormatter dataFormatter;
 
@@ -52,6 +59,15 @@ public class ExcelReader {
             rows = sheet.getPhysicalNumberOfRows();
             cols = sheet.getRow( 0 ).getPhysicalNumberOfCells();
             dataFormatter = new DataFormatter();
+
+            // First row should be the header row
+            current = -1;
+            next();
+            logger.debug( Arrays.toString( currentRow ) );
+
+            colIndexes = new HashMap<String, Integer>();
+            for( int i = 0; i < currentRow.length; ++i )
+                colIndexes.put( currentRow[i].toUpperCase().trim(), i );
         }
         catch( Exception e )
         {
@@ -73,20 +89,41 @@ public class ExcelReader {
         }
     }
 
-    public boolean hasNextRow()
+    public boolean hasNext()
     {
-        return currentRow < rows;
+        return current + 1 < rows;
     }
 
-    public String[] nextRow()
+    public boolean next()
     {
-        String values[] = new String[cols];
-        for( int i = 0; i < cols; ++i )
-            values[i] = dataFormatter
-                .formatCellValue( sheet.getRow( currentRow ).getCell( i ) );
+        if( ++current >= rows ) return false;
 
-        ++currentRow;
-        return values;
+        currentRow = new String[cols];
+        for( int i = 0; i < cols; ++i )
+            currentRow[i] = dataFormatter
+                .formatCellValue( sheet.getRow( current ).getCell( i ) ).trim();
+
+        return true;
+    }
+
+    public String get( int colIndex )
+    {
+        return currentRow[colIndex];
+    }
+
+    public String get( String colName )
+    {
+        return currentRow[colIndexes.get( colName.toUpperCase() )];
+    }
+
+    public String[] getRow()
+    {
+        return currentRow;
+    }
+
+    public boolean hasColumn( String colName )
+    {
+        return colIndexes.keySet().contains( colName.toUpperCase() );
     }
 
 }

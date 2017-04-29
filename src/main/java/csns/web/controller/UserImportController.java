@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -75,8 +75,8 @@ public class UserImportController {
 
     @RequestMapping(value = "/user/import", method = RequestMethod.POST)
     public String importUsers(
-        @RequestParam(value = "file" ) MultipartFile uploadedFile,
-        ModelMap models) throws IOException
+        @RequestParam(value = "file") MultipartFile uploadedFile,
+        ModelMap models ) throws IOException
     {
         int n = importUsers( null, uploadedFile );
         models.put( "message", "status.user.import" );
@@ -96,8 +96,8 @@ public class UserImportController {
     @RequestMapping(value = "/department/{dept}/user/import",
         method = RequestMethod.POST)
     public String importUsers( @PathVariable String dept,
-        @RequestParam(value = "file" ) MultipartFile uploadedFile,
-        ModelMap models) throws IOException
+        @RequestParam(value = "file") MultipartFile uploadedFile,
+        ModelMap models ) throws IOException
     {
         int n = importUsers( departmentDao.getDepartment( dept ),
             uploadedFile );
@@ -115,19 +115,14 @@ public class UserImportController {
         int n = 0;
         ExcelReader excelReader = new ExcelReader(
             uploadedFile.getInputStream() );
-        String cols[] = excelReader.nextRow();
-        Map<String, Integer> colIndexes = new HashMap<String, Integer>();
-        for( int i = 0; i < cols.length; ++i )
-            colIndexes.put( cols[i].toUpperCase(), i );
-        logger.info( "Header Row: " + cols.toString() );
 
         Map<String, Department> departments = new HashMap<String, Department>();
-        if( colIndexes.containsKey( "PLAN" ) )
+        if( excelReader.hasColumn( "PLAN" ) )
             for( Department d : departmentDao.getDepartments() )
             departments.put( d.getAbbreviation().toUpperCase(), d );
 
         Map<String, Standing> standings = new HashMap<String, Standing>();
-        if( colIndexes.containsKey( "STANDING" ) )
+        if( excelReader.hasColumn( "STANDING" ) )
         {
             for( Standing s : standingDao.getStandings() )
                 standings.put( s.getSymbol(), s );
@@ -136,19 +131,17 @@ public class UserImportController {
                 standings.put( "B" + i, standings.get( "B" ) );
         }
 
-        while( excelReader.hasNextRow() )
+        while( excelReader.next() )
         {
-            cols = excelReader.nextRow();
-
-            String cin = cols[colIndexes.get( "CIN" )];
+            String cin = excelReader.get( "CIN" );
             User user = userDao.getUserByCin( cin );
-            if( user == null ) user = createUser( colIndexes, cols );
+            if( user == null ) user = createUser( excelReader );
 
-            if( colIndexes.containsKey( "STANDING" ) )
+            if( excelReader.hasColumn( "STANDING" ) )
             {
-                if( colIndexes.containsKey( "PLAN" ) )
+                if( excelReader.hasColumn( "PLAN" ) )
                 {
-                    String plan = cols[colIndexes.get( "PLAN" )];
+                    String plan = excelReader.get( "PLAN" );
                     department = departments.get( plan.split( " " )[0] );
                     if( department == null )
                         logger.warn( "No department for: " + plan );
@@ -157,15 +150,15 @@ public class UserImportController {
                 // department is either from the method argument or from plan
                 if( department != null )
                 {
-                    String symbol = cols[colIndexes.get( "STANDING" )];
+                    String symbol = excelReader.get( "STANDING" );
                     Standing standing = standings.get( symbol );
                     if( standing == null )
                         logger.warn( "Unrecognized standing: )" + symbol );
                     else
                     {
                         Term term = new Term();
-                        if( colIndexes.containsKey( "TERM" ) ) term.setCode(
-                            Integer.parseInt( cols[colIndexes.get( "TERM" )] )
+                        if( excelReader.hasColumn( "TERM" ) ) term.setCode(
+                            Integer.parseInt( excelReader.get( "TERM" ) )
                                 - 1000 );
                         user = updateStanding( user, department, standing,
                             term );
@@ -179,18 +172,18 @@ public class UserImportController {
         return n;
     }
 
-    private User createUser( Map<String, Integer> colIndexes, String cols[] )
+    private User createUser( ExcelReader excelReader )
     {
         User user = new User();
-        String cin = cols[colIndexes.get( "CIN" )];
+        String cin = excelReader.get( "CIN" );
         user.setCin( cin );
-        user.setLastName( cols[colIndexes.get( "LAST NAME" )] );
-        user.setFirstName( cols[colIndexes.get( "FIRST NAME" )] );
+        user.setLastName( excelReader.get( "LAST NAME" ) );
+        user.setFirstName( excelReader.get( "FIRST NAME" ) );
         user.setUsername( cin );
         String password = passwordEncoder.encodePassword( cin, null );
         user.setPassword( password );
-        if( colIndexes.containsKey( "EMAIL" ) )
-            user.setPrimaryEmail( cols[colIndexes.get( "EMAIL" )] );
+        if( excelReader.hasColumn( "EMAIL" ) )
+            user.setPrimaryEmail( excelReader.get( "EMAIL" ) );
         user.setTemporary( true );
         user = userDao.saveUser( user );
 

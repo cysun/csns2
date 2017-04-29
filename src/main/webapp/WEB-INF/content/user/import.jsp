@@ -5,20 +5,18 @@ function selectImport()
 {
     if( $("select[name='import']").val() == "grade" )
     {
-        $("#user-instructions").hide();
-        $("#grade-instructions").show();
-        $("#file-form").attr("action", "importGrades");
+        $("#user-import").hide();
+        $("#grade-import").show();
     }
     else
     {
-        $("#grade-instructions").hide();
-        $("#user-instructions").show();
-        $("#file-form").attr("action", "import");
+        $("#grade-import").hide();
+        $("#user-import").show();
     }
 }
 $(function(){
     $("#loading").hide();
-    $("#file-form").submit(function(){
+    $("form").submit(function(){
         $("#loading").show();
     });
     selectImport();
@@ -36,12 +34,10 @@ $(function(){
 
 <select name="import">
   <option value="user">Import Users</option>
-<%--
   <option value="grade" <c:if test="${param.type == 'grade'}">selected</c:if>>Import Grades</option>
- --%>
 </select>
 
-<div id="user-instructions">
+<div id="user-import">
 <p>Please upload the Excel file (.xls or .xlsx) that contains the user data.
 The order of the columns does not matter, but the first row of the file must
 be a header row with the following column names:</p>
@@ -54,14 +50,19 @@ be a header row with the following column names:</p>
   <li>Plan (optional)</li>
   <li>Standing (optional)</li>
 </ul>
+<form action="import" method="post" enctype="multipart/form-data">
+File: <input type="file" name="file" style="width: 25%;" class="leftinput" required
+  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+  <button class="subbutton">Import</button>
+</form>
 </div>
 
-<div id="grade-instructions">
+<div id="grade-import">
 <p>Please upload the Excel file (.xls or .xlsx) that contains the user data.
 The order of the columns does not matter, but the first row of the file must
 be a header row with the following column names:</p>
 <ul>
-  <li>CIN</li>
+  <li>ID (i.e. CIN)</li>
   <li>Name, in the form of "Last Name,First Name".</li>
   <li>Email (optional)</li>
   <li>Acad Plan (optional)</li>
@@ -71,13 +72,12 @@ be a header row with the following column names:</p>
   <li>Section</li>
   <li>Grade</li>
 </ul>
-</div>
-
-<form id="file-form" method="post" enctype="multipart/form-data">
+<form action="importGrades" method="post" enctype="multipart/form-data">
 File: <input type="file" name="file" style="width: 25%;" class="leftinput" required
   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-  <input type="submit" name="impport" value="Import" class="subbutton" />
+  <button class="subbutton">Import</button>
 </form>
+</div>
 
 <div id="loading" class="loading">
   <img src="<c:url value='/img/style/loading.gif' />">

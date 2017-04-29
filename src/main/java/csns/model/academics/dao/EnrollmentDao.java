@@ -32,9 +32,9 @@ public interface EnrollmentDao {
 
     Enrollment getEnrollment( Section section, User student );
 
-    Enrollment getEnrollment( Course course, Term term, User student );
-
     List<Enrollment> getEnrollments( User student );
+
+    List<Enrollment> getEnrollments( Course course, Term term, User student );
 
     Enrollment saveEnrollment( Enrollment enrollment );
 

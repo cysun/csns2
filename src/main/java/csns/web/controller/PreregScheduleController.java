@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2016, Mahdiye Jamali (mjamali@calstatela.edu).
+ * Copyright 2016-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -23,10 +23,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -152,8 +150,8 @@ public class PreregScheduleController {
         method = RequestMethod.POST)
     public String importSections( @PathVariable String dept,
         @RequestParam Long scheduleId,
-        @RequestParam(value = "file" ) MultipartFile uploadedFile)
-            throws IOException
+        @RequestParam(value = "file") MultipartFile uploadedFile )
+        throws IOException
     {
         if( uploadedFile == null || uploadedFile.isEmpty() )
             return "redirect:import?scheduleId=" + scheduleId;
@@ -170,26 +168,18 @@ public class PreregScheduleController {
 
         ExcelReader excelReader = new ExcelReader(
             uploadedFile.getInputStream() );
-        String cols[] = excelReader.nextRow();
-        Map<String, Integer> colIndexes = new HashMap<String, Integer>();
-        for( int i = 0; i < cols.length; ++i )
-            colIndexes.put( cols[i], i );
-        logger.info( "Header Row: " + cols.toString() );
 
         List<Section> sections = new ArrayList<Section>();
-        while( excelReader.hasNextRow() )
+        while( excelReader.next() )
         {
-            cols = excelReader.nextRow();
-
-            String classNumber = cols[colIndexes.get( "Class Nbr" )];
+            String classNumber = excelReader.get( "Class Nbr" );
             if( classNumbers.contains( classNumber ) )
             {
                 logger.debug( classNumber + " is already in the schedule." );
                 continue;
             }
 
-            String code = cols[colIndexes.get( "Subj" )]
-                + cols[colIndexes.get( "Cat" )];
+            String code = excelReader.get( "Subj" ) + excelReader.get( "Cat" );
             Course course = courseDao.getCourse( code );
             if( course == null )
             {
@@ -206,13 +196,13 @@ public class PreregScheduleController {
             Section section = new Section( schedule );
             section.setCourse( course );
             section.setSectionNumber(
-                Integer.parseInt( cols[colIndexes.get( "Sect" )] ) );
-            section.setType( cols[colIndexes.get( "Type" )] );
+                Integer.parseInt( excelReader.get( "Sect" ) ) );
+            section.setType( excelReader.get( "Type" ) );
             section.setClassNumber( classNumber );
-            section.setDays( cols[colIndexes.get( "Day" )] );
-            section.setStartTime( cols[colIndexes.get( "Start" )] );
-            section.setEndTime( cols[colIndexes.get( "End" )] );
-            section.setLocation( cols[colIndexes.get( "Bldg/Room" )] );
+            section.setDays( excelReader.get( "Day" ) );
+            section.setStartTime( excelReader.get( "Start" ) );
+            section.setEndTime( excelReader.get( "End" ) );
+            section.setLocation( excelReader.get( "Bldg/Room" ) );
             sections.add( section );
         }
         excelReader.close();

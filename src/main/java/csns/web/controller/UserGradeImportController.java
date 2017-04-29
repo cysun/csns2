@@ -19,8 +19,11 @@
 package csns.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,7 +81,10 @@ public class UserGradeImportController {
     private static final Logger logger = LoggerFactory
         .getLogger( UserGradeImportController.class );
 
-    @RequestMapping(value = "/user/importGrades", method = RequestMethod.POST)
+    @RequestMapping(
+        value = { "/user/importGrades",
+            "/department/{dept}/user/importGrades" },
+        method = RequestMethod.POST)
     public String importGrades(
         @RequestParam(value = "file") MultipartFile uploadedFile,
         ModelMap models ) throws IOException
@@ -89,22 +95,46 @@ public class UserGradeImportController {
         if( uploadedFile == null || uploadedFile.isEmpty() )
             return "gradeImportResults";
 
-        // colIndexes is a map of <colName,colIndex>
         ExcelReader excelReader = new ExcelReader(
             uploadedFile.getInputStream() );
-        String cols[] = excelReader.nextRow();
-        Map<String, Integer> colIndexes = new HashMap<String, Integer>();
-        for( int i = 0; i < cols.length; ++i )
-            colIndexes.put( cols[i].trim().toUpperCase(), i );
-        logger.info( "Header Row: " + cols.toString() );
 
-        while( excelReader.hasNextRow() )
+        String previous = null;
+        while( excelReader.next() )
         {
-            cols = excelReader.nextRow();
-            String cin = cols[colIndexes.get( "CIN" )];
-            if( cin == null || cin.trim().length() == 0 ) break;
+            String cin = excelReader.get( "ID" );
+            if( cin.length() == 0 ) break;
 
             results.entriesProcessed++;
+
+            String gradeSymbol = excelReader.get( "GRADE" );
+            if( gradeSymbol.length() == 0 )
+            {
+                results.emptyGrades++;
+                continue;
+            }
+            Grade grade = results.grades.get( gradeSymbol );
+            if( grade == null )
+            {
+                logger.warn( "Cannot recognize grade: " + gradeSymbol );
+                continue;
+            }
+
+            String code = excelReader.get( "SUBJECT" )
+                + excelReader.get( "CATALOG" );
+            if( results.nocourses.contains( code ) ) continue;
+
+            Term term = new Term();
+            term.setCode(
+                Integer.parseInt( excelReader.get( "TERM" ) ) - 1000 );
+            String current = cin + "-" + code + "-" + term.getShortString();
+            if( previous != null && previous.equals( current ) )
+            {
+                results.nogrades.add( Arrays.toString( excelReader.getRow() ) );
+                previous = current;
+                continue;
+            }
+
+            previous = current;
 
             User user = results.users.get( cin );
             if( user == null )
@@ -112,15 +142,12 @@ public class UserGradeImportController {
                 user = userDao.getUserByCin( cin );
                 if( user == null )
                 {
-                    user = createUser( colIndexes, cols, results );
+                    user = createUser( excelReader, results );
                     results.accountsCreated++;
                 }
                 results.users.put( cin, user );
             }
 
-            String code = cols[colIndexes.get( "SUBJECT" )].trim()
-                + cols[colIndexes.get( "CATALOG" )].trim();
-            if( results.nocourses.contains( code ) ) continue;
             Course course = results.courses.get( code );
             if( course == null )
             {
@@ -134,35 +161,46 @@ public class UserGradeImportController {
                 }
             }
 
-            Term term = new Term();
-            term.setCode(
-                Integer.parseInt( cols[colIndexes.get( "TERM" )] ) - 1000 );
-            Grade grade = results.grades
-                .get( cols[colIndexes.get( "GRADE" )].trim() );
-            Enrollment enrollment = enrollmentDao.getEnrollment( course, term,
-                user );
-            if( enrollment != null )
-            {
-                if( grade != enrollment.getGrade() )
-                {
-                    enrollment.setGrade( grade );
-                    enrollment = enrollmentDao.saveEnrollment( enrollment );
-                    results.gradesUpdated++;
-                }
-            }
-            else
+            List<Enrollment> enrollments = enrollmentDao.getEnrollments( course,
+                term, user );
+            if( enrollments.size() == 0 )
             {
                 Section section = results.specialSections
                     .get( code + term.getCode() );
                 if( section == null )
                 {
-                    section = sectionDao.addSection( term, course, null );
+                    section = sectionDao.getSpecialSection( term, course );
+                    if( section == null )
+                    {
+                        section = sectionDao.addSection( term, course, null );
+                        results.nosections.add( code + "-" + section.getNumber()
+                            + ", " + term.getShortString() );
+                    }
                     results.specialSections.put( code + term.getCode(),
                         section );
-                    enrollment = new Enrollment( section, user, grade );
-                    enrollment = enrollmentDao.saveEnrollment( enrollment );
-                    results.gradesAdded++;
                 }
+                enrollmentDao
+                    .saveEnrollment( new Enrollment( section, user, grade ) );
+                results.gradesAdded++;
+            }
+            else if( enrollments.size() == 1 )
+            {
+                Enrollment enrollment = enrollments.get( 0 );
+                Grade oldGrade = enrollment.getGrade();
+                if( oldGrade == null
+                    || !oldGrade.getId().equals( grade.getId() ) )
+                {
+                    enrollment.setGrade( grade );
+                    enrollmentDao.saveEnrollment( enrollment );
+                    results.gradesUpdated++;
+                    logger.info( current + ": "
+                        + (oldGrade == null ? "null" : oldGrade.getSymbol())
+                        + " -> " + grade.getSymbol() );
+                }
+            }
+            else
+            {
+                results.nogrades.add( Arrays.toString( excelReader.getRow() ) );
             }
         }
 
@@ -171,14 +209,14 @@ public class UserGradeImportController {
         return "user/gradeImportResults";
     }
 
-    private User createUser( Map<String, Integer> colIndexes, String cols[],
+    private User createUser( ExcelReader excelReader,
         UserGradeImportResults results )
     {
         User user = new User();
-        String cin = cols[colIndexes.get( "CIN" )];
+        String cin = excelReader.get( "ID" );
         user.setCin( cin );
 
-        String name = cols[colIndexes.get( "NAME" )];
+        String name = excelReader.get( "NAME" );
         String tokens[] = name.split( "," );
         user.setLastName( tokens[0].trim() );
         if( tokens[1].trim().contains( " " ) )
@@ -194,13 +232,13 @@ public class UserGradeImportController {
         String password = passwordEncoder.encodePassword( cin, null );
         user.setPassword( password );
 
-        if( colIndexes.containsKey( "EMAIL" ) )
-            user.setPrimaryEmail( cols[colIndexes.get( "EMAIL" )] );
+        if( excelReader.hasColumn( "EMAIL" ) )
+            user.setPrimaryEmail( excelReader.get( "EMAIL" ) );
         user.setTemporary( true );
 
-        if( colIndexes.containsKey( "ACAD PLAN" ) )
+        if( excelReader.hasColumn( "ACAD PLAN" ) )
         {
-            String dept = cols[colIndexes.get( "ACAD PLAN" )].split( " " )[0];
+            String dept = excelReader.get( "ACAD PLAN" ).split( " " )[0];
             user.setMajor( results.departments.get( dept.toUpperCase() ) );
         }
 
@@ -221,13 +259,19 @@ public class UserGradeImportController {
 
         int gradesUpdated = 0;
 
+        int emptyGrades = 0;
+
         Map<String, User> users;
 
         Map<String, Course> courses;
 
+        Map<String, Section> specialSections;
+
         Set<String> nocourses;
 
-        Map<String, Section> specialSections;
+        List<String> nosections;
+
+        List<String> nogrades;
 
         Map<String, Department> departments;
 
@@ -237,8 +281,10 @@ public class UserGradeImportController {
         {
             users = new HashMap<String, User>();
             courses = new HashMap<String, Course>();
-            nocourses = new LinkedHashSet<String>();
             specialSections = new HashMap<String, Section>();
+            nocourses = new LinkedHashSet<String>();
+            nosections = new ArrayList<String>();
+            nogrades = new ArrayList<String>();
 
             departments = new HashMap<String, Department>();
             for( Department d : departmentDao.getDepartments() )
@@ -269,9 +315,24 @@ public class UserGradeImportController {
             return gradesUpdated;
         }
 
+        public int getEmptyGrades()
+        {
+            return emptyGrades;
+        }
+
         public Set<String> getNocourses()
         {
             return nocourses;
+        }
+
+        public List<String> getNosections()
+        {
+            return nosections;
+        }
+
+        public List<String> getNogrades()
+        {
+            return nogrades;
         }
 
     }

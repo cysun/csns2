@@ -68,8 +68,8 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public Section getSpecialSection( Term term, Course course )
     {
-        String query = "from Section where term = :term "
-            + "and course = :course and instructors is empty order by id asc";
+        String query = "from Section s where term = :term "
+            + "and course = :course and s.instructors is empty order by id asc";
 
         List<Section> sections = entityManager
             .createQuery( query, Section.class )

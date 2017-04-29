@@ -63,28 +63,27 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     }
 
     @Override
-    public Enrollment getEnrollment( Course course, Term term, User student )
-    {
-        String query = "from Enrollment where section.course = :course "
-            + "and section.term = :term and student = :student "
-            + "order by id asc";
-
-        List<Enrollment> enrollments = entityManager
-            .createQuery( query, Enrollment.class )
-            .setParameter( "course", course )
-            .setParameter( "term", term )
-            .setParameter( "student", student )
-            .getResultList();
-        return enrollments.size() == 0 ? null : enrollments.get( 0 );
-    }
-
-    @Override
     public List<Enrollment> getEnrollments( User student )
     {
         String query = "from Enrollment where student = :student "
             + "order by section.term desc";
 
         return entityManager.createQuery( query, Enrollment.class )
+            .setParameter( "student", student )
+            .getResultList();
+    }
+
+    @Override
+    public List<Enrollment> getEnrollments( Course course, Term term,
+        User student )
+    {
+        String query = "from Enrollment where section.course = :course "
+            + "and section.term = :term and student = :student "
+            + "order by id asc";
+
+        return entityManager.createQuery( query, Enrollment.class )
+            .setParameter( "course", course )
+            .setParameter( "term", term )
             .setParameter( "student", student )
             .getResultList();
     }

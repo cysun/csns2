@@ -81,7 +81,9 @@ public class Section implements Serializable, Comparable<Section> {
     @OrderColumn(name = "instructor_order")
     private List<User> instructors;
 
-    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "section",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "section",

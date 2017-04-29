@@ -21,7 +21,38 @@
   <th>Grades Updated</th><td>${results.gradesUpdated}</td>
 </tr>
 <tr>
-  <th>Nonexistent Courses</th>
+  <th>Empty Grades</th><td>${results.emptyGrades}</td>
+</tr>
+<tr>
+  <th style="vertical-align: top;">Sections Created</th>
+  <td>
+    <c:if test="${fn:length(results.nosections) > 0}">
+      <ol>
+        <c:forEach items="${results.nosections}" var="section">
+        <li>${section}</li>
+        </c:forEach>
+      </ol>
+    </c:if>
+  </td>
+</tr>
+<tr>
+  <th style="vertical-align: top;">Entries Skipped</th>
+  <td>
+    <c:if test="${fn:length(results.nogrades) > 0}">
+    The following entries are skipped because the student took multiple sections
+    of the same course in the same term (typically a special topic course).
+    Because the section number on CSNS does not match the section number on GET,
+    we are not able to determine the correct section to put in the grade.
+    <ol>
+      <c:forEach items="${results.nogrades}" var="grade">
+      <li>${grade}</li>
+      </c:forEach>
+    </ol>
+    </c:if>
+  </td>
+</tr>
+<tr>
+  <th style="vertical-align: top;">Nonexistent Courses</th>
   <td>
     <c:if test="${fn:length(results.nocourses) > 0}">
       <ol>

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -211,6 +211,19 @@ public class SectionController {
         section = sectionDao.deleteSection( section );
         logger.info( SecurityUtils.getUser().getUsername() + " deleted section "
             + section.getId() );
+
+        return "redirect:/section/taught";
+    }
+
+    @RequestMapping("/section/fdelete")
+    public String fdelete( @RequestParam Long id, ModelMap models )
+    {
+        Section section = sectionDao.getSection( id );
+        section.getEnrollments().clear();
+        section = sectionDao.deleteSection( section );
+
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " force deleted section " + section.getId() );
 
         return "redirect:/section/taught";
     }

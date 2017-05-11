@@ -3,8 +3,11 @@
 <script>
 $(function(){
     $(".assignment-toggle").change(function(){
+        var url = "toggleAssignment";
+        if($(this).attr("data-assignment-type") == "rubric")
+            url = "toggleRubricAssignment";
         $.ajax({
-           url: "toggleAssignment",
+           "url": url,
            data: {
                "journalId": ${section.journal.id},
                "assignmentId": $(this).attr("data-assignment-id")
@@ -40,6 +43,19 @@ $(function(){
       </c:when>
       <c:otherwise>${assignment.name}</c:otherwise>
     </c:choose>
+    </td>
+  </tr>
+  </c:forEach>
+  </tbody>
+  <tbody>
+  <c:forEach items="${section.rubricAssignments}" var="assignment">
+  <tr data-assignment-id="${assignment.id}">
+    <td>
+      <input type="checkbox" class="assignment-toggle" data-assignment-id="${assignment.id}" data-assignment-type="rubric"
+        <c:if test="${section.journal.rubricAssignments.contains(assignment)}">checked="checked"</c:if> />
+    </td>
+    <td>
+      <a href="<c:url value='/department/${dept}/rubric/view?id=${assignment.rubric.id}' />">${assignment.name}</a>
     </td>
   </tr>
   </c:forEach>

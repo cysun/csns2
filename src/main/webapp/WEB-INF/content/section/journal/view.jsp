@@ -5,6 +5,12 @@
 <c:set var="journal" value="${section.journal}" />
 
 <script>
+function recreateJournal()
+{
+    var msg = "Do you want to recreate this course journal?";
+    if( confirm(msg) )
+        window.location.href = "recreate?sectionId=${section.id}";
+}
 function submitJournal()
 {
     var msg = "Do you want to submit this course journal for review?";
@@ -20,6 +26,8 @@ function submitJournal()
 <c:if test="${not journal.submitted}">
 <li class="align_right"><a href="javascript:submitJournal()"><img title="Submit Course Journal"
   alt="[Submit Course Journal]" src="<c:url value='/img/icons/accept.png' />" /></a></li>
+<li class="align_right"><a href="javascript:recreateJournal()"><img title="Recreate Course Journal"
+  alt="[Recreate Course Journal]" src="<c:url value='/img/icons/arrow_refresh.png' />" /></a></li>
 </c:if>
 </ul>
 
@@ -112,6 +120,11 @@ be included or excluded. By default all the assignments will be included.</p>
     </c:when>
     <c:otherwise>${assignment.name}</c:otherwise>
   </c:choose>
+  </li>
+  </c:forEach>
+  <c:forEach items="${journal.rubricAssignments}" var="assignment">
+  <li>
+    <a href="<c:url value='/department/${dept}/rubric/view?id=${assignment.rubric.id}' />">${assignment.name}</a>
   </li>
   </c:forEach>
 </ul>

@@ -38,7 +38,9 @@ import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.assessment.CourseJournal;
+import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.dao.CourseJournalDao;
+import csns.model.assessment.dao.RubricAssignmentDao;
 import csns.model.core.User;
 import csns.model.site.Block;
 import csns.model.site.Item;
@@ -56,6 +58,9 @@ public class SectionJournalController {
 
     @Autowired
     private AssignmentDao assignmentDao;
+
+    @Autowired
+    private RubricAssignmentDao rubricAssignmentDao;
 
     @Autowired
     private EnrollmentDao enrollmentDao;
@@ -82,6 +87,7 @@ public class SectionJournalController {
 
         // Populate assignments
         journal.getAssignments().addAll( section.getAssignments() );
+        journal.getRubricAssignments().addAll( section.getRubricAssignments() );
 
         section = sectionDao.saveSection( section );
         logger.info( SecurityUtils.getUser().getUsername()
@@ -111,6 +117,8 @@ public class SectionJournalController {
 
         journal.getAssignments().clear();
         journal.getAssignments().addAll( section.getAssignments() );
+        journal.getRubricAssignments().clear();
+        journal.getRubricAssignments().addAll( section.getRubricAssignments() );
 
         section = sectionDao.saveSection( section );
         logger.info( SecurityUtils.getUser().getUsername()
@@ -187,6 +195,34 @@ public class SectionJournalController {
         {
             assignments.add( assignment );
             logger.info( user.getUsername() + " added assignment "
+                + assignmentId + " to course jorunal " + journalId );
+        }
+        courseJournalDao.saveCourseJournal( courseJournal );
+    }
+
+    @RequestMapping("/section/journal/toggleRubricAssignment")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleRubricAssignment( @RequestParam Long journalId,
+        @RequestParam Long assignmentId )
+    {
+        User user = SecurityUtils.getUser();
+        CourseJournal courseJournal = courseJournalDao
+            .getCourseJournal( journalId );
+        RubricAssignment assignment = rubricAssignmentDao
+            .getRubricAssignment( assignmentId );
+
+        List<RubricAssignment> assignments = courseJournal
+            .getRubricAssignments();
+        if( assignments.contains( assignment ) )
+        {
+            assignments.remove( assignment );
+            logger.info( user.getUsername() + " removed rubric assignment "
+                + assignmentId + " from course jorunal " + journalId );
+        }
+        else
+        {
+            assignments.add( assignment );
+            logger.info( user.getUsername() + " added rubric assignment "
                 + assignmentId + " to course jorunal " + journalId );
         }
         courseJournalDao.saveCourseJournal( courseJournal );

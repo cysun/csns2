@@ -517,7 +517,14 @@ create table course_journal_handouts (
 create table course_journal_assignments (
     course_journal_id   bigint not null references course_journals(id),
     assignment_id       bigint not null references assignments(id),
-    assignment_order    bigint not null,
+    assignment_order    integer not null,
+  primary key (course_journal_id, assignment_order)
+);
+
+create table course_journal_rubric_assignments (
+    course_journal_id   bigint not null references course_journals(id),
+    assignment_id       bigint not null,
+    assignment_order    integer not null,
   primary key (course_journal_id, assignment_order)
 );
 
@@ -1597,6 +1604,10 @@ create table rubric_assignments (
     due_date                    timestamp,
     deleted                     boolean not null default 'f'
 );
+
+alter table course_journal_rubric_assignments
+    add constraint course_journal_rubric_assignments_assignment_id_fkey
+    foreign key (assignment_id) references rubric_assignments(id);
 
 create table rubric_external_evaluators (
     rubric_assignment_id    bigint not null references rubric_assignments(id),

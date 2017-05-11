@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -71,11 +71,18 @@ public class CourseJournal implements Serializable {
     private List<Assignment> assignments;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinTable(name = "course_journal_rubric_assignments",
+        joinColumns = @JoinColumn(name = "course_journal_id"),
+        inverseJoinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "assignment_order")
+    private List<RubricAssignment> rubricAssignments;
+
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(name = "course_journal_student_samples",
         joinColumns = @JoinColumn(name = "course_journal_id"),
         inverseJoinColumns = @JoinColumn(name = "enrollment_id"),
-        uniqueConstraints = @UniqueConstraint(columnNames = {
-            "course_journal_id", "enrollment_id" }))
+        uniqueConstraints = @UniqueConstraint(
+            columnNames = { "course_journal_id", "enrollment_id" }))
     @OrderBy("id asc")
     private List<Enrollment> studentSamples;
 
@@ -155,6 +162,16 @@ public class CourseJournal implements Serializable {
     public void setAssignments( List<Assignment> assignments )
     {
         this.assignments = assignments;
+    }
+
+    public List<RubricAssignment> getRubricAssignments()
+    {
+        return rubricAssignments;
+    }
+
+    public void setRubricAssignments( List<RubricAssignment> rubricAssignments )
+    {
+        this.rubricAssignments = rubricAssignments;
     }
 
     public List<Enrollment> getStudentSamples()

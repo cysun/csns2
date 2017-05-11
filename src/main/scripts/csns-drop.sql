@@ -24,6 +24,7 @@ drop table assessment_program_outcomes;
 drop table assessment_program_objectives;
 drop table assessment_programs;
 
+alter table course_journal_rubric_assignments drop constraint course_journal_rubric_assignments_assignment_id_fkey;
 drop table rubric_evaluation_ratings;
 drop table rubric_evaluations;
 drop table rubric_external_evaluators;
@@ -151,6 +152,7 @@ drop table departments;
 alter table sections drop constraint sections_journal_id_fkey;
 alter table courses drop constraint courses_journal_id_fkey;
 drop table course_journal_student_samples;
+drop table course_journal_rubric_assignments;
 drop table course_journal_assignments;
 drop table course_journal_handouts;
 drop table course_journals;

@@ -154,6 +154,13 @@ create sequence hibernate_sequence start 1 increment 1;
         primary key (course_journal_id, handout_order)
     );
 
+    create table course_journal_rubric_assignments (
+       course_journal_id int8 not null,
+        assignment_id int8 not null,
+        assignment_order int4 not null,
+        primary key (course_journal_id, assignment_order)
+    );
+
     create table course_journal_student_samples (
        course_journal_id int8 not null,
         enrollment_id int8 not null
@@ -1274,6 +1281,16 @@ create sequence hibernate_sequence start 1 increment 1;
 
     alter table course_journal_handouts 
        add constraint FKocvp0b07el7lwqranlk4dkqyn 
+       foreign key (course_journal_id) 
+       references course_journals;
+
+    alter table course_journal_rubric_assignments 
+       add constraint FK2xpjgpqolrpsbvslysq7c0k2s 
+       foreign key (assignment_id) 
+       references rubric_assignments;
+
+    alter table course_journal_rubric_assignments 
+       add constraint FKlnjmj5up2r1dnn047xjbk73mw 
        foreign key (course_journal_id) 
        references course_journals;
 

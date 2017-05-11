@@ -42,6 +42,13 @@ $(function(){
         autoOpen: false,
         modal: true
     });
+    $("#code").blur(function(){
+       var code = $(this).val();
+       if( code.search(/[0-9]{4}/) >= 0 )
+           $("#unitFactor").val("1.0");
+       else
+           $("#unitFactor").val("0.667");
+    });
 });
 function help( name )
 {

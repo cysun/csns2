@@ -96,6 +96,7 @@ public class CourseJournal implements Serializable {
     {
         handouts = new ArrayList<Resource>();
         assignments = new ArrayList<Assignment>();
+        rubricAssignments = new ArrayList<RubricAssignment>();
         studentSamples = new ArrayList<Enrollment>();
     }
 

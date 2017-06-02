@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -46,6 +46,7 @@ import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.GradeDao;
 import csns.model.academics.dao.SectionDao;
 import csns.model.academics.dao.SubmissionDao;
+import csns.model.assessment.dao.RubricSubmissionDao;
 import csns.model.core.User;
 import csns.security.SecurityUtils;
 import freemarker.template.Configuration;
@@ -65,6 +66,9 @@ public class SectionGradeController {
 
     @Autowired
     private SubmissionDao submissionDao;
+
+    @Autowired
+    private RubricSubmissionDao rubricSubmissionDao;
 
     @Autowired
     private MailSender mailSender;
@@ -105,6 +109,9 @@ public class SectionGradeController {
         models.put( "enrollment", enrollment );
         models.put( "submissions", submissionDao.getSubmissions(
             enrollment.getStudent(), enrollment.getSection() ) );
+        models.put( "rubricSubmissions",
+            rubricSubmissionDao.getRubricSubmissions( enrollment.getStudent(),
+                enrollment.getSection() ) );
 
         return "section/grade";
     }

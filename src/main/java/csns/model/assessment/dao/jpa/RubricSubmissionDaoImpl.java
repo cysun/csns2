@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -26,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import csns.model.academics.Section;
 import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricSubmission;
 import csns.model.assessment.dao.RubricSubmissionDao;
@@ -56,6 +57,21 @@ public class RubricSubmissionDaoImpl implements RubricSubmissionDao {
             .setParameter( "assignment", assignment )
             .getResultList();
         return results.size() == 0 ? null : results.get( 0 );
+    }
+
+    @Override
+    public List<RubricSubmission> getRubricSubmissions( User student,
+        Section section )
+    {
+        String query = "from RubricSubmission submission "
+            + "where submission.student = :student "
+            + "and submission.assignment.section = :section "
+            + "and submission.assignment.deleted = false";
+
+        return entityManager.createQuery( query, RubricSubmission.class )
+            .setParameter( "student", student )
+            .setParameter( "section", section )
+            .getResultList();
     }
 
     @Override

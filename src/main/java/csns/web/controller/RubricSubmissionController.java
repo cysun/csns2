@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -109,7 +109,7 @@ public class RubricSubmissionController {
         if( stats.get( 0 ).getCount() == 0 ) return;
 
         List<Double> data = new ArrayList<Double>();
-        for( int i = 1; i < stats.size() ; ++i )
+        for( int i = 1; i < stats.size(); ++i )
             data.add( stats.get( i ).getMean() );
         // The overall stats is the first one in the list
         data.add( stats.get( 0 ).getMean() );
@@ -179,6 +179,14 @@ public class RubricSubmissionController {
         if( submission == null )
             submission = new RubricSubmission( student, assignment );
         return view( "student", submission, models );
+    }
+
+    @RequestMapping("/rubric/submission/student/rubric")
+    public String rubric( @RequestParam Long assignmentId, ModelMap models )
+    {
+        models.put( "assignment",
+            rubricAssignmentDao.getRubricAssignment( assignmentId ) );
+        return "rubric/submission/rubric";
     }
 
     @RequestMapping("/rubric/submission/{role}/view")

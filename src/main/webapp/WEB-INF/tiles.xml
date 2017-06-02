@@ -1126,6 +1126,11 @@
         <put-attribute name="content" value="/WEB-INF/content/rubric/submission/view/student.jsp" />
     </definition>
 
+    <definition name="rubric/submission/rubric" extends="layout.basic">
+        <put-attribute name="title" value="Rubric" />
+        <put-attribute name="content" value="/WEB-INF/content/rubric/submission/rubric.jsp" />
+    </definition>
+
     <definition name="rubric/evaluation/view" extends="layout.jqueryui">
         <put-attribute name="title" value="Rubric Evaluation" />
         <put-attribute name="content" value="/WEB-INF/content/rubric/evaluation/view.jsp" />

@@ -18,6 +18,8 @@ $(function(){
 <li class="align_right"><a href="<c:url value='/rubric/submission/student/list?assignmentId=${assignment.id}' />"><img
   title="Evaluate Others" alt="[Evaluate Others]" src="<c:url value='/img/icons/table_heatmap2.png' />" /></a></li>
 </c:if>
+<li class="align_right"><a href="<c:url value='/rubric/submission/student/rubric?assignmentId=${assignment.id}' />"><img
+  title="View Rubric" alt="[View Rubric]" src="<c:url value='/img/icons/table.png' />" /></a></li>
 </ul>
 
 <c:if test="${not assignment.published}">

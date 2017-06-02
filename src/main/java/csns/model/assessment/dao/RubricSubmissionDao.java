@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,6 +18,9 @@
  */
 package csns.model.assessment.dao;
 
+import java.util.List;
+
+import csns.model.academics.Section;
 import csns.model.assessment.RubricAssignment;
 import csns.model.assessment.RubricSubmission;
 import csns.model.core.User;
@@ -28,6 +31,9 @@ public interface RubricSubmissionDao {
 
     RubricSubmission getRubricSubmission( User student,
         RubricAssignment assignment );
+
+    List<RubricSubmission> getRubricSubmissions( User student,
+        Section section );
 
     RubricSubmission saveRubricSubmission( RubricSubmission submission );
 

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
@@ -59,17 +60,29 @@ $(function(){
   src="<c:url value='/img/icons/email_go.png' />" /></a></li>
 </ul>
 
-<table class="viewtable halfwidth">
+<table class="viewtable autowidth">
 <thead><tr><th>Assignment</th><th>Grade</th><th>Total</th></tr></thead>
 <tbody>
   <c:forEach items="${submissions}" var="submission">
   <tr>
-    <td><a href="<c:url value='/submission/grade?id=${submission.id}' />">${submission.assignment.name}</a></td>
+    <td><a href="<c:url value='/submission/grade?id=${submission.id}'
+      />">${submission.assignment.name}</a></td>
     <td class="center">${submission.grade}</td>
     <td class="center">${submission.assignment.totalPoints}</td>
   </tr>
   </c:forEach>
 </tbody>
+<c:if test="${fn:length(rubricSubmissions) > 0}">
+<tbody>
+  <c:forEach items="${rubricSubmissions}" var="submission">
+  <tr>
+    <td><a href="<c:url value='/rubric/submission/instructor/view?id=${submission.id}'
+      />">${submission.assignment.name}</a></td>
+    <td colspan="2"></td>
+  </tr>
+  </c:forEach>
+</tbody>
+</c:if>
 </table>
 
 <h4><a id="gradeLink" href="javascript:void(0)">Grade</a></h4>

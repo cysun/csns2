@@ -1,37 +1,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
-<c:set var="department" value="${importer.department}" />
-<c:set var="section" value="${importer.section}" />
-
-<script>
-$(function(){
-   $("#section\\.course option[value='${section.course.id}']").attr("selected", "selected");
-   $("#section\\.instructors option[value='${section.instructors[0].id}']").attr("selected", "selected"); 
-});
-</script>
 
 <ul id="title">
 <li><a class="bc" href="<c:url value='/section/search' />">Sections</a></li>
-<li><a class="bc" href="<c:url value='/department/${dept}/sections?term=${section.term.code}' />">${department.name}</a></li>
+<li><a class="bc" href="<c:url value='/department/${dept}/sections?term=${term.code}' />">${department.name}</a></li>
 <li>Import Section</li>
 </ul>
 
-<form:form modelAttribute="importer">
+<form action="import1" method="get">
 <table class="viewtable autowidth">
 <tr><th>Term</th><th>Course</th><th>Instructor</th></tr>
 <tr>
-  <td>${section.term}</td>
+  <td>${term}</td>
   <td>
-    <form:select path="section.course" items="${importer.courses}"
-      itemLabel="code" itemValue="id" />
+    <select name="course">
+      <c:forEach items="${courses}" var="course">
+        <option value="${course.id}">${course.code}</option>
+      </c:forEach>
+    </select>
   </td>
   <td>
-    <form:select path="section.instructors" items="${importer.instructors}" 
-      itemLabel="name" itemValue="id" multiple="false" />
+    <select name="instructor">
+      <c:forEach items="${instructors}" var="instructor">
+        <option value="${instructor.id}">${instructor.name}</option>
+      </c:forEach>
+    </select>
   </td>
 </tr>
 </table>
-<p><input type="hidden" name="_page" value="0" />
-<input type="submit" name="_target1" value="Next" class="subbutton" /></p>
-</form:form>
+<input type="hidden" name="term" value="${term.code}" />
+<p><input type="submit" name="next" value="Next" class="subbutton" /></p>
+</form>

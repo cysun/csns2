@@ -25,7 +25,7 @@ $(function(){
   </select>
 </li>
 <security:authorize access="authenticated and principal.isAdmin('${dept}')">
-<li class="align_right"><a href="section/import?term=${term.code}"><img alt="[Import Section]"
+<li class="align_right"><a href="section/import0?term=${term.code}"><img alt="[Import Section]"
   title="Import Section" src="<c:url value='/img/icons/table_import.png' />" /></a></li>
 </security:authorize>
 </ul>

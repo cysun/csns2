@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,13 +18,17 @@
  */
 package csns.importer;
 
+import java.io.Serializable;
+
 import csns.model.academics.Term;
 
 /**
  * This class holds all the fields that could potentially be imported. Note that
  * not all fields are used by every importer.
  */
-public class ImportedUser {
+public class ImportedUser implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     String cin;
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.WebApplicationContext;
 
 import csns.helper.GradeSheet;
@@ -50,7 +49,6 @@ import csns.web.editor.CoursePropertyEditor;
 import csns.web.editor.TermPropertyEditor;
 
 @Controller
-@SessionAttributes("importer")
 public class DepartmentSectionController {
 
     @Autowired
@@ -83,8 +81,7 @@ public class DepartmentSectionController {
 
         Term currentTerm = new Term();
         if( term == null ) term = currentTerm;
-        if( !terms.contains( currentTerm ) )
-            terms.add( 0, currentTerm );
+        if( !terms.contains( currentTerm ) ) terms.add( 0, currentTerm );
         Term nextTerm = currentTerm.next();
         if( !terms.contains( nextTerm ) ) terms.add( 0, nextTerm );
 
@@ -106,9 +103,9 @@ public class DepartmentSectionController {
     }
 
     @RequestMapping("/department/{dept}/section/grades")
-    public String grades( @RequestParam Term term,
-        @RequestParam Course course, @RequestParam int number,
-        HttpServletResponse response ) throws IOException
+    public String grades( @RequestParam Term term, @RequestParam Course course,
+        @RequestParam int number, HttpServletResponse response )
+        throws IOException
     {
         Section section = sectionDao.getSection( term, course, number );
         if( section != null )
@@ -123,8 +120,8 @@ public class DepartmentSectionController {
                 String grade = enrollments.get( i ).getGrade() == null ? ""
                     : enrollments.get( i ).getGrade().getSymbol();
                 out.println( (i + 1) + " " + student.getCin() + " "
-                    + student.getLastName() + "," + student.getFirstName()
-                    + " " + grade );
+                    + student.getLastName() + "," + student.getFirstName() + " "
+                    + grade );
             }
         }
         return null;

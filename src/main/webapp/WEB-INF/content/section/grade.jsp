@@ -65,8 +65,16 @@ $(function(){
 <tbody>
   <c:forEach items="${submissions}" var="submission">
   <tr>
-    <td><a href="<c:url value='/submission/grade?id=${submission.id}'
-      />">${submission.assignment.name}</a></td>
+    <c:choose>
+      <c:when test="${submission.online}">
+        <td><a href="<c:url value='/submission/online/grade?id=${submission.id}'
+          />">${submission.assignment.name}</a></td>
+      </c:when>
+      <c:otherwise>
+        <td><a href="<c:url value='/submission/grade?id=${submission.id}'
+          />">${submission.assignment.name}</a></td>
+      </c:otherwise>
+    </c:choose>
     <td class="center">${submission.grade}</td>
     <td class="center">${submission.assignment.totalPoints}</td>
   </tr>

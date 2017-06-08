@@ -106,7 +106,7 @@
         <security:intercept-url pattern="/department/*/group/export" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/group/**" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/section" access="authenticated and principal.admin" />
-        <security:intercept-url pattern="/department/*/section/import" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/section/import*" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/user/import" access="authenticated and principal.admin" />
         <security:intercept-url pattern="/department/*/assessment/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/project/view" access="permitAll" />

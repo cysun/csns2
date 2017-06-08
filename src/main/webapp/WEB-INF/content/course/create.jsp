@@ -45,9 +45,15 @@ $(function(){
     $("#code").blur(function(){
        var code = $(this).val();
        if( code.search(/[0-9]{4}/) >= 0 )
+       {
+           $("#units").val("3");
            $("#unitFactor").val("1.0");
+       }
        else
+       {
+           $("#units").val("4");
            $("#unitFactor").val("0.667");
+       }
     });
 });
 function help( name )

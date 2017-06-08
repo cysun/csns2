@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,9 +18,9 @@
  */
 package csns.web.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,14 +35,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.WebUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import csns.importer.GradesImporter;
 import csns.importer.ImportedUser;
 import csns.model.academics.Course;
+import csns.model.academics.Department;
 import csns.model.academics.Enrollment;
 import csns.model.academics.Term;
 import csns.model.academics.Section;
@@ -53,12 +54,13 @@ import csns.model.academics.dao.SectionDao;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
+import csns.util.ExcelReader;
 import csns.web.editor.CoursePropertyEditor;
 import csns.web.editor.TermPropertyEditor;
 import csns.web.editor.UserPropertyEditor;
 
 @Controller
-@SessionAttributes("importer")
+@SessionAttributes("importedUsers")
 @SuppressWarnings("deprecation")
 public class DepartmentSectionControllerS {
 
@@ -83,7 +85,8 @@ public class DepartmentSectionControllerS {
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( DepartmentSectionControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( DepartmentSectionControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -96,124 +99,151 @@ public class DepartmentSectionControllerS {
             (CoursePropertyEditor) context.getBean( "coursePropertyEditor" ) );
     }
 
-    @RequestMapping(value = "/department/{dept}/section/import",
-        method = RequestMethod.GET)
-    public String importSection( @PathVariable String dept,
-        @RequestParam Term term, ModelMap models )
+    @RequestMapping("/department/{dept}/section/import0")
+    public String import0( @PathVariable String dept, @RequestParam Term term,
+        ModelMap models )
     {
-        GradesImporter importer = (GradesImporter) context.getBean( "gradesImporter" );
-        importer.selectParser( 1 );
-        importer.setDepartment( departmentDao.getDepartment( dept ) );
-        importer.setSection( new Section() );
-        importer.getSection().setTerm( term );
-        models.put( "importer", importer );
+        Department department = departmentDao.getDepartment( dept );
+        List<Course> courses = new ArrayList<Course>();
+        courses.addAll( department.getUndergraduateCourses() );
+        courses.addAll( department.getGraduateCourses() );
+        List<User> instructors = new ArrayList<User>();
+        instructors.addAll( department.getFaculty() );
+        instructors.addAll( department.getInstructors() );
+
+        models.put( "department", department );
+        models.put( "term", term );
+        models.put( "courses", courses );
+        models.put( "instructors", instructors );
         return "department/section/import0";
     }
 
-    @RequestMapping(value = "/department/{dept}/section/import",
-        method = RequestMethod.POST)
-    public String importSection(
-        @ModelAttribute("importer") GradesImporter importer,
-        @PathVariable String dept, @RequestParam("_page") int currentPage,
-        HttpServletRequest request, SessionStatus sessionStatus )
+    @RequestMapping("/department/{dept}/section/import1")
+    public String import1( @PathVariable String dept, @RequestParam Term term,
+        @RequestParam Course course, @RequestParam User instructor,
+        ModelMap models )
     {
-        if( request.getParameter( "_finish" ) == null )
+        models.put( "department", departmentDao.getDepartment( dept ) );
+        models.put( "term", term );
+        models.put( "course", course );
+        models.put( "instructor", instructor );
+        models.put( "sections",
+            sectionDao.getSectionsByInstructor( instructor, term, course ) );
+        return "department/section/import1";
+    }
+
+    @RequestMapping(value = "/department/{dept}/section/import2",
+        method = RequestMethod.POST)
+    public String import2( @PathVariable String dept, @RequestParam Term term,
+        @RequestParam Course course, @RequestParam User instructor,
+        @RequestParam int number,
+        @RequestParam(value = "file") MultipartFile uploadedFile,
+        ModelMap models ) throws IOException
+    {
+        List<ImportedUser> importedUsers = new ArrayList<ImportedUser>();
+        ExcelReader excelReader = new ExcelReader(
+            uploadedFile.getInputStream() );
+        while( excelReader.next() )
         {
-            int targetPage = WebUtils.getTargetPage( request, "_target",
-                currentPage );
+            ImportedUser importedUser = new ImportedUser();
+            importedUser.setCin( excelReader.get( "ID" ) );
+            importedUser.setName( excelReader.get( "Name" ) );
+            importedUser.setGrade( excelReader.get( "Official Grade" ) );
+            importedUsers.add( importedUser );
+        }
+        excelReader.close();
 
-            if( targetPage == 1 && currentPage < targetPage )
+        if( number > 0 )
+        {
+            Section section = sectionDao.getSection( term, course, number );
+            for( ImportedUser importedUser : importedUsers )
             {
-                importer.clear();
-                Section section = importer.getSection();
-                List<Section> sections = sectionDao.getSectionsByInstructor(
-                    section.getInstructors().get( 0 ), section.getTerm(),
-                    section.getCourse() );
-                for( Section s : sections )
-                    importer.getSectionNumbers().add( s.getNumber() );
-                section.setNumber( importer.getSectionNumbers().size() == 0
-                    ? -1 : importer.getSectionNumbers().get( 0 ) );
-            }
-
-            if( targetPage == 2 )
-            {
-                int number = importer.getSection().getNumber();
-                if( number > 0 )
+                User user = userDao.getUserByCin( importedUser.getCin() );
+                if( user == null )
                 {
-                    Term term = importer.getSection().getTerm();
-                    Course course = importer.getSection().getCourse();
-                    Section section = sectionDao.getSection( term, course,
-                        number );
-                    for( ImportedUser student : importer.getImportedStudents() )
-                    {
-                        User user = userDao.getUserByCin( student.getCin() );
-                        if( user == null )
-                        {
-                            student.setNewAccount( true );
-                            student.setNewEnrollment( true );
-                        }
-                        else
-                        {
-                            Enrollment enrollment = section.getEnrollment( user );
-                            if( enrollment == null )
-                                student.setNewEnrollment( true );
-                            else if( enrollment.getGrade() != null )
-                                student.setOldGrade( enrollment.getGrade()
-                                    .getSymbol() );
-                        }
-                    }
+                    importedUser.setNewAccount( true );
+                    importedUser.setNewEnrollment( true );
+                }
+                else
+                {
+                    Enrollment enrollment = section.getEnrollment( user );
+                    if( enrollment == null )
+                        importedUser.setNewEnrollment( true );
+                    else if( enrollment.getGrade() != null ) importedUser
+                        .setOldGrade( enrollment.getGrade().getSymbol() );
                 }
             }
-
-            return "department/section/import" + targetPage;
         }
 
-        // received _finish, so do the import.
-        Term term = importer.getSection().getTerm();
-        Course course = importer.getSection().getCourse();
-        int number = importer.getSection().getNumber();
-        Section section = number > 0 ? sectionDao.getSection( term, course,
-            number ) : sectionDao.addSection( term, course,
-            importer.getSection().getInstructors().get( 0 ) );
+        models.put( "department", departmentDao.getDepartment( dept ) );
+        models.put( "term", term );
+        models.put( "course", course );
+        models.put( "instructor", instructor );
+        models.put( "number", number );
+        models.put( "importedUsers", importedUsers );
+        return "department/section/import2";
+    }
 
-        for( ImportedUser importedStudent : importer.getImportedStudents() )
+    @RequestMapping("/department/{dept}/section/import-cancel")
+    @ResponseBody
+    public void cancelImport( SessionStatus sessionStatus )
+    {
+        sessionStatus.setComplete();
+        logger.debug( "Import canceled" );
+    }
+
+    @RequestMapping("/department/{dept}/section/import-confirm")
+    @ResponseBody
+    public Long confirmImport(
+        @ModelAttribute(
+            name = "importedUsers") List<ImportedUser> importedUsers,
+        @PathVariable String dept, @RequestParam Term term,
+        @RequestParam Course course, @RequestParam User instructor,
+        @RequestParam int number, SessionStatus sessionStatus )
+    {
+        Section section = number > 0
+            ? sectionDao.getSection( term, course, number )
+            : sectionDao.addSection( term, course, instructor );
+
+        int count = 0;
+        for( ImportedUser importedUser : importedUsers )
         {
-            String cin = importedStudent.getCin();
-            User student = userDao.getUserByCin( cin );
-            if( student == null )
+            String cin = importedUser.getCin();
+            User user = userDao.getUserByCin( cin );
+            if( user == null )
             {
-                student = new User();
-                student.setCin( cin );
-                student.setLastName( importedStudent.getLastName() );
-                student.setFirstName( importedStudent.getFirstName() );
-                student.setMiddleName( importedStudent.getMiddleName() );
-                student.setUsername( cin );
+                user = new User();
+                user.setCin( cin );
+                user.setLastName( importedUser.getLastName() );
+                user.setFirstName( importedUser.getFirstName() );
+                user.setMiddleName( importedUser.getMiddleName() );
+                user.setUsername( cin );
                 String password = passwordEncoder.encodePassword( cin, null );
-                student.setPassword( password );
-                student.setPrimaryEmail( cin + "@localhost" );
-                student.setTemporary( true );
-                student = userDao.saveUser( student );
+                user.setPassword( password );
+                user.setPrimaryEmail( cin + "@localhost" );
+                user.setTemporary( true );
+                user = userDao.saveUser( user );
             }
-            Enrollment enrollment = section.getEnrollment( student );
+            Enrollment enrollment = section.getEnrollment( user );
             if( enrollment == null )
-                enrollment = new Enrollment( section, student );
-            if( importedStudent.getGrade() != null
+                enrollment = new Enrollment( section, user );
+            if( importedUser.getGrade() != null
                 && (enrollment.getGrade() == null || !enrollment.getGrade()
                     .getSymbol()
-                    .equalsIgnoreCase( importedStudent.getGrade() )) )
+                    .equalsIgnoreCase( importedUser.getGrade() )) )
             {
-                enrollment.setGrade( gradeDao.getGrade( importedStudent.getGrade() ) );
+                enrollment
+                    .setGrade( gradeDao.getGrade( importedUser.getGrade() ) );
                 enrollmentDao.saveEnrollment( enrollment );
+                ++count;
             }
         }
 
-        logger.info( SecurityUtils.getUser().getUsername()
-            + " imported section " + section.getTerm().getShortString()
-            + " " + section.getCourse().getCode() + "-" + section.getNumber() );
+        logger.info( SecurityUtils.getUser().getUsername() + " imported "
+            + count + " records into section " + section.getId() );
 
         sessionStatus.setComplete();
-        return "redirect:/department/" + dept + "/section?id="
-            + section.getId();
+        return section.getId();
     }
 
 }

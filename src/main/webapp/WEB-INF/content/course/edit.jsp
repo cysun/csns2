@@ -69,7 +69,7 @@ function deleteprerequisites( prereqId )
   <tr>
     <th><csns:help name="code">Code</csns:help> *</th>
     <td>
-      <form:input path="code" cssClass="forminput" cssStyle="width: 100px;" required="required" />
+      <form:input path="code" cssClass="forminput" cssStyle="width: 150px;" required="required" />
       <div class="error"><form:errors path="code" /></div>
     </td>
   </tr>

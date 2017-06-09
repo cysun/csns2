@@ -32,6 +32,7 @@ $(function(){
     $(".code").each(function(){
         $(this).html( splitCode($(this).html()) );
     });
+    $("#catalog-desc").html( $("#catalog-desc").html().replace(/\n/g, '<br>') );
 });
 function splitCode( code )
 {
@@ -91,7 +92,7 @@ function splitCode( code )
   </tr>
   <tr>
     <th>Catalog Description</th>
-    <td colspan="3">${course.catalogDescription}</td>
+    <td colspan="3" id="catalog-desc">${course.catalogDescription}</td>
   </tr>
 </table>
 <c:if test="${course.obsolete}"><p class="error">This course is obsolete.</p></c:if>

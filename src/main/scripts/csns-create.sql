@@ -854,7 +854,7 @@ create table survey_chart_points (
 
 create table forums (
     id              bigint primary key,
-    name            varchar(80) not null,
+    name            varchar(255) not null,
     description     varchar(255),
     date            timestamp default current_timestamp,
     num_of_topics   integer not null default 0,

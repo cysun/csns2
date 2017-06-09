@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2012-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2012-2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -49,19 +49,21 @@ public class ForumDaoImpl implements ForumDao {
     @Override
     public Forum getForum( String name )
     {
-        return entityManager.createQuery( "from Forum where name = :name",
-            Forum.class )
+        List<Forum> results = entityManager
+            .createQuery( "from Forum where name = :name", Forum.class )
             .setParameter( "name", name )
-            .getSingleResult();
+            .getResultList();
+        return results.size() == 0 ? null : results.get( 0 );
     }
 
     @Override
     public Forum getForum( Course course )
     {
-        return entityManager.createQuery( "from Forum where course = :course",
-            Forum.class )
+        List<Forum> results = entityManager
+            .createQuery( "from Forum where course = :course", Forum.class )
             .setParameter( "course", course )
-            .getSingleResult();
+            .getResultList();
+        return results.size() == 0 ? null : results.get( 0 );
     }
 
     @Override
@@ -87,8 +89,8 @@ public class ForumDaoImpl implements ForumDao {
     @Override
     public List<Forum> searchForums( String text, int maxResults )
     {
-        TypedQuery<Forum> query = entityManager.createNamedQuery(
-            "forum.search", Forum.class );
+        TypedQuery<Forum> query = entityManager
+            .createNamedQuery( "forum.search", Forum.class );
         if( maxResults > 0 ) query.setMaxResults( maxResults );
         return query.setParameter( "text", text ).getResultList();
     }

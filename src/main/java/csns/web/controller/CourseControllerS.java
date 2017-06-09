@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -69,7 +69,8 @@ public class CourseControllerS {
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( CourseControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( CourseControllerS.class );
 
     @InitBinder
     public void initBinder( WebDataBinder binder )
@@ -88,17 +89,17 @@ public class CourseControllerS {
     }
 
     @RequestMapping(value = "/course/create", method = RequestMethod.POST)
-    public String create(
-        @ModelAttribute Course course,
-        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
+    public String create( @ModelAttribute Course course,
+        @RequestParam(value = "file",
+            required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         courseValidator.validate( course, bindingResult );
         if( bindingResult.hasErrors() ) return "course/create";
 
         if( uploadedFile != null && !uploadedFile.isEmpty() )
-            course.setDescription( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), true ) );
+            course.setDescription(
+                fileIO.save( uploadedFile, SecurityUtils.getUser(), true ) );
 
         course.setDepartment( departmentDao.getDepartment( course.getDept() ) );
         course = courseDao.saveCourse( course );
@@ -122,22 +123,27 @@ public class CourseControllerS {
     }
 
     @RequestMapping(value = "/course/edit", method = RequestMethod.POST)
-    public String edit(
-        @ModelAttribute Course course,
-        @RequestParam(value = "file", required = false) MultipartFile uploadedFile,
+    public String edit( @ModelAttribute Course course,
+        @RequestParam(value = "file",
+            required = false) MultipartFile uploadedFile,
         BindingResult bindingResult, SessionStatus sessionStatus )
     {
         courseValidator.validate( course, bindingResult );
         if( bindingResult.hasErrors() ) return "course/edit";
 
         if( uploadedFile != null && !uploadedFile.isEmpty() )
-            course.setDescription( fileIO.save( uploadedFile,
-                SecurityUtils.getUser(), true ) );
+            course.setDescription(
+                fileIO.save( uploadedFile, SecurityUtils.getUser(), true ) );
 
         course.setDepartment( departmentDao.getDepartment( course.getDept() ) );
         course = courseDao.saveCourse( course );
 
         Forum forum = forumDao.getForum( course );
+        if( forum == null )
+        {
+            forum = new Forum();
+            forum.setCourse( course );
+        }
         forum.setName( course.getCode() + " " + course.getName() );
         forumDao.saveForum( forum );
 

@@ -53,7 +53,7 @@ public class CourseValidator implements Validator {
         String code = course.getCode();
         if( !StringUtils.hasText( code ) )
             errors.rejectValue( "code", "error.field.required" );
-        else if( !Pattern.matches( "[A-Z]+\\d+[A-Z]?", code ) )
+        else if( !Pattern.matches( "[A-Z]+\\d+[A-Z]{0,2}", code ) )
             errors.rejectValue( "code", "error.course.code.invalid" );
         else
         {

@@ -103,7 +103,7 @@ function deleteprerequisites( prereqId )
           <a href="javascript:deleteprerequisites(${prerequisite.id})">${prerequisite.code}</a>,
         </span>
       </c:forEach>
-      <input id="prerequisites" type="text" class="forminput add" name="a" style="width: 100px;" />
+      <input id="prerequisites" type="text" class="forminput add" name="a" style="width: 150px;" />
     </td>
   </tr>
   <tr>

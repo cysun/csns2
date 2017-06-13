@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 $(function(){
@@ -22,9 +23,14 @@ $(function(){
 </table>
 
 <c:if test="${not empty user.personalProgram}">
-<div id="personal-program">
+<%-- Approval Block --%>
+<c:if test="${user.personalProgram.approved}">
+<p><em>Reviewed and approved by ${user.personalProgram.approvedBy.name} on
+<fmt:formatDate value="${user.personalProgram.approveDate}" type="date" />.</em></p>
+</c:if>
 
 <%-- personal program --%>
+<div id="personal-program">
 <table id="program" class="general2 autowidth">
 <thead class="hidden"><tr><th colspan="6"></th></tr></thead>
 <c:forEach items="${user.personalProgram.blocks}" var="block">
@@ -50,7 +56,11 @@ $(function(){
     <td>${entry.course.name}</td>
     <td>${entry.course.units}</td>
     <c:if test="${empty entry.enrollment}">
-      <td colspan="3" class="prereq" data-entry-id="${entry.id}" data-prereq-met="${entry.prereqMet}">
+      <td colspan="3" class="notes center">
+        <c:choose>
+          <c:when test="${entry.requirementMet}">Requirement Satisfied</c:when>
+          <c:when test="${entry.prereqMet}">Prerequisites Met</c:when>
+        </c:choose>
       </td>
     </c:if>
     <c:if test="${not empty entry.enrollment}">

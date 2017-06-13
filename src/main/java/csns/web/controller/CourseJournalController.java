@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import csns.model.academics.Course;
 import csns.model.academics.Department;
 import csns.model.academics.Enrollment;
+import csns.model.academics.Submission;
 import csns.model.academics.dao.AssignmentDao;
 import csns.model.academics.dao.CourseDao;
 import csns.model.academics.dao.DepartmentDao;
@@ -85,7 +86,7 @@ public class CourseJournalController {
 
     @RequestMapping("/department/{dept}/journal/viewOnlineAssignment")
     public String viewOnlineAssignment( @RequestParam Long assignmentId,
-        @RequestParam(required = false ) Integer sectionIndex, ModelMap models)
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
         models.put( "assignment", assignmentDao.getAssignment( assignmentId ) );
         models.put( "sectionIndex", sectionIndex != null ? sectionIndex : 0 );
@@ -105,10 +106,14 @@ public class CourseJournalController {
 
     @RequestMapping("/department/{dept}/journal/viewSubmission")
     public String viewSubmission( @RequestParam Long id,
-        @RequestParam Long enrollmentId, ModelMap models )
+        @RequestParam Long enrollmentId,
+        @RequestParam(required = false) Integer sectionIndex, ModelMap models )
     {
-        models.put( "submission", submissionDao.getSubmission( id ) );
-        return "journal/viewSubmission";
+        Submission submission = submissionDao.getSubmission( id );
+        models.put( "submission", submission );
+        models.put( "sectionIndex", sectionIndex == null ? 0 : sectionIndex );
+        return submission.isOnline() ? "journal/viewOnlineSubmission"
+            : "journal/viewSubmission";
     }
 
     @RequestMapping("/department/{dept}/journal/approve")

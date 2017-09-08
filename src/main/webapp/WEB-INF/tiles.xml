@@ -516,6 +516,11 @@
         <put-attribute name="content" value="/WEB-INF/content/journal/viewOnlineSubmission.jsp" />
     </definition>
 
+    <definition name="journal/viewRubricSubmission" extends="layout.chart">
+        <put-attribute name="title" value="View Submission" />
+        <put-attribute name="content" value="/WEB-INF/content/journal/viewRubricSubmission.jsp" />
+    </definition>
+
     <definition name="section/view" extends="layout.jqueryui">
         <put-attribute name="title" value="View Section" />
         <put-attribute name="content" value="/WEB-INF/content/section/view.jsp" />

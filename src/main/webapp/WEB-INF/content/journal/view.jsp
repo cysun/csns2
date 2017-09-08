@@ -82,6 +82,11 @@ function removeJournal()
   </c:choose>
   </li>
   </c:forEach>
+  <c:forEach items="${journal.rubricAssignments}" var="assignment">
+  <li>
+    <a href="<c:url value='/department/${dept}/rubric/view?id=${assignment.rubric.id}' />">${assignment.name}</a>
+  </li>
+  </c:forEach>
 </ul>
 </c:if>
 </div>

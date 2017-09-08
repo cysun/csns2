@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013-2016, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013-2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -19,6 +19,7 @@
 package csns.web.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -75,6 +76,14 @@ public class MFTDistributionControllerS {
         @ModelAttribute("distribution") MFTDistribution distribution,
         @PathVariable String dept, SessionStatus sessionStatus )
     {
+        if( distribution.getToDate() != null )
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime( distribution.getToDate() );
+            cal.set( Calendar.DAY_OF_MONTH,
+                cal.getActualMaximum( Calendar.DAY_OF_MONTH ) );
+            distribution.setToDate( cal.getTime() );
+        }
         distribution = mftDistributionDao.saveDistribution( distribution );
         sessionStatus.setComplete();
         return "redirect:/department/" + dept + "/mft/distribution/view?id="

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013,2017, Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -18,7 +18,6 @@
  */
 package csns.model.assessment.dao.jpa;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -63,8 +62,8 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
     {
         String query = "from MFTDistribution where year = :year and type = :type";
 
-        List<MFTDistribution> distributions = entityManager.createQuery( query,
-            MFTDistribution.class )
+        List<MFTDistribution> distributions = entityManager
+            .createQuery( query, MFTDistribution.class )
             .setParameter( "year", year )
             .setParameter( "type", type )
             .getResultList();
@@ -72,20 +71,21 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
     }
 
     @Override
-    public MFTDistribution getDistribution( Date date, MFTDistributionType type )
+    public MFTDistribution getDistribution( Date date,
+        MFTDistributionType type )
     {
-        List<Integer> years = getYears( type.getDepartment() );
-        if( years.size() == 0 ) return null;
+        List<MFTDistribution> distributions = getDistributions( type );
+        if( distributions.size() == 0 ) return null;
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime( date );
-        int targetYear = calendar.get( Calendar.YEAR );
-        int distYear = years.get( 0 );
-        for( Integer year : years )
-            if( Math.abs( year - targetYear ) < Math.abs( distYear - targetYear ) )
-                distYear = year;
+        for( MFTDistribution distribution : distributions )
+        {
+            Date fromDate = distribution.getFromDate();
+            Date toDate = distribution.getToDate();
+            if( fromDate != null && toDate != null && fromDate.before( date )
+                && toDate.after( date ) ) return distribution;
+        }
 
-        return getDistribution( distYear, type );
+        return distributions.get( 0 );
     }
 
     @Override
@@ -99,6 +99,16 @@ public class MFTDistributionDaoImpl implements MFTDistributionDao {
         return entityManager.createQuery( query, MFTDistribution.class )
             .setParameter( "department", department )
             .setParameter( "year", year )
+            .getResultList();
+    }
+
+    @Override
+    public List<MFTDistribution> getDistributions( MFTDistributionType type )
+    {
+        String query = "from MFTDistribution where type = :type order by year desc";
+
+        return entityManager.createQuery( query, MFTDistribution.class )
+            .setParameter( "type", type )
             .getResultList();
     }
 

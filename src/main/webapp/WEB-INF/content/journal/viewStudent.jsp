@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="section" value="${enrollment.section}" />
 
@@ -20,6 +21,16 @@
   </tr>
   </c:forEach>
 </tbody>
+<c:if test="${fn:length(rubricSubmissions) > 0}">
+<tbody>
+  <c:forEach items="${rubricSubmissions}" var="submission">
+  <tr>
+    <td><a href="viewRubricSubmission?id=${submission.id}&amp;enrollmentId=${enrollment.id}">${submission.assignment.name}</a></td>
+    <td colspan="2"></td>
+  </tr>
+  </c:forEach>
+</tbody>
+</c:if>
 </table>
 
 <h4>Grade</h4>

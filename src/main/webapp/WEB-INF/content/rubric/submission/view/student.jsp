@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="csns" uri="http://cs.calstatela.edu/csns" %>
 
 <c:set var="assignment" value="${submission.assignment}" />
 <c:set var="section" value="${assignment.section}" />
@@ -27,6 +28,21 @@ $(function(){
 </c:if>
 
 <c:if test="${assignment.published}">
+
+<table class="general autowidth">
+<tr>
+  <th>Rubric</th>
+  <td>
+    <a href="<c:url value='/department/${dept}/rubric/view?id=${rubric.id}' />">View</a>
+  </td>
+</tr>
+<tr>
+  <th>Due Date</th><td><csns:dueDate date="${assignment.dueDate.time}"
+  datePast="${assignment.pastDue}" /></td>
+</tr>
+</table>
+
+<p></p>
 
 <div id="tabs">
 <ul>

@@ -42,7 +42,7 @@ public class RubricDaoImpl implements RubricDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.public or authenticated and (returnObject.creator.id == principal.id or principal.admin)")
+    @PostAuthorize("returnObject.published or authenticated and (returnObject.creator.id == principal.id or principal.admin)")
     public Rubric getRubric( Long id )
     {
         return entityManager.find( Rubric.class, id );

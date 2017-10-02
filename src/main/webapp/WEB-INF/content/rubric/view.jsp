@@ -28,8 +28,10 @@ function promote( id )
     title="Promote Rubric" src="<c:url value='/img/icons/table_up.png' />" /></a></li>
 </c:if>
 </security:authorize>
+<security:authorize access="principal.instructor">
 <li class="align_right"><a href="results?id=${rubric.id}"><img alt="[Results]" 
     title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a></li>
+</security:authorize>
 </ul>
 
 <c:if test="${rubric.obsolete}"><p class="error">This rubric is obsolete.</p></c:if>

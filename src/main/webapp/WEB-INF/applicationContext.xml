@@ -124,6 +124,8 @@
         <security:intercept-url pattern="/department/*/survey/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/mft/**" access="authenticated and principal.faculty" />
         <security:intercept-url pattern="/department/*/rubric/promote" access="authenticated and principal.admin" />
+        <security:intercept-url pattern="/department/*/rubric/list" access="authenticated" />
+        <security:intercept-url pattern="/department/*/rubric/view" access="authenticated" />
         <security:intercept-url pattern="/department/*/rubric/**" access="authenticated and principal.instructor" />
         <security:intercept-url pattern="/department/*/journal/**" access="authenticated and (principal.instructor or principal.reviewer)" />
         <security:intercept-url pattern="/department/*/forum/list" access="permitAll" />

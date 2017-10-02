@@ -30,8 +30,10 @@ function clone( id )
 
 <ul id="title">
 <li>Rubrics</li>
+<security:authorize access="principal.instructor">
 <li class="align_right"><a href="create"><img alt="[Create Rubric]"
   title="Create Rubric" src="<c:url value='/img/icons/table_add.png' />" /></a></li>
+</security:authorize>
 </ul>
 
 <div id="tabs">
@@ -40,7 +42,9 @@ function clone( id )
   <li><a href="#personal">Personal</a></li>
 </c:if>
   <li><a href="#department">Department</a></li>
-  <li><a href="#search">All</a>
+<security:authorize access="principal.instructor">
+  <li><a href="#search">All</a></li>
+</security:authorize>
 </ul>
 
 <c:if test="${fn:length(personalRubrics) > 0}">
@@ -85,7 +89,11 @@ function clone( id )
 <c:if test="${fn:length(departmentRubrics) > 0}">
 <table class="viewtable">
 <thead>
-  <tr><th>Name</th><th>Published</th><th></th></tr>
+  <tr><th>Name</th><th>Published</th>
+  <security:authorize access="principal.instructor">
+  <th></th>
+  </security:authorize>
+  </tr>
 </thead>
 <tbody>
   <c:forEach items="${departmentRubrics}" var="rubric">
@@ -100,12 +108,14 @@ function clone( id )
       <c:if test="${not rubric.published}">No</c:if>
 </security:authorize>
     </td>
+<security:authorize access="principal.instructor">
     <td class="action">
       <a href="results?id=${rubric.id}"><img alt="[Results]" 
          title="Results" src="<c:url value='/img/icons/table_multiple.png'/>" /></a>
       <a href="javascript:clone(${rubric.id})"><img alt="[Clone Rubric]"
          title="Clone Rubric" src="<c:url value='/img/icons/table_code.png'/>" /></a>
     </td>
+</security:authorize>
   </tr>
   </c:forEach>
 </tbody>
@@ -113,6 +123,7 @@ function clone( id )
 </c:if>
 </div>
 
+<security:authorize access="principal.instructor">
 <div id="search">
 <form action="search" method="post">
 <p><input name="text" type="text" class="leftinput" style="width: 15em;" value="${rubricSearchTerm}"/>
@@ -144,5 +155,6 @@ function clone( id )
 </table>
 </c:if>
 </div>
+</security:authorize>
 
 </div> <!-- tabs -->

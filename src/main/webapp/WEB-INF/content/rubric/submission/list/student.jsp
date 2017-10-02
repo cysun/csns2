@@ -21,8 +21,20 @@ $(function(){
 <li><csns:truncate value="${assignment.name}" length="60" /></li>
 </ul>
 
-<p>Due Date: <csns:dueDate date="${assignment.dueDate.time}"
-  datePast="${assignment.pastDue}" /></p>
+<table class="general autowidth">
+<tr>
+  <th>Rubric</th>
+  <td>
+    <a href="<c:url value='/department/${dept}/rubric/view?id=${assignment.rubric.id}' />">View</a>
+  </td>
+</tr>
+<tr>
+  <th>Due Date</th><td><csns:dueDate date="${assignment.dueDate.time}"
+  datePast="${assignment.pastDue}" /></td>
+</tr>
+</table>
+
+<p></p>
 
 <table class="viewtable autowidth">
 <thead><tr><th>Name</th>

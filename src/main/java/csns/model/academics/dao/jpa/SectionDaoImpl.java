@@ -93,6 +93,18 @@ public class SectionDaoImpl implements SectionDao {
     }
 
     @Override
+    public List<Section> getSections( Course course, Integer beginYear,
+        Integer endYear )
+    {
+        return entityManager
+            .createNamedQuery( "sections.by.year", Section.class )
+            .setParameter( "courseId", course.getId() )
+            .setParameter( "beginYear", beginYear )
+            .setParameter( "endYear", endYear )
+            .getResultList();
+    }
+
+    @Override
     public List<Section> getSectionsByInstructor( User instructor, Term term )
     {
         String query = "select section from Section section "

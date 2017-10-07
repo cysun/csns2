@@ -39,6 +39,16 @@ select * from sections where deleted = 'f' and plainto_tsquery(:text) @@ tsv
 ]]>
     </sql-query>
 
+    <sql-query name="sections.by.year">
+        <return class="csns.model.academics.Section" />
+<![CDATA[
+select s.* from sections s inner join courses c on c.id = s.course_id
+    where c.id = :courseId and s.deleted = 'f'
+    and :beginYear <= year(s.term) and year(s.term) <= :endYear
+    order by term asc
+]]>
+    </sql-query>
+
     <sql-query name="assignment.search">
         <return class="csns.model.academics.Assignment" />
 <![CDATA[

@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014,2017 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -21,7 +21,9 @@ package csns.model.assessment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,6 +37,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import csns.model.academics.Section;
 import csns.model.core.User;
@@ -85,12 +88,15 @@ public class RubricAssignment implements Serializable {
     @Column(name = "due_date")
     private Calendar dueDate;
 
-    @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
-        CascadeType.PERSIST })
+    @OneToMany(mappedBy = "assignment",
+        cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     protected List<RubricSubmission> submissions;
 
     @Column(nullable = false)
     private boolean deleted;
+
+    @Transient
+    private Map<String, int[][]> ratingCountsByType;
 
     public RubricAssignment()
     {
@@ -128,6 +134,30 @@ public class RubricAssignment implements Serializable {
         for( User evaluator : externalEvaluators )
             if( evaluator.getId().equals( user.getId() ) ) return true;
         return false;
+    }
+
+    public void countRatings()
+    {
+        ratingCountsByType = new HashMap<String, int[][]>();
+
+        for( RubricSubmission submission : submissions )
+        {
+            submission.aggregateRatings();
+            for( String key : submission.getRatingsByType().keySet() )
+            {
+                int[][] ratingCounts = ratingCountsByType.get( key );
+                if( ratingCounts == null )
+                {
+                    ratingCounts = new int[rubric.getIndicators().size()][rubric
+                        .getScale()];
+                    ratingCountsByType.put( key, ratingCounts );
+                }
+
+                int[] ratings = submission.getRatingsByType().get( key );
+                for( int i = 0; i < ratings.length; ++i )
+                    ratingCounts[i][ratings[i] - 1]++;
+            }
+        }
     }
 
     public Long getId()
@@ -238,6 +268,16 @@ public class RubricAssignment implements Serializable {
     public void setDeleted( boolean deleted )
     {
         this.deleted = deleted;
+    }
+
+    public Map<String, int[][]> getRatingCountsByType()
+    {
+        return ratingCountsByType;
+    }
+
+    public void setRatingCountsByType( Map<String, int[][]> ratingCountsByType )
+    {
+        this.ratingCountsByType = ratingCountsByType;
     }
 
 }

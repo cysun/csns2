@@ -81,7 +81,7 @@
             <add-attribute value="${jqueryui.url}" />
             <add-attribute value="${jquery.plugins}/jquery.tablesorter.min.js" />
             <add-attribute value="${highcharts}/highcharts.js" />
-            <add-attribute value="${highcharts}/exporting.js" />
+            <add-attribute value="${highcharts}/modules/exporting.js" />
         </put-list-attribute>
     </definition>
 

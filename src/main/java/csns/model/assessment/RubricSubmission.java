@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2014-2015, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2014-2015,2017 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -20,7 +20,9 @@ package csns.model.assessment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,8 +33,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import csns.model.core.User;
+import csns.model.assessment.RubricEvaluation;
 
 /**
  * RubricSubmission is the collection of all the rubric evaluations of a
@@ -74,6 +78,9 @@ public class RubricSubmission implements Serializable {
 
     @Column(name = "external_evaluation_count", nullable = false)
     private int externalEvaluationCount;
+
+    @Transient
+    private Map<String, int[]> ratingsByType;
 
     public RubricSubmission()
     {
@@ -146,6 +153,43 @@ public class RubricSubmission implements Serializable {
         return ++externalEvaluationCount;
     }
 
+    /* Aggregate the ratings for each evaluation type */
+    public void aggregateRatings()
+    {
+        Map<String, List<RubricEvaluation>> evaluationsByType = new HashMap<String, List<RubricEvaluation>>();
+        for( RubricEvaluation evaluation : evaluations )
+        {
+            if( !evaluation.isCompleted() ) continue;
+
+            List<RubricEvaluation> evals = evaluationsByType
+                .get( evaluation.getType().name() );
+            if( evals == null )
+            {
+                evals = new ArrayList<RubricEvaluation>();
+                evaluationsByType.put( evaluation.getType().name(), evals );
+            }
+            evals.add( evaluation );
+        }
+
+        ratingsByType = new HashMap<String, int[]>();
+        for( String key : evaluationsByType.keySet() )
+        {
+            int[] ratings = new int[assignment.getRubric()
+                .getIndicators()
+                .size()];
+
+            List<RubricEvaluation> evals = evaluationsByType.get( key );
+            for( RubricEvaluation eval : evals )
+                for( int i = 0; i < ratings.length; ++i )
+                    ratings[i] += eval.getRatings().get( i );
+            for( int i = 0; i < ratings.length; ++i )
+                ratings[i] = (int) (Math
+                    .round( ratings[i] * 1.0 / evals.size() ));
+
+            ratingsByType.put( key, ratings );
+        }
+    }
+
     public Long getId()
     {
         return id;
@@ -214,6 +258,16 @@ public class RubricSubmission implements Serializable {
     public void setExternalEvaluationCount( int externalEvaluationCount )
     {
         this.externalEvaluationCount = externalEvaluationCount;
+    }
+
+    public Map<String, int[]> getRatingsByType()
+    {
+        return ratingsByType;
+    }
+
+    public void setRatingsByType( Map<String, int[]> ratingsByType )
+    {
+        this.ratingsByType = ratingsByType;
     }
 
 }

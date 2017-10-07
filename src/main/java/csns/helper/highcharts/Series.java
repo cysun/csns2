@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013,2017 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -32,21 +32,30 @@ public class Series {
 
     Boolean showInLegend;
 
+    String stack;
+
     public Series()
     {
     }
 
     public Series( String name, List<? extends Number> data )
     {
-        this( name, data, null );
+        this( name, data, null, null );
     }
 
     public Series( String name, List<? extends Number> data,
         Boolean showInLegend )
     {
+        this( name, data, showInLegend, null );
+    }
+
+    public Series( String name, List<? extends Number> data,
+        Boolean showInLegend, String stack )
+    {
         this.name = name;
         this.data = data;
         this.showInLegend = showInLegend;
+        this.stack = stack;
     }
 
     public String getName()
@@ -77,6 +86,16 @@ public class Series {
     public void setShowInLegend( Boolean showInLegend )
     {
         this.showInLegend = showInLegend;
+    }
+
+    public String getStack()
+    {
+        return stack;
+    }
+
+    public void setStack( String stack )
+    {
+        this.stack = stack;
     }
 
 }

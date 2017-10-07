@@ -11,7 +11,34 @@
 <script>
 $(function(){
     $("#tabs").tabs();
-    $("#chartContainer").highcharts(${chart});
+    var chart = ${chart};
+    chart.plotOptions = {
+        column: {
+            stacking: 'percent'
+        }
+    };
+    chart.colors = ['green', 'greenyellow', 'yellow', 'orange', 'red'];
+    chart.yAxis = {
+        title: {
+            text: "Percent"
+        }
+<c:if test="${ratingCountsByType.keySet().size() > 1}">    
+        ,
+        max: 105,
+        endOnTick: false,
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: 'gray'
+            },
+            formatter: function() {
+                return  this.stack;
+            }
+        }
+</c:if>
+    };
+    $("#chartContainer").highcharts(chart);
 });
 </script>
 
@@ -29,6 +56,67 @@ $(function(){
 </ul>
 
 <div id="tab-data">
+<c:if test="${not empty ratingCountsByType.get('INSTRUCTOR')}">
+<h4>Instructor Evaluations</h4>
+<table class="general2 autowidth">
+<tr>
+  <th>Indicator</th>
+  <c:forEach begin="1" end="${rubric.scale}" var="rank">
+    <th>${rank}</th>
+  </c:forEach>
+</tr>
+<c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
+<tr>
+  <td>${indicator.name}</td> 
+  <c:forEach items="${ratingCountsByType.get('INSTRUCTOR')[status.index]}" var="count">
+  <td class="center">${count}</td>
+  </c:forEach>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<c:if test="${not empty ratingCountsByType.get('PEER')}">
+<h4>Peer Evaluations</h4>
+<table class="general2 autowidth">
+<tr>
+  <th>Indicator</th>
+  <c:forEach begin="1" end="${rubric.scale}" var="rank">
+    <th>${rank}</th>
+  </c:forEach>
+</tr>
+<c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
+<tr>
+  <td>${indicator.name}</td> 
+  <c:forEach items="${ratingCountsByType.get('PEER')[status.index]}" var="count">
+  <td class="center">${count}</td>
+  </c:forEach>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<c:if test="${not empty ratingCountsByType.get('EXTERNAL')}">
+<h4>Instructor Evaluations</h4>
+<table class="general2 autowidth">
+<tr>
+  <th>Indicator</th>
+  <c:forEach begin="1" end="${rubric.scale}" var="rank">
+    <th>${rank}</th>
+  </c:forEach>
+</tr>
+<c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
+<tr>
+  <td>${indicator.name}</td> 
+  <c:forEach items="${ratingCountsByType.get('EXTERNAL')[status.index]}" var="count">
+  <td class="center">${count}</td>
+  </c:forEach>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<%--
 <c:if test="${not empty iEvalStats}">
 <h4>Instructor Evaluations: ${iEvalStats[0].count}</h4>
 <table class="general2 autowidth">
@@ -97,6 +185,7 @@ $(function(){
 </tr>
 </table>
 </c:if>
+ --%>
 </div> <!--  end of tab-data -->
 
 <div id="tab-chart">

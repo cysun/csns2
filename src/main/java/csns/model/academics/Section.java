@@ -168,6 +168,15 @@ public class Section implements Serializable, Comparable<Section> {
         return false;
     }
 
+    /* Usually there is only one assignment for a rubric in a section. */
+    public RubricAssignment getRubricAssignment( Rubric rubric )
+    {
+        for( int i = rubricAssignments.size() - 1; i >= 0; --i )
+            if( rubricAssignments.get( i ).getRubric().getId().equals(
+                rubric.getId() ) ) return rubricAssignments.get( i );
+        return null;
+    }
+
     public List<RubricAssignment> getRubricAssignments( Rubric rubric )
     {
         List<RubricAssignment> results = new ArrayList<RubricAssignment>();

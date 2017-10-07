@@ -42,6 +42,9 @@ public interface SectionDao {
 
     List<Section> getSections( Department department, Term term );
 
+    List<Section> getSections( Course course, Integer beginYear,
+        Integer endYear );
+
     List<Section> getSectionsByInstructor( User instructor, Term term );
 
     List<Section> getSectionsByInstructor( User instructor, Term term,

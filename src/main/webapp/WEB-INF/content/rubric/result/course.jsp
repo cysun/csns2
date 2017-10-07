@@ -11,6 +11,7 @@
 <script>
 $(function(){
     $("#tabs").tabs();
+    $("#evalType").val("${evalType}");
     $("#beginYear").val("${beginYear}").change(function(){
     	if( $("#endYear").val() < $("#beginYear").val() )
     	    $("#endYear").val($("#beginYear").val());
@@ -22,30 +23,38 @@ $(function(){
     $("#select").click(function(){
         window.location.href = "?rubricId=${rubric.id}&courseId=${course.id}"
             + "&beginYear=" + $("#beginYear").val()
-            + "&endYear=" + $("#endYear").val();
+            + "&endYear=" + $("#endYear").val()
+            + "&evalType=" + $("#evalType").val();
     });
+    var chart = ${chart};
+    chart.plotOptions = {
+        column: {
+            stacking: 'percent'
+        }
+    };
+    chart.colors = ['green', 'greenyellow', 'yellow', 'orange', 'red'];
+    chart.yAxis = {
+        title: {
+            text: "Percent"
+        }
+<c:if test="${ratingCountsByYear.keySet().size() > 1}">    
+        ,
+        max: 105,
+        endOnTick: false,
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: 'gray'
+            },
+            formatter: function() {
+                return  this.stack;
+            }
+        }
+</c:if>
+    };
+    $("#chartContainer").highcharts(chart);
 });
-function showStats( evalType )
-{ 
-    $("#statsContainer").load( "result/stats", {
-        rubricId: ${rubric.id},
-        courseId: ${course.id},
-        type: evalType,
-        beginYear: ${beginYear},
-        endYear: ${endYear}
-    });
-    $.ajax({
-        url: "result/chart",
-        data: {
-            rubricId: ${rubric.id},
-            courseId: ${course.id},
-            type: evalType,
-            beginYear: ${beginYear},
-            endYear: ${endYear}
-        },
-        success: function(data){ $("#chartContainer").highcharts(data.chart); }
-    });
-}
 </script>
 
 <ul id="title">
@@ -56,42 +65,26 @@ function showStats( evalType )
 </ul>
 
 <div style="padding: 10px; margin-bottom: 1em;" class="ui-widget-content ui-corner-all">
-From:
+Evaluation Type:
+  <select id="evalType" name="evalType">
+    <option>INSTRUCTOR</option>
+    <option>PEER</option>
+    <option>EXTERNAL</option>
+  </select>
+<span style="margin-left: 2em;">From:</span>
   <select id="beginYear" name="beginYear">
     <c:forEach items="${years}" var="year">
       <option value="${year}">${year}</option>
     </c:forEach>    
   </select>
-<span style="margin-left: 10px;">To:</span>
+<span style="margin-left: 1em;">To:</span>
   <select id="endYear" name="endYear">
     <c:forEach items="${years}" var="year" varStatus="status">
       <option value="${year}">${year}</option>
     </c:forEach>    
   </select>
-<span style="margin-left: 10px;"><button id="select" class="subbutton">Select</button></span>
+<span style="margin-left: 2em;"><button id="select" class="subbutton">Select</button></span>
 </div>
-
-<table class="general2 autowidth" style="margin-bottom: 1em;">
-<tr>
-  <th>Evaluation Type</th>
-  <c:forEach begin="${beginYear}" end="${endYear}" step="1" var="year">
-  <th>${year}</th>
-  </c:forEach>
-  <th></th>
-</tr>
-<c:forEach items="${countsByType}" var="counts">
-<tr>
-  <td>${counts.key}</td>
-  <c:forEach items="${counts.value}" var="count">
-  <td class="center">${count}</td>
-  </c:forEach>
-  <td class="center">
-    <a href="javascript:showStats('${counts.key}')"><img title="Show Stats" alt="[Show Stats]"
-       src="<c:url value='/img/icons/table_chart.png' />" /></a>
-  </td>
-</tr>
-</c:forEach>
-</table>
 
 <div id="tabs">
 <ul>
@@ -100,7 +93,27 @@ From:
 </ul>
 
 <div id="tab-data">
-<div id="statsContainer"></div>
+<c:if test="${not empty ratingCountsByYear}">
+<c:forEach items="${ratingCountsByYear.keySet()}" var="year">
+  <h4>${year}</h4>
+  <table class="general2 autowidth">
+  <tr>
+    <th>Indicator</th>
+    <c:forEach begin="1" end="${rubric.scale}" var="rank">
+      <th>${rank}</th>
+    </c:forEach>
+  </tr>
+  <c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
+  <tr>
+    <td>${indicator.name}</td> 
+    <c:forEach items="${ratingCountsByYear.get(year)[status.index]}" var="count">
+    <td class="center">${count}</td>
+    </c:forEach>
+  </tr>
+  </c:forEach>
+  </table>
+</c:forEach>
+</c:if>
 </div> <!--  end of tab-data -->
 
 <div id="tab-chart">

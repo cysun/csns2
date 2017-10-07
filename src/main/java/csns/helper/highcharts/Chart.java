@@ -1,7 +1,7 @@
 /*
  * This file is part of the CSNetwork Services (CSNS) project.
  * 
- * Copyright 2013, Chengyu Sun (csun@calstatela.edu).
+ * Copyright 2013,2017 Chengyu Sun (csun@calstatela.edu).
  * 
  * CSNS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU Affero General Public License as published by the Free
@@ -42,6 +42,11 @@ public class Chart {
     Axis xAxis, yAxis;
 
     List<Series> series;
+
+    public Chart( String titleText )
+    {
+        this( titleText, null, null );
+    }
 
     public Chart( String titleText, String xTitleText, String yTitleText )
     {

@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import csns.helper.RubricEvaluationStats;
 import csns.helper.highcharts.Chart;
 import csns.helper.highcharts.Series;
 import csns.model.academics.Course;
@@ -93,16 +94,23 @@ public class RubricResultsController {
         return "rubric/results";
     }
 
-    @RequestMapping(value = "/department/{dept}/rubric/results",
-        params = { "rubricId", "sectionId" })
-    public String results( @RequestParam Long rubricId,
-        @RequestParam Long sectionId, ModelMap models )
+    private void addSeries( Chart chart, String name,
+        List<RubricEvaluationStats> stats )
     {
-        Rubric rubric = rubricDao.getRubric( rubricId );
-        Section section = sectionDao.getSection( sectionId );
-        models.put( "rubric", rubric );
-        models.put( "section", section );
+        if( stats.get( 0 ).getCount() == 0 ) return;
 
+        List<Double> data = new ArrayList<Double>();
+        for( int i = 1; i < stats.size(); ++i )
+            data.add( stats.get( i ).getMean() );
+        // The overall stats is the first one in the list
+        data.add( stats.get( 0 ).getMean() );
+
+        chart.getSeries().add( new Series( name, data, true ) );
+    }
+
+    private void addSectionChart1( Rubric rubric, Section section,
+        ModelMap models )
+    {
         // if there are more than one assignment in a section for the same
         // rubric (which should be extremely rare), we take the last assignment
         // because aggregating multiple assignments doesn't make too much sense.
@@ -144,46 +152,96 @@ public class RubricResultsController {
 
         try
         {
-            models.put( "chart", objectMapper.writeValueAsString( chart ) );
+            models.put( "chart1", objectMapper.writeValueAsString( chart ) );
         }
         catch( JsonProcessingException e )
         {
             logger.warn( "Cannot serialize chart.", e );
         }
+    }
+
+    private void addSectionChart2( Rubric rubric, Section section,
+        ModelMap models )
+    {
+        boolean instructorEvaluated = false;
+        boolean studentEvaluated = false;
+        boolean externalEvaluated = false;
+        for( RubricAssignment assignment : section
+            .getRubricAssignments( rubric ) )
+        {
+            if( assignment.isEvaluatedByInstructors() )
+                instructorEvaluated = true;
+            if( assignment.isEvaluatedByStudents() ) studentEvaluated = true;
+            if( assignment.isEvaluatedByExternal() ) externalEvaluated = true;
+        }
+
+        Chart chart = new Chart(
+            rubric.getName() + ", " + section.getCourse().getCode() + " "
+                + section.getTerm().getShortString(),
+            "Indicator", "Mean Rating" );
+
+        List<String> xLabels = new ArrayList<String>();
+        for( RubricIndicator indicator : rubric.getIndicators() )
+            xLabels.add( indicator.getName() );
+        xLabels.add( "Overall" );
+        chart.getxAxis().setCategories( xLabels );
+        chart.getyAxis().setMax( rubric.getScale() );
+
+        List<RubricEvaluationStats> stats;
+        if( instructorEvaluated )
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.INSTRUCTOR );
+            models.put( "iEvalStats", stats );
+            addSeries( chart, "Instructor", stats );
+        }
+
+        if( studentEvaluated )
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.PEER );
+            models.put( "sEvalStats", stats );
+            addSeries( chart, "Peer", stats );
+        }
+
+        if( externalEvaluated )
+        {
+            stats = rubricEvaluationDao.getRubricEvaluationStats( rubric,
+                section, RubricEvaluation.Type.EXTERNAL );
+            models.put( "eEvalStats", stats );
+            addSeries( chart, "External", stats );
+        }
+
+        try
+        {
+            models.put( "chart2", objectMapper.writeValueAsString( chart ) );
+        }
+        catch( JsonProcessingException e )
+        {
+            logger.warn( "Cannot serialize chart.", e );
+        }
+    }
+
+    @RequestMapping(value = "/department/{dept}/rubric/results",
+        params = { "rubricId", "sectionId" })
+    public String results( @RequestParam Long rubricId,
+        @RequestParam Long sectionId, ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Section section = sectionDao.getSection( sectionId );
+        models.put( "rubric", rubric );
+        models.put( "section", section );
+
+        addSectionChart1( rubric, section, models );
+        addSectionChart2( rubric, section, models );
 
         return "rubric/result/section";
     }
 
-    @RequestMapping(value = "/department/{dept}/rubric/results",
-        params = { "rubricId", "courseId" })
-    public String results( @RequestParam Long rubricId,
-        @RequestParam Long courseId,
-        @RequestParam(required = false) Integer beginYear,
-        @RequestParam(required = false) Integer endYear,
-        @RequestParam(required = false,
-            name = "evalType") RubricEvaluation.Type type,
+    private void addCourseChart1( Rubric rubric, Course course,
+        Integer beginYear, Integer endYear, RubricEvaluation.Type type,
         ModelMap models )
     {
-        Rubric rubric = rubricDao.getRubric( rubricId );
-        Course course = courseDao.getCourse( courseId );
-        models.put( "rubric", rubric );
-        models.put( "course", course );
-
-        List<Integer> years = rubricEvaluationDao
-            .getRubricEvaluationYears( rubric, course );
-        if( endYear == null ) endYear = years.get( 0 );
-        if( beginYear == null )
-        {
-            beginYear = years.get( years.size() - 1 );
-            beginYear = beginYear < endYear - 5 ? endYear - 5 : beginYear;
-        }
-        models.put( "years", years );
-        models.put( "beginYear", beginYear );
-        models.put( "endYear", endYear );
-
-        if( type == null ) type = RubricEvaluation.Type.INSTRUCTOR;
-        models.put( "evalType", type.name() );
-
         SortedMap<Integer, int[][]> ratingCountsByYear = new TreeMap<Integer, int[][]>();
         for( int i = beginYear; i <= endYear; ++i )
             ratingCountsByYear.put( i,
@@ -233,12 +291,104 @@ public class RubricResultsController {
 
         try
         {
-            models.put( "chart", objectMapper.writeValueAsString( chart ) );
+            models.put( "chart1", objectMapper.writeValueAsString( chart ) );
         }
         catch( JsonProcessingException e )
         {
             logger.warn( "Cannot serialize chart.", e );
         }
+    }
+
+    private void addCourseChart2( Rubric rubric, Course course,
+        Integer beginYear, Integer endYear, RubricEvaluation.Type type,
+        ModelMap models )
+    {
+        List<RubricEvaluationStats> stats = rubricEvaluationDao
+            .getRubricEvaluationStats( rubric, course, type, beginYear,
+                endYear );
+        Map<Integer, List<Double>> meansByYear = new TreeMap<Integer, List<Double>>();
+        for( RubricEvaluationStats stat : stats )
+        {
+            List<Double> means = meansByYear.get( stat.getYear() );
+            if( means == null )
+            {
+                means = new ArrayList<Double>();
+                meansByYear.put( stat.getYear(), means );
+            }
+            means.add( stat.getMean() );
+        }
+        models.put( "meansByYear", meansByYear );
+
+        Map<Integer, List<Double>> meansByIndicator = new TreeMap<Integer, List<Double>>();
+        for( int i = 0; i <= rubric.getIndicators().size(); ++i )
+        {
+            List<Double> means = new ArrayList<Double>();
+            for( int j = beginYear; j <= endYear; ++j )
+                means.add( 0d );
+            meansByIndicator.put( i, means );
+        }
+        for( RubricEvaluationStats stat : stats )
+            meansByIndicator.get( stat.getIndicatorIndex() )
+                .set( stat.getYear() - beginYear, stat.getMean() );
+
+        Chart chart = new Chart( rubric.getName() + ", " + course.getCode()
+            + " (" + type.name() + " Evaluation)", "Year", "Mean Rating" );
+
+        List<String> xLabels = new ArrayList<String>();
+        for( int i = beginYear; i <= endYear; ++i )
+            xLabels.add( "" + i );
+        chart.getxAxis().setCategories( xLabels );
+        chart.getyAxis().setMax( rubric.getScale() );
+
+        for( int i = 0; i < rubric.getIndicators().size(); ++i )
+            chart.getSeries()
+                .add( new Series( rubric.getIndicators().get( i ).getName(),
+                    meansByIndicator.get( i + 1 ), true ) );
+        chart.getSeries()
+            .add( new Series( "Overall", meansByIndicator.get( 0 ), true ) );
+
+        try
+        {
+            models.put( "chart2", objectMapper.writeValueAsString( chart ) );
+        }
+        catch( JsonProcessingException e )
+        {
+            logger.warn( "Cannot serialize chart.", e );
+        }
+    }
+
+    @RequestMapping(value = "/department/{dept}/rubric/results",
+        params = { "rubricId", "courseId" })
+    public String results( @RequestParam Long rubricId,
+        @RequestParam Long courseId,
+        @RequestParam(required = false) Integer beginYear,
+        @RequestParam(required = false) Integer endYear,
+        @RequestParam(required = false,
+            name = "evalType") RubricEvaluation.Type type,
+        ModelMap models )
+    {
+        Rubric rubric = rubricDao.getRubric( rubricId );
+        Course course = courseDao.getCourse( courseId );
+        models.put( "rubric", rubric );
+        models.put( "course", course );
+
+        List<Integer> years = rubricEvaluationDao
+            .getRubricEvaluationYears( rubric, course );
+        if( endYear == null ) endYear = years.get( 0 );
+        if( beginYear == null )
+        {
+            beginYear = years.get( years.size() - 1 );
+            beginYear = beginYear < endYear - 5 ? endYear - 5 : beginYear;
+        }
+        models.put( "years", years );
+        models.put( "beginYear", beginYear );
+        models.put( "endYear", endYear );
+
+        if( type == null ) type = RubricEvaluation.Type.INSTRUCTOR;
+        models.put( "evalType", type.name() );
+
+        addCourseChart1( rubric, course, beginYear, endYear, type, models );
+        addCourseChart2( rubric, course, beginYear, endYear, type, models );
 
         return "rubric/result/course";
     }

@@ -26,14 +26,14 @@ $(function(){
             + "&endYear=" + $("#endYear").val()
             + "&evalType=" + $("#evalType").val();
     });
-    var chart = ${chart};
-    chart.plotOptions = {
+    var chart1 = ${chart1};
+    chart1.plotOptions = {
         column: {
             stacking: 'percent'
         }
     };
-    chart.colors = ['green', 'greenyellow', 'yellow', 'orange', 'red'];
-    chart.yAxis = {
+    chart1.colors = ['green', 'greenyellow', 'yellow', 'orange', 'red'];
+    chart1.yAxis = {
         title: {
             text: "Percent"
         }
@@ -53,7 +53,8 @@ $(function(){
         }
 </c:if>
     };
-    $("#chartContainer").highcharts(chart);
+    $("#chart1Container").highcharts(chart1);
+    $("#chart2Container").highcharts(${chart2});
 });
 </script>
 
@@ -88,11 +89,12 @@ Evaluation Type:
 
 <div id="tabs">
 <ul>
-  <li><a href="#tab-data">Data</a></li>
-  <li><a href="#tab-chart">Chart</a></li>
+  <li><a href="#tab1">Student</a></li>
+  <li><a href="#tab2">Average</a></li>
 </ul>
 
-<div id="tab-data">
+<div id="tab1">
+<div id="chart1Container" style="width: 880px; height: 400px;"></div>
 <c:if test="${not empty ratingCountsByYear}">
 <c:forEach items="${ratingCountsByYear.keySet()}" var="year">
   <h4>${year}</h4>
@@ -114,10 +116,34 @@ Evaluation Type:
   </table>
 </c:forEach>
 </c:if>
-</div> <!--  end of tab-data -->
+</div> <!--  end of tab1 -->
 
-<div id="tab-chart">
-<div id="chartContainer" style="width: 880px; height: 400px;"></div>
-</div> <!--  end of tab-chart -->
+<div id="tab2">
+<div id="chart2Container" style="width: 880px; height: 400px;"></div>
+<table class="general2 autowidth">
+<tr>
+  <th>Indicator</th>
+  <c:forEach begin="${beginYear}" end="${endYear}" step="1" var="year">
+    <th>${year}</th>
+  </c:forEach>
+</tr>
+<c:forEach items="${rubric.indicators}" var="indicator" varStatus="status">
+<tr>
+  <td>${indicator.name}</td>
+  <c:forEach begin="${beginYear}" end="${endYear}" step="1" var="year">
+    <td class="center"><fmt:formatNumber pattern=".00"
+      value="${meansByYear.get(year)[status.index+1]}" /></td>
+  </c:forEach>
+</tr>
+</c:forEach>
+<tr>
+  <td class="overall">Overall</td>
+  <c:forEach begin="${beginYear}" end="${endYear}" step="1" var="year">
+    <td class="overall center"><fmt:formatNumber pattern=".00"
+      value="${meansByYear.get(year)[0]}" /></td>
+  </c:forEach>
+</tr>
+</table>
+</div> <!--  end of tab2 -->
 
 </div> <!--  end of tabs -->

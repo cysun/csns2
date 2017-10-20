@@ -36,11 +36,18 @@
 <div class="site-block">
 <div id="objectives" class="site-block-title">Program Educational Objectives (PEO)</div>
 <div class="site-block-content">
-<ol>
-  <c:forEach items="${program.objectives}" var="objective">
-  <li>${objective.text}</li>
+<table class="general">
+  <c:forEach items="${program.objectives}" var="objective" varStatus="status">
+  <tr>
+    <th class="shrink">${status.index+1}</th>
+    <td>${objective.text}</td>
+    <td class="shrink">
+      <a href="objective/description?fieldId=${objective.id}"><img alt="[Details]"
+           title="Details" src="<c:url value='/img/icons/table_chart.png' />" /></a>
+    </td>
+  </tr>
   </c:forEach>
-</ol>
+</table>
 </div>
 </div>
 

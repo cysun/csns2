@@ -206,7 +206,7 @@ $(function(){
 <div id="personal-program">
 
 <%-- Approval Block --%>
-<p>
+<p class="left-block">
 <c:choose>
   <c:when test="${user.personalProgram.approved}">
     <em>Reviewed and approved by ${user.personalProgram.approvedBy.name} on
@@ -217,6 +217,11 @@ $(function(){
         data-program-id="${user.personalProgram.id}">Approve</button>
   </c:otherwise>
 </c:choose>
+<c:if test="${not empty user.personalProgram.gpa}">
+<span style="float: right;">Program GPA:
+  <strong><fmt:formatNumber maxFractionDigits="2">${user.personalProgram.gpa}</fmt:formatNumber></strong>
+</span>
+</c:if>
 </p>
 
 <%-- Left Block --%>

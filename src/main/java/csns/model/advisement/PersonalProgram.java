@@ -40,6 +40,7 @@ import javax.persistence.UniqueConstraint;
 
 import csns.model.academics.Course;
 import csns.model.academics.Enrollment;
+import csns.model.academics.Grade;
 import csns.model.academics.Program;
 import csns.model.academics.ProgramBlock;
 import csns.model.core.User;
@@ -91,6 +92,24 @@ public class PersonalProgram implements Serializable {
 
         for( ProgramBlock programBlock : program.getBlocks() )
             blocks.add( new PersonalProgramBlock( programBlock ) );
+    }
+
+    public Double getGpa()
+    {
+        double units = 0;
+        double total = 0;
+        for( Enrollment enrollment : getEnrollments() )
+        {
+            Grade grade = enrollment.getGrade();
+            if( grade != null && grade.getValue() != null )
+            {
+                Course course = enrollment.getSection().getCourse();
+                units += course.getUnits() * course.getUnitFactor();
+                total += grade.getValue() * course.getUnits()
+                    * course.getUnitFactor();
+            }
+        }
+        return units > 0 ? total / units : null;
     }
 
     public Set<Enrollment> getEnrollments()

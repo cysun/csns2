@@ -52,7 +52,7 @@
 </div>
 
 <div class="site-block">
-<div id="outcomes" class="site-block-title">Student Learning Outcomes (SLO)</div>
+<div id="outcomes" class="site-block-title">Student Outcomes (SO)</div>
 <div class="site-block-content">
 <table class="general">
   <c:forEach items="${program.outcomes}" var="outcome" varStatus="status">

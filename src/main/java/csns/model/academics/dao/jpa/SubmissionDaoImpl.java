@@ -42,7 +42,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.student.id == principal.id or returnObject.assignment.section.isInstructor(principal) or principal.admin")
+    @PostAuthorize("returnObject.student.id == principal.id or returnObject.assignment.section.isInstructor(principal) or principal.faculty")
     public Submission getSubmission( Long id )
     {
         return entityManager.find( Submission.class, id );

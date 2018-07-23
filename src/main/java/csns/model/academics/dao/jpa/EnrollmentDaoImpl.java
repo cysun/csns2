@@ -42,7 +42,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     private EntityManager entityManager;
 
     @Override
-    @PostAuthorize("returnObject.section.isInstructor(principal) or returnObject.student.id == principal.id or principal.admin")
+    @PostAuthorize("returnObject.section.isInstructor(principal) or returnObject.student.id == principal.id or principal.faculty")
     public Enrollment getEnrollment( Long id )
     {
         return entityManager.find( Enrollment.class, id );

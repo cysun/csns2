@@ -252,6 +252,7 @@
         <groupId>org.outerj.daisy</groupId>
         <artifactId>daisydiff</artifactId>
         <version>1.1</version>
+        <classifier>nodeps</classifier>
       </dependency>
       <dependency>
           <groupId>org.postgresql</groupId>

@@ -68,13 +68,15 @@ public class SectionRosterControllerS {
     @Autowired
     private WebApplicationContext context;
 
-    private static final Logger logger = LoggerFactory.getLogger( SectionRosterControllerS.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( SectionRosterControllerS.class );
 
     @RequestMapping(value = "/section/roster/import",
         method = RequestMethod.GET)
     public String importRoster( @RequestParam Long sectionId, ModelMap models )
     {
-        RosterImporter rosterImporter = (RosterImporter) context.getBean( "rosterImporter" );
+        RosterImporter rosterImporter = (RosterImporter) context
+            .getBean( "rosterImporter" );
         rosterImporter.selectParser( 2 );
         rosterImporter.setSection( sectionDao.getSection( sectionId ) );
         models.put( "rosterImporter", rosterImporter );
@@ -99,9 +101,10 @@ public class SectionRosterControllerS {
             return views.get( targetPage );
         }
 
-        Section section = sectionDao.getSection( rosterImporter.getSection()
-            .getId() );
-        for( ImportedUser importedStudent : rosterImporter.getImportedStudents() )
+        Section section = sectionDao
+            .getSection( rosterImporter.getSection().getId() );
+        for( ImportedUser importedStudent : rosterImporter
+            .getImportedStudents() )
         {
             String cin = importedStudent.getCin();
             User student = userDao.getUserByCin( cin );
@@ -118,13 +121,15 @@ public class SectionRosterControllerS {
                 student.setPrimaryEmail( cin + "@localhost" );
                 student.setTemporary( true );
                 student = userDao.saveUser( student );
-                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+                enrollmentDao
+                    .saveEnrollment( new Enrollment( section, student ) );
                 importedStudent.setNewAccount( true );
                 importedStudent.setNewEnrollment( true );
             }
             else if( !section.isEnrolled( student ) )
             {
-                enrollmentDao.saveEnrollment( new Enrollment( section, student ) );
+                enrollmentDao
+                    .saveEnrollment( new Enrollment( section, student ) );
                 importedStudent.setNewAccount( false );
                 importedStudent.setNewEnrollment( true );
             }
@@ -137,8 +142,8 @@ public class SectionRosterControllerS {
 
         models.put( "rosterImporter", rosterImporter );
 
-        logger.info( SecurityUtils.getUser() + " imported roster for section "
-            + section.getId() );
+        logger.info( SecurityUtils.getUser().getUsername()
+            + " imported roster for section " + section.getId() );
 
         sessionStatus.setComplete();
         return views.get( 2 );

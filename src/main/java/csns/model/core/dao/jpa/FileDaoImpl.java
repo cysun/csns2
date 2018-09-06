@@ -66,6 +66,7 @@ public class FileDaoImpl implements FileDao {
     }
 
     @Override
+    @Transactional
     public File getCKEditorFolder( User owner )
     {
         String name = "ckeditor_files";

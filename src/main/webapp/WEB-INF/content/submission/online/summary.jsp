@@ -69,7 +69,8 @@ $(function(){
     <ul>
       <c:forEach items="${question.answers}" var="answer">
       <c:if test="${not empty answer.text}">
-      <li><a href="grade?answerSheetId=${answer.section.answerSheet.id}&amp;sectionIndex=${answer.section.index}">${answer.section.answerSheet.author.name}</a>:
+      <li><a href="grade?answerSheetId=${answer.section.answerSheet.id}&amp;sectionIndex=${answer.section.index}">${answer.section.answerSheet.author.lastName},
+      ${answer.section.answerSheet.author.firstName}</a>:
         <c:if test="${fn:length(answer.text) <= 500}">${answer.text}</c:if>
         <c:if test="${fn:length(answer.text) > 500}"><p>... ...</p></c:if>
       </li>

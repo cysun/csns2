@@ -168,7 +168,7 @@ public class UserImportController {
                             && excelReader.hasColumn( "SEMESTER" ) )
                         {
                             String year = excelReader.get( "YEAR" );
-                            if( year.length() == 2 ) year += "20" + year;
+                            if( year.length() == 2 ) year = "20" + year;
                             term = new Term( Integer.parseInt( year ),
                                 excelReader.get( "SEMESTER" ) );
                         }

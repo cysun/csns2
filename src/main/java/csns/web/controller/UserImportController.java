@@ -156,12 +156,25 @@ public class UserImportController {
                         logger.warn( "Unrecognized standing: )" + symbol );
                     else
                     {
-                        Term term = new Term();
-                        if( excelReader.hasColumn( "TERM" ) ) term.setCode(
-                            Integer.parseInt( excelReader.get( "TERM" ) )
-                                - 1000 );
-                        user = updateStanding( user, department, standing,
-                            term );
+                        Term term = null;
+                        if( excelReader.hasColumn( "TERM" ) )
+                        {
+                            term = new Term();
+                            term.setCode(
+                                Integer.parseInt( excelReader.get( "TERM" ) )
+                                    - 1000 );
+                        }
+                        else if( excelReader.hasColumn( "YEAR" )
+                            && excelReader.hasColumn( "SEMESTER" ) )
+                        {
+                            String year = excelReader.get( "YEAR" );
+                            if( year.length() == 2 ) year += "20" + year;
+                            term = new Term( Integer.parseInt( year ),
+                                excelReader.get( "SEMESTER" ) );
+                        }
+
+                        if( term != null ) user = updateStanding( user,
+                            department, standing, term );
                     }
                 }
             }
@@ -184,6 +197,8 @@ public class UserImportController {
         user.setPassword( password );
         if( excelReader.hasColumn( "EMAIL" ) )
             user.setPrimaryEmail( excelReader.get( "EMAIL" ) );
+        else
+            user.setPrimaryEmail( cin + "@localhost" );
         user.setTemporary( true );
         user = userDao.saveUser( user );
 

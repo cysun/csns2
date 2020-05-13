@@ -140,8 +140,8 @@ public class SectionRosterController {
     }
 
     @RequestMapping("/section/roster/drop")
-    public String drop( @RequestParam("userId" ) Long ids[],
-        @RequestParam Long sectionId)
+    public String drop( @RequestParam("userId") Long ids[],
+        @RequestParam Long sectionId )
     {
         Section section = sectionDao.getSection( sectionId );
         List<User> students = userDao.getUsers( ids );
@@ -177,10 +177,11 @@ public class SectionRosterController {
         Row row = sheet.createRow( 0 );
         row.createCell( 0 ).setCellValue( "CIN" );
         row.createCell( 1 ).setCellValue( "Name" );
+        row.createCell( 2 ).setCellValue( "Email" );
         for( int i = 0; i < n; ++i )
-            row.createCell( i + 2 )
+            row.createCell( i + 3 )
                 .setCellValue( section.getAssignments().get( i ).getAlias() );
-        row.createCell( n + 2 ).setCellValue( "Grade" );
+        row.createCell( n + 3 ).setCellValue( "Grade" );
 
         int rowIndex = 1;
         Map<Enrollment, String[]> studentGrades = gradeSheet.getStudentGrades();
@@ -192,9 +193,11 @@ public class SectionRosterController {
             row.createCell( 1 )
                 .setCellValue( enrollment.getStudent().getLastName() + ", "
                     + enrollment.getStudent().getFirstName() );
+            row.createCell( 2 )
+                .setCellValue( enrollment.getStudent().getPrimaryEmail() );
             for( int i = 0; i < n; ++i )
             {
-                Cell cell = row.createCell( i + 2 );
+                Cell cell = row.createCell( i + 3 );
                 String grade = studentGrades.get( enrollment )[i];
                 if( StringUtils.hasText( grade )
                     && grade.matches( "-?\\d+(\\.\\d+)?" ) )
@@ -202,7 +205,7 @@ public class SectionRosterController {
                 else
                     cell.setCellValue( grade );
             }
-            if( enrollment.getGrade() != null ) row.createCell( n + 2 )
+            if( enrollment.getGrade() != null ) row.createCell( n + 3 )
                 .setCellValue( enrollment.getGrade().getSymbol() );
         }
 

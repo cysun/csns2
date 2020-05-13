@@ -42,7 +42,6 @@ import javax.persistence.Transient;
 
 import org.springframework.util.StringUtils;
 
-import csns.model.academics.Section;
 import csns.model.core.Resource;
 
 @Entity
@@ -90,8 +89,8 @@ public class Assignment implements Serializable {
     @Column(name = "available_after_due_date", nullable = false)
     protected boolean availableAfterDueDate;
 
-    @OneToMany(mappedBy = "assignment", cascade = { CascadeType.MERGE,
-        CascadeType.PERSIST })
+    @OneToMany(mappedBy = "assignment",
+        cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     protected List<Submission> submissions;
 
     @Column(nullable = false)
@@ -150,7 +149,8 @@ public class Assignment implements Serializable {
 
     public boolean isFileExtensionAllowed( String fileExtension )
     {
-        if( StringUtils.hasText( fileExtensions ) && fileExtensionSet.isEmpty() )
+        if( StringUtils.hasText( fileExtensions )
+            && fileExtensionSet.isEmpty() )
         {
             String extensions[] = fileExtensions.split( " " );
             fileExtensionSet.clear();

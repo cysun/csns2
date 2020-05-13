@@ -34,7 +34,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import csns.model.academics.Department;
 import csns.model.core.User;
 
 @Entity

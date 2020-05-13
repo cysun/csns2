@@ -32,8 +32,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import csns.model.academics.Course;
-
 @Entity
 @Table(name = "program_blocks")
 public class ProgramBlock implements Serializable {

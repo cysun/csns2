@@ -45,7 +45,23 @@ public class ImageUtils {
     @Autowired
     private FileIO fileIO;
 
-    private static final Logger logger = LoggerFactory.getLogger( ImageUtils.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( ImageUtils.class );
+
+    // Copied from Adam Gawne-Cain's "2019 answer" at
+    // https://stackoverflow.com/questions/3432388/imageio-not-able-to-write-a-jpeg-file
+    static BufferedImage ensureOpaque( BufferedImage bi )
+    {
+        if( bi.getTransparency() == BufferedImage.OPAQUE ) return bi;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+        int[] pixels = new int[w * h];
+        bi.getRGB( 0, 0, w, h, pixels, 0, w );
+        BufferedImage bi2 = new BufferedImage( w, h,
+            BufferedImage.TYPE_INT_RGB );
+        bi2.setRGB( 0, 0, w, h, pixels, 0, w );
+        return bi2;
+    }
 
     public File resizeToProfilePicture( File file )
     {
@@ -68,6 +84,7 @@ public class ImageUtils {
             if( !always && image.getWidth() < targetSize
                 && image.getHeight() < targetSize ) return file;
 
+            image = ensureOpaque( image );
             BufferedImage newImage = Scalr.resize( image, targetSize );
             java.io.File tempFile = java.io.File.createTempFile( "temp", null );
             ImageIO.write( newImage, "jpg", tempFile );

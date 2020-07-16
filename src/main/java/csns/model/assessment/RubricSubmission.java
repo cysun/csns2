@@ -36,7 +36,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import csns.model.core.User;
-import csns.model.assessment.RubricEvaluation;
 
 /**
  * RubricSubmission is the collection of all the rubric evaluations of a

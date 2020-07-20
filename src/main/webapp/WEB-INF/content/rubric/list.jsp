@@ -97,6 +97,7 @@ function clone( id )
 </thead>
 <tbody>
   <c:forEach items="${departmentRubrics}" var="rubric">
+  <c:if test="${!rubric.obsolete}">
   <tr>
     <td><a href="view?id=${rubric.id}">${rubric.name}</a></td>
     <td class="date">
@@ -117,6 +118,7 @@ function clone( id )
     </td>
 </security:authorize>
   </tr>
+  </c:if>
   </c:forEach>
 </tbody>
 </table>

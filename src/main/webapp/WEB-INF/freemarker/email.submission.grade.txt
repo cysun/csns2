@@ -1,3 +1,1 @@
-Grade: ${grade}
-
-${comments}
+Your grade is now available on CSNS.

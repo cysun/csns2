@@ -49,6 +49,9 @@ import csns.model.academics.Section;
 import csns.model.academics.dao.EnrollmentDao;
 import csns.model.academics.dao.GradeDao;
 import csns.model.academics.dao.SectionDao;
+import csns.model.assessment.RubricAssignment;
+import csns.model.assessment.RubricEvaluation;
+import csns.model.assessment.RubricSubmission;
 import csns.model.core.User;
 import csns.model.core.dao.UserDao;
 import csns.security.SecurityUtils;
@@ -209,6 +212,91 @@ public class SectionRosterController {
                 .setCellValue( enrollment.getGrade().getSymbol() );
         }
 
+        List<RubricAssignment> rubricAssignments = section
+            .getRubricAssignments();
+        if( rubricAssignments != null && rubricAssignments.size() > 0 )
+        {
+            sheet = wb.createSheet( "Rubrics" );
+
+            List<Enrollment> enrollments = section.getEnrollments();
+            row = sheet.createRow( 0 );
+            row.createCell( 0 ).setCellValue( "CIN" );
+            row.createCell( 1 ).setCellValue( "Name" );
+
+            rowIndex = 1;
+            for( Enrollment enrollment : enrollments )
+            {
+                row = sheet.createRow( rowIndex++ );
+                row.createCell( 0 )
+                    .setCellValue( enrollment.getStudent().getCin() );
+                row.createCell( 1 )
+                    .setCellValue( enrollment.getStudent().getLastName() + ", "
+                        + enrollment.getStudent().getFirstName() );
+            }
+
+            int currentColumn = 2;
+            for( RubricAssignment rubricAssignment : rubricAssignments )
+            {
+                if( rubricAssignment.isEvaluatedByInstructors() )
+                {
+                    row = sheet.getRow( 0 );
+                    row.createCell( currentColumn )
+                        .setCellValue( rubricAssignment.getName() );
+
+                    for( int i = 0; i < enrollments.size(); ++i )
+                    {
+                        row = sheet.getRow( i + 1 );
+                        String cin = row.getCell( 0 ).getStringCellValue();
+                        double eval = getAverageEval( rubricAssignment, cin,
+                            RubricEvaluation.Type.INSTRUCTOR );
+                        if( eval > 0 ) row.createCell( currentColumn )
+                            .setCellValue( eval );
+                    }
+
+                    ++currentColumn;
+                }
+
+                if( rubricAssignment.isEvaluatedByStudents() )
+                {
+                    row = sheet.getRow( 0 );
+                    row.createCell( currentColumn )
+                        .setCellValue( rubricAssignment.getName() + "(Peer)" );
+
+                    for( int i = 0; i < enrollments.size(); ++i )
+                    {
+                        row = sheet.getRow( i + 1 );
+                        String cin = row.getCell( 0 ).getStringCellValue();
+                        double eval = getAverageEval( rubricAssignment, cin,
+                            RubricEvaluation.Type.PEER );
+                        if( eval > 0 ) row.createCell( currentColumn )
+                            .setCellValue( eval );
+                    }
+
+                    ++currentColumn;
+                }
+
+                if( rubricAssignment.isEvaluatedByExternal() )
+                {
+                    row = sheet.getRow( 0 );
+                    row.createCell( currentColumn )
+                        .setCellValue(
+                            rubricAssignment.getName() + "(External)" );
+
+                    for( int i = 0; i < enrollments.size(); ++i )
+                    {
+                        row = sheet.getRow( i + 1 );
+                        String cin = row.getCell( 0 ).getStringCellValue();
+                        double eval = getAverageEval( rubricAssignment, cin,
+                            RubricEvaluation.Type.EXTERNAL );
+                        if( eval > 0 ) row.createCell( currentColumn )
+                            .setCellValue( eval );
+                    }
+
+                    ++currentColumn;
+                }
+            }
+        }
+
         wb.write( response.getOutputStream() );
         wb.close();
 
@@ -218,4 +306,28 @@ public class SectionRosterController {
         return null;
     }
 
+    private double getAverageEval( RubricAssignment assignment, String cin,
+        RubricEvaluation.Type type )
+    {
+        int count = 0;
+        double total = 0;
+
+        for( RubricSubmission submission : assignment.getSubmissions() )
+        {
+            if( submission.getStudent().getCin().equals( cin ) )
+            {
+                for( RubricEvaluation evaluation : submission.getEvaluations() )
+                {
+                    if( evaluation.getType().equals( type )
+                        && evaluation.isCompleted() )
+                    {
+                        ++count;
+                        total += evaluation.getTotalRating();
+                    }
+                }
+            }
+        }
+
+        return total / count;
+    }
 }

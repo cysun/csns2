@@ -70,7 +70,7 @@ public class RubricEvaluation implements Serializable {
 
     @ElementCollection
     @CollectionTable(name = "rubric_evaluation_ratings",
-        joinColumns = @JoinColumn(name = "evaluation_id") )
+        joinColumns = @JoinColumn(name = "evaluation_id"))
     @Column(name = "rating")
     @OrderColumn(name = "rating_order")
     private List<Integer> ratings;
@@ -130,6 +130,17 @@ public class RubricEvaluation implements Serializable {
         overallRating /= ratings.size();
 
         return overallRating;
+    }
+
+    public Double getTotalRating()
+    {
+        if( !completed ) return null;
+
+        Double totalRating = 0.0;
+        for( Integer rating : ratings )
+            totalRating += rating;
+
+        return totalRating;
     }
 
     public void setCompleted()

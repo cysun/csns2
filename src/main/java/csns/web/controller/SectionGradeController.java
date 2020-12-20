@@ -122,18 +122,19 @@ public class SectionGradeController {
         throws IOException, JSONException
     {
         Enrollment enrollment = enrollmentDao.getEnrollment( enrollmentId );
-        enrollment.setGrade( gradeDao.getGrade( gradeId ) );
+
+        Grade grade = gradeDao.getGrade( gradeId );
+        enrollment.setGrade( grade );
         enrollment.setGradeMailed( false );
         enrollmentDao.saveEnrollment( enrollment );
 
+        String symbol = grade == null ? "" : grade.getSymbol();
         logger.info( SecurityUtils.getUser().getUsername() + " set enrollment "
             + enrollment.getId() + " grade to "
-            + enrollment.getGrade().getSymbol() );
+            + (grade != null ? grade.getSymbol() : "null") );
 
         response.setContentType( "text/plain" );
-        String grade = enrollment.getGrade() == null ? ""
-            : enrollment.getGrade().getSymbol();
-        response.getWriter().print( grade );
+        response.getWriter().print( symbol );
         return null;
     }
 

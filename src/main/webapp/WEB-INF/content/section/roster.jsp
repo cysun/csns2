@@ -78,11 +78,13 @@ $(function(){
     <tr>
       <td class="center"><input type="checkbox" name="userId" value="${enrollment.student.id}" /></td>
         <td class="shrink">
+        <%--
           <c:if test="${not empty enrollment.student.profileThumbnail}">
           <img src="<c:url value='/download.html?fileId=${enrollment.student.profileThumbnail.id}' />"
             alt="[Profile Thumbnail]" class="thumbnails" name="${enrollment.student.profilePicture.id}"
             width="24" height="24" />
           </c:if>
+         --%>
       </td>
       <td><a href="grade?enrollmentId=${enrollment.id}">${enrollment.student.lastName},
         ${enrollment.student.firstName}</a></td>

@@ -38,7 +38,7 @@ $(function(){
   datePast="${assignment.pastDue}" /></p>
 
 <table class="viewtable autowidth">
-<thead><tr><th>Name</th>
+<thead><tr><th></th><th>Name</th>
   <th>Instructor Evaluations</th>
   <c:if test="${assignment.evaluatedByExternal}"><th>External Evaluations</th></c:if>
   <c:if test="${assignment.evaluatedByStudents}"><th>Peer Evaluations</th></c:if>
@@ -46,7 +46,6 @@ $(function(){
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr <c:if test="${submission.totalEvaluationCount == 0}">class="no-eval"</c:if>>
-  <%--
     <td>
       <c:if test="${not empty submission.student.profileThumbnail}">
         <img src="<c:url value='/download.html?fileId=${submission.student.profileThumbnail.id}' />"
@@ -54,7 +53,6 @@ $(function(){
              width="24" height="24" />
       </c:if>
     </td>
-  --%>
     <td><a href="view?id=${submission.id}">${submission.student.lastName},
         ${submission.student.firstName}</a></td>
     <td class="center">${submission.instructorEvaluationCount}</td>

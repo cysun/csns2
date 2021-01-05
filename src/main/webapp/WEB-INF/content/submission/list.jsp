@@ -73,11 +73,10 @@ $(function(){
 </c:if>
 
 <table class="viewtable autowidth">
-<thead><tr><th class="sorter-text">Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
+<thead><tr><th></th><th class="sorter-text">Name</th><c:if test="${not assignment.online}"><th># of Files</th></c:if><th>Grade</th></tr></thead>
 <tbody>
   <c:forEach items="${assignment.submissions}" var="submission">
   <tr>
-<%--
     <td>
       <c:if test="${not empty submission.student.profileThumbnail}">
         <img src="<c:url value='/download.html?fileId=${submission.student.profileThumbnail.id}' />"
@@ -85,7 +84,6 @@ $(function(){
              width="24" height="24" />
       </c:if>
     </td>
- --%>
     <td class="submission" data-submission-id="${submission.id}">
       <c:if test="${not empty submission.grade and not submission.gradeMailed}"><img
         src="<c:url value='/img/icons/email.png' />" alt="[Email]" /></c:if>

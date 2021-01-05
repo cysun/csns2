@@ -47,8 +47,8 @@ public class FileIO {
     @Autowired
     FileDao fileDao;
 
-    @Value("#{applicationProperties['file.dir']}")
-    private String fileDir;
+    @Value("#{applicationProperties['file.dirs']}")
+    private String[] fileDirs;
 
     @Resource(name = "contentTypes")
     Properties contentTypes;
@@ -67,12 +67,17 @@ public class FileIO {
 
     public java.io.File getDiskFile( File file, boolean followReference )
     {
-        java.io.File diskFile = new java.io.File( fileDir,
-            file.getId().toString() );
+        logger.debug( java.util.Arrays.toString(fileDirs) );
+        String fileId = file.getId().toString();
+        for( int i = 0; i < fileDirs.length; ++i )
+        {
+            java.io.File diskFile = new java.io.File( fileDirs[i], fileId );
+            if( diskFile.exists() ) return diskFile;
+        }
 
-        return diskFile.exists() || !followReference
-            || file.getReference() == null ? diskFile
-                : getDiskFile( file.getReference(), true );
+        return followReference && file.getReference() != null
+            ? getDiskFile( file.getReference(), true )
+            : new java.io.File( fileDirs[0], fileId );
     }
 
     public File save( MultipartFile uploadedFile, User user, boolean isPublic )

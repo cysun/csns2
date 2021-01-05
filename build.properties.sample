@@ -8,7 +8,7 @@ app.school=csula
 app.url=http://localhost:8080/csns2
 app.email=csns2@localhost.localdomain
 app.encoding=UTF-8
-app.file.dir=E:/Temp/csns2/files
+app.file.dirs=E:/Temp/csns2/files1,E:/Temp/csns2/files2
 app.log.dir=E:/Temp/csns2/logs
 
 ## set app.log.level to debug during development and info for production.

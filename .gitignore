@@ -7,6 +7,6 @@
 .classpath
 .settings/
 
-# build.properties
+# My stuff
 build.properties
-
+deploy.sh

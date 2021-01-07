@@ -67,7 +67,6 @@ public class FileIO {
 
     public java.io.File getDiskFile( File file, boolean followReference )
     {
-        logger.debug( java.util.Arrays.toString(fileDirs) );
         String fileId = file.getId().toString();
         for( int i = 0; i < fileDirs.length; ++i )
         {

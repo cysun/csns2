@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,8 @@ public class ImageUtils {
             newFile.setPublic( file.isPublic() );
             newFile = fileDao.saveFile( newFile );
 
-            tempFile.renameTo( fileIO.getDiskFile( newFile, false ) );
+            FileUtils.copyFile( tempFile,
+                fileIO.getDiskFile( newFile, false ) );
         }
         catch( IOException e )
         {

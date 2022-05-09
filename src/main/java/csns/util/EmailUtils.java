@@ -57,7 +57,8 @@ public class EmailUtils {
     @Value("#{applicationProperties.email}")
     private String appEmail;
 
-    private static final Logger logger = LoggerFactory.getLogger( EmailUtils.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( EmailUtils.class );
 
     public List<String> getAddresses( List<User> users,
         boolean useSecondaryEmail )
@@ -70,7 +71,8 @@ public class EmailUtils {
                 && StringUtils.hasText( user.getSecondaryEmail() ) )
                 email = user.getSecondaryEmail();
 
-            if( !email.endsWith( "@localhost" ) ) addresses.add( email );
+            if( email.contains( "@" ) && !email.contains( " " )
+                && !email.endsWith( "localhost" ) ) addresses.add( email );
         }
         return addresses;
     }
@@ -82,7 +84,8 @@ public class EmailUtils {
 
     public List<String> getAddresses( Subscribable subscribable )
     {
-        List<Subscription> subscriptions = subscriptionDao.getSubscriptions( subscribable );
+        List<Subscription> subscriptions = subscriptionDao
+            .getSubscriptions( subscribable );
         List<String> addresses = new ArrayList<String>();
         for( Subscription subscription : subscriptions )
             addresses.add( subscription.getSubscriber().getPrimaryEmail() );

@@ -32,7 +32,9 @@ $(function(){
             stacking: 'percent'
         }
     };
-    chart1.colors = ['green', 'greenyellow', 'yellow', 'orange', 'red'];
+    chart1.colors = ${rubric.scale} == 5 ?
+    		['green', 'greenyellow', 'yellow', 'orange', 'red'] :
+    		['green', 'greenyellow', 'yellow', 'red'];
     chart1.yAxis = {
         title: {
             text: "Percent"

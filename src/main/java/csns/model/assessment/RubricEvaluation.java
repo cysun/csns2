@@ -175,8 +175,11 @@ public class RubricEvaluation implements Serializable {
 
     public void setIncompleted()
     {
-        ratings.clear();
         completed = false;
+
+        for( int i = 0; i < ratings.size(); ++i )
+            ratings.set( i, -1 );
+
         switch( type )
         {
             case INSTRUCTOR:

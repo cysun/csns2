@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="assignment" value="${submission.assignment}" />
 <c:set var="section" value="${assignment.section}" />
@@ -15,6 +16,12 @@
 </style>
 
 <script>
+function removeEvaluation( id )
+{
+    var msg = "Are you sure you want to remove this evaluation?";
+    if( confirm(msg) )
+        window.location.href = "remove?id=" + id;
+}
 $(function(){
 <c:if test="${not empty evaluation}">
 	$("td.indicator-criterion").click(function(){
@@ -78,6 +85,8 @@ $(function(){
 <c:if test="${role == 'student'}">
 <li>${submission.student.name}</li>
 </c:if>
+<li class="align_right"><a href="javascript:removeEvaluation(${evaluation.id})"><img title="Remove Evaluation"
+    alt="[Remove Evaluation]" src="<c:url value='/img/icons/table_delete.png' />" /></a></li>
 </ul>
 
 <c:if test="${empty evaluation}">

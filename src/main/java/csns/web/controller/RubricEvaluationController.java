@@ -49,14 +49,16 @@ public class RubricEvaluationController {
     @Autowired
     private RubricEvaluationDao rubricEvaluationDao;
 
-    private static final Logger logger = LoggerFactory.getLogger( RubricEvaluationController.class );
+    private static final Logger logger = LoggerFactory
+        .getLogger( RubricEvaluationController.class );
 
     @RequestMapping("/rubric/evaluation/{role}/view")
     public String view( @PathVariable String role,
         @RequestParam Long submissionId, ModelMap models )
     {
         User user = SecurityUtils.getUser();
-        RubricSubmission submission = rubricSubmissionDao.getRubricSubmission( submissionId );
+        RubricSubmission submission = rubricSubmissionDao
+            .getRubricSubmission( submissionId );
         RubricAssignment assignment = submission.getAssignment();
         if( assignment.isPublished() && !assignment.isPastDue() )
         {
@@ -66,7 +68,8 @@ public class RubricEvaluationController {
             {
                 evaluation = new RubricEvaluation( submission, user );
                 submission.getEvaluations().add( evaluation );
-                submission = rubricSubmissionDao.saveRubricSubmission( submission );
+                submission = rubricSubmissionDao
+                    .saveRubricSubmission( submission );
             }
         }
 
@@ -76,13 +79,14 @@ public class RubricEvaluationController {
         return "rubric/evaluation/view";
     }
 
-    @RequestMapping(value = "/rubric/evaluation/{role}/set", params = {
-        "index", "value" })
+    @RequestMapping(value = "/rubric/evaluation/{role}/set",
+        params = { "index", "value" })
     @ResponseBody
     public ResponseEntity<String> set( @RequestParam Long id,
         @RequestParam int index, @RequestParam int value )
     {
-        RubricEvaluation evaluation = rubricEvaluationDao.getRubricEvaluation( id );
+        RubricEvaluation evaluation = rubricEvaluationDao
+            .getRubricEvaluation( id );
         // Ignore the request if the rubric assignment is already past due.
         if( evaluation.getSubmission().getAssignment().isPastDue() )
             return new ResponseEntity<String>( HttpStatus.BAD_REQUEST );
@@ -91,9 +95,9 @@ public class RubricEvaluationController {
         evaluation.setCompleted();
         rubricEvaluationDao.saveRubricEvaluation( evaluation );
 
-        logger.info( SecurityUtils.getUser().getUsername() + " rated "
-            + (value + 1) + " for indicator " + index
-            + " in rubric evaluation " + id );
+        logger.info(
+            SecurityUtils.getUser().getUsername() + " rated " + (value + 1)
+                + " for indicator " + index + " in rubric evaluation " + id );
 
         return new ResponseEntity<String>( HttpStatus.OK );
     }
@@ -104,7 +108,8 @@ public class RubricEvaluationController {
     public ResponseEntity<String> set( @RequestParam Long id,
         @RequestParam String comments )
     {
-        RubricEvaluation evaluation = rubricEvaluationDao.getRubricEvaluation( id );
+        RubricEvaluation evaluation = rubricEvaluationDao
+            .getRubricEvaluation( id );
         // Ignore the request if the rubric assignment is already past due.
         if( evaluation.getSubmission().getAssignment().isPastDue() )
             return new ResponseEntity<String>( HttpStatus.BAD_REQUEST );
@@ -115,6 +120,27 @@ public class RubricEvaluationController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType( MediaType.TEXT_PLAIN );
         return new ResponseEntity<String>( comments, headers, HttpStatus.OK );
+    }
+
+    @RequestMapping("/rubric/evaluation/{role}/remove")
+    public String remove( @PathVariable String role, @RequestParam Long id,
+        ModelMap models )
+    {
+        User user = SecurityUtils.getUser();
+        RubricEvaluation evaluation = rubricEvaluationDao
+            .getRubricEvaluation( id );
+
+        if( user.isAdmin() || user.isSameUser( evaluation.getEvaluator() ) )
+        {
+            evaluation.setIncompleted();
+            rubricEvaluationDao.saveRubricEvaluation( evaluation );
+
+            logger.info( SecurityUtils.getUser().getUsername()
+                + " removed rubric evaluation " + id );
+        }
+
+        return "redirect:/rubric/submission/" + role + "/view?id="
+            + evaluation.getSubmission().getId();
     }
 
 }

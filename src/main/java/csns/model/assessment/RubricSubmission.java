@@ -142,14 +142,29 @@ public class RubricSubmission implements Serializable {
         return ++instructorEvaluationCount;
     }
 
+    public int decrementInstructorEvaluationCount()
+    {
+        return --instructorEvaluationCount;
+    }
+
     public int incrementPeerEvaluationCount()
     {
         return ++peerEvaluationCount;
     }
 
+    public int decrementPeerEvaluationCount()
+    {
+        return --peerEvaluationCount;
+    }
+
     public int incrementExternalEvaluationCount()
     {
         return ++externalEvaluationCount;
+    }
+
+    public int decrementExternalEvaluationCount()
+    {
+        return --externalEvaluationCount;
     }
 
     /* Aggregate the ratings for each evaluation type */

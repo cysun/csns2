@@ -135,7 +135,10 @@ public class UserImportController {
         {
             String cin = excelReader.get( "CIN" );
             User user = userDao.getUserByCin( cin );
-            if( user == null ) user = createUser( excelReader );
+            if( user == null )
+                user = createUser( excelReader );
+            else
+                user = updateUser( user, excelReader );
 
             if( excelReader.hasColumn( "STANDING" ) )
             {
@@ -190,13 +193,13 @@ public class UserImportController {
         User user = new User();
         String cin = excelReader.get( "CIN" );
         user.setCin( cin );
-        user.setLastName( excelReader.get( "LAST NAME" ) );
-        user.setFirstName( excelReader.get( "FIRST NAME" ) );
+        user.setLastName( excelReader.get( "LAST NAME" ).trim() );
+        user.setFirstName( excelReader.get( "FIRST NAME" ).trim() );
         user.setUsername( cin );
         String password = passwordEncoder.encodePassword( cin, null );
         user.setPassword( password );
         if( excelReader.hasColumn( "EMAIL" ) )
-            user.setPrimaryEmail( excelReader.get( "EMAIL" ) );
+            user.setPrimaryEmail( excelReader.get( "EMAIL" ).trim() );
         else
             user.setPrimaryEmail( cin + "@localhost" );
         user.setTemporary( true );
@@ -205,6 +208,15 @@ public class UserImportController {
         logger.info( "New account created for user " + user.getName() );
 
         return user;
+    }
+
+    private User updateUser( User user, ExcelReader excelReader )
+    {
+        user.setLastName( excelReader.get( "LAST NAME" ).trim() );
+        user.setFirstName( excelReader.get( "FIRST NAME" ).trim() );
+        if( user.isTemporary() && excelReader.hasColumn( "EMAIL" ) )
+            user.setPrimaryEmail( excelReader.get( "EMAIL" ).trim() );
+        return userDao.saveUser( user );
     }
 
     private User updateStanding( User user, Department department,

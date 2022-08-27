@@ -18,7 +18,6 @@
  */
 package csns.web.controller;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import csns.model.academics.Department;
 import csns.model.academics.Project;
+import csns.model.academics.Term;
 import csns.model.academics.dao.DepartmentDao;
 import csns.model.academics.dao.ProjectDao;
 import csns.model.core.User;
@@ -52,11 +52,15 @@ public class ProjectController {
 
     @RequestMapping("/department/{dept}/projects")
     public String projects( @PathVariable String dept,
-        @RequestParam(required = false ) Integer year, ModelMap models)
+        @RequestParam(required = false) Integer year, ModelMap models )
     {
         Department department = departmentDao.getDepartment( dept );
 
-        Integer currentYear = Calendar.getInstance().get( Calendar.YEAR );
+        Term term = new Term();
+        Integer currentYear = term.getYear();
+        if( term.getTermName().equals( "FALL" )
+            || term.getTermName().equals( "WINTER" ) ) ++currentYear;
+
         if( year == null ) year = currentYear;
         List<Integer> years = projectDao.getProjectYears( department );
         if( !years.contains( currentYear ) ) years.add( 0, currentYear );
@@ -119,8 +123,8 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/project/search")
-    public String search( @RequestParam(required = false ) String text,
-        ModelMap models)
+    public String search( @RequestParam(required = false) String text,
+        ModelMap models )
     {
         List<Project> projects = null;
         if( StringUtils.hasText( text ) )

@@ -179,12 +179,14 @@ public class SectionRosterController {
         int n = section.getAssignments().size();
         Row row = sheet.createRow( 0 );
         row.createCell( 0 ).setCellValue( "CIN" );
-        row.createCell( 1 ).setCellValue( "Name" );
-        row.createCell( 2 ).setCellValue( "Email" );
+        row.createCell( 1 ).setCellValue( "LastName" );
+        row.createCell( 2 ).setCellValue( "FirstName" );
+        row.createCell( 3 ).setCellValue( "PrimaryEmail" );
+        row.createCell( 4 ).setCellValue( "SecondaryEmail" );
         for( int i = 0; i < n; ++i )
-            row.createCell( i + 3 )
+            row.createCell( i + 5 )
                 .setCellValue( section.getAssignments().get( i ).getAlias() );
-        row.createCell( n + 3 ).setCellValue( "Grade" );
+        row.createCell( n + 5 ).setCellValue( "Grade" );
 
         int rowIndex = 1;
         Map<Enrollment, String[]> studentGrades = gradeSheet.getStudentGrades();
@@ -194,13 +196,16 @@ public class SectionRosterController {
             row.createCell( 0 )
                 .setCellValue( enrollment.getStudent().getCin() );
             row.createCell( 1 )
-                .setCellValue( enrollment.getStudent().getLastName() + ", "
-                    + enrollment.getStudent().getFirstName() );
+                .setCellValue( enrollment.getStudent().getLastName() );
             row.createCell( 2 )
+                .setCellValue( enrollment.getStudent().getFirstName() );
+            row.createCell( 3 )
                 .setCellValue( enrollment.getStudent().getPrimaryEmail() );
+            row.createCell( 4 )
+                .setCellValue( enrollment.getStudent().getSecondaryEmail() );
             for( int i = 0; i < n; ++i )
             {
-                Cell cell = row.createCell( i + 3 );
+                Cell cell = row.createCell( i + 5 );
                 String grade = studentGrades.get( enrollment )[i];
                 if( StringUtils.hasText( grade )
                     && grade.matches( "-?\\d+(\\.\\d+)?" ) )
@@ -208,7 +213,7 @@ public class SectionRosterController {
                 else
                     cell.setCellValue( grade );
             }
-            if( enrollment.getGrade() != null ) row.createCell( n + 3 )
+            if( enrollment.getGrade() != null ) row.createCell( n + 5 )
                 .setCellValue( enrollment.getGrade().getSymbol() );
         }
 

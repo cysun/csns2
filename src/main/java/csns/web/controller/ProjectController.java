@@ -56,6 +56,9 @@ public class ProjectController {
     {
         Department department = departmentDao.getDepartment( dept );
 
+        if( department.getAbbreviation().equals( "cs" ) )
+            return "redirect:https://ascent.cysun.org/project/project";
+
         Term term = new Term();
         Integer currentYear = term.getYear();
         if( term.getTermName().equals( "FALL" )
